@@ -1,4 +1,4 @@
-"""Figures of a finished run: observed vs out-of-fold predicted target (mean of 12 months) and, for gated fusion,
+"""Figures of a finished run: observed vs out-of-fold predicted target (mean over the time steps) and, for gated fusion,
 the mean weight of every input branch (which domain the model relies on where)."""
 from __future__ import annotations
 
@@ -28,14 +28,14 @@ class RunMaps:
             if not f.exists():
                 continue
             pred = np.load(f)["pred"]
-            obs = data.z[y].reshape(12, -1)[:, data.cells]
+            obs = data.z[y].reshape(data.z[y].shape[0], -1)[:, data.cells]
             wf = run.dir / "preds" / f"weights_{y}.npz"
             wts = np.load(wf) if wf.exists() else None
             n_w = 0 if wts is None else len(wts["branches"])
             fig, ax = plt.subplots(1, 2 + n_w, figsize=(4.2 * (2 + n_w), 3.2), squeeze=False)
             ax = ax[0]
-            lim = float(np.nanpercentile(np.abs(obs.mean(0)), 98))
-            for a, (title, v) in zip(ax, [(f"{y} observed z", obs.mean(0)), (f"{y} out-of-fold predicted z", pred.mean(0))]):
+            lim = float(np.nanpercentile(np.abs(np.nanmean(obs, 0)), 98))
+            for a, (title, v) in zip(ax, [(f"{y} observed z", np.nanmean(obs, 0)), (f"{y} out-of-fold predicted z", np.nanmean(pred, 0))]):
                 im = a.imshow(self._field(v), extent=self.extent, cmap="RdBu_r", vmin=-lim, vmax=lim)
                 a.set_title(title, fontsize=9)
                 fig.colorbar(im, ax=a, shrink=0.75)

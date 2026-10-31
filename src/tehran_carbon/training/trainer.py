@@ -40,7 +40,9 @@ class NeuralPredictor:
         if self.needs_graph and graph is None:
             raise ValueError(f"backbone '{m['backbone']['type']}' needs a graph")
         self.graph = graph if self.needs_graph else None
-        self.mpb = int(t["months_per_batch"])
+        self.mpb = int(t["months_per_batch"])                  # time steps (months or days) per batch
+        b = m["backbone"]                                     # city-wide wind (raw u, v) for wind-aware edges
+        self.wind_idx = [data.features.index(f) for f in b["wind_features"]] if b.get("wind_edges") else None
         self.models: list[CarbonModel] = []
         self.history: list[list] = []
 
@@ -50,6 +52,12 @@ class NeuralPredictor:
         x = X.reshape(T, H * W, F)
         x = ((x[:, rows] if rows is not None else x) - self.mu) / self.sd
         return {k: torch.as_tensor(x[..., idx].astype(np.float32), device=self.device) for k, idx in self.cols.items()}
+
+    def _wind(self, X: np.ndarray):
+        """(T, 2) raw city-wide wind of the steps (taken from any cell), or None without wind-aware edges."""
+        if self.wind_idx is None:
+            return None
+        return torch.as_tensor(X[:, 0, 0, self.wind_idx].astype(np.float32), device=self.device)
 
     def fit(self, Xs: list, ys: list, train_masks: list, val_masks: list | None = None) -> "NeuralPredictor":
         t = self.cfg["train"]
@@ -63,14 +71,20 @@ class NeuralPredictor:
             tr = train_masks[i].ravel()
             va = val_masks[i].ravel() if val_masks is not None and val_masks[i].any() else None
             rows = None if self.needs_graph else np.flatnonzero(tr | va if va is not None else tr)
-            trt = torch.as_tensor(tr if rows is None else tr[rows], device=self.device)
-            vat = None if va is None else torch.as_tensor(va if rows is None else va[rows], device=self.device)
+            trn = tr if rows is None else tr[rows]
+            van = None if va is None else (va if rows is None else va[rows])
             for a in range(0, X.shape[0], self.mpb):
                 y = ys[i][a:a + self.mpb]
                 y = y.reshape(y.shape[0], -1)
-                y = np.nan_to_num(y if rows is None else y[:, rows]).astype(np.float32)
-                batches.append((self._inputs(X[a:a + self.mpb], rows), torch.as_tensor(y, device=self.device), trt, vat))
-        has_val = any(b[3] is not None for b in batches)
+                y = y if rows is None else y[:, rows]
+                fin = np.isfinite(y)                           # missing targets (clouds) are left out of the loss
+                trm = torch.as_tensor(fin & trn[None], device=self.device)
+                vam = None if van is None else torch.as_tensor(fin & van[None], device=self.device)
+                batches.append((self._inputs(X[a:a + self.mpb], rows),
+                                torch.as_tensor(np.nan_to_num(y).astype(np.float32), device=self.device), trm, vam,
+                                self._wind(X[a:a + self.mpb])))
+        batches = [b for b in batches if b[2].any()]
+        has_val = any(b[3] is not None and b[3].any() for b in batches)
 
         init = self.cfg["model"].get("init_from")
         for s in t["seeds"]:
@@ -89,9 +103,9 @@ class NeuralPredictor:
             for ep in range(int(t["epochs"])):
                 model.train()
                 tl = 0.0
-                for xs, y, tr, _ in batches:
+                for xs, y, tr, _, wind in batches:
                     opt.zero_grad()
-                    loss = ((model(xs, self.graph) - y)[:, tr] ** 2).mean()
+                    loss = ((model(xs, self.graph, wind) - y)[tr] ** 2).mean()
                     loss.backward()
                     opt.step()
                     tl += loss.item()
@@ -100,9 +114,9 @@ class NeuralPredictor:
                     model.eval()
                     se, n = 0.0, 0
                     with torch.no_grad():
-                        for xs, y, _, va in batches:
-                            if va is not None:
-                                d = (model(xs, self.graph) - y)[:, va]
+                        for xs, y, _, va, wind in batches:
+                            if va is not None and va.any():
+                                d = (model(xs, self.graph, wind) - y)[va]
                                 se, n = se + float((d ** 2).sum()), n + d.numel()
                     vl = se / max(n, 1)
                     if vl < best - 1e-6:
@@ -130,7 +144,7 @@ class NeuralPredictor:
         for i, model in enumerate(self.models):
             wm = []
             for a in range(0, T, self.mpb):
-                p = model(self._inputs(X[a:a + self.mpb], rows), self.graph).cpu().numpy()
+                p = model(self._inputs(X[a:a + self.mpb], rows), self.graph, self._wind(X[a:a + self.mpb])).cpu().numpy()
                 if rows is None:
                     P[i, a:a + self.mpb] = p
                 else:

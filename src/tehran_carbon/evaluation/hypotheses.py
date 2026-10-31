@@ -56,7 +56,7 @@ class HypothesisTest:
         cid, cdir, ccfg = cands[0]
         data = CellMonthDataset.build(ccfg, log=run.log)
         years = data.years
-        truth = {y: (data.z[y].reshape(12, -1)[:, data.cells], data.hot[y].reshape(12, -1)[:, data.cells]) for y in years}
+        truth = {y: (data.z[y].reshape(data.z[y].shape[0], -1)[:, data.cells], data.hot[y].reshape(data.z[y].shape[0], -1)[:, data.cells]) for y in years}
 
         def oof(folder, y):
             a = np.load(folder / "preds" / f"cv_{y}.npz")

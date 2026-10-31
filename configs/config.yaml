@@ -399,6 +399,78 @@ experiments:
   rq2_mlp_random_v2: {rq: RQ2, inherits: rq2_mlp_random_v1, split: {inner_val: false}}
   rq2_sage_random_v2: {rq: RQ2, inherits: rq2_sage_random_v1, split: {inner_val: false}}
 
+  # ---------------------------------------------------------------- RQ2b: DAILY NO2 + wind at the overpass
+  # Pre-registered in docs/preregistration_rq2b_daily.md before any daily model is trained. Data: run
+  # gee/GEE_daily_NO2_wind_L0.js and put the files in data/raw/satellite/daily/ and data/raw/weather/.
+  rq2d_mlp_v1:
+    rq: RQ2b
+    description: daily control - same network (early fusion) without a graph
+    data:
+      temporal: daily
+      spatial_lags: []
+      inputs:
+        satellite_daily: {file: "satellite/daily/Tehran_NO2_daily_{year}.tif", nodata: -9999, layer: no2_daily}
+        weather_daily:
+          wind_file: weather/Tehran_wind10UTC_{year}.csv          # ERA5-Land at 10 UTC (overpass), city-box mean
+          wind_columns: {date: date, u: u_component_of_wind_10m, v: v_component_of_wind_10m}
+          era5_file: weather/weather_daily_era5_both.csv
+          era5_columns: {date: date, t2m: t2m_mean_C, t2m_bias: bias_delta_C}
+          hdd_base_C: 18.0
+          weekend_weekdays: [4]                                    # Friday (Monday = 0)
+          nowruz_days: 13                                          # Nowruz holidays: first days of Farvardin
+        pollution_daily:
+          stations_file: pollution/monitoring_points.csv
+          station_id_prefix: AQ
+          air_files: {1402: pollution/air_daily_1402.csv, 1403: pollution/air_daily_1403_1404.csv}
+          columns: {station_id: id, station_name: name, lat: latitude, lon: longitude, station: station, year: year,
+                    month: month, day: day, pollutant: pollutant, value: daily_mean, valid_hours: valid_hours}
+          pollutants: {aq_co_d: CO}
+          min_valid_hours: 18
+          idw_power: 2.0
+          idw_min_km: 0.1
+      target: {layer: no2_daily, log_floor: 1.0e-6, min_valid_fraction: 0.5}   # days with < 50 % clear cells dropped
+      modalities:
+        traffic: [inv_road, road_km_motorway_trunk, road_km_primary, road_km_secondary, road_km_tertiary, vkt_peak, vc_mean]
+        energy: [inv_residential, inv_commercial, inv_industry, inv_power, hdd_d]
+        pollution: [aq_co_d]
+        context: [pop, vol_total, vol_nonres, viirs, industrial_frac, t2m_d, wind_d, wind_u, wind_v, weekend, nowruz]
+      no_lag: [hdd_d, t2m_d, wind_d, wind_u, wind_v, weekend, nowruz]
+    model: {fusion: {type: early}, backbone: {type: none}}
+    split: {inner_val: false}
+    train: {epochs: 30, seeds: [0], months_per_batch: 8}       # 8 days per batch; ~46 batches per year and epoch
+    eval: {bootstrap: {n: 500}}
+  rq2d_sage_v1:
+    rq: RQ2b
+    description: daily multi-scale GraphSAGE (isotropic neighbourhood)
+    inherits: rq2d_mlp_v1
+    model: {backbone: {type: sage}}
+  rq2d_gat_v1:
+    rq: RQ2b
+    description: daily GATv2, edge features scale + direction, no wind
+    inherits: rq2d_mlp_v1
+    model: {backbone: {type: gat}}
+  rq2d_gat_wind_v1:
+    rq: RQ2b
+    description: daily wind-aware GATv2 (edge feature = wind carried from the neighbour) - pre-registered primary
+    inherits: rq2d_gat_v1
+    model: {backbone: {wind_edges: true, wind_features: [wind_u, wind_v]}}
+  rq2d_base_ols_v1:
+    rq: RQ2b
+    inherits: rq2d_mlp_v1
+    model: {type: baseline, baseline: {name: ols, lags: []}}
+  rq2d_base_slx_ols_v1:
+    inherits: rq2d_base_ols_v1
+    model: {baseline: {name: ols, lags: [1, 3, 9, 15]}}
+  rq2d_base_gbm_v1:
+    inherits: rq2d_base_ols_v1
+    model: {baseline: {name: gbm, lags: []}}
+  rq2d_base_slx_gbm_v1:
+    inherits: rq2d_base_ols_v1
+    model: {baseline: {name: gbm, lags: [1, 3, 9, 15]}}
+  rq2d_base_forward_v1:
+    inherits: rq2d_base_ols_v1
+    model: {baseline: {name: forward_operator}}
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1
@@ -428,3 +500,13 @@ hypotheses:
       - {experiment: rq2_base_slx_gbm_v1}
       - {experiment: rq2_base_slx_rf_v1}
       - {experiment: rq2_base_forward_v1}
+  H2b:                            # daily NO2 + wind (docs/preregistration_rq2b_daily.md)
+    rq: RQ2b
+    metric: pr_auc
+    candidate: {experiment: rq2d_gat_wind_v1}
+    references:
+      - {experiment: rq2d_base_ols_v1}
+      - {experiment: rq2d_base_slx_ols_v1}
+      - {experiment: rq2d_base_gbm_v1}
+      - {experiment: rq2d_base_slx_gbm_v1}
+      - {experiment: rq2d_base_forward_v1}

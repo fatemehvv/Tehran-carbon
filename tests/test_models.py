@@ -57,9 +57,24 @@ def test_od_channel():
 
 def test_edge_directions_are_unit_vectors():
     g = GridGraph(GRID, [1, 3])
-    _, union, kind, direction = g.batched(T, "cpu")
-    assert direction.shape == (union.shape[1], 2) and kind.shape == (union.shape[1],)
+    _, union, kind, direction, step = g.batched(T, "cpu")
+    assert direction.shape == (union.shape[1], 2) and kind.shape == step.shape == (union.shape[1],)
     assert torch.allclose(direction.norm(dim=1), torch.ones(len(direction)), atol=1e-5)
+    # every edge connects two nodes of its own time step
+    assert torch.equal(union[0] // (H * W), step) and torch.equal(union[1] // (H * W), step)
+
+
+def test_wind_aware_gat():
+    m = copy.deepcopy(Config().defaults["model"])
+    m["backbone"].update(type="gat", wind_edges=True, wind_features=["wind_u", "wind_v"])
+    model = CarbonModel(DIMS, m)
+    xs = {k: torch.randn(T, H * W, f) for k, f in DIMS.items()}
+    graph = GridGraph(GRID, m["backbone"]["scales"])
+    out = model(xs, graph, torch.tensor([[3.0, 0.0], [0.0, -2.0]]))
+    assert out.shape == (T, H * W)
+    out.sum().backward()
+    with pytest.raises(ValueError):
+        model(xs, graph)                                       # wind is required
 
 
 class TinyData:
@@ -96,6 +111,31 @@ def test_predictor_fit_predict(backbone):
     pred, w = p.predict(d.X, te, return_weights=True)
     assert pred.shape == (12, H, W) and np.isfinite(pred[:, te]).all()
     assert w.shape == (12, H, W, 3)                             # gated: traffic, energy, context
+
+
+def test_daily_style_training_with_gaps_and_wind():
+    """20 'days', cloud gaps in the target (NaN), city-wide wind columns used by the wind-aware GAT."""
+    rng = np.random.default_rng(1)
+    d = TinyData()
+    days = 20
+    d.modality_of = d.modality_of + ["context", "context"]
+    d.base_of = d.base_of + ["wind_u", "wind_v"]
+    d.lag_of = d.lag_of + [0, 0]
+    d.features = d.base_of
+    X = rng.normal(size=(days, H, W, 9)).astype(np.float32)
+    X[..., 7:] = rng.normal(size=(days, 1, 1, 2))              # city-wide: same wind in every cell of a day
+    z = (X[..., 0] + 0.1 * rng.normal(size=(days, H, W))).astype(np.float32)
+    z[rng.random(z.shape) < 0.3] = np.nan                       # clouds
+    z[3] = np.nan                                               # a fully cloudy day
+    cfg = copy.deepcopy(Config().defaults)
+    cfg["model"].update(modalities=["traffic", "energy"], fusion={"type": "early"})
+    cfg["model"]["backbone"].update(type="gat", wind_edges=True, wind_features=["wind_u", "wind_v"])
+    cfg["train"].update(epochs=3, seeds=[0], device="cpu", months_per_batch=8)
+    graph = GridGraph(GRID, cfg["model"]["backbone"]["scales"])
+    tr = np.ones((H, W), bool)
+    p = NeuralPredictor(cfg, d, graph).fit([X], [z], [tr])
+    pred = p.predict(X)
+    assert pred.shape == (days, H, W) and np.isfinite(pred).all()
 
 
 def test_checkpoint_roundtrip(tmp_path):

@@ -63,9 +63,17 @@ METRICS = {"pr_auc": pr_auc, "roc_auc": roc_auc, "f1_top": f1_top, "spearman": s
 
 
 def monthly_scores(z: np.ndarray, hot: np.ndarray, pred: np.ndarray, names, idx=None) -> dict[str, np.ndarray]:
-    """z, hot, pred: (T, n) over the domain cells; idx: optional row index (bootstrap resample).
-    Returns name -> (T,) score of every month (NaN for a month without hotspots in the sample)."""
+    """z, hot, pred: (T, n) over the domain cells (T months or days); idx: optional row index (bootstrap resample).
+    Each step is scored on its valid cells only (finite target and prediction; daily data has cloud gaps).
+    Returns name -> (T,) score of every step (NaN for a step without valid cells or hotspots in the sample)."""
     if idx is not None:
         z, hot, pred = z[:, idx], hot[:, idx], pred[:, idx]
-    return {name: np.array([METRICS[name](hot[t].astype(bool), pred[t], z[t]) for t in range(z.shape[0])])
-            for name in names}
+    out = {name: np.full(z.shape[0], np.nan) for name in names}
+    for t in range(z.shape[0]):
+        ok = np.isfinite(z[t]) & np.isfinite(pred[t])
+        if ok.sum() < 2:
+            continue
+        zt, ht, pt = z[t][ok], hot[t][ok].astype(bool), pred[t][ok]
+        for name in names:
+            out[name][t] = METRICS[name](ht, pt, zt)
+    return out

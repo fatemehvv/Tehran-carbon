@@ -1,10 +1,13 @@
-"""The cell-month dataset shared by every experiment.
+"""The cell x time-step dataset shared by every experiment (data.temporal: monthly = 12 Jalali months; daily = every
+day of the Jalali year; absent = monthly).
 
-Unit of analysis: one L0 cell in one Jalali month, for every study year.
-  X[year]    (12, H, W, F) features of every cell (features exist everywhere; labels only in the label domain)
-  z[year]    (12, H, W)    target: log NO2, z-scored within each month over the label domain (only the spatial
-                           pattern is kept; the seasonal level is removed)
-  hot[year]  (12, H, W)    hotspot label = top (1 - hotspot_quantile) of the label domain in that month
+Unit of analysis: one L0 cell in one time step, for every study year (T = 12 or 365/366).
+  X[year]    (T, H, W, F) features of every cell (features exist everywhere; labels only in the label domain)
+  z[year]    (T, H, W)    target: log NO2, z-scored within each step over the valid label-domain cells (only the
+                          spatial pattern is kept). NaN where the target is missing (clouds); a step with fewer valid
+                          cells than target.min_valid_fraction of the domain is left out (all NaN)
+  hot[year]  (T, H, W)    hotspot label = top (1 - hotspot_quantile) of the valid domain cells in that step
+Static layers are broadcast to all steps; monthly layers are repeated over the days of their month (daily data).
 Each feature belongs to one modality (traffic / energy / pollution / context); its spatial lags keep the modality.
 The dataset holds ALL configured modalities; a model picks its branches with columns().
 
@@ -142,8 +145,12 @@ class CellMonthDataset:
 
         X, Z, HOT = {}, {}, {}
         t = d["target"]
+        daily = d.get("temporal", "monthly") == "daily"         # absent = monthly (keeps the monthly configs unchanged)
+        min_valid = float(t.get("min_valid_fraction", 0.0))
         for y in years:
             L = layers[y]
+            jy = JalaliYear(y)
+            T = len(jy.dates) if daily else 12
             unknown = sorted(set(base_of) - set(L))
             if unknown:
                 raise KeyError(f"features {unknown} are not produced by any source; available: {sorted(L)}")
@@ -151,28 +158,35 @@ class CellMonthDataset:
             for n, k in zip(base_of, lag_of):
                 a = L[n].astype(np.float64)
                 a = np.log1p(a) if n in log1p else a
-                a = np.broadcast_to(a, (12, grid.H, grid.W)) if a.ndim == 2 else a
+                if a.ndim == 2:
+                    a = np.broadcast_to(a, (T, grid.H, grid.W))
+                elif a.shape[0] != T:
+                    if a.shape[0] != 12:
+                        raise ValueError(f"layer {n} has {a.shape[0]} steps, expected {T} or 12")
+                    a = np.repeat(a, jy.days, axis=0)          # monthly layer -> every day of its month
                 cols.append(a if k == 0 else uniform_filter(a, size=(1, 2 * k + 1, 2 * k + 1), mode="nearest"))
             X[y] = np.stack(cols, -1).astype(np.float32)
             bad = [features[j] for j in range(X[y].shape[-1]) if not np.isfinite(X[y][..., j]).all()]
             if bad:
                 raise ValueError(f"non-finite values in {y}: {bad}")
 
-            # target: per month, z-score of log NO2 over the label domain; hotspot = top share of the domain
+            # target: per step, z-score of log NO2 over the valid domain cells; hotspot = top share of them
             no2 = L[t["layer"]]
             z = np.full(no2.shape, np.nan)
             hot = np.zeros(no2.shape, bool)
-            for m in range(12):
+            for m in range(no2.shape[0]):
+                valid = domain & np.isfinite(no2[m])
+                if valid.sum() < max(min_valid * domain.sum(), 2):
+                    continue
                 v = np.log(np.clip(no2[m], float(t["log_floor"]), None))
-                z[m] = (v - v[domain].mean()) / v[domain].std()
-                hot[m] = domain & (z[m] >= np.quantile(z[m][domain], float(t["hotspot_quantile"])))
-            if not np.isfinite(z[:, domain]).all():
+                z[m] = (v - v[valid].mean()) / v[valid].std()
+                hot[m] = valid & (z[m] >= np.quantile(z[m][valid], float(t["hotspot_quantile"])))
+            if min_valid == 0 and not np.isfinite(z[:, domain]).all():
                 raise ValueError(f"target of {y} has missing values inside the label domain")
             Z[y], HOT[y] = z.astype(np.float32), hot
+            log(f"  {y}: {T} steps, {int(np.isfinite(z[:, domain]).any(1).sum())} with a target")
 
         data = cls(years, X, Z, HOT, domain, in_core, features, modality_of, base_of, lag_of, h)
         data.save(out)
-        month_keys = {y: JalaliYear(y).gregorian_months for y in years}
-        log(f"dataset {h}: {len(features)} features, {int(domain.sum())} label cells (CORE {int(in_core.sum())}), "
-            f"target months {month_keys}")
+        log(f"dataset {h}: {len(features)} features, {int(domain.sum())} label cells (CORE {int(in_core.sum())})")
         return data

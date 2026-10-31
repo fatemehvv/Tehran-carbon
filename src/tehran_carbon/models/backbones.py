@@ -3,8 +3,9 @@
 none  no message passing (control: the same network without a graph)
 sage  multi-scale GraphSAGE: h <- h + act(sum_s SAGE_s(h, edges at dilation s) [+ W_od OD(h)])
 gcn   multi-scale GCN (Kipf & Welling normalisation per scale), same optional OD channel
-gat   GATv2 over the union of all scales; edge features = scale (one-hot) and, if edge_direction, the unit
-      direction of the edge, so attention can weigh near/far and upwind/downwind neighbours differently
+gat   GATv2 over the union of all scales; edge features = scale (one-hot), if edge_direction the unit direction
+      of the edge, and if wind_edges the day's wind component carried from the neighbour towards the cell
+      (m/s; > 0 = the neighbour is upwind), so attention can follow the transport of the plume (PM2.5-GNN idea)
 The OD channel (od.enabled) adds travel-demand links between districts (graph.od, data/graphs.py: ODOperator).
 Months are processed as T disjoint copies of the graph (GridGraph.batched).
 """
@@ -26,7 +27,7 @@ class NoGraph(nn.Module):
     def __init__(self, hidden: int, **_):
         super().__init__()
 
-    def forward(self, h: torch.Tensor, graph=None) -> torch.Tensor:
+    def forward(self, h: torch.Tensor, graph=None, wind=None) -> torch.Tensor:
         return h
 
 
@@ -43,7 +44,7 @@ class _MultiScale(nn.Module):
     def make_conv(self, hidden: int) -> nn.Module:
         raise NotImplementedError
 
-    def forward(self, h, graph):
+    def forward(self, h, graph, wind=None):
         T, N, d = h.shape
         per_scale = graph.batched(T, h.device)[0]
         if self.od is not None and graph.od is None:
@@ -75,23 +76,30 @@ class MultiScaleGCN(_MultiScale):
 class MultiScaleGAT(nn.Module):
     needs_graph = True
 
-    def __init__(self, hidden: int, layers: int, scales, heads: int, dropout: float, edge_direction: bool = False, **_):
+    def __init__(self, hidden: int, layers: int, scales, heads: int, dropout: float, edge_direction: bool = False,
+                 wind_edges: bool = False, **_):
         super().__init__()
         from torch_geometric.nn import GATv2Conv
         if hidden % heads:
             raise ValueError(f"hidden ({hidden}) must be divisible by heads ({heads})")
-        self.n_scales, self.direction = len(scales), bool(edge_direction)
-        edge_dim = self.n_scales + (2 if self.direction else 0)
+        self.n_scales, self.direction, self.wind = len(scales), bool(edge_direction), bool(wind_edges)
+        edge_dim = self.n_scales + (2 if self.direction else 0) + (1 if self.wind else 0)
         self.convs = nn.ModuleList([GATv2Conv(hidden, hidden // heads, heads=heads, edge_dim=edge_dim,
                                               add_self_loops=True, fill_value="mean") for _ in range(layers)])
         self.drop = nn.Dropout(dropout)
 
-    def forward(self, h, graph):
+    def forward(self, h, graph, wind=None):
         T, N, d = h.shape
-        _, union, kind, direction = graph.batched(T, h.device)
-        attr = Fn.one_hot(kind, self.n_scales).to(h.dtype)
+        _, union, kind, direction, step = graph.batched(T, h.device)
+        attr = [Fn.one_hot(kind, self.n_scales).to(h.dtype)]
         if self.direction:
-            attr = torch.cat([attr, direction.to(h.dtype)], 1)
+            attr.append(direction.to(h.dtype))
+        if self.wind:
+            if wind is None:
+                raise ValueError("wind_edges needs the wind of every step (model.backbone.wind_features)")
+            # direction points from the cell to the neighbour, so -direction . wind > 0 when the neighbour is upwind
+            attr.append(-(direction * wind[step]).sum(1, keepdim=True).to(h.dtype))
+        attr = torch.cat(attr, 1)
         x = h.reshape(T * N, d)
         for conv in self.convs:
             x = x + self.drop(Fn.silu(conv(x, union, edge_attr=attr)))

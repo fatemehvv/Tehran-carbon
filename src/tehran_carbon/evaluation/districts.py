@@ -1,6 +1,6 @@
 """District-level link between RQ2 and RQ1.
 
-The out-of-fold maps (every cell predicted by a model that never saw its block; mean of 12 months) are averaged over
+The out-of-fold maps (every cell predicted by a model that never saw its block; mean over the time steps) are averaged over
 the 22 districts with the cell-area shares, ranked into equal-count classes (L, M, H), and compared with the RQ1 v2
 Dempster-Shafer classes and the inventory-only classes (linear-weighted Cohen's kappa). The observed NO2 map is
 treated the same way. Note: satellite NO2 is one of the six DS evidence sources, so agreement with DS is not fully
@@ -45,12 +45,12 @@ class DistrictComparison:
         tables, kappas = [], []
         for y in data.years:
             ds = pd.read_csv(raw / a["ds_file"].format(year=y), encoding="utf-8-sig").set_index(a["id_column"])
-            maps = {"observed": data.z[y].reshape(12, -1)[:, data.cells].mean(0)}
+            maps = {"observed": np.nanmean(data.z[y].reshape(data.z[y].shape[0], -1)[:, data.cells], 0)}
             for exp, (folder, _) in sources.items():
                 p = np.load(folder / "preds" / f"cv_{y}.npz")
                 if not np.array_equal(p["cells"], data.cells):
                     raise ValueError(f"{folder.name} has a different label domain")
-                maps[exp] = p["pred"].mean(0)
+                maps[exp] = np.nanmean(p["pred"], 0)
             out = pd.DataFrame(index=ds.index)
             for name, v in maps.items():
                 g = np.full(n, np.nan)

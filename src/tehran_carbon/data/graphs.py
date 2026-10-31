@@ -45,15 +45,17 @@ class GridGraph:
         self._batched = {}
 
     def batched(self, T: int, device):
-        """T disjoint copies (one per month) for node features flattened to (T * N, d). Returns the per-scale
-        edge_index list, the union of all scales, the scale id and the unit direction of every union edge."""
+        """T disjoint copies (one per time step) for node features flattened to (T * N, d). Returns the per-scale
+        edge_index list, the union of all scales, and for every union edge its scale id, unit direction (from the
+        cell to the neighbour) and time step."""
         key = (T, str(device))
         if key not in self._batched:
             off = (torch.arange(T) * self.N).view(T, 1, 1)
             per = [(e.unsqueeze(0) + off).permute(1, 0, 2).reshape(2, -1).to(device) for e in self.edges]
             kind = torch.cat([torch.full((p.shape[1],), i, dtype=torch.long) for i, p in enumerate(per)]).to(device)
             direction = torch.cat([v.repeat(T, 1) for v in self.directions]).to(device)
-            self._batched = {key: (per, torch.cat(per, 1), kind, direction)}   # only the latest T is kept (memory)
+            step = torch.cat([torch.arange(T).repeat_interleave(e.shape[1]) for e in self.edges]).to(device)
+            self._batched = {key: (per, torch.cat(per, 1), kind, direction, step)}   # only the latest T is kept
         return self._batched[key]
 
 

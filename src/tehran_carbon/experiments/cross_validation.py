@@ -1,12 +1,12 @@
 """Train one resolved config under the validation design and store everything in its run folder.
 
   spatial CV   for every year and fold: train on the other folds (minus the buffer; one inner block held out for
-               early stopping), predict the test fold for all 12 months -> preds/folds/<year>/fold<k>.npz
+               early stopping), predict the test fold for all time steps -> preds/folds/<year>/fold<k>.npz
                (a fold that already exists is skipped, so an interrupted run can be resumed)
                folds are stitched into one out-of-fold map per month -> preds/cv_<year>.npz (+ weights_<year>.npz)
   transfer     train on all label cells of one year, predict the other -> preds/transfer_<a>to<b>.npz
   final        train on all label cells of all years -> models/final.pt (reused by init_from: RQ1 -> RQ2 -> RQ3)
-Out-of-fold arrays are (12, n_domain) in the order of dataset.cells.
+Out-of-fold arrays are (T steps, n_domain) in the order of dataset.cells.
 """
 from __future__ import annotations
 
@@ -74,28 +74,28 @@ class CrossValidation:
                 te_cells = np.flatnonzero(te.ravel())
                 extra = {}
                 if w is not None:
-                    extra["weights"] = (w.reshape(12, -1, w.shape[-1])[:, te_cells] if w.ndim == 4 else w).astype(np.float32)
-                np.savez_compressed(f, pred=pred.reshape(12, -1)[:, te_cells].astype(np.float32), cells=te_cells, **extra)
+                    extra["weights"] = (w.reshape(w.shape[0], -1, w.shape[-1])[:, te_cells] if w.ndim == 4 else w).astype(np.float32)
+                np.savez_compressed(f, pred=pred.reshape(pred.shape[0], -1)[:, te_cells].astype(np.float32), cells=te_cells, **extra)
                 run.log(f"  {y} fold {k:02d}: train {int(tr.sum())} cells, test {int(te.sum())}")
                 if smoke:
                     run.log("smoke run: one fold only, no scoring")
                     return {"smoke": True}
 
-            full = np.full((12, self.grid.n), np.nan, np.float32)
+            full = np.full((X.shape[0], self.grid.n), np.nan, np.float32)
             wfull = None
             for k in range(split.n_folds):
                 a = np.load(run.path("preds", "folds", str(y), f"fold{k:02d}.npz"))
                 full[:, a["cells"]] = a["pred"]
                 if "weights" in a and a["weights"].ndim == 3:            # gated: weights per cell-month
                     if wfull is None:
-                        wfull = np.full((12, self.grid.n, a["weights"].shape[-1]), np.nan, np.float32)
+                        wfull = np.full((X.shape[0], self.grid.n, a["weights"].shape[-1]), np.nan, np.float32)
                     wfull[:, a["cells"]] = a["weights"]
             oof = full[:, cells]
             np.savez_compressed(run.path("preds", f"cv_{y}.npz"), pred=oof, cells=cells)
             if wfull is not None:
                 np.savez_compressed(run.path("preds", f"weights_{y}.npz"), weights=wfull[:, cells], cells=cells,
                                     branches=np.array(self.branches))
-            s = monthly_scores(z.reshape(12, -1)[:, cells], data.hot[y].reshape(12, -1)[:, cells], oof, names)
+            s = monthly_scores(z.reshape(z.shape[0], -1)[:, cells], data.hot[y].reshape(z.shape[0], -1)[:, cells], oof, names)
             metrics["cv"][str(y)] = {n: float(np.nanmean(v)) for n, v in s.items()}
             run.log(f"  {y} CV: " + ", ".join(f"{n}={v:.3f}" for n, v in metrics["cv"][str(y)].items()))
 
@@ -105,9 +105,9 @@ class CrossValidation:
                 va = split.inner_val(dom, -1) if self.use_val else None
                 p = self.predictor().fit([data.X[a]], [data.z[a]], [dom & ~va if va is not None else dom],
                                          [va] if va is not None else None)
-                pred = p.predict(data.X[b], dom).reshape(12, -1)[:, cells]
+                pred = p.predict(data.X[b], dom).reshape(data.X[b].shape[0], -1)[:, cells]
                 np.savez_compressed(run.path("preds", f"transfer_{a}to{b}.npz"), pred=pred, cells=cells)
-                s = monthly_scores(data.z[b].reshape(12, -1)[:, cells], data.hot[b].reshape(12, -1)[:, cells], pred, names)
+                s = monthly_scores(data.z[b].reshape(data.z[b].shape[0], -1)[:, cells], data.hot[b].reshape(data.z[b].shape[0], -1)[:, cells], pred, names)
                 metrics["transfer"][f"{a}to{b}"] = {n: float(np.nanmean(v)) for n, v in s.items()}
                 run.log(f"  transfer {a}->{b}: " + ", ".join(f"{n}={v:.3f}" for n, v in metrics["transfer"][f"{a}to{b}"].items()))
 

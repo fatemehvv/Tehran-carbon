@@ -14,6 +14,7 @@ class JalaliYear:
             b = jdatetime.date(self.year + (m == 12), m % 12 + 1, 1).togregorian()
             self.spans.append((pd.Timestamp(a), pd.Timestamp(b)))
         self.days = [(b - a).days for a, b in self.spans]
+        self.dates = pd.date_range(self.spans[0][0], self.spans[-1][1] - pd.Timedelta(days=1), freq="D")   # every day
         self.gregorian_year = self.spans[0][0].year       # year of Nowruz (1402 -> 2023)
         # Gregorian (year, month) with the largest overlap with each Jalali month (Farvardin -> April)
         self.gregorian_months = []

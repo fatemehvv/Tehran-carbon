@@ -22,13 +22,14 @@ class CarbonModel(nn.Module):
         n_heads = len(dims) if self.fusion.level == "decision" else 1
         self.heads = nn.ModuleList([nn.Linear(hidden, 1) for _ in range(n_heads)])
 
-    def forward(self, xs: dict[str, torch.Tensor], graph=None) -> torch.Tensor:
-        """xs: branch -> (T, N, F_m) standardised features; returns (T, N)."""
+    def forward(self, xs: dict[str, torch.Tensor], graph=None, wind: torch.Tensor | None = None) -> torch.Tensor:
+        """xs: branch -> (T, N, F_m) standardised features; wind: optional (T, 2) city-wide wind (east, north) in
+        m/s for wind-aware edges; returns (T, N)."""
         h = self.fusion(xs)
         if self.fusion.level == "decision":
-            preds = torch.stack([head(self.backbone(hm, graph)).squeeze(-1) for head, hm in zip(self.heads, h)])
+            preds = torch.stack([head(self.backbone(hm, graph, wind)).squeeze(-1) for head, hm in zip(self.heads, h)])
             return self.fusion.combine(preds)
-        return self.heads[0](self.backbone(h, graph)).squeeze(-1)
+        return self.heads[0](self.backbone(h, graph, wind)).squeeze(-1)
 
     def load_from(self, state: dict, modules: list[str], freeze: bool) -> list[str]:
         """Copy the weights of the named sub-modules (e.g. ['fusion']) from a saved state dict (transfer between

@@ -56,3 +56,14 @@ def test_metrics_match_sklearn():
     assert all(v.shape == (3,) for v in sc.values()) and (sc["spearman"] > 0.9).all()
     assert sc["mae"][0] == pytest.approx(mean_absolute_error(z[0], p[0]))
     assert sc["rmse"][0] == pytest.approx(np.sqrt(mean_squared_error(z[0], p[0])))
+    # missing targets (clouds) are ignored per step; an empty step gives NaN
+    zg = z.copy()
+    zg[0, :50] = np.nan
+    zg[1] = np.nan
+    sg = monthly_scores(zg, zg > 1.0, p, ["mae"])["mae"]
+    assert sg[0] == pytest.approx(mean_absolute_error(z[0, 50:], p[0, 50:])) and np.isnan(sg[1])
+
+
+def test_jalali_days():
+    assert len(JalaliYear(1402).dates) == 365 and len(JalaliYear(1403).dates) == 366
+    assert JalaliYear(1403).dates[0] == pd.Timestamp("2024-03-20")

@@ -72,8 +72,8 @@ class ResponseChecks:
 
         base = model.predict(X)
         q = float(cfg["data"]["target"]["hotspot_quantile"])
-        self.thr = [np.quantile(base[t][self.dom], q) for t in range(12)]
-        self.hot = [self.dom & (base[t] >= self.thr[t]) for t in range(12)]
+        self.thr = [np.quantile(base[t][self.dom], q) for t in range(base.shape[0])]
+        self.hot = [self.dom & (base[t] >= self.thr[t]) for t in range(base.shape[0])]
         B = self._indices(base)
 
         # cell x district shares; multiplier of a district-level factor vector f: 1 + F (f - 1)
