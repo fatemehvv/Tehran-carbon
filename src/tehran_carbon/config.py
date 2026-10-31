@@ -69,8 +69,11 @@ class Config:
                 k, sep, v = ov.partition("=")
                 if not sep:
                     raise ValueError(f"override '{ov}' must look like key=value")
-                adhoc[k.strip()] = yaml.safe_load(v)
-                self.set(c, k.strip(), adhoc[k.strip()])
+                val = yaml.safe_load(v)
+                if isinstance(val, str) and re.fullmatch(r"[+-]?(\d+\.?\d*|\.\d+)[eE][+-]?\d+", val.strip()):
+                    val = float(val)                     # YAML 1.1 reads 1e-3 (no decimal point) as a string
+                adhoc[k.strip()] = val
+                self.set(c, k.strip(), val)
             label = "|".join(
                 re.sub(r"\.type$", "", re.sub(r"^(model|data|train|split|eval)\.", "", k)) + "="
                 + ("+".join(map(str, v)) if isinstance(v, list) else str(v)) for k, v in variant.items())

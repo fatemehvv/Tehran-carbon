@@ -94,7 +94,7 @@ class NeuralPredictor:
                     loss = ((model(xs, self.graph) - y)[:, tr] ** 2).mean()
                     loss.backward()
                     opt.step()
-                    tl += float(loss)
+                    tl += loss.item()
                 vl = None
                 if has_val:
                     model.eval()
