@@ -161,7 +161,8 @@ class Run:
             variant=m["variant_label"], rq=m["rq"] or "", kind=m["kind"], version=m["version"] or "",
             config_hash=m["config_hash"], data_hash=m["data_hash"], git_commit=m["git"]["commit"],
             git_dirty=m["git"]["dirty"], adhoc=bool(m["overrides"]), duration_s=m["duration_s"],
-            summary=json.dumps(m.get("summary", {}), ensure_ascii=False),
+            summary=json.dumps(m.get("summary", {}), ensure_ascii=False,
+                               default=lambda o: o.item() if isinstance(o, np.generic) else str(o)),
             path=str(self.dir.relative_to(ROOT)) if self.dir.is_relative_to(ROOT) else str(self.dir)))
 
     def __enter__(self) -> "Run":
