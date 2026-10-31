@@ -1,0 +1,326 @@
+# =====================================================================================================================
+# Tehran-carbon: the ONE configuration file of the project. The code reads every setting from here.
+#
+#   defaults     every setting. Paths are relative to the repository root; raw-file paths to data/raw.
+#   experiments  versioned entries (<name>_v<N>). Each lists only what differs from `defaults`, or from the entry it
+#                `inherits`. `sweep` expands one entry into the Cartesian product of its values (one run each).
+#   hypotheses   pre-registered decision rules, evaluated on finished runs (python main.py evaluate --hypothesis H1)
+#
+# Rule: never edit an experiment that already has runs (main.py refuses: config drift). Add a new version instead:
+#   rq1_gated_v2: {inherits: rq1_gated_v1, train: {lr: 1.0e-3}}
+# =====================================================================================================================
+
+defaults:
+  seed: 0
+  paths: {raw: data/raw, interim: data/interim, processed: data/processed, runs: runs}
+
+  # L0 analysis grid: 1/120 degree cells (~0.75 x 0.93 km), north-west corner (lon0, lat0), EPSG:4326
+  grid: {H: 72, W: 126, lon0: 50.85, lat0: 35.95, cells_per_degree: 120, km_per_degree: 111.32}
+  years: [1402, 1403]                              # Jalali study years (1402 = 2023-03-21 .. 2024-03-19)
+
+  # ================================================================================================= data
+  data:
+    core_counties: [تهران, ری, شمیرانات]         # CORE = these counties (all 22 districts lie inside)
+    boundaries:
+      counties_file: spatial/counties.shp
+      county_name_column: CityName
+      districts_file: spatial/Tehran_Districts22.geojson
+      district_id_column: district_id
+      district_fractions_file: rq1_frozen/grid_district_fractions.csv
+      metric_crs: EPSG:32639                       # UTM 39N, for areas and distances in metres
+      touch_tolerance_m: 1.0                       # districts closer than this share a boundary
+
+    # Label domain = CORE cells that the inventory gives any CO2 (mountains and desert excluded), in every year,
+    # so a model cannot score by telling 'city' from 'no city'.
+    label_domain:
+      file: rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv
+      cell_column: cell_id
+      columns: [road_transport, buildings_residential, buildings_commercial, industry, power_plants_CORE, power_plants_METRO]
+
+    # Source loaders (src/tehran_carbon/data/sources). Each returns named layers in physical units.
+    inputs:
+      satellite:
+        file: satellite/Tehran_NO2_grid_2023_2025.tif      # TROPOMI monthly NO2 + VIIRS annual, on the L0 grid (GEE)
+        no2_band: "m_{gy}_{gm:02d}"                          # band of the Gregorian month of largest overlap
+        viirs_band: "viirs_{gyear}"
+      context:
+        ghsl_file: spatial/ghsl_2020_100m.tif
+        ghsl_bands: {vol_total: 1, vol_nonres: 2, pop: 3}
+        industrial_file: spatial/osm_industrial.gpkg
+        area_crs: EPSG:32639
+        weather_file: weather/weather_daily_era5_both.csv   # ERA5 daily, with a bias-correction column
+        weather_columns: {date: date, t2m: t2m_mean_C, t2m_bias: bias_delta_C, wind: wind10_ms}
+      traffic:
+        l2_grid_file: rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv
+        l1_profiles_file: rq1_frozen/{year}/L1/L1_monthly_profiles_{year}.csv
+        links_file: rq1_frozen/{year}/L2/L2_road_links_{year}.csv
+        cell_column: cell_id
+        month_column: month
+        sectors:                                             # layer: annual L2 columns x L1 monthly share column
+          inv_road: {columns: [road_transport], share: gasoline_share}
+        link_columns: {lon: mid_lon, lat: mid_lat, road_class: highway, length_km: len_km, volume: vol_peak, vc: vc}
+        road_classes: {motorway: road_km_motorway_trunk, trunk: road_km_motorway_trunk, primary: road_km_primary,
+                       secondary: road_km_secondary, tertiary: road_km_tertiary}
+      energy:
+        l2_grid_file: rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv
+        l1_profiles_file: rq1_frozen/{year}/L1/L1_monthly_profiles_{year}.csv
+        cell_column: cell_id
+        month_column: month
+        sectors:
+          inv_residential: {columns: [buildings_residential], share: residential_gas_share}
+          inv_commercial: {columns: [buildings_commercial], share: commercial_gas_share}
+          inv_industry: {columns: [industry], share: flat_share}
+          inv_power: {columns: [power_plants_CORE, power_plants_METRO], share: flat_share}
+        hdd_column: HDD18
+      pollution:
+        stations_file: pollution/monitoring_points.csv
+        station_id_prefix: AQ                                # AQCC stations; other rows are traffic counters
+        air_files: {1402: pollution/air_daily_1402.csv, 1403: pollution/air_daily_1403_1404.csv}
+        columns: {station_id: id, station_name: name, lat: latitude, lon: longitude,
+                  station: station, year: year, month: month, pollutant: pollutant, value: daily_mean}
+        pollutants: {aq_co: CO, aq_no2: NO2, aq_nox: NOX}    # layer -> pollutant code in the air files
+        min_valid_days: 15                                   # station-months with fewer valid days are dropped
+        idw_power: 2.0
+        idw_min_km: 0.1
+      embeddings:                                            # pretrained satellite embeddings (frozen features)
+        enabled: false
+        file: embeddings/alphaearth_L0_{gyear}.tif           # export with gee/export_alphaearth_L0.js
+        pca_dims: 16
+
+    target: {layer: no2, log_floor: 1.0e-7, hotspot_quantile: 0.90}
+
+    # Feature groups. `context` goes to every model when model.use_context is true.
+    # The 1403 air files hold only CO, NO2 and NOX: CO is the only pollutant that is not the target species and exists
+    # in both years. NO2/NOX are tested in the sensitivity experiment rq1_pollution_no2_v1.
+    modalities:
+      traffic:   [inv_road, road_km_motorway_trunk, road_km_primary, road_km_secondary, road_km_tertiary, vkt_peak, vc_mean]
+      energy:    [inv_residential, inv_commercial, inv_industry, inv_power, hdd]
+      pollution: [aq_co]
+      context:   [pop, vol_total, vol_nonres, viirs, industrial_frac, t2m, wind]
+    log1p: [inv_road, inv_residential, inv_commercial, inv_industry, inv_power, pop, vol_total, vol_nonres, viirs, vkt_peak]
+    spatial_lags: [3, 9]          # neighbourhood means (box half-width in cells) added for every feature; [] = off
+    no_lag: [hdd, t2m, wind]      # city-wide monthly values: no spatial lag
+
+  # ================================================================================================= validation
+  split:
+    scheme: block_lobo            # block_lobo | block_kfold | random_kfold
+    block_km: 22                  # = autocorrelation range of the target (RQ2 correlogram); "auto" recomputes it
+    buffer_km: 2.0                # training cells closer than this to the test block are dropped
+    n_folds: 10                   # block_kfold / random_kfold only
+    transfer: true                # also train on one year and predict the other
+    inner_val: true               # one training block is held out for early stopping
+    correlogram: {threshold: 0.2, max_km: 42.0, bin_km: 2.0, pairs: 60000}
+
+  # ================================================================================================= model
+  model:
+    type: neural                  # neural | baseline
+    modalities: [traffic, energy, pollution]
+    use_context: true
+    encoder: {hidden: 32, layers: 2, dropout: 0.1}
+    fusion: {type: gated}         # early | late | gated
+    backbone: {type: none, layers: 3, scales: [1, 3, 9], heads: 2, dropout: 0.1}   # none | sage | gcn | gat
+    init_from: null               # {run: <run_id>, modules: [fusion], freeze: false}: start from trained weights
+    baseline:                     # used when type = baseline
+      name: gbm                   # ols | gbm | rf | forward_operator
+      lags: [1, 3, 9, 15]         # SLX neighbourhood means (box half-width in cells); [] = own cell only
+      params:
+        ols: {}
+        gbm: {max_iter: 300, learning_rate: 0.05, max_leaf_nodes: 31, random_state: 0}
+        rf: {n_estimators: 300, min_samples_leaf: 5, max_features: 0.33, n_jobs: 4, random_state: 0}
+        forward_operator: {inventory_prefix: inv_, sigmas_km: [0, 1, 2, 3, 4, 6, 8, 10, 12, 15]}
+
+  train:
+    epochs: 300
+    lr: 3.0e-3
+    weight_decay: 1.0e-4
+    seeds: [0, 1, 2]              # predictions are averaged over seeds
+    early_stopping: {patience: 30}
+    months_per_batch: 12          # lower it (e.g. 2) if memory is short (GAT)
+    device: auto                  # auto | cpu | cuda
+    threads: 4
+    save_final: true              # also fit on all label cells of all years and save models/final.pt
+
+  eval:
+    primary: pr_auc
+    metrics: [pr_auc, roc_auc, f1_top, spearman, r2]
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
+
+  # ================================================================================================= inventory L1
+  # IPCC (2006) Tier 1: E = sum_f A_f x NCV_f x density_f x EF_f. Lists are triangular [central, low, high].
+  inventory:
+    l1:
+      draws: 10000
+      factors:
+        ng_ncv_MJ_m3: [34.5, 33.0, 37.0]              # ASSUMPTION for Iranian pipeline gas
+        ng_ef_kg_GJ: [56.1, 54.3, 58.3]
+        gas_ncv_MJ_kg: [44.3, 42.5, 44.8]
+        gas_density_kg_L: [0.74, 0.72, 0.76]
+        gas_ef_kg_GJ: [69.3, 67.5, 73.0]
+        dsl_ncv_MJ_kg: [43.0, 41.4, 43.3]
+        dsl_density_kg_L: [0.84, 0.82, 0.86]
+        dsl_ef_kg_GJ: [74.1, 72.6, 74.8]
+        fo_ncv_MJ_kg: [40.4, 39.8, 41.7]
+        fo_density_kg_L: [0.96, 0.94, 0.99]
+        fo_ef_kg_GJ: [77.4, 75.5, 78.8]
+        bus_litres_diesel_share: [1.0, 0.9, 1.0]      # bus litres read as diesel (3,840 of 5,387 buses are diesel)
+        heavy_diesel_other_kt: [790.0, 474.0, 1106.0] # Shahbazi et al. 2022 (2017): trucks + private bus + minibus, +-40 %
+        liquid_fuels_scale: [1.0, 0.6, 1.2]
+        kerosene_kg_CO2_per_L: 2.5194                  # 0.80 kg/L x 43.8 MJ/kg x 71.9 kg/GJ
+        lpg_t_CO2_per_t: 2.985                         # 47.3 MJ/kg x 63.1 kg/GJ
+      years:
+        1403:
+          gasoline_province_ML_day: [21.0, 20.0, 22.3] # NIOPDC statements 20-22 ML/day
+          gasoline_core_share: [0.73, 0.71, 0.75]
+          national_power: {gas_Mm3: 73533.0, fo_ML: 8983.0, gasoil_ML: 12642.0, net_GWh: 384701.0}
+          weather_file: weather/weather_daily_era5_1403.csv
+        1402:
+          gasoline_province_ML_day: [19.54, 18.61, 21.40]  # 1403 x national ratio 115.4/124; upper 22.3 x 119/124
+          gasoline_core_share: [0.734, 0.714, 0.754]
+          national_power: {gas_Mm3: 76814.0, fo_ML: 6632.0, gasoil_ML: 9896.0, net_GWh: 375371.5}  # gross 1402 x net/gross 1403
+          weather_file: weather/weather_daily_era5_1402.csv
+      files:
+        county_gas: energy/county_gas_annual.csv
+        electricity: energy/electricity_province_annual.csv
+        bus_fuel: energy/bus_fuel_annual.csv
+        fuel_sales_annual: energy/fuel_sales_annual_historical.csv
+        fuel_sales_monthly: energy/fuel_sales_monthly_historical.csv
+      columns:
+        county_gas: {year: year_sh, county: county_name, residential: household_million_m3,
+                     commercial: commercial_public_million_m3, industry: industry_million_m3,
+                     cng: transport_million_m3, power: power_plants_million_m3}
+        bus_fuel: {year: year_sh, fleet: fleet, value: value_liters}
+        electricity: {year: year_sh, sector: sector, value: value_GWh}
+        fuel_sales: {year: year_sh, area: distribution_area, carrier: carrier, value: value_thousand_liters, month: month_name}
+        weather: {date: date_local, temperature: temperature_mean_C}
+      core_counties_gas: [تهران, ری, شمیرانات]
+      power_counties: {تهران: CORE, ری: CORE, پاکدشت: METRO, رباطکریم: METRO}
+      bus_fleets: [bus, minibus]
+      electricity_sectors: {household: residential, public: public, industry: industrial, agriculture: agriculture,
+                            other_and_streetlighting: lighting_and_other}
+      niopdc_core_areas: [ناحيه مركز, ناحيه شمال, ناحيه جنوب, ناحيه شرق, ناحيه غرب, شهر ري]
+      niopdc_month_names: [فروردين, ارديبهشت, خرداد, تير, مرداد, شهريور, مهر, آبان, آذر, دي, بهمن, اسفند]
+      carriers: {gasoline: gasoline, diesel: diesel, fuel_oil: fuel_oil, kerosene: kerosene}
+      liquid_fuels: {hist_years: [1395, 1398], diesel_national_scale: 1.1455, lpg_kt: 150.11}  # 38140/33296.3; 232.5 x 0.73 x 3362.4/3801.8
+      monthly: {hdd_base_C: 18.0, residential_base_share: 0.25, commercial_base_share: 0.40}
+      shahbazi_2022_Mt: {road_transport: 13.384, buildings: 18.339, industry: 8.077, power_plants: 6.919, total: 47.071}
+      check_against: rq1_frozen/{year}/L1/L1_summary_{year}.csv  # frozen RQ1 v2 totals (regression check)
+
+# =====================================================================================================================
+experiments:
+
+  # ---------------------------------------------------------------- RQ1: which fusion architecture, which domains
+  rq1_early_v1:
+    rq: RQ1
+    description: early fusion (concatenate all domains), MLP
+    model: {fusion: {type: early}}
+  rq1_late_v1:
+    rq: RQ1
+    description: late (decision-level) fusion, learned weight per domain
+    model: {fusion: {type: late}}
+  rq1_gated_v1:
+    rq: RQ1
+    description: gated fusion (attention over domains) - pre-registered primary RQ1 model
+  rq1_ablation_v1:
+    rq: RQ1
+    description: all 7 domain subsets x 3 fusion types (context always included)
+    sweep:
+      model.modalities: [[traffic], [energy], [pollution], [traffic, energy], [traffic, pollution], [energy, pollution],
+                         [traffic, energy, pollution]]
+      model.fusion.type: [early, late, gated]
+  rq1_context_only_v1:
+    rq: RQ1
+    description: no domain data, context only (lower reference)
+    model: {modalities: [], fusion: {type: early}}
+  rq1_pollution_no2_v1:
+    rq: RQ1
+    description: sensitivity - station NO2 and NOX in the pollution domain (same species as the target)
+    inherits: rq1_gated_v1
+    data: {modalities: {pollution: [aq_co, aq_no2, aq_nox]}}
+  rq1_gated_emb_v1:
+    rq: RQ1
+    description: gated fusion + pretrained AlphaEarth embeddings in the context group
+    inherits: rq1_gated_v1
+    data: {inputs: {embeddings: {enabled: true}}}
+  rq1_base_forward_v1:
+    rq: RQ1
+    description: physical baseline - Gaussian-smoothed inventory (the RQ1 v2 product) mapped to z
+    model: {type: baseline, baseline: {name: forward_operator}}
+  rq1_base_gbm_v1:
+    rq: RQ1
+    description: gradient boosting on the same features
+    model: {type: baseline, baseline: {name: gbm, lags: []}}
+
+  # ---------------------------------------------------------------- RQ2: does a learned graph help?
+  rq2_mlp_v1:
+    rq: RQ2
+    description: control - the same network without a graph
+    model: {fusion: {type: gated}, backbone: {type: none}}
+    data: {spatial_lags: []}
+  rq2_sage_v1:
+    rq: RQ2
+    description: multi-scale GraphSAGE (pre-registered primary GNN)
+    inherits: rq2_mlp_v1
+    model: {backbone: {type: sage}}
+  rq2_gcn_v1:
+    rq: RQ2
+    inherits: rq2_sage_v1
+    model: {backbone: {type: gcn}}
+  rq2_gat_v1:
+    rq: RQ2
+    description: multi-scale GATv2 (attention over edges, scale as edge feature)
+    inherits: rq2_sage_v1
+    model: {backbone: {type: gat}}
+    train: {months_per_batch: 2}
+  rq2_receptive_field_v1:
+    rq: RQ2
+    inherits: rq2_sage_v1
+    sweep:
+      model.backbone.layers: [1, 2, 3, 4]
+  rq2_base_ols_v1:
+    rq: RQ2
+    model: {type: baseline, baseline: {name: ols, lags: []}}
+    data: {spatial_lags: []}
+  rq2_base_slx_ols_v1:
+    inherits: rq2_base_ols_v1
+    model: {baseline: {name: ols, lags: [1, 3, 9, 15]}}
+  rq2_base_gbm_v1:
+    inherits: rq2_base_ols_v1
+    model: {baseline: {name: gbm, lags: []}}
+  rq2_base_slx_gbm_v1:
+    inherits: rq2_base_ols_v1
+    model: {baseline: {name: gbm, lags: [1, 3, 9, 15]}}
+  rq2_base_slx_rf_v1:
+    inherits: rq2_base_ols_v1
+    model: {baseline: {name: rf, lags: [1, 3, 9, 15]}}
+  rq2_base_forward_v1:
+    inherits: rq2_base_ols_v1
+    model: {baseline: {name: forward_operator}}
+
+  # ---------------------------------------------------------------- inventory
+  inv_l1_v1:
+    rq: RQ1
+    kind: inventory
+    description: L1 sector totals (IPCC Tier 1 + Monte Carlo) for all study years
+
+# =====================================================================================================================
+# Pre-registered decision rules (fixed before any model is trained; docs/preregistration_rq1.md).
+# Selector = experiment + optional `where` on the resolved config (a value, or {in: [...]}).
+# The reference is the best of `references` by the primary metric, chosen after the results (conservative).
+hypotheses:
+  H1:
+    rq: RQ1
+    metric: pr_auc
+    candidate: {experiment: rq1_ablation_v1, where: {model.modalities: [traffic, energy, pollution], model.fusion.type: gated}}
+    references:
+      - {experiment: rq1_ablation_v1, where: {model.modalities: {in: [[traffic], [energy], [pollution]]}}}
+  H2:
+    rq: RQ2
+    metric: pr_auc
+    candidate: {experiment: rq2_sage_v1}
+    references:
+      - {experiment: rq2_base_ols_v1}
+      - {experiment: rq2_base_slx_ols_v1}
+      - {experiment: rq2_base_gbm_v1}
+      - {experiment: rq2_base_slx_gbm_v1}
+      - {experiment: rq2_base_slx_rf_v1}
+      - {experiment: rq2_base_forward_v1}

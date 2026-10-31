@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tehran_carbon"
+version = "0.1.0"
+description = "Multi-modal data fusion for carbon-footprint analytics in Tehran (MSc thesis, RQ1-RQ3)"
+authors = [{ name = "Fatemeh Vafaiean" }]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0", "pandas>=2.2", "scipy>=1.13", "scikit-learn>=1.5", "geopandas>=1.0", "shapely>=2.0",
+    "pyogrio>=0.9", "rasterio>=1.4", "pyyaml>=6.0", "jdatetime>=5.0", "matplotlib>=3.8", "openpyxl>=3.1",
+    "torch>=2.3", "torch_geometric>=2.5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

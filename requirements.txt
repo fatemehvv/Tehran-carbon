@@ -1,0 +1,17 @@
+# Tested on Windows 10, Python 3.13, CPU only.
+numpy>=2.0
+pandas>=2.2
+scipy>=1.13
+scikit-learn>=1.5
+geopandas>=1.0
+shapely>=2.0
+pyogrio>=0.9
+rasterio>=1.4
+pyyaml>=6.0
+jdatetime>=5.0
+matplotlib>=3.8
+openpyxl>=3.1
+torch>=2.3                # CPU build is enough: pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch_geometric>=2.5      # GNN layers (SAGEConv, GCNConv, GATv2Conv); pure Python, no compiled extensions needed
+pytest>=8.0
+# RQ3 (added when the RL part starts): gymnasium, stable-baselines3

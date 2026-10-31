@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+.vscode/
+.idea/
+
+# data: raw inputs, caches and processed tensors stay out of git; only the manifest is versioned
+data/raw/**
+!data/raw/MANIFEST.csv
+data/interim/
+data/processed/
+
+# runs: every run folder stays local; the registry (run history) is versioned
+runs/*
+!runs/registry.csv
