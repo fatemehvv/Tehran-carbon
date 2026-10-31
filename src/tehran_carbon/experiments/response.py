@@ -112,7 +112,7 @@ class ResponseChecks:
         zd = pd.Series({d: base.mean(0)[inside[d]].mean() for d in ids if inside[d].any()})
         top = list(zd.sort_values().index[-int(a["targeted_districts"]):])
         mask = np.any([inside[d] for d in top], 0)
-        local_cut = min(cut * co2[self.dom].sum() / co2[mask].sum(), float(a["max_local_cut"]))
+        local_cut = float(min(cut * co2[self.dom].sum() / co2[mask].sum(), float(a["max_local_cut"])))
         It = self._indices(model.predict(self._scenario(X, np.where(mask, 1 - local_cut, 1.0))))
 
         summary = dict(model_run=self.run_id, year=y, baseline_HCI=B["HCI"], baseline_PEX=B["PEX"],
