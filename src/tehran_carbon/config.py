@@ -122,8 +122,9 @@ class Config:
 
     @staticmethod
     def config_hash(cfg: dict) -> str:
-        """Everything that can change a result (the `experiment` block is bookkeeping and is left out)."""
-        return Config.digest({k: v for k, v in cfg.items() if k != "experiment"})
+        """Everything that can change a training result. Left out: the `experiment` block (bookkeeping) and the
+        `analysis` settings (they only affect analyses of finished runs, so tuning them is not config drift)."""
+        return Config.digest({k: v for k, v in cfg.items() if k not in ("experiment", "analysis")})
 
     @staticmethod
     def data_hash(cfg: dict) -> str:

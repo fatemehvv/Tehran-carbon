@@ -156,3 +156,20 @@ class NeuralPredictor:
         return dict(mu=torch.as_tensor(self.mu), sd=torch.as_tensor(self.sd),
                     cols={k: v.tolist() for k, v in self.cols.items()}, dims=self.dims, model_cfg=self.cfg["model"],
                     state_dicts=[m.state_dict() for m in self.models], history=self.history)
+
+    @classmethod
+    def load(cls, cfg: dict, data, graph, path, log=print) -> "NeuralPredictor":
+        """Rebuild a saved model (models/final.pt of a run) with the run's own config and dataset."""
+        p = cls(cfg, data, graph, log)
+        ck = torch.load(path, map_location=p.device, weights_only=False)
+        if ck.get("data_hash") and ck["data_hash"] != data.hash:
+            raise ValueError(f"{path} was trained on dataset {ck['data_hash']}, not {data.hash}")
+        if {k: v.tolist() for k, v in p.cols.items()} != ck["cols"]:
+            raise ValueError(f"{path} expects other input features")
+        p.mu, p.sd = ck["mu"].numpy(), ck["sd"].numpy()
+        for state in ck["state_dicts"]:
+            model = CarbonModel(p.dims, cfg["model"]).to(p.device)
+            model.load_state_dict(state)
+            model.eval()
+            p.models.append(model)
+        return p

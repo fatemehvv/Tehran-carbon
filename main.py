@@ -7,6 +7,9 @@
     python main.py train     --resume <run_id>                  continue an interrupted run
     python main.py inventory --exp inv_l1_v1                    L1 sector totals (IPCC + Monte Carlo)
     python main.py evaluate  --hypothesis H1                    pre-registered decision rule on finished runs
+    python main.py analyze   districts --exp rq2_sage_v1 rq2_base_slx_gbm_v1   district classes vs RQ1 (kappa)
+    python main.py analyze   response  --exp rq2_sage_v1        response checks of the final model (for RQ3)
+    python main.py summarize --exp rq1_ablation_v1              table of all finished runs / sweep variants
     python main.py runs      [--rq RQ1] [--exp rq1_] [--last 30]   run history (runs/registry.csv)
 """
 from __future__ import annotations
@@ -106,16 +109,58 @@ def cmd_inventory(args):
             run.finish("done", summary)
 
 
+def analysis_config(name: str, rq: str | None, description: str, **extra) -> dict:
+    """Defaults + an `experiment` block for a tracked analysis run (it trains nothing)."""
+    cfg = dict(Config().defaults)
+    cfg["experiment"] = dict(name=name, rq=rq, kind="analysis", description=description, version=None, variant={},
+                             variant_label="", overrides={}, **extra)
+    return cfg
+
+
 def cmd_evaluate(args):
     from tehran_carbon.evaluation.hypotheses import HypothesisTest
-    conf = Config()
-    spec = conf.hypotheses[args.hypothesis]
-    cfg = dict(conf.defaults)
-    cfg["experiment"] = dict(name=f"hypothesis_{args.hypothesis}", rq=spec.get("rq"), kind="analysis",
-                             description=f"decision rule {args.hypothesis}", version=None, variant={},
-                             variant_label="", overrides={}, spec=spec)
+    spec = Config().hypotheses[args.hypothesis]
+    cfg = analysis_config(f"hypothesis_{args.hypothesis}", spec.get("rq"), f"decision rule {args.hypothesis}", spec=spec)
     with Run(cfg) as run:
         run.finish("done", HypothesisTest(cfg, args.hypothesis, spec).run(run))
+
+
+def cmd_analyze(args):
+    if args.what == "districts":
+        from tehran_carbon.evaluation.districts import DistrictComparison
+        cfg = analysis_config("districts", "RQ2", "district classes vs RQ1 v2 (kappa)", experiments=args.exp)
+        with Run(cfg) as run:
+            run.finish("done", DistrictComparison(cfg, args.exp).run(run))
+    else:
+        from tehran_carbon.experiments.response import ResponseChecks
+        cfg = analysis_config("response", "RQ2", "response checks of the final model (bridge to RQ3)",
+                              experiments=args.exp[:1])
+        with Run(cfg) as run:
+            run.finish("done", ResponseChecks(cfg, args.exp[0]).run(run))
+
+
+def cmd_summarize(args):
+    import pandas as pd
+    cfg = Config().defaults
+    rows = []
+    for _, r in RunRegistry(cfg).find(args.exp).iterrows():
+        f = ROOT / r.path / "metrics.json"
+        if not f.exists():
+            continue
+        row = {"run_id": r.run_id, "variant": r.variant}
+        for part, values in json.loads(f.read_text(encoding="utf-8")).items():
+            for key, metrics in values.items():
+                row.update({f"{part}_{key}_{m}": round(v, 4) for m, v in metrics.items()})
+        rows.append(row)
+    if not rows:
+        print(f"no finished runs of {args.exp}")
+        return
+    t = pd.DataFrame(rows)
+    out = Config.path(cfg, "runs") / f"summary_{args.exp}.csv"
+    t.to_csv(out, index=False, encoding="utf-8-sig")
+    with pd.option_context("display.width", 250, "display.max_columns", 50):
+        print(t.to_string(index=False))
+    print(f"\nwritten {out}")
 
 
 def cmd_runs(args):
@@ -145,6 +190,9 @@ def main():
     p = sub.add_parser("inventory"); p.add_argument("--exp", required=True); p.add_argument("--set", nargs="*", default=[])
     p.set_defaults(fn=cmd_inventory)
     p = sub.add_parser("evaluate"); p.add_argument("--hypothesis", required=True); p.set_defaults(fn=cmd_evaluate)
+    p = sub.add_parser("analyze"); p.add_argument("what", choices=["districts", "response"])
+    p.add_argument("--exp", nargs="+", required=True); p.set_defaults(fn=cmd_analyze)
+    p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)
     p = sub.add_parser("runs"); p.add_argument("--rq"); p.add_argument("--exp"); p.add_argument("--last", type=int, default=30)
     p.set_defaults(fn=cmd_runs)
     args = ap.parse_args()

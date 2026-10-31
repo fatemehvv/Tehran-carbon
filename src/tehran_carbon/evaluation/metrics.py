@@ -5,6 +5,7 @@ roc_auc   area under the ROC curve
 f1_top    F1 when the predicted top-k cells (k = number of true hotspots) are called hotspots
 spearman  rank correlation of predicted and observed z
 r2        coefficient of determination of z
+mae/rmse  absolute / root-mean-square error of z (reported by the comparable studies)
 The vectorised implementations accept duplicated rows (needed by the block bootstrap).
 """
 from __future__ import annotations
@@ -49,7 +50,16 @@ def r2(y, s, z) -> float:
     return float(1 - ((z - s) ** 2).sum() / ((z - z.mean()) ** 2).sum())
 
 
-METRICS = {"pr_auc": pr_auc, "roc_auc": roc_auc, "f1_top": f1_top, "spearman": spearman, "r2": r2}
+def mae(y, s, z) -> float:
+    return float(np.abs(z - s).mean())
+
+
+def rmse(y, s, z) -> float:
+    return float(np.sqrt(((z - s) ** 2).mean()))
+
+
+METRICS = {"pr_auc": pr_auc, "roc_auc": roc_auc, "f1_top": f1_top, "spearman": spearman, "r2": r2, "mae": mae,
+           "rmse": rmse}
 
 
 def monthly_scores(z: np.ndarray, hot: np.ndarray, pred: np.ndarray, names, idx=None) -> dict[str, np.ndarray]:

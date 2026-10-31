@@ -86,19 +86,22 @@ class HypothesisTest:
             pc, pr = oof(cdir, y), oof(rdir, y)
             diff = boot.scores(*truth[y], pc, self.metric) - boot.scores(*truth[y], pr, self.metric)
             lo, hi = BlockBootstrap.interval(diff, level)
-            d = score(pc, y) - score(pr, y)
-            rows.append(dict(test=f"cv_{y}", delta=d, ci_low=lo, ci_high=hi))
-            ok_all &= d > 0
+            sc, sr = score(pc, y), score(pr, y)
+            rows.append(dict(test=f"cv_{y}", candidate=sc, reference=sr, delta=sc - sr, ci_low=lo, ci_high=hi,
+                             persistence=np.nan))
+            ok_all &= sc > sr
             ci_all &= lo > 0
         for a in years:
             for b in years:
                 if a == b or not (cdir / "preds" / f"transfer_{a}to{b}.npz").exists():
                     continue
-                pc = np.load(cdir / "preds" / f"transfer_{a}to{b}.npz")["pred"]
-                pr = np.load(rdir / "preds" / f"transfer_{a}to{b}.npz")["pred"]
-                d = score(pc, b) - score(pr, b)
-                rows.append(dict(test=f"transfer_{a}to{b}", delta=d, ci_low=np.nan, ci_high=np.nan))
-                ok_all &= d > 0
+                sc = score(np.load(cdir / "preds" / f"transfer_{a}to{b}.npz")["pred"], b)
+                sr = score(np.load(rdir / "preds" / f"transfer_{a}to{b}.npz")["pred"], b)
+                # persistence = last year's OBSERVED map: a reference ceiling, not a competitor (it cannot respond
+                # to scenarios, so it is useless for RQ3)
+                rows.append(dict(test=f"transfer_{a}to{b}", candidate=sc, reference=sr, delta=sc - sr, ci_low=np.nan,
+                                 ci_high=np.nan, persistence=score(truth[a][0], b)))
+                ok_all &= sc > sr
         verdict = "supported" if ok_all and ci_all else ("partial" if ok_all else "not supported")
         decision = pd.DataFrame(rows)
         run.save_table(f"{self.name}_scores.csv", table)

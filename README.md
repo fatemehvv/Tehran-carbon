@@ -90,10 +90,19 @@ python main.py train --exp rq1_base_gbm_v1
 python main.py train --exp rq1_pollution_no2_v1
 python main.py evaluate --hypothesis H1           # قاعدهٔ پیش‌ثبت‌شده → H1_decision.csv
 
-python main.py train --exp rq2_mlp_v1             # RQ2
+python main.py train --exp rq2_mlp_v1             # RQ2 (پیش‌ثبت: docs/preregistration_rq2.md)
 python main.py train --exp rq2_sage_v1
 python main.py train --exp rq2_base_slx_gbm_v1    # و بقیهٔ rq2_base_*
-python main.py evaluate --hypothesis H2
+python main.py evaluate --hypothesis H2           # با ردیف persistence برای انتقال زمانی
+python main.py train --exp rq2_sage_od_v1         # ثانویه: یال OD بین مناطق (HENCE)
+python main.py train --exp rq2_gcn_v1             # ثانویه
+python main.py train --exp rq2_gat_v1             # ثانویه: GAT با جهت یال، ۱ seed
+python main.py train --exp rq2_receptive_field_v1 # ۱، ۲ و ۴ لایه
+python main.py train --exp rq2_sage_single_scale_v1
+python main.py train --exp rq2_sage_random_v1     # و rq2_mlp_random_v1، rq2_base_slx_gbm_random_v1 (خوش‌بینی CV تصادفی)
+python main.py analyze response --exp rq2_sage_v1                       # مدل پاسخ برای RQ3
+python main.py analyze districts --exp rq2_sage_v1 rq2_base_slx_gbm_v1  # مقایسه با کلاس‌های DS در RQ1
+python main.py summarize --exp rq2_receptive_field_v1                   # جدول همهٔ اجراهای یک آزمایش
 
 python main.py runs --rq RQ1                      # تاریخچه
 python main.py train --resume <run_id>            # ادامهٔ اجرای قطع‌شده (foldهای تمام‌شده دوباره اجرا نمی‌شوند)

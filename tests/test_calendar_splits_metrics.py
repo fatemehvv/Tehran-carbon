@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from sklearn.metrics import average_precision_score, roc_auc_score
+from sklearn.metrics import average_precision_score, mean_absolute_error, mean_squared_error, roc_auc_score
 
 from tehran_carbon.config import Config
 from tehran_carbon.data.grid import Grid
@@ -51,5 +51,8 @@ def test_metrics_match_sklearn():
         assert pr_auc(y, s) == pytest.approx(average_precision_score(y, s), abs=1e-9)
         assert roc_auc(y, s) == pytest.approx(roc_auc_score(y, s), abs=1e-9)
     z = rng.normal(size=(3, 200))
-    sc = monthly_scores(z, z > 1.0, z + 0.1 * rng.normal(size=z.shape), ["pr_auc", "spearman", "r2"])
+    p = z + 0.1 * rng.normal(size=z.shape)
+    sc = monthly_scores(z, z > 1.0, p, ["pr_auc", "spearman", "r2", "mae", "rmse"])
     assert all(v.shape == (3,) for v in sc.values()) and (sc["spearman"] > 0.9).all()
+    assert sc["mae"][0] == pytest.approx(mean_absolute_error(z[0], p[0]))
+    assert sc["rmse"][0] == pytest.approx(np.sqrt(mean_squared_error(z[0], p[0])))

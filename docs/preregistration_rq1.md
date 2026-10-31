@@ -76,7 +76,8 @@ with context always included.
 - **Temporal transfer.** Train on one year, predict the other.
 - **Primary metric.** PR-AUC of the hotspot label (chance = 0.10), per month on the pooled out-of-fold map, then
   averaged over the 12 months.
-- **Secondary metrics.** ROC-AUC, F1 of the predicted top 10 %, Spearman, R².
+- **Secondary metrics.** ROC-AUC, F1 of the predicted top 10 %, Spearman, R², MAE, RMSE. MAE and RMSE make the
+  results comparable with OpenCarbon and HENCE.
 - **Uncertainty.** Block bootstrap over the 22 km blocks, 2,000 resamples. Paired differences use identical
   resamples.
 

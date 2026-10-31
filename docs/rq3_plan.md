@@ -16,7 +16,7 @@ Status: **design only**; nothing is implemented yet. The design follows the prop
 | need | where |
 |---|---|
 | emissions by sector, district and month | `inventory/` (L1 now; L2 allocation to be ported from the frozen RQ1 v2 outputs) |
-| where an intervention changes the hotspot | `models/final.pt` of the chosen RQ2 run (fusion + GNN), loaded frozen |
+| where an intervention changes the hotspot | `models/final.pt` of the chosen RQ2 run (fusion + GNN), loaded with `NeuralPredictor.load`; scenario scaling, HCI and PEX are in `experiments/response.py` (`ResponseChecks`) |
 | district graph (22 nodes, shared boundaries) | `data/graphs.py: DistrictGraph` |
 | cell → district shares | `data/raw/rq1_frozen/grid_district_fractions.csv` |
 | run tracking, config versions | `tracking.py`, `configs/config.yaml` |

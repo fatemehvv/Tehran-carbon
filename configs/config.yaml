@@ -27,6 +27,7 @@ defaults:
       districts_file: spatial/Tehran_Districts22.geojson
       district_id_column: district_id
       district_fractions_file: rq1_frozen/grid_district_fractions.csv
+      fractions_columns: {cell: cell_id, district: district_id, frac: frac_of_cell}
       metric_crs: EPSG:32639                       # UTM 39N, for areas and distances in metres
       touch_tolerance_m: 1.0                       # districts closer than this share a boundary
 
@@ -118,7 +119,19 @@ defaults:
     use_context: true
     encoder: {hidden: 32, layers: 2, dropout: 0.1}
     fusion: {type: gated}         # early | late | gated
-    backbone: {type: none, layers: 3, scales: [1, 3, 9], heads: 2, dropout: 0.1}   # none | sage | gcn | gat
+    backbone:                     # none | sage | gcn | gat
+      type: none
+      layers: 3
+      scales: [1, 3, 9]           # neighbour distance (cells) of each edge set
+      heads: 2                    # gat only
+      dropout: 0.1
+      edge_direction: true        # gat only: unit direction of every edge as an edge feature
+      od:                         # sage / gcn: travel-demand links between districts (HENCE-style OD edges)
+        enabled: false
+        file: rq1_frozen/{year}/L2prep/OD_gravity_typical_day.csv   # gravity-model OD of RQ1 (modelled, not observed)
+        origin_column: origin
+        destination_column: destination
+        flow_column: person_trips
     init_from: null               # {run: <run_id>, modules: [fusion], freeze: false}: start from trained weights
     baseline:                     # used when type = baseline
       name: gbm                   # ols | gbm | rf | forward_operator
@@ -142,8 +155,27 @@ defaults:
 
   eval:
     primary: pr_auc
-    metrics: [pr_auc, roc_auc, f1_top, spearman, r2]
+    metrics: [pr_auc, roc_auc, f1_top, spearman, r2, mae, rmse]
     bootstrap: {n: 2000, seed: 0, level: 0.95}
+
+  # ================================================================================================= analyses of finished runs
+  analysis:
+    districts:                    # out-of-fold hotspot maps -> 22 districts, compared with the RQ1 v2 classes
+      ds_file: rq1_frozen/{year}/L3/L3_hotspots_DS.csv
+      id_column: district_id
+      references: {DS: class_DS, inventory_only: class_INV_only}
+      labels: [L, M, H]           # classes by equal-count ranks (terciles)
+    response:                     # is the trained GNN usable for decisions (RQ3)?
+      year: 1403
+      inventory_prefix: inv_      # features scaled in the scenarios
+      population_feature: pop     # for the population-exposure index PEX
+      district_factor: 0.7        # sign test: -30 % CO2 in one district at a time
+      inside_min_fraction: 0.5    # a cell belongs to a district if at least this share lies inside
+      ring_km: 2.0                # distance rings for the decay of the effect
+      max_km: 30.0
+      total_cut: 0.10             # uniform vs targeted cut of the same total CO2
+      targeted_districts: 4       # the districts with the highest baseline predicted z
+      max_local_cut: 0.9          # upper bound of the cut inside the targeted districts
 
   # ================================================================================================= inventory L1
   # IPCC (2006) Tier 1: E = sum_f A_f x NCV_f x density_f x EF_f. Lists are triangular [central, low, high].
@@ -267,15 +299,45 @@ experiments:
     model: {backbone: {type: gcn}}
   rq2_gat_v1:
     rq: RQ2
-    description: multi-scale GATv2 (attention over edges, scale as edge feature)
+    description: multi-scale GATv2 (attention over edges; scale and direction as edge features), 1 seed (cost)
     inherits: rq2_sage_v1
     model: {backbone: {type: gat}}
-    train: {months_per_batch: 2}
+    train: {months_per_batch: 2, seeds: [0]}
+  rq2_sage_od_v1:
+    rq: RQ2
+    description: primary GNN + OD (travel-demand) links between districts, as in HENCE
+    inherits: rq2_sage_v1
+    model: {backbone: {od: {enabled: true}}}
+  rq2_sage_single_scale_v1:
+    rq: RQ2
+    description: receptive-field check - 3 layers, only the adjacent cells (scale 1)
+    inherits: rq2_sage_v1
+    model: {backbone: {scales: [1]}}
+    split: {transfer: false}
+    train: {save_final: false}
   rq2_receptive_field_v1:
     rq: RQ2
+    description: 1, 2 and 4 layers (0 layers = rq2_mlp_v1, 3 layers = rq2_sage_v1)
     inherits: rq2_sage_v1
+    split: {transfer: false}
+    train: {save_final: false}
     sweep:
-      model.backbone.layers: [1, 2, 3, 4]
+      model.backbone.layers: [1, 2, 4]
+  # design optimism: the same models under naive random CV (compare with the 22 km blocks)
+  rq2_mlp_random_v1:
+    rq: RQ2
+    inherits: rq2_mlp_v1
+    split: {scheme: random_kfold, transfer: false}
+    train: {save_final: false}
+  rq2_sage_random_v1:
+    rq: RQ2
+    inherits: rq2_sage_v1
+    split: {scheme: random_kfold, transfer: false}
+    train: {save_final: false}
+  rq2_base_slx_gbm_random_v1:
+    rq: RQ2
+    inherits: rq2_base_slx_gbm_v1
+    split: {scheme: random_kfold, transfer: false}
   rq2_base_ols_v1:
     rq: RQ2
     model: {type: baseline, baseline: {name: ols, lags: []}}

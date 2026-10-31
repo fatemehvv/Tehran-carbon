@@ -17,7 +17,7 @@ import pandas as pd
 import torch
 
 from ..data.dataset import CellMonthDataset
-from ..data.graphs import GridGraph
+from ..data.graphs import GridGraph, ODOperator
 from ..data.grid import Grid
 from ..data.splits import SpatialSplit
 from ..evaluation.metrics import monthly_scores
@@ -38,8 +38,10 @@ class CrossValidation:
         self.neural = m["type"] == "neural"
         if not self.neural and m["type"] != "baseline":
             raise ValueError(f"unknown model.type '{m['type']}'")
-        self.graph = (GridGraph(self.grid.H, self.grid.W, m["backbone"]["scales"])
+        self.graph = (GridGraph(self.grid, m["backbone"]["scales"])
                       if self.neural and BACKBONES.get(m["backbone"]["type"]).needs_graph else None)
+        if self.graph is not None and m["backbone"]["od"]["enabled"]:
+            self.graph.od = ODOperator.from_config(cfg, self.grid.n)
         self.use_val = self.neural and bool(cfg["split"]["inner_val"])
         self.branches = list(self.data.columns(m["modalities"], m["use_context"]))
 
