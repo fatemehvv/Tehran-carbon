@@ -117,11 +117,13 @@ class CarbonPolicyEnv(gym.Env):
         bus_d = c.bus_co2 * b * c.bus_share * c.days[t] / c.days.sum()   # (D,) extra bus CO2
         dC = float(car_saved.sum() - bus_d.sum())
 
+        # person-hours: trips made (car at BPR speed, transit at door-to-door speed), plus the baseline duration of
+        # every trip that is no longer made (its loss); T0 = the baseline car hours of all trips
         tau = c.time_ratio(vkt1 / np.maximum(vkt0, 1e-12))
         tau_od = 0.5 * (tau[:, None] + tau[None])
         T0 = c.m[t] * occ * (C0 * c.L).sum() / c.speed
-        T1 = c.m[t] * occ * (((stay * tau_od + suppressed) * c.L).sum() / c.speed
-                             + (shifted * c.L).sum() / float(self.r["transit_speed_kmh"]))
+        made = ((stay * tau_od) * c.L).sum() / c.speed + (shifted * c.L).sum() / float(self.r["transit_speed_kmh"])
+        T1 = c.m[t] * occ * (made + 2 * (suppressed * c.L).sum() / c.speed)
         dE = c.bus_mj * bus_used
 
         R = c.road_co2[t].sum()

@@ -160,3 +160,6 @@ def test_baselines(name):
     tr = np.ones((H, W), bool)
     p = BASELINES.get(name)(cfg, d).fit([d.X], [d.z], [tr])
     assert p.predict(d.X).shape == (12, H, W)
+    z = d.z.copy()
+    z[np.random.default_rng(2).random(z.shape) < 0.3] = np.nan       # cloud gaps (daily data)
+    assert np.isfinite(BASELINES.get(name)(cfg, d).fit([d.X], [z], [tr]).predict(d.X)).all()

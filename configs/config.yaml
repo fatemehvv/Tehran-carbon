@@ -510,8 +510,8 @@ experiments:
           CNG: [ng_ncv_MJ_m3]
           diesel_municipal_bus: [dsl_density_kg_L, dsl_ncv_MJ_kg]
       road_grid: {file: "rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv", cell: cell_id, column: road_transport}
-      links: {file: "rq1_frozen/{year}/L2/L2_road_links_{year}.csv", district: district_id, free_speed: vff, vc: vc,
-              volume: vol_peak, length: len_km}
+      links: {file: "rq1_frozen/{year}/L2/L2_road_links_{year}.csv", district: district_id, free_speed: vff,
+              day_speed: v_day, volume: vol_peak, length: len_km}   # BPR anchored at the all-day speed v_day
       city: {file: traffic/city_transport_by_year.csv, year: year_sh, trips_M: total_intracity_person_trips_M,
              speed: network_speed_kmh, bus_share: share_bus}
       district_trips: {file: traffic/district_trips_by_year.csv, district: district_id, year: year_sh,

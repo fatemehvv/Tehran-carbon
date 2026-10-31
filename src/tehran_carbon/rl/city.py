@@ -5,10 +5,11 @@ docs/preregistration_rq3.md):
   C (D, D)        restricted car vehicle trips o -> d of a typical day (gravity OD of RQ1)
   L (D, D)        trip distance in km
   m (12,)         typical days per month of car activity: annual x gasoline_share_t (sums to the days of the year)
-  ef              t CO2 per car vehicle-km, calibrated so that the baseline reproduces the L1 car CO2
+  ef              t CO2 per car vehicle-km, calibrated so that the baseline reproduces the car share (L1) of the
+                  road CO2 inside the districts
   bus_*           annual CO2 / energy of the municipal buses, their service share and riders per day by district
   road_co2 (12, D) road CO2 of each district and month (L2 grid x monthly profile), road_mj (12,) road fuel energy
-  links           peak v/c, free-flow speed and VKT weight of every road link, with its district (BPR speeds)
+  links           effective all-day v/c, free-flow speed and VKT weight of every road link, with its district
 """
 from __future__ import annotations
 
@@ -75,8 +76,7 @@ class CityTransport:
         factors = cfg["inventory"]["l1"]["factors"]
         mj = {k: by.loc[k, s["activity_column"]] * float(s["activity_scale"]) * float(np.prod([factors[f][0] for f in fs]))
               for k, fs in s["energy_factors"].items()}
-        car_co2 = by.loc[s["car"], s["co2_column"]].sum()
-        ef = car_co2 / (days.sum() * (C * L).sum())
+        car_share = by.loc[s["car"], s["co2_column"]].sum() / by[s["co2_column"]].sum()
 
         c = r["city"]
         city = pd.read_csv(raw / c["file"], encoding="utf-8-sig").set_index(c["year"]).loc[y]
@@ -94,10 +94,16 @@ class CityTransport:
         road[grid[g["cell"]].values] = grid[g["column"]].values
         road_co2 = share[:, None] * (road @ F)[None]
         road_mj = share * sum(mj.values())
+        # the baseline OD reproduces the car share of the road CO2 inside the districts
+        ef = car_share * road_co2.sum() / (days.sum() * (C * L).sum())
 
-        k = r["links"]
+        # BPR anchored at the all-day mean speed of every link: effective v/c = the one that gives v_day
+        # (the peak v/c reaches 8 on some links and would overstate all-day congestion relief)
+        k, bpr = r["links"], r["bpr"]
         lk = pd.read_csv(raw / k["file"].format(year=y), encoding="utf-8-sig")
-        lk = lk[lk[k["district"]].isin(col) & (lk[k["free_speed"]] > 0)]
+        lk = lk[lk[k["district"]].isin(col) & (lk[k["free_speed"]] > 0) & (lk[k["day_speed"]] > 0)]
+        ratio = np.maximum(lk[k["free_speed"]].values / lk[k["day_speed"]].values - 1, 0.0)
+        vc = (ratio / float(bpr["alpha"])) ** (1 / float(bpr["beta"]))
         return cls(ids, C, L, m, days, prof[p["hdd"]].values, ef, by.loc[s["bus"], s["co2_column"]], mj[s["bus"]],
                    bus_share, bus_riders, road_co2, road_mj, city[c["speed"]], lk[k["district"]].map(col).values,
-                   (lk[k["volume"]] * lk[k["length"]]).values, lk[k["free_speed"]].values, lk[k["vc"]].values, r["bpr"])
+                   (lk[k["volume"]] * lk[k["length"]]).values, lk[k["free_speed"]].values, vc, bpr)

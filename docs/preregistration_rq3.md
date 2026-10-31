@@ -31,12 +31,15 @@ Decisions taken with the thesis author on 2026-11-01:
 | bus CO₂, diesel litres (annual) | L1 line `diesel_municipal_bus` |
 | monthly profile s_t | L1 `gasoline_share` (car activity of month t = annual × s_t) |
 | road CO₂ of district i, month t | L2 grid `road_transport` × s_t, cells → districts by area share |
-| speed response | L2 road links: free-flow speed, capacity, peak volume, v/c (BPR α = 0.15, β = 4) |
+| speed response | L2 road links: free-flow speed and all-day mean speed v_day (BPR α = 0.15, β = 4, anchored at v_day: the effective v/c is the one that gives v_day); peak volume × length as the VKT weight |
 | base speed, mean trip length, bus share, total trips | `traffic/city_transport_by_year.csv` |
 | bus riders by district | city bus person-trips × district share of attracted trips (`traffic/district_trips_by_year.csv`) |
 
-**Calibration.** The car emission factor per vehicle-km is chosen so that the baseline reproduces the L1 car CO₂:
-EF = CO₂_car / (365 · Σ C_od L_od). This keeps RQ3 consistent with RQ1.
+**Calibration.**
+- The car emission factor per vehicle-km is chosen so that the baseline reproduces the car part of the road CO₂
+  inside the 22 districts: EF = s_car · R_year / (365 · Σ C_od L_od).
+- s_car is the share of the L1 road CO₂ that comes from gasoline and CNG.
+- This keeps RQ3 consistent with RQ1, and the CO₂ term on the same base as R_t.
 
 **Actions (per district i, per month).**
 - Restriction r_i ∈ [0, 0.3]: the share of restricted car trips **into** district i that are removed. This works
@@ -140,6 +143,25 @@ episodes), so they are strong baselines.
    of the tuned static policies.
 2. **What the agent does.** The mean action by month and district, and the use of the bus budget over the year.
 3. **Components.** CO₂, travel time, energy and exposure of every policy.
+
+## Changes before the first full run
+
+The smoke run (2,400 agent steps, 2 episodes; an installation check) showed three errors in the simulator. They
+were fixed on 2026-11-01, **before any full run**:
+1. **BPR on the peak v/c.**
+   - Travel-time changes used the peak-hour v/c (up to 8 on some links). This overstated the congestion relief of
+     all-day trips (a 10 % restriction "saved" 312 M person-hours a year).
+   - BPR is now anchored at each link's all-day mean speed v_day of the RQ1 assignment.
+2. **Inconsistent CO₂ base.**
+   - The emission factor reproduced the car CO₂ of the whole CORE, while the reward divides by the road CO₂ of the
+     22 districts. A 30 % restriction then "cut" 34 % of road CO₂.
+   - The factor now reproduces the car share of the 22-district road CO₂.
+3. **Suppressed trips were free.**
+   - The code cancelled their time against the baseline. The design above (a trip that is not made costs its own
+     travel time) was not implemented.
+   - It is now implemented, with a unit test.
+
+The design, the levers, the reward weights, the policies and the decision rules are unchanged.
 
 ## Known limitations
 

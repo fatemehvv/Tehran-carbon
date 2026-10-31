@@ -98,9 +98,11 @@ class ForwardOperator:
 
     def fit(self, Xs, ys, train_masks, val_masks=None):
         y = np.concatenate([Y[:, m].ravel() for Y, m in zip(ys, train_masks)])
+        ok = np.isfinite(y)                  # missing targets (cloudy cells of the daily data)
+        y = y[ok]
         best, self.sigma, rows = -np.inf, None, None
         for s in self.sigmas:
-            a = np.concatenate([self.score(X, s)[:, m].ravel() for X, m in zip(Xs, train_masks)])
+            a = np.concatenate([self.score(X, s)[:, m].ravel() for X, m in zip(Xs, train_masks)])[ok]
             rho = spearmanr(a, y).correlation
             if rho > best:
                 best, self.sigma, rows = rho, s, a

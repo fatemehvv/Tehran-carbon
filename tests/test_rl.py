@@ -12,7 +12,7 @@ RL = Config().resolve("rq3_policy_v1")[0]["rl"]
 D = 3
 
 
-def tiny_city() -> CityTransport:
+def tiny_city(vc: float = 0.6) -> CityTransport:
     """3 districts, 2 links each, low v/c (small speed effects); car faster than transit."""
     C = np.array([[1000.0, 400.0, 200.0], [300.0, 800.0, 100.0], [200.0, 100.0, 600.0]])
     L = np.array([[2.0, 8.0, 12.0], [8.0, 2.5, 6.0], [12.0, 6.0, 3.0]])
@@ -24,13 +24,13 @@ def tiny_city() -> CityTransport:
                          ef=2e-4, bus_co2=1200.0, bus_mj=1.6e7, bus_share=[0.5, 0.3, 0.2],
                          bus_riders=[3000.0, 2000.0, 1000.0], road_co2=road, road_mj=np.full(12, 1e8), speed=25.0,
                          link_district=links, link_w=np.full(2 * D, 100.0), link_vff=np.full(2 * D, 50.0),
-                         link_vc=np.full(2 * D, 0.6), bpr=RL["bpr"])
+                         link_vc=np.full(2 * D, vc), bpr=RL["bpr"])
 
 
-def env(**reward) -> CarbonPolicyEnv:
+def env(vc: float = 0.6, **reward) -> CarbonPolicyEnv:
     r = copy.deepcopy(RL)
     r["reward"].update(reward)
-    e = CarbonPolicyEnv(tiny_city(), r)
+    e = CarbonPolicyEnv(tiny_city(vc), r)
     e.reset(seed=0)
     return e
 
@@ -49,6 +49,14 @@ def test_restriction_cuts_co2_and_costs_time():
     assert 0 < out["shift_share"] <= 1 and out["energy_MJ"] == 0
     # a larger travel-time weight lowers the reward of the same action
     assert env(lambda_mobility=4.0).outcome(0, np.array([0.3, 0, 0]), np.zeros(D))["reward"] < out["reward"]
+
+
+def test_a_trip_not_made_is_a_loss():
+    e = env(vc=0.0)                                                    # no congestion, so no time saved
+    e.theta.update(shift=0.0, shift_boost=0.0)                         # every removed trip is suppressed
+    out = e.outcome(0, np.array([0.3, 0.0, 0.0]), np.zeros(D))
+    removed_hours = 0.3 * (e.city.C[:, 0] * e.noise[0] * e.city.L[:, 0]).sum() * e.city.m[0] * RL["occupancy"] / e.city.speed
+    assert out["hours_lost"] == pytest.approx(removed_hours, rel=1e-9)
 
 
 def test_bus_boost_costs_energy_and_respects_the_budget():
