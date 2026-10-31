@@ -166,7 +166,7 @@ class NeuralPredictor:
             raise ValueError(f"{path} was trained on dataset {ck['data_hash']}, not {data.hash}")
         if {k: v.tolist() for k, v in p.cols.items()} != ck["cols"]:
             raise ValueError(f"{path} expects other input features")
-        p.mu, p.sd = ck["mu"].numpy(), ck["sd"].numpy()
+        p.mu, p.sd = ck["mu"].cpu().numpy(), ck["sd"].cpu().numpy()
         for state in ck["state_dicts"]:
             model = CarbonModel(p.dims, cfg["model"]).to(p.device)
             model.load_state_dict(state)
