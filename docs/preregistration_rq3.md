@@ -31,7 +31,7 @@ Decisions taken with the thesis author on 2026-11-01:
 | bus CO₂, diesel litres (annual) | L1 line `diesel_municipal_bus` |
 | monthly profile s_t | L1 `gasoline_share` (car activity of month t = annual × s_t) |
 | road CO₂ of district i, month t | L2 grid `road_transport` × s_t, cells → districts by area share |
-| speed response | L2 road links: free-flow speed and all-day mean speed v_day (BPR α = 0.15, β = 4, anchored at v_day: the effective v/c is the one that gives v_day); peak volume × length as the VKT weight |
+| speed response | free-flow speed of the L2 road links (VKT-weighted per district) and the reported district speed (`L2_traffic_speed_check.csv`); the delay changes with elasticity η |
 | base speed, mean trip length, bus share, total trips | `traffic/city_transport_by_year.csv` |
 | bus riders by district | city bus person-trips × district share of attracted trips (`traffic/district_trips_by_year.csv`) |
 
@@ -60,7 +60,7 @@ Decisions taken with the thesis author on 2026-11-01:
 **Outcomes per month.** Car VKT is allocated half to the origin and half to the destination district.
 - **Net CO₂ reduction** ΔC = car CO₂ saved − extra bus CO₂.
 - **Travel time** (person-hours):
-  - remaining car trips at the BPR-adjusted speed of their two districts;
+  - remaining car trips at the adjusted speed of their two districts (delay elasticity, see "Changes" below);
   - shifted trips at the door-to-door transit speed;
   - each suppressed trip costs its own car travel time.
   - ΔT = T − T₀.
@@ -146,12 +146,20 @@ episodes), so they are strong baselines.
 
 ## Changes before the first full run
 
-The smoke run (2,400 agent steps, 2 episodes; an installation check) showed three errors in the simulator. They
-were fixed on 2026-11-01, **before any full run**:
-1. **BPR on the peak v/c.**
-   - Travel-time changes used the peak-hour v/c (up to 8 on some links). This overstated the congestion relief of
-     all-day trips (a 10 % restriction "saved" 312 M person-hours a year).
-   - BPR is now anchored at each link's all-day mean speed v_day of the RQ1 assignment.
+Two smoke runs (2,400 agent steps, 2 episodes each; installation checks) showed three errors in the simulator.
+They were fixed on 2026-11-01, **before any full run**:
+1. **Speed model (BPR on the RQ1 assignment).**
+   - Travel-time changes used BPR on the peak-hour v/c of the RQ1 links (up to 8 on some links). This overstated the
+     congestion relief (a 10 % restriction "saved" 312 M person-hours a year).
+   - Anchoring BPR at the links' all-day speeds was tried in a second smoke run. It still gave −75 % travel time for
+     −30 % traffic in central districts, because the RQ1 assignment is far too congested there (modelled 6–10 km/h,
+     reported 13–27 km/h).
+   - **Replaced by a delay-elasticity model.**
+     - Hours per km of a district = h_free + (h₀ − h_free) · x^η.
+     - h₀ comes from the **reported** district speed (`L2_traffic_speed_check.csv`); h_free from the VKT-weighted
+       free-flow speed of the district's links; x is the car-VKT ratio.
+     - η is drawn per episode from [1.7, 1.2, 2.5]. Evidence: the London charge (TfL 2004) gave −18 % traffic and
+       −30 % delay; Stockholm (Eliasson 2009) gave −20 % traffic and −30 to −50 % queue time.
 2. **Inconsistent CO₂ base.**
    - The emission factor reproduced the car CO₂ of the whole CORE, while the reward divides by the road CO₂ of the
      22 districts. A 30 % restriction then "cut" 34 % of road CO₂.
@@ -166,7 +174,7 @@ The design, the levers, the reward weights, the policies and the decision rules 
 ## Known limitations
 
 - **No network assignment.** Car VKT is split between the origin and destination districts. Route choice and
-  through-traffic are not modelled; BPR speeds react to the district's own VKT change only.
+  through-traffic are not modelled; the speed of a district reacts to its own VKT change only.
 - **Modelled demand.** The OD matrix is the RQ1 gravity model, not an observed survey.
 - **Assumed behaviour.** The behavioural parameters (shift share, elasticity, share of new riders who drove before)
   come from the literature as triangular ranges. They are not estimated for Tehran; the ranges are sampled so the

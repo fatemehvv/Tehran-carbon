@@ -119,7 +119,7 @@ class CarbonPolicyEnv(gym.Env):
 
         # person-hours: trips made (car at BPR speed, transit at door-to-door speed), plus the baseline duration of
         # every trip that is no longer made (its loss); T0 = the baseline car hours of all trips
-        tau = c.time_ratio(vkt1 / np.maximum(vkt0, 1e-12))
+        tau = c.time_ratio(vkt1 / np.maximum(vkt0, 1e-12), th["delay_elasticity"])
         tau_od = 0.5 * (tau[:, None] + tau[None])
         T0 = c.m[t] * occ * (C0 * c.L).sum() / c.speed
         made = ((stay * tau_od) * c.L).sum() / c.speed + (shifted * c.L).sum() / float(self.r["transit_speed_kmh"])

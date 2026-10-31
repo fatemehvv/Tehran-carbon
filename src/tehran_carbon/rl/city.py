@@ -9,7 +9,9 @@ docs/preregistration_rq3.md):
                   road CO2 inside the districts
   bus_*           annual CO2 / energy of the municipal buses, their service share and riders per day by district
   road_co2 (12, D) road CO2 of each district and month (L2 grid x monthly profile), road_mj (12,) road fuel energy
-  links           effective all-day v/c, free-flow speed and VKT weight of every road link, with its district
+  h_free, h0 (D,) hours per km at free flow (VKT-weighted over the district's links) and at the reported speed
+Travel time per km of a district whose car volume is scaled by x: h_free + (h0 - h_free) x^eta, i.e. the delay
+changes with elasticity eta (congestion-charge evidence: London, Stockholm).
 """
 from __future__ import annotations
 
@@ -22,26 +24,19 @@ from ..utils.calendar import JalaliYear
 
 class CityTransport:
     def __init__(self, ids, C, L, m, days, hdd, ef, bus_co2, bus_mj, bus_share, bus_riders, road_co2, road_mj, speed,
-                 link_district, link_w, link_vff, link_vc, bpr):
+                 h_free, h0):
         self.ids, self.C, self.L = list(ids), np.asarray(C, float), np.asarray(L, float)
         self.m, self.days, self.hdd = np.asarray(m, float), np.asarray(days, float), np.asarray(hdd, float)
         self.ef, self.bus_co2, self.bus_mj = float(ef), float(bus_co2), float(bus_mj)
         self.bus_share, self.bus_riders = np.asarray(bus_share, float), np.asarray(bus_riders, float)
         self.road_co2, self.road_mj, self.speed = np.asarray(road_co2, float), np.asarray(road_mj, float), float(speed)
-        self.link_district, self.link_w = np.asarray(link_district, int), np.asarray(link_w, float)
-        self.link_vff, self.link_vc = np.asarray(link_vff, float), np.asarray(link_vc, float)
-        self.alpha, self.beta = float(bpr["alpha"]), float(bpr["beta"])
+        self.h0 = np.asarray(h0, float)
+        self.h_free = np.minimum(np.asarray(h_free, float), self.h0)        # no negative delay
         self.D = len(self.ids)
-        self.base_hours = self._hours_per_km(np.ones(self.D))
 
-    def _hours_per_km(self, x: np.ndarray) -> np.ndarray:
-        """(D,) VKT-weighted hours per km on the links of each district when its car volume is scaled by x (BPR)."""
-        v = self.link_vff / (1 + self.alpha * (self.link_vc * x[self.link_district]) ** self.beta)
-        return np.bincount(self.link_district, self.link_w / v, minlength=self.D)
-
-    def time_ratio(self, x: np.ndarray) -> np.ndarray:
+    def time_ratio(self, x: np.ndarray, eta: float) -> np.ndarray:
         """(D,) travel time per km relative to the baseline, for a car-volume ratio x of each district."""
-        return np.where(self.base_hours > 0, self._hours_per_km(x) / np.maximum(self.base_hours, 1e-12), 1.0)
+        return (self.h_free + (self.h0 - self.h_free) * np.asarray(x, float) ** eta) / self.h0
 
     def vkt_by_district(self, trips: np.ndarray) -> np.ndarray:
         """(D,) vehicle-km of an (o, d) trip matrix, half to the origin and half to the destination district."""
@@ -97,13 +92,16 @@ class CityTransport:
         # the baseline OD reproduces the car share of the road CO2 inside the districts
         ef = car_share * road_co2.sum() / (days.sum() * (C * L).sum())
 
-        # BPR anchored at the all-day mean speed of every link: effective v/c = the one that gives v_day
-        # (the peak v/c reaches 8 on some links and would overstate all-day congestion relief)
-        k, bpr = r["links"], r["bpr"]
+        # speeds: free flow from the RQ1 links (VKT-weighted), congested = the REPORTED district speed (the RQ1
+        # assignment is far too congested in the centre: modelled 6-10 km/h vs reported 13-27 km/h)
+        k = r["links"]
         lk = pd.read_csv(raw / k["file"].format(year=y), encoding="utf-8-sig")
-        lk = lk[lk[k["district"]].isin(col) & (lk[k["free_speed"]] > 0) & (lk[k["day_speed"]] > 0)]
-        ratio = np.maximum(lk[k["free_speed"]].values / lk[k["day_speed"]].values - 1, 0.0)
-        vc = (ratio / float(bpr["alpha"])) ** (1 / float(bpr["beta"]))
+        lk = lk[lk[k["district"]].isin(col) & (lk[k["free_speed"]] > 0)]
+        w, d = (lk[k["volume"]] * lk[k["length"]]).values, lk[k["district"]].map(col).values
+        h_free = np.bincount(d, w / lk[k["free_speed"]].values, len(ids)) / np.maximum(np.bincount(d, w, len(ids)), 1e-12)
+        v = r["district_speeds"]
+        rep = pd.read_csv(raw / v["file"].format(year=y), encoding="utf-8-sig", index_col=0)[v["speed"]].reindex(ids)
+        if rep.isna().any():
+            raise ValueError(f"reported speeds of {y} miss {list(rep.index[rep.isna()])}")
         return cls(ids, C, L, m, days, prof[p["hdd"]].values, ef, by.loc[s["bus"], s["co2_column"]], mj[s["bus"]],
-                   bus_share, bus_riders, road_co2, road_mj, city[c["speed"]], lk[k["district"]].map(col).values,
-                   (lk[k["volume"]] * lk[k["length"]]).values, lk[k["free_speed"]].values, vc, bpr)
+                   bus_share, bus_riders, road_co2, road_mj, city[c["speed"]], h_free, 1 / rep.values)

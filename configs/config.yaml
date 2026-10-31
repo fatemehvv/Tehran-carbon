@@ -511,12 +511,12 @@ experiments:
           diesel_municipal_bus: [dsl_density_kg_L, dsl_ncv_MJ_kg]
       road_grid: {file: "rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv", cell: cell_id, column: road_transport}
       links: {file: "rq1_frozen/{year}/L2/L2_road_links_{year}.csv", district: district_id, free_speed: vff,
-              day_speed: v_day, volume: vol_peak, length: len_km}   # BPR anchored at the all-day speed v_day
+              volume: vol_peak, length: len_km}           # free-flow speed of each district (VKT-weighted)
+      district_speeds: {file: "rq1_frozen/{year}/L2/L2_traffic_speed_check.csv", speed: reported_peak_kmh}
       city: {file: traffic/city_transport_by_year.csv, year: year_sh, trips_M: total_intracity_person_trips_M,
              speed: network_speed_kmh, bus_share: share_bus}
       district_trips: {file: traffic/district_trips_by_year.csv, district: district_id, year: year_sh,
                        attraction: attraction_resident_trips}
-      bpr: {alpha: 0.15, beta: 4.0}              # BPR link speed curve (US Bureau of Public Roads 1964)
       occupancy: 1.4                             # ASSUMPTION persons per car trip
       transit_speed_kmh: 15.0                    # ASSUMPTION door-to-door bus / metro speed (walk + wait + ride)
       levers: {restriction_max: 0.3, bus_boost_max: 1.0}
@@ -526,6 +526,8 @@ experiments:
         shift_boost: [0.2, 0.1, 0.3]             # extra shift share at bus_boost_max
         elasticity: [0.4, 0.2, 0.6]              # ridership elasticity to bus service (Litman 2004: 0.2-0.7)
         from_car: [0.3, 0.15, 0.45]              # share of new riders who drove before (Litman 2004)
+        delay_elasticity: [1.7, 1.2, 2.5]        # delay vs car volume: London charge -18 % traffic / -30 % delay
+                                                 # (TfL 2004), Stockholm -20 % / -30..-50 % (Eliasson 2009)
       demand_noise_sd: 0.05                      # monthly lognormal noise of car demand
       reward: {lambda_mobility: 1.0, mu_energy: 1.0, kappa_exposure: 1.0}   # pre-registered main weights
       agent:

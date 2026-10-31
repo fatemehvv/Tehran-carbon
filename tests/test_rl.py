@@ -12,25 +12,23 @@ RL = Config().resolve("rq3_policy_v1")[0]["rl"]
 D = 3
 
 
-def tiny_city(vc: float = 0.6) -> CityTransport:
-    """3 districts, 2 links each, low v/c (small speed effects); car faster than transit."""
+def tiny_city(congested_kmh: float = 40.0) -> CityTransport:
+    """3 districts, free flow 50 km/h, mild congestion; car faster than transit."""
     C = np.array([[1000.0, 400.0, 200.0], [300.0, 800.0, 100.0], [200.0, 100.0, 600.0]])
     L = np.array([[2.0, 8.0, 12.0], [8.0, 2.5, 6.0], [12.0, 6.0, 3.0]])
     days = np.array([31.0] * 6 + [30.0] * 5 + [29.0])
     share = np.full(12, 1 / 12)
     road = np.array([[5000.0, 3000.0, 2000.0]] * 12)
-    links = np.repeat(np.arange(D), 2)
     return CityTransport([f"D{i}" for i in range(D)], C, L, share * days.sum(), days, np.linspace(0, 400, 12),
                          ef=2e-4, bus_co2=1200.0, bus_mj=1.6e7, bus_share=[0.5, 0.3, 0.2],
                          bus_riders=[3000.0, 2000.0, 1000.0], road_co2=road, road_mj=np.full(12, 1e8), speed=25.0,
-                         link_district=links, link_w=np.full(2 * D, 100.0), link_vff=np.full(2 * D, 50.0),
-                         link_vc=np.full(2 * D, vc), bpr=RL["bpr"])
+                         h_free=np.full(D, 1 / 50), h0=np.full(D, 1 / congested_kmh))
 
 
-def env(vc: float = 0.6, **reward) -> CarbonPolicyEnv:
+def env(congested_kmh: float = 40.0, **reward) -> CarbonPolicyEnv:
     r = copy.deepcopy(RL)
     r["reward"].update(reward)
-    e = CarbonPolicyEnv(tiny_city(vc), r)
+    e = CarbonPolicyEnv(tiny_city(congested_kmh), r)
     e.reset(seed=0)
     return e
 
@@ -52,7 +50,7 @@ def test_restriction_cuts_co2_and_costs_time():
 
 
 def test_a_trip_not_made_is_a_loss():
-    e = env(vc=0.0)                                                    # no congestion, so no time saved
+    e = env(congested_kmh=50.0)                                        # no congestion, so no time saved
     e.theta.update(shift=0.0, shift_boost=0.0)                         # every removed trip is suppressed
     out = e.outcome(0, np.array([0.3, 0.0, 0.0]), np.zeros(D))
     removed_hours = 0.3 * (e.city.C[:, 0] * e.noise[0] * e.city.L[:, 0]).sum() * e.city.m[0] * RL["occupancy"] / e.city.speed
@@ -68,6 +66,12 @@ def test_bus_boost_costs_energy_and_respects_the_budget():
         total_energy += out["energy_MJ"]
     assert done and total_energy > 0
     assert used == pytest.approx(RL["bus_budget"], rel=1e-6)          # max boost every month exhausts the budget
+
+
+def test_delay_elasticity():
+    c = tiny_city(25.0)                                                # delay = half of the time per km
+    assert np.allclose(c.time_ratio(np.ones(D), 1.7), 1.0)
+    assert np.allclose(c.time_ratio(np.full(D, 0.8), 1.0), 0.9)        # -20 % volume, eta 1 -> -20 % delay
 
 
 def test_common_random_numbers():
