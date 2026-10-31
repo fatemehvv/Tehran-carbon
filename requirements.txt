@@ -14,4 +14,5 @@ openpyxl>=3.1
 torch>=2.3                # CPU build is enough: pip install torch --index-url https://download.pytorch.org/whl/cpu
 torch_geometric>=2.5      # GNN layers (SAGEConv, GCNConv, GATv2Conv); pure Python, no compiled extensions needed
 pytest>=8.0
-# RQ3 (added when the RL part starts): gymnasium, stable-baselines3
+gymnasium>=1.0            # RQ3 simulator interface
+stable-baselines3>=2.4    # RQ3 agent (PPO)

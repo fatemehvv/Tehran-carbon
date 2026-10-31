@@ -10,6 +10,7 @@ Checks (settings: analysis.response):
   1. sign      cut CO2 in ONE district at a time: z inside must fall relative to the rest (contrast < 0)
   2. locality  how fast the effect decays with distance from the district (km at half of the inside effect)
   3. targeted  the same total CO2 cut, concentrated in the districts with the highest baseline z vs uniform -> HCI
+FrozenResponseModel (loading the final model and scaling features in a scenario) is shared with the RQ3 simulator.
 """
 from __future__ import annotations
 
@@ -18,7 +19,7 @@ import pandas as pd
 import yaml
 from scipy.ndimage import distance_transform_edt
 
-from ..config import ROOT, Config
+from ..config import ROOT
 from ..data.dataset import CellMonthDataset
 from ..data.graphs import GridGraph, ODOperator
 from ..data.grid import Grid
@@ -27,26 +28,57 @@ from ..tracking import RunRegistry
 from ..training.trainer import NeuralPredictor
 
 
-class ResponseChecks:
-    def __init__(self, base_cfg: dict, experiment: str):
-        self.a = base_cfg["analysis"]["response"]
+class FrozenResponseModel:
+    """models/final.pt of the latest finished run of an experiment, with its own config, dataset and graph.
+    F (N cells x D districts) holds the cell-district shares: a district factor vector f scales a cell by 1 + F (f - 1)."""
+
+    def __init__(self, base_cfg: dict, experiment: str, log=print):
         rows = RunRegistry(base_cfg).find(experiment).sort_values("finished")
         if rows.empty:
             raise ValueError(f"no finished run of {experiment}")
         self.folder = ROOT / rows.iloc[-1].path
         self.run_id = rows.iloc[-1].run_id
-        self.cfg = yaml.safe_load((self.folder / "config.yaml").read_text(encoding="utf-8"))
-        if self.cfg["data"].get("spatial_lags"):
-            raise ValueError("response checks need a dataset without spatial lags (data.spatial_lags: [])")
+        self.cfg = cfg = yaml.safe_load((self.folder / "config.yaml").read_text(encoding="utf-8"))
+        if cfg["data"].get("spatial_lags"):
+            raise ValueError("scenarios need a dataset without spatial lags (data.spatial_lags: [])")
         if not (self.folder / "models" / "final.pt").exists():
             raise FileNotFoundError(f"{self.folder.name} has no models/final.pt (train.save_final)")
+        self.data = CellMonthDataset.build(cfg, log=log)
+        self.grid = Grid(cfg)
+        b = cfg["model"]["backbone"]
+        graph = GridGraph(self.grid, b["scales"]) if BACKBONES.get(b["type"]).needs_graph else None
+        if graph is not None and b["od"]["enabled"]:
+            graph.od = ODOperator.from_config(cfg, self.grid.n)
+        self.model = NeuralPredictor.load(cfg, self.data, graph, self.folder / "models" / "final.pt", log)
+        self.logged = set(cfg["data"]["log1p"])
+        self.F, self.ids = ODOperator.district_fractions(cfg, self.grid.n)
+
+    def physical(self, X: np.ndarray, name: str) -> np.ndarray:
+        """Feature `name` of X in physical units (undo log1p)."""
+        a = X[..., self.data.features.index(name)]
+        return np.expm1(a) if name in self.logged else a
+
+    def scenario(self, X: np.ndarray, mult: dict[str, np.ndarray]) -> np.ndarray:
+        """Scale features {name: (H, W) multiplier} in physical units, then back to the feature scale."""
+        Xs = X.copy()
+        for name, m in mult.items():
+            j = self.data.features.index(name)
+            Xs[..., j] = np.log1p(np.expm1(X[..., j]) * m) if name in self.logged else X[..., j] * m
+        return Xs
+
+    def cell_multiplier(self, f: np.ndarray) -> np.ndarray:
+        """(H, W) multiplier of a district factor vector f (cells inside several districts take the area-weighted mix)."""
+        return (1 + self.F @ (np.asarray(f, float) - 1)).reshape(self.grid.H, self.grid.W)
+
+
+class ResponseChecks:
+    def __init__(self, base_cfg: dict, experiment: str):
+        self.a = base_cfg["analysis"]["response"]
+        self.base_cfg, self.experiment = base_cfg, experiment
 
     def _scenario(self, X: np.ndarray, mult: np.ndarray) -> np.ndarray:
-        """Scale the inventory features by a (H, W) multiplier (in physical units, then back to the feature scale)."""
-        Xs = X.copy()
-        for j, logged in zip(self.inv, self.logged):
-            Xs[..., j] = np.log1p(np.expm1(X[..., j]) * mult) if logged else X[..., j] * mult
-        return Xs
+        """Scale the inventory features by a (H, W) multiplier."""
+        return self.frozen.scenario(X, {n: mult for n in self.inv})
 
     def _indices(self, Z: np.ndarray) -> dict:
         hci = [Z[t][self.hot[t]].mean() - Z[t][self.dom].mean() for t in range(Z.shape[0])]
@@ -54,21 +86,13 @@ class ResponseChecks:
         return {"HCI": float(np.mean(hci)), "PEX": float(np.mean(pex))}
 
     def run(self, run) -> dict:
-        a, cfg = self.a, self.cfg
-        data = CellMonthDataset.build(cfg, log=run.log)
-        grid = Grid(cfg)
-        b = cfg["model"]["backbone"]
-        graph = GridGraph(grid, b["scales"]) if BACKBONES.get(b["type"]).needs_graph else None
-        if graph is not None and b["od"]["enabled"]:
-            graph.od = ODOperator.from_config(cfg, grid.n)
-        model = NeuralPredictor.load(cfg, data, graph, self.folder / "models" / "final.pt", run.log)
+        a = self.a
+        self.frozen = fr = FrozenResponseModel(self.base_cfg, self.experiment, run.log)
+        self.run_id, cfg, data, grid, model = fr.run_id, fr.cfg, fr.data, fr.grid, fr.model
         y = int(a["year"])
         X, self.dom = data.X[y], data.label_domain
-        logged = set(cfg["data"]["log1p"])
-        self.inv = [j for j, n in enumerate(data.base_of) if n.startswith(a["inventory_prefix"])]
-        self.logged = [data.base_of[j] in logged for j in self.inv]
-        pj = data.features.index(a["population_feature"])
-        self.pop = np.expm1(X[0][..., pj]) if a["population_feature"] in logged else X[0][..., pj]
+        self.inv = [n for n in data.features if n.startswith(a["inventory_prefix"])]
+        self.pop = fr.physical(X[0], a["population_feature"])
 
         base = model.predict(X)
         q = float(cfg["data"]["target"]["hotspot_quantile"])
@@ -76,13 +100,7 @@ class ResponseChecks:
         self.hot = [self.dom & (base[t] >= self.thr[t]) for t in range(base.shape[0])]
         B = self._indices(base)
 
-        # cell x district shares; multiplier of a district-level factor vector f: 1 + F (f - 1)
-        bd = cfg["data"]["boundaries"]
-        fc = bd["fractions_columns"]
-        fr = pd.read_csv(Config.path(cfg, "raw") / bd["district_fractions_file"], encoding="utf-8-sig")
-        ids = sorted(fr[fc["district"]].unique())
-        F = np.zeros((grid.n, len(ids)))
-        F[fr[fc["cell"]].values, fr[fc["district"]].map({d: i for i, d in enumerate(ids)}).values] = fr[fc["frac"]].values
+        F, ids = fr.F, fr.ids
         inside = {d: (F[:, i] > float(a["inside_min_fraction"])).reshape(grid.H, grid.W) & self.dom for i, d in enumerate(ids)}
         edges = np.arange(0, float(a["max_km"]), float(a["ring_km"]))
 
@@ -106,7 +124,7 @@ class ResponseChecks:
         C = pd.DataFrame(rows)
 
         # 3. uniform vs targeted cut of the same total CO2
-        co2 = sum(np.expm1(X[..., j]) if lg else X[..., j] for j, lg in zip(self.inv, self.logged)).sum(0)
+        co2 = sum(fr.physical(X, n) for n in self.inv).sum(0)
         cut = float(a["total_cut"])
         Iu = self._indices(model.predict(self._scenario(X, np.full((grid.H, grid.W), 1 - cut))))
         zd = pd.Series({d: base.mean(0)[inside[d]].mean() for d in ids if inside[d].any()})

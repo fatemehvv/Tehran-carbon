@@ -5,6 +5,7 @@
     python main.py prepare   --exp rq1_gated_v1                 build / cache the dataset and print the split
     python main.py train     --exp rq1_ablation_v1 [--set train.lr=1e-3] [--smoke] [--variant 3]
     python main.py train     --resume <run_id>                  continue an interrupted run
+    python main.py train     --exp rq3_policy_v1                RQ3: RL agent vs static policies (kind: rl)
     python main.py inventory --exp inv_l1_v1                    L1 sector totals (IPCC + Monte Carlo)
     python main.py evaluate  --hypothesis H1                    pre-registered decision rule on finished runs
     python main.py analyze   districts --exp rq2_sage_v1 rq2_base_slx_gbm_v1   district classes vs RQ1 (kappa)
@@ -88,7 +89,11 @@ def cmd_train(args):
     for i, cfg in enumerate(cfgs):
         print(f"\n=== {i + 1}/{len(cfgs)}  {cfg['experiment']['name']} [{cfg['experiment']['variant_label'] or '-'}]")
         with Run(cfg) as run:
-            run.finish("done", CrossValidation(cfg, run).run_all(smoke=args.smoke))
+            if cfg["experiment"]["kind"] == "rl":
+                from tehran_carbon.experiments.policy_search import PolicySearch
+                run.finish("done", PolicySearch(cfg, run).run_all(smoke=args.smoke))
+            else:
+                run.finish("done", CrossValidation(cfg, run).run_all(smoke=args.smoke))
 
 
 def cmd_inventory(args):
@@ -119,10 +124,12 @@ def analysis_config(name: str, rq: str | None, description: str, **extra) -> dic
 
 def cmd_evaluate(args):
     from tehran_carbon.evaluation.hypotheses import HypothesisTest
+    from tehran_carbon.evaluation.policy_tests import PolicyHypothesis
     spec = Config().hypotheses[args.hypothesis]
     cfg = analysis_config(f"hypothesis_{args.hypothesis}", spec.get("rq"), f"decision rule {args.hypothesis}", spec=spec)
+    test = PolicyHypothesis if spec.get("kind") == "policy" else HypothesisTest
     with Run(cfg) as run:
-        run.finish("done", HypothesisTest(cfg, args.hypothesis, spec).run(run))
+        run.finish("done", test(cfg, args.hypothesis, spec).run(run))
 
 
 def cmd_analyze(args):

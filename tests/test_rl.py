@@ -1,0 +1,85 @@
+import copy
+
+import numpy as np
+import pytest
+
+from tehran_carbon.config import Config
+from tehran_carbon.rl.city import CityTransport
+from tehran_carbon.rl.env import CarbonPolicyEnv
+from tehran_carbon.rl.policies import StaticPolicy
+
+RL = Config().resolve("rq3_policy_v1")[0]["rl"]
+D = 3
+
+
+def tiny_city() -> CityTransport:
+    """3 districts, 2 links each, low v/c (small speed effects); car faster than transit."""
+    C = np.array([[1000.0, 400.0, 200.0], [300.0, 800.0, 100.0], [200.0, 100.0, 600.0]])
+    L = np.array([[2.0, 8.0, 12.0], [8.0, 2.5, 6.0], [12.0, 6.0, 3.0]])
+    days = np.array([31.0] * 6 + [30.0] * 5 + [29.0])
+    share = np.full(12, 1 / 12)
+    road = np.array([[5000.0, 3000.0, 2000.0]] * 12)
+    links = np.repeat(np.arange(D), 2)
+    return CityTransport([f"D{i}" for i in range(D)], C, L, share * days.sum(), days, np.linspace(0, 400, 12),
+                         ef=2e-4, bus_co2=1200.0, bus_mj=1.6e7, bus_share=[0.5, 0.3, 0.2],
+                         bus_riders=[3000.0, 2000.0, 1000.0], road_co2=road, road_mj=np.full(12, 1e8), speed=25.0,
+                         link_district=links, link_w=np.full(2 * D, 100.0), link_vff=np.full(2 * D, 50.0),
+                         link_vc=np.full(2 * D, 0.6), bpr=RL["bpr"])
+
+
+def env(**reward) -> CarbonPolicyEnv:
+    r = copy.deepcopy(RL)
+    r["reward"].update(reward)
+    e = CarbonPolicyEnv(tiny_city(), r)
+    e.reset(seed=0)
+    return e
+
+
+def test_no_action_changes_nothing():
+    e = env()
+    out = e.outcome(0, np.zeros(D), np.zeros(D))
+    assert out["reward"] == pytest.approx(0.0, abs=1e-12)
+    assert out["co2_saved_t"] == pytest.approx(0.0, abs=1e-9) and out["hours_lost"] == pytest.approx(0.0, abs=1e-6)
+
+
+def test_restriction_cuts_co2_and_costs_time():
+    e = env()
+    out = e.outcome(0, np.array([0.3, 0.0, 0.0]), np.zeros(D))
+    assert out["co2_saved_t"] > 0 and out["hours_lost"] > 0
+    assert 0 < out["shift_share"] <= 1 and out["energy_MJ"] == 0
+    # a larger travel-time weight lowers the reward of the same action
+    assert env(lambda_mobility=4.0).outcome(0, np.array([0.3, 0, 0]), np.zeros(D))["reward"] < out["reward"]
+
+
+def test_bus_boost_costs_energy_and_respects_the_budget():
+    e = env()
+    used, total_energy = 0.0, 0.0
+    for _ in range(12):
+        _, _, done, _, out = e.step(np.ones(2 * D, np.float32))
+        used += out["bus_used"]
+        total_energy += out["energy_MJ"]
+    assert done and total_energy > 0
+    assert used == pytest.approx(RL["bus_budget"], rel=1e-6)          # max boost every month exhausts the budget
+
+
+def test_common_random_numbers():
+    a, b = env(), env()
+    a.reset(seed=7)
+    b.reset(seed=7)
+    assert a.theta == b.theta and np.array_equal(a.noise, b.noise)
+
+
+def test_static_policies():
+    policies = StaticPolicy.grid(RL["static"])
+    assert len(policies) == 1 + 9 + 9 + 18 and len({p.name for p in policies}) == len(policies)
+    e = env()
+    hot = StaticPolicy("hotspot", 0.2, 0.5, districts=1)
+    r, b = e.levers(hot.act(None, e))
+    assert (r > 0).sum() == 1 and r[e.hot_rank[0]] == pytest.approx(0.2)
+    winter = StaticPolicy("winter", 0.2, 0.0, months=[8])
+    assert np.allclose(e.levers(winter.act(None, e))[0], 0.0)           # month 1: off
+
+
+def test_gymnasium_api():
+    from gymnasium.utils.env_checker import check_env
+    check_env(env(), skip_render_check=True)

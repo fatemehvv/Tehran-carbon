@@ -79,17 +79,24 @@ class ODOperator:
         self.P, self.W, self.R = self.P.to(device), self.W.to(device), self.R.to(device)
         return self
 
+    @staticmethod
+    def district_fractions(cfg: dict, n_cells: int) -> tuple[np.ndarray, list[str]]:
+        """(N cells x D districts) share of each cell in each district, and the district ids (sorted)."""
+        b = cfg["data"]["boundaries"]
+        fc = b["fractions_columns"]
+        fr = pd.read_csv(Config.path(cfg, "raw") / b["district_fractions_file"], encoding="utf-8-sig")
+        ids = sorted(fr[fc["district"]].unique())
+        F = np.zeros((n_cells, len(ids)))
+        F[fr[fc["cell"]].values, fr[fc["district"]].map({d: i for i, d in enumerate(ids)}).values] = fr[fc["frac"]].values
+        return F, ids
+
     @classmethod
     def from_config(cls, cfg: dict, n_cells: int) -> "ODOperator":
         """OD flows of the study years (averaged) and the cell-district shares, as set in the config."""
         raw = Config.path(cfg, "raw")
-        b, od = cfg["data"]["boundaries"], cfg["model"]["backbone"]["od"]
-        fc = b["fractions_columns"]
-        fr = pd.read_csv(raw / b["district_fractions_file"], encoding="utf-8-sig")
-        ids = sorted(fr[fc["district"]].unique())
+        od = cfg["model"]["backbone"]["od"]
+        F, ids = cls.district_fractions(cfg, n_cells)
         col = {d: i for i, d in enumerate(ids)}
-        F = np.zeros((n_cells, len(ids)))
-        F[fr[fc["cell"]].values, fr[fc["district"]].map(col).values] = fr[fc["frac"]].values
         T = np.zeros((len(ids), len(ids)))
         for y in cfg["years"]:
             t = pd.read_csv(raw / od["file"].format(year=y), encoding="utf-8-sig")

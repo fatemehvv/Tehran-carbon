@@ -478,6 +478,78 @@ experiments:
     description: L1 sector totals (IPCC Tier 1 + Monte Carlo) for all study years
     split: {inner_val: true}      # as run (no effect on the inventory)
 
+  # ---------------------------------------------------------------- RQ3: adaptive interventions (reinforcement learning)
+  # Pre-registered in docs/preregistration_rq3.md before any agent is trained. The RQ3 settings live in this entry, not
+  # in `defaults`, so the config hashes of the RQ1 / RQ2 experiments do not change.
+  rq3_policy_v1:
+    rq: RQ3
+    kind: rl
+    description: PPO vs tuned static policies in the macroscopic district simulator (H3, H4)
+    rl:
+      response_experiment: rq2_sage_v2           # frozen RQ2 model (latest run, models/final.pt) for the exposure term
+      exposure: {road_feature: inv_road, activity_features: [vkt_peak, vc_mean], population_feature: pop}
+      od:                                        # gravity OD of RQ1 (typical day, 22 x 22 districts)
+        file: rq1_frozen/{year}/L2prep/OD_gravity_typical_day.csv
+        origin: origin
+        destination: destination
+        distance: dist_km
+        restricted: [veh_trips_private_car, veh_trips_taxi_app]   # vehicle trips a restriction applies to
+      profile: {file: "rq1_frozen/{year}/L1/L1_monthly_profiles_{year}.csv", month: month, share: gasoline_share, hdd: HDD18}
+      l1_lines:                                  # car and bus CO2 / energy of the L1 inventory
+        file: "rq1_frozen/{year}/L1/L1_sector_lines_{year}.csv"
+        sector_column: sector
+        sector: road_transport
+        subsector_column: subsector
+        activity_column: activity
+        co2_column: tCO2_central
+        activity_scale: 1.0e+6                   # activity is in million litres / million m3
+        car: [gasoline, CNG]                     # road CO2 of the restricted modes (cars, ride-hailing, motorcycles)
+        bus: diesel_municipal_bus
+        energy_factors:                          # MJ per unit = product of these inventory.l1.factors (central values)
+          gasoline: [gas_density_kg_L, gas_ncv_MJ_kg]
+          CNG: [ng_ncv_MJ_m3]
+          diesel_municipal_bus: [dsl_density_kg_L, dsl_ncv_MJ_kg]
+      road_grid: {file: "rq1_frozen/{year}/L2/L2_grid_1km_{year}.csv", cell: cell_id, column: road_transport}
+      links: {file: "rq1_frozen/{year}/L2/L2_road_links_{year}.csv", district: district_id, free_speed: vff, vc: vc,
+              volume: vol_peak, length: len_km}
+      city: {file: traffic/city_transport_by_year.csv, year: year_sh, trips_M: total_intracity_person_trips_M,
+             speed: network_speed_kmh, bus_share: share_bus}
+      district_trips: {file: traffic/district_trips_by_year.csv, district: district_id, year: year_sh,
+                       attraction: attraction_resident_trips}
+      bpr: {alpha: 0.15, beta: 4.0}              # BPR link speed curve (US Bureau of Public Roads 1964)
+      occupancy: 1.4                             # ASSUMPTION persons per car trip
+      transit_speed_kmh: 15.0                    # ASSUMPTION door-to-door bus / metro speed (walk + wait + ride)
+      levers: {restriction_max: 0.3, bus_boost_max: 1.0}
+      bus_budget: 0.25                           # extra bus service per year, share of the annual base service
+      behaviour:                                 # ASSUMPTION triangular [central, low, high], drawn per episode
+        shift: [0.5, 0.3, 0.7]                   # share of removed car trips that switch to bus / metro
+        shift_boost: [0.2, 0.1, 0.3]             # extra shift share at bus_boost_max
+        elasticity: [0.4, 0.2, 0.6]              # ridership elasticity to bus service (Litman 2004: 0.2-0.7)
+        from_car: [0.3, 0.15, 0.45]              # share of new riders who drove before (Litman 2004)
+      demand_noise_sd: 0.05                      # monthly lognormal noise of car demand
+      reward: {lambda_mobility: 1.0, mu_energy: 1.0, kappa_exposure: 1.0}   # pre-registered main weights
+      agent:
+        type: ppo
+        timesteps: 150000
+        seeds: [0, 1, 2]
+        device: cpu                              # the policy network is tiny; the frozen GNN uses its own device
+        params: {n_steps: 1200, batch_size: 120, learning_rate: 3.0e-4, gamma: 0.99, gae_lambda: 0.95, ent_coef: 0.0}
+      static:                                    # grids of the static policies (tuned on the training year)
+        uniform: {restriction: [0.1, 0.2, 0.3], bus_boost: [0.0, 0.5, 1.0]}
+        winter: {months: [8, 9, 10, 11], restriction: [0.1, 0.2, 0.3], bus_boost: [0.0, 0.5, 1.0]}
+        hotspot: {districts: [4, 8], restriction: [0.1, 0.2, 0.3], bus_boost: [0.0, 0.5, 1.0]}
+      evaluation: {episodes: 100, seed: 1000, tune_episodes: 16, tune_seed: 50000}
+      smoke:                                     # --smoke: installation check only
+        agent: {timesteps: 2400}
+        evaluation: {episodes: 2, tune_episodes: 1}
+  rq3_lambda_v1:
+    rq: RQ3
+    description: secondary - trade-off curve over the travel-time weight (1 agent seed)
+    inherits: rq3_policy_v1
+    rl: {agent: {seeds: [0]}}
+    sweep:
+      rl.reward.lambda_mobility: [0.25, 0.5, 2.0, 4.0]
+
 # =====================================================================================================================
 # Pre-registered decision rules (fixed before any model is trained; docs/preregistration_rq1.md).
 # Selector = experiment + optional `where` on the resolved config (a value, or {in: [...]}).
@@ -510,3 +582,16 @@ hypotheses:
       - {experiment: rq2d_base_gbm_v1}
       - {experiment: rq2d_base_slx_gbm_v1}
       - {experiment: rq2d_base_forward_v1}
+  H3:                             # RL vs the best tuned static policy, transfers (docs/preregistration_rq3.md)
+    rq: RQ3
+    kind: policy
+    experiment: rq3_policy_v1
+    test: effectiveness
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
+  H4:                             # CVaR of the policy screened by simulation vs a choice made without simulation
+    rq: RQ3
+    kind: policy
+    experiment: rq3_policy_v1
+    test: risk
+    cvar: 0.10
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
