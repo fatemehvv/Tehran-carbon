@@ -130,7 +130,7 @@ class CarbonPolicyEnv(gym.Env):
             pex = self.exposure(t, np.maximum(road, 0.0), vkt1 / np.maximum(vkt0, 1e-12))
             dpex = (pex - self.exposure.pex0[t]) / self.exposure.pex0[t]
         else:
-            pex, dpex = np.nan, 0.0
+            pex, dpex = None, 0.0
         reward = dC / R - self.lam * (T1 - T0) / T0 - self.mu * dE / c.road_mj[t] - self.kappa * dpex
         moved = removed.sum()
         return dict(reward=float(reward), co2_saved_t=dC, dC_rel=dC / R, hours_lost=float(T1 - T0),

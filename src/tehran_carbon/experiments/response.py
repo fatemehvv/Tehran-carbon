@@ -14,12 +14,14 @@ FrozenResponseModel (loading the final model and scaling features in a scenario)
 """
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pandas as pd
 import yaml
 from scipy.ndimage import distance_transform_edt
 
-from ..config import ROOT
+from ..config import ROOT, Config
 from ..data.dataset import CellMonthDataset
 from ..data.graphs import GridGraph, ODOperator
 from ..data.grid import Grid
@@ -43,7 +45,11 @@ class FrozenResponseModel:
             raise ValueError("scenarios need a dataset without spatial lags (data.spatial_lags: [])")
         if not (self.folder / "models" / "final.pt").exists():
             raise FileNotFoundError(f"{self.folder.name} has no models/final.pt (train.save_final)")
-        self.data = CellMonthDataset.build(cfg, log=log)
+        # the dataset the model was trained on: a later manifest change (e.g. new raw files for other experiments)
+        # gives the same data a new hash, which NeuralPredictor.load would refuse
+        trained_on = json.loads((self.folder / "meta.json").read_text(encoding="utf-8"))["data_hash"]
+        cached = Config.path(cfg, "processed") / f"cellmonth_{trained_on}.npz"
+        self.data = CellMonthDataset.load(cached) if cached.exists() else CellMonthDataset.build(cfg, log=log)
         self.grid = Grid(cfg)
         b = cfg["model"]["backbone"]
         graph = GridGraph(self.grid, b["scales"]) if BACKBONES.get(b["type"]).needs_graph else None

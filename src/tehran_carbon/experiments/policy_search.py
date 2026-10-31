@@ -10,6 +10,8 @@ tuned.json (tuned static policy per family and training year), metrics.json (mea
 """
 from __future__ import annotations
 
+import time
+
 import numpy as np
 
 from ..rl.city import CityTransport
@@ -79,8 +81,10 @@ class PolicySearch:
 
         static_eval = {}
         for y in years:
-            self.run.log(f"static policies on {y}: {len(statics)} x {len(eval_seeds)} episodes")
-            static_eval[y] = self.evaluate(self.env(y), statics, eval_seeds)
+            env, t0 = self.env(y), time.time()
+            static_eval[y] = self.evaluate(env, statics, eval_seeds)
+            self.run.log(f"static policies on {y}: {len(statics)} x {len(eval_seeds)} episodes, "
+                         f"{(time.time() - t0) / (12 * len(statics) * len(eval_seeds)) * 1e3:.1f} ms per step")
 
         tuned, agents, metrics = {}, {}, {}
         for a in years:
