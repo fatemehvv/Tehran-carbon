@@ -75,6 +75,20 @@ ceiling. It is not a competitor: it cannot respond to scenarios.
    - A uniform vs targeted (4 hottest districts) cut of the same total 10 % CO₂: change of the hotspot contrast
      index (HCI) and population exposure (PEX).
 
+## Deviation (2026-10-31, after the first run)
+
+Same issue and fix as RQ1 (see `docs/preregistration_rq1.md`).
+
+**What happened.** `rq2_mlp_v1`, `rq2_sage_v1` and `rq2_gcn_v1` were trained with early stopping on a 3–5-cell inner
+fold. They stopped after about 31–40 epochs: undertrained and invalid. SAGE scored PR-AUC 0.30 / 0.42, against
+0.79 / 0.84 in the earlier package.
+
+**What was fixed.** All neural experiments re-run as `_v2` with the fixed 300 epochs. H2 uses `rq2_sage_v2`; the
+secondary analyses use the `_v2` names of the experiments listed above.
+
+**What is unaffected.** The traditional baselines do not use early stopping, so their v1 runs are valid. They
+reproduce the earlier package (SLX-GBM 0.757 / 0.791 against 0.769 / 0.786).
+
 ## Changes from the earlier pre-registration (2026-10-12)
 
 - **GNN layers.** From PyTorch Geometric (SAGEConv / GCNConv / GATv2Conv) instead of hand-written layers.

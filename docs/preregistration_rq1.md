@@ -103,6 +103,20 @@ the others and with the gate-weight maps, which show which domain matters where 
    improve the score under the same validation.
 4. Station NO₂/NOₓ sensitivity (`rq1_pollution_no2_v1`).
 
+## Deviation (2026-10-31, after the first run)
+
+**What happened.** The first runs (`rq1_ablation_v1`, `rq1_context_only_v1`, `rq1_pollution_no2_v1`) used early
+stopping on one inner training fold. With 22 km block CV the folds hold 3–595 cells. The inner fold was often tiny,
+and for the final model it was a 3-cell fold. Training therefore stopped after **31–74 of the 300 epochs**, so the
+models were undertrained. Those results are invalid.
+
+**What was fixed.** Early stopping was removed (`split.inner_val: false`); all neural models now train for the fixed
+300 epochs, as in the earlier RQ2 pre-registration. The models, data, validation, metrics and decision rule are
+unchanged.
+
+**What counts.** The valid runs are the `_v2` experiments, and H1 is evaluated on `rq1_ablation_v2`. The v1 runs
+stay in `runs/registry.csv` as a record.
+
 ## Known limitations
 
 - **Few independent observations.** Monthly TROPOMI has a ~3.5 × 5.5 km native pixel and ~20 km
