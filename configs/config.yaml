@@ -693,6 +693,18 @@ hypotheses:
     years: [1404]
     candidate: {experiment: c1404_sage5_v1}
     references: [{experiment: c1404_base_slx_rf_v1}]           # fixed in advance: best traditional model of the rehearsal
+  H2c_robust:                     # NOT pre-registered (added after the H2c result): the same candidate against the best
+    rq: RQ2                       # of ALL traditional models on 1404, chosen after the results; a robustness check only
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: c1404_sage5_v1}
+    references:
+      - {experiment: c1404_base_slx_rf_v1}
+      - {experiment: c1404_base_slx_gbm_v1}
+      - {experiment: c1404_base_slx_ols_v1}
+      - {experiment: c1404_base_gbm_v1}
+      - {experiment: c1404_base_ols_v1}
+      - {experiment: c1404_base_forward_v1}
   H1c:                            # confirmatory, held-out year 1404
     rq: RQ1
     metric: pr_auc
