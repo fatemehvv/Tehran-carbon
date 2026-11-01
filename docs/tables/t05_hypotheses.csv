@@ -1,0 +1,28 @@
+﻿hypothesis,label,test,delta,ci_low,ci_high,verdict,reference
+H1,RQ1 fusion vs best single domain,cv_1402,-0.0213,-0.0323,0.0687,not supported,
+H1,RQ1 fusion vs best single domain,cv_1403,0.1008,-0.0231,0.1853,not supported,
+H1,RQ1 fusion vs best single domain,transfer_1402to1403,0.006,,,not supported,
+H1,RQ1 fusion vs best single domain,transfer_1403to1402,0.0222,,,not supported,
+H1c,"RQ1 fusion, confirmatory 1404",cv_1404,0.0022,-0.0101,0.1614,partial,
+H2,RQ2 GNN vs best traditional,cv_1402,0.0124,-0.0003,0.1144,not supported,
+H2,RQ2 GNN vs best traditional,cv_1403,0.0395,-0.0049,0.1638,not supported,
+H2,RQ2 GNN vs best traditional,transfer_1402to1403,0.0047,,,not supported,
+H2,RQ2 GNN vs best traditional,transfer_1403to1402,-0.0173,,,not supported,
+H2c,"RQ2 GNN, confirmatory 1404",cv_1404,0.0647,0.013,0.1634,supported,
+H2c_robust,"RQ2 GNN vs best of all, 1404 (not pre-reg.)",cv_1404,0.0385,0.0044,0.1806,supported,
+H2b,RQ2b daily GNN with wind,cv_1402,-0.0227,-0.0448,0.0554,not supported,
+H2b,RQ2b daily GNN with wind,cv_1403,-0.0424,-0.1491,0.009,not supported,
+H2b,RQ2b daily GNN with wind,transfer_1402to1403,-0.0168,,,not supported,
+H2b,RQ2b daily GNN with wind,transfer_1403to1402,0.0085,,,not supported,
+H3,RQ3 policy,transfer_1402to1403,-0.0316,-0.0326,-0.0307,not supported,uniform r=0.3 b=1
+H3,RQ3 policy,transfer_1403to1402,-0.0409,-0.0422,-0.0398,not supported,uniform r=0.3 b=1
+H4,RQ3 policy,transfer_1402to1403,2.3693,2.3297,2.4167,supported,
+H4,RQ3 policy,transfer_1403to1402,2.1892,2.1507,2.2385,supported,
+H3d,RQ3 policy,transfer_1402to1403,1.2581,1.2007,1.3167,supported,hotspot r=0.2 b=0 k=4
+H3d,RQ3 policy,transfer_1403to1402,2.2388,2.2059,2.2739,supported,hotspot r=0.2 b=0 k=4
+H3d_robust,RQ3 policy,transfer_1402to1403,-9.9284,-10.2302,-9.6397,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km
+H3d_robust,RQ3 policy,transfer_1403to1402,-9.1548,-9.4155,-8.8954,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km
+H3d_g0999,RQ3 policy,transfer_1402to1403,-7.2289,-7.402,-7.0574,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km
+H3d_g0999,RQ3 policy,transfer_1403to1402,-6.2127,-6.3517,-6.0763,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km
+H3d_g1,RQ3 policy,transfer_1402to1403,-6.3469,-6.5086,-6.1773,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km
+H3d_g1,RQ3 policy,transfer_1403to1402,-6.1834,-6.332,-6.0363,not supported,hotkm r=0.2 b=0 k=3 rank=trip_km

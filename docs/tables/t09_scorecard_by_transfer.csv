@@ -1,0 +1,17 @@
+﻿transfer,policy,detail,return_mean,cvar10,co2_saved_kt,hours_lost_M,exposure_change_pct
+1402to1403,Uniform,uniform r=0.025 b=0,13.481,11.567,275.461,-7.856,-0.98
+1402to1403,Winter only,winter r=0.1 b=0,14.857,13.242,274.641,-2.771,-1.02
+1402to1403,Hotspot (by NO2),hotspot r=0.2 b=0 k=4,17.738,15.224,414.204,-7.733,-1.357
+1402to1403,Calm days,calm r=0.1 b=0 below=-0.5,14.319,12.718,272.851,-2.75,-0.958
+1402to1403,Hotspot (by car-km),hotkm r=0.2 b=0 k=3 rank=trip_km,28.945,25.282,613.334,-9.933,-2.299
+1402to1403,RL (gamma 0.99),"PPO, 3 seeds",19.017,16.641,502.131,3.379,-1.727
+1402to1403,RL (gamma 0.999),"PPO, 3 seeds",21.717,18.796,552.818,-3.032,-1.927
+1402to1403,RL (gamma 1),"PPO, 3 seeds",22.599,19.646,556.153,-4.159,-2.052
+1403to1402,Uniform,uniform r=0.025 b=0,13.592,11.673,263.89,-6.939,-1.06
+1403to1402,Winter only,winter r=0.075 b=0,15.312,13.599,263.569,-3.679,-1.084
+1403to1402,Hotspot (by NO2),hotspot r=0.2 b=0 k=4,17.103,14.661,381.651,-6.478,-1.437
+1403to1402,Calm days,calm r=0.1 b=0 below=-0.5,14.464,12.837,262.025,-2.069,-0.909
+1403to1402,Hotspot (by car-km),hotkm r=0.2 b=0 k=3 rank=trip_km,28.381,24.843,567.004,-8.21,-2.475
+1403to1402,RL (gamma 0.99),"PPO, 3 seeds",19.226,16.796,482.031,4.084,-1.988
+1403to1402,RL (gamma 0.999),"PPO, 3 seeds",22.168,19.198,532.946,-2.026,-2.182
+1403to1402,RL (gamma 1),"PPO, 3 seeds",22.197,19.221,531.225,-2.34,-2.184
