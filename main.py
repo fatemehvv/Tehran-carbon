@@ -13,6 +13,7 @@
     python main.py summarize --exp rq1_ablation_v1              table of all finished runs / sweep variants
     python main.py runs      [--rq RQ1] [--exp rq1_] [--last 30]   run history (runs/registry.csv)
     python main.py figures                                      thesis figures and tables (docs/figures, docs/tables)
+    python main.py dashboard                                    data of the offline dashboard (docs/dashboard/data.js)
 """
 from __future__ import annotations
 
@@ -189,6 +190,11 @@ def cmd_figures(args):
     print(f"{len(out['done'])} figures written, skipped: {out['skipped'] or 'none'}")
 
 
+def cmd_dashboard(args):
+    from tehran_carbon.viz.dashboard import DashboardData
+    DashboardData(Config().defaults).run()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -210,6 +216,7 @@ def main():
     p = sub.add_parser("runs"); p.add_argument("--rq"); p.add_argument("--exp"); p.add_argument("--last", type=int, default=30)
     p.set_defaults(fn=cmd_runs)
     p = sub.add_parser("figures"); p.set_defaults(fn=cmd_figures)
+    p = sub.add_parser("dashboard"); p.set_defaults(fn=cmd_dashboard)
     args = ap.parse_args()
     if args.cmd == "train" and not (args.exp or args.resume):
         ap.error("train needs --exp or --resume")
