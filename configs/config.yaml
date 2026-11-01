@@ -482,6 +482,11 @@ experiments:
     split: {transfer: false}
     train: {save_final: false}
     sweep: {split.test_year: [1402, 1403], model.backbone.layers: [3, 4]}
+  dev_sage_deep_v1:
+    rq: RQ2
+    description: rehearsal - SAGE with 5 and 6 layers (does the receptive-field trend continue?)
+    inherits: dev_sage_v1
+    sweep: {split.test_year: [1402, 1403], model.backbone.layers: [5, 6]}
   dev_sage4_fusion_v1:
     rq: RQ1
     description: rehearsal - SAGE 4 layers, single domains vs all three, gated
