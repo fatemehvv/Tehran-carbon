@@ -72,6 +72,20 @@ with one hand-made rule. RL − tuned `calm` is reported.
 - **Partial:** Δ > 0 in both, at least one CI includes 0.
 - **Not supported:** otherwise.
 
+## Change before the first full run
+
+**The emulator.**
+- The smoke run (an installation check, no results) showed that calling the daily GNN one day at a time costs about
+  0.8 s per step: about 34 hours per agent seed.
+- The exposure term therefore uses a **linear emulator of the same frozen model**:
+  - The response of each district is computed once for all days of the year, with all its road features cut by 30 %:
+    22 full-model runs per year.
+  - A scenario's pattern = the baseline + the sum of the district responses, scaled to each district's cut.
+  - The RQ2 response checks support this: the effects are local and halve within 2 km.
+- The emulator's mean absolute error in the PEX change, against the full model on 20 random scenarios per year, is
+  logged in the run and reported.
+- Nothing else changed.
+
 ## Known limitations
 
 - **Perfect weather knowledge.** The agent sees the day's actual weather. A real policy would use a forecast; this is
@@ -81,4 +95,5 @@ with one hand-made rule. RL − tuned `calm` is reported.
 - **Relative exposure.** The exposure model predicts the relative pattern (z) of each day. The absolute level enters
   only through s_t.
 - **Monthly inputs.** Within a month, emissions and traffic are spread evenly; the weekly cycle is not modelled.
+- **Emulated exposure.** The exposure response is a linear emulator of the GNN; its error is reported.
 - **Monthly limitations.** All limitations of the monthly simulator apply.

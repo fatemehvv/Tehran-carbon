@@ -630,6 +630,7 @@ experiments:
     rl:
       temporal: daily
       response_experiment: rq2d_gat_wind_v1      # frozen daily GNN (wind on the edges) for the exposure term
+      exposure: {linear: {perturbation: 0.7, check_samples: 20}}   # fast emulator of the frozen GNN (see rl/env.py)
       daily:
         weather_features: [wind_d, wind_u, wind_v, t2m_d]   # the day's weather the agent sees (city-wide)
         severity: {source: satellite_daily, layer: no2_daily}   # the day's observed city NO2 weighs the exposure term

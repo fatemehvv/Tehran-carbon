@@ -22,7 +22,12 @@ from .city import CityTransport
 
 class Exposure:
     """Population exposure (PEX) of a month when the road features of each district are scaled, from the frozen RQ2
-    model (FrozenResponseModel). The hotspot threshold of each month is that of the baseline prediction."""
+    model (FrozenResponseModel). The hotspot threshold of each month is that of the baseline prediction.
+
+    linear (exposure.linear in the config): a fast emulator of the same model for long episodes (daily design). The
+    response of every district is computed once for all steps (all its road features scaled by `perturbation`); a
+    scenario's pattern is the baseline plus the sum of the district responses, scaled to each district's own factor
+    (the RQ2 response checks found local, additive effects). Its error against the full model is logged."""
 
     def __init__(self, frozen, year: int, e: dict, quantile: float):
         self.fr, self.e = frozen, e
@@ -36,12 +41,39 @@ class Exposure:
         # mean baseline z of the domain cells of each district (observation; hotspot ranking of static policies)
         Fd = frozen.F * self.dom.ravel()[:, None]
         self.zbar = np.stack([np.nan_to_num(self.base[t].ravel()) @ Fd for t in range(T)]) / np.maximum(Fd.sum(0), 1e-12)
+        self.linear = e.get("linear")
+        if self.linear:
+            f, D = float(self.linear["perturbation"]), frozen.F.shape[1]
+            self.J = np.stack([self._full(np.where(np.arange(D) == i, f, 1.0)) - self.base for i in range(D)], 1)
+            self.J = (self.J / (1 - f)).reshape(T, D, -1).astype(np.float32)     # change of z per unit cut, (T, D, N)
+
+    def _full(self, factor: np.ndarray, t: slice = slice(None)) -> np.ndarray:
+        """Prediction of the full model with every road feature of district i scaled by factor[i]."""
+        m = self.fr.cell_multiplier(factor)
+        mult = {n: m for n in [self.e["road_feature"], *self.e["activity_features"]]}
+        return self.fr.model.predict(self.fr.scenario(self.X[t], mult))
+
+    def check(self, rng, n: int) -> float:
+        """Mean absolute error of the emulator's PEX change against the full model, on n random scenarios."""
+        err = []
+        for _ in range(n):
+            t = int(rng.integers(0, self.X.shape[0]))
+            road, act = rng.uniform(0.6, 1.0, self.J.shape[1]), rng.uniform(0.6, 1.0, self.J.shape[1])
+            mult = {self.e["road_feature"]: self.fr.cell_multiplier(road)}
+            mult.update({n: self.fr.cell_multiplier(act) for n in self.e["activity_features"]})
+            full = self.pex(t, self.fr.model.predict(self.fr.scenario(self.X[t:t + 1], mult))[0]) - self.pex0[t]
+            err.append(abs(self(t, road, act) - self.pex0[t] - full))
+        return float(np.mean(err))
 
     def pex(self, t: int, z: np.ndarray) -> float:
         return float(self.pop[self.dom & (z >= self.thr[t])].sum() / self.pop[self.dom].sum())
 
     def __call__(self, t: int, road: np.ndarray, activity: np.ndarray) -> float:
         """road / activity (D,): district factors of the road CO2 feature and of the traffic activity features."""
+        if self.linear:
+            cut = 1 - (np.asarray(road) + np.asarray(activity)) / 2
+            z = self.base[t].ravel() + cut @ self.J[t]
+            return self.pex(t, z.reshape(self.base[t].shape))
         mult = {self.e["road_feature"]: self.fr.cell_multiplier(road)}
         mult.update({n: self.fr.cell_multiplier(activity) for n in self.e["activity_features"]})
         return self.pex(t, self.fr.model.predict(self.fr.scenario(self.X[t:t + 1], mult))[0])
