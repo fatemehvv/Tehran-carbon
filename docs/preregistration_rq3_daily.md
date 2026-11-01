@@ -55,7 +55,7 @@ with one hand-made rule. RL − tuned `calm` is reported.
 
 **Agent.**
 - PPO, MLP policy.
-- 146,000 steps per seed (400 years of days), 3 seeds, trained on one year.
+- 2,000,000 steps per seed (about 5,500 years of days; see the change below), 3 seeds, trained on one year.
 - The returns of the 3 seeds are averaged per evaluation episode.
 
 **Evaluation.**
@@ -84,7 +84,15 @@ with one hand-made rule. RL − tuned `calm` is reported.
   - The RQ2 response checks support this: the effects are local and halve within 2 km.
 - The emulator's mean absolute error in the PEX change, against the full model on 20 random scenarios per year, is
   logged in the run and reported.
-- Nothing else changed.
+
+**Training budget.**
+- The 146,000 agent steps above were chosen assuming about 10 ms per step with the full GNN. That is only 400
+  episodes, against 12,500 in the monthly design.
+- With the emulator a step costs about 1 ms. The budget is therefore raised to **2,000,000 steps** (about 5,500
+  episodes, about 3 hours of server time).
+- This was decided from the smoke run's **speed** only, before any full run.
+
+Nothing else changed.
 
 ## Known limitations
 

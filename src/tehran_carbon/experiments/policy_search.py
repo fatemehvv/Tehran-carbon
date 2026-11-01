@@ -42,8 +42,9 @@ class PolicySearch:
             self.inputs[year] = (city, ex, weather, severity)
             if ex.linear:
                 n = int(ex.linear["check_samples"])
-                self.run.log(f"  {year}: exposure emulator vs full model, mean |error| of the PEX change "
-                             f"{ex.check(np.random.default_rng(0), n):.5f} ({n} random scenarios)")
+                err, size = ex.check(np.random.default_rng(0), n)
+                self.run.log(f"  {year}: exposure emulator vs full model on {n} random scenarios: mean |error| of the "
+                             f"PEX change {err:.5f}, mean |PEX change| {size:.5f}")
             self.run.log(f"  {year}: car EF {city.ef * 1e6:.1f} g/vkm, car trips {city.C.sum():,.0f}/day, "
                          f"road CO2 {city.road_co2.sum() / 1e6:.2f} Mt (22 districts), baseline PEX {ex.pex0.mean():.3f}, "
                          f"{city.T} steps")

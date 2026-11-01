@@ -53,9 +53,10 @@ class Exposure:
         mult = {n: m for n in [self.e["road_feature"], *self.e["activity_features"]]}
         return self.fr.model.predict(self.fr.scenario(self.X[t], mult))
 
-    def check(self, rng, n: int) -> float:
-        """Mean absolute error of the emulator's PEX change against the full model, on n random scenarios."""
-        err = []
+    def check(self, rng, n: int) -> tuple[float, float]:
+        """Mean absolute error of the emulator's PEX change against the full model, and the mean absolute PEX change of
+        the full model, on n random scenarios."""
+        err, size = [], []
         for _ in range(n):
             t = int(rng.integers(0, self.X.shape[0]))
             road, act = rng.uniform(0.6, 1.0, self.J.shape[1]), rng.uniform(0.6, 1.0, self.J.shape[1])
@@ -63,7 +64,8 @@ class Exposure:
             mult.update({n: self.fr.cell_multiplier(act) for n in self.e["activity_features"]})
             full = self.pex(t, self.fr.model.predict(self.fr.scenario(self.X[t:t + 1], mult))[0]) - self.pex0[t]
             err.append(abs(self(t, road, act) - self.pex0[t] - full))
-        return float(np.mean(err))
+            size.append(abs(full))
+        return float(np.mean(err)), float(np.mean(size))
 
     def pex(self, t: int, z: np.ndarray) -> float:
         return float(self.pop[self.dom & (z >= self.thr[t])].sum() / self.pop[self.dom].sum())
