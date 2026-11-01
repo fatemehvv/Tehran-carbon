@@ -13,6 +13,5 @@ data/raw/**
 data/interim/
 data/processed/
 
-# runs: every run folder stays local; the registry (run history) is versioned
+# runs: every run folder and the registry stay on the server (copied back to the laptop after runs)
 runs/*
-!runs/registry.csv
