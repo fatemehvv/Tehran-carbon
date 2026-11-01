@@ -33,6 +33,23 @@ class CityTransport:
         self.h0 = np.asarray(h0, float)
         self.h_free = np.minimum(np.asarray(h_free, float), self.h0)        # no negative delay
         self.D = len(self.ids)
+        self.T = len(self.m)                                                # steps of an episode
+        self.month = np.arange(1, 13) if self.T == 12 else None             # Jalali month of every step
+
+    @staticmethod
+    def daily_months(year: int) -> np.ndarray:
+        """Jalali month (1..12) of every day of a year."""
+        return np.repeat(np.arange(1, 13), JalaliYear(year).days)
+
+    def daily(self) -> "CityTransport":
+        """The same year in daily steps: every monthly quantity is spread evenly over the days of its month."""
+        k = np.repeat(np.arange(12), self.days.astype(int))
+        per = self.days[k]
+        d = CityTransport(self.ids, self.C, self.L, self.m[k] / per, np.ones(len(k)), self.hdd[k] / per, self.ef,
+                          self.bus_co2, self.bus_mj, self.bus_share, self.bus_riders, self.road_co2[k] / per[:, None],
+                          self.road_mj[k] / per, self.speed, self.h_free, self.h0)
+        d.month = k + 1
+        return d
 
     def time_ratio(self, x: np.ndarray, eta: float) -> np.ndarray:
         """(D,) travel time per km relative to the baseline, for a car-volume ratio x of each district."""

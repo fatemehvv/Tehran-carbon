@@ -43,9 +43,12 @@ class PolicyHypothesis:
         """(delta function of the episode indices, description) of one transfer a -> b."""
         names, Rb = self.load(a, b)
         if self.spec["test"] == "effectiveness":
-            refs = [names.index(n) for n in self.tuned[a].values()]
+            # families named in exclude_families (e.g. the reactive weather rule) are reported, not references
+            skip = set(self.spec.get("exclude_families") or [])
+            refs = [names.index(n) for f, n in self.tuned[a].items() if f not in skip]
             best = refs[int(np.argmax(Rb[refs].mean(1)))]
-            return (lambda idx: Rb[-1, idx].mean() - Rb[best, idx].mean()), dict(reference=names[best])
+            extra = {f"rl_minus_{f}": float(Rb[-1].mean() - Rb[names.index(n)].mean()) for f, n in self.tuned[a].items() if f in skip}
+            return (lambda idx: Rb[-1, idx].mean() - Rb[best, idx].mean()), dict(reference=names[best], **extra)
         names_a, Ra = self.load(a, a)
         if names_a != names:
             raise ValueError(f"{self.name}: policy sets of {a}->{a} and {a}->{b} differ")

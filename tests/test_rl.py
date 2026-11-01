@@ -95,3 +95,32 @@ def test_static_policies():
 def test_gymnasium_api():
     from gymnasium.utils.env_checker import check_env
     check_env(env(), skip_render_check=True)
+
+
+def test_daily_city_keeps_the_annual_totals():
+    c = tiny_city()
+    d = c.daily()
+    assert d.T == int(c.days.sum()) and d.month[0] == 1 and d.month[-1] == 12
+    assert np.isclose(d.m.sum(), c.m.sum()) and np.isclose(d.road_co2.sum(), c.road_co2.sum())
+
+
+def test_daily_restriction_budget_weather_and_calm_rule():
+    r = copy.deepcopy(RL)
+    r.update(restriction_budget_days=5.0, bus_budget=0.0)
+    city = tiny_city().daily()
+    weather = np.zeros((city.T, 1))
+    weather[::2, 0] = -2.0                                              # every second day is calm
+    e = CarbonPolicyEnv(city, r, None, weather, np.ones(city.T))
+    obs, _ = e.reset(seed=0)
+    assert obs.shape == (8 + 2 * D + 2,)                                # + weather + remaining budget
+    used = 0.0
+    for _ in range(city.T):
+        _, _, done, _, out = e.step(np.ones(2 * D, np.float32))
+        used += out["restriction"].mean() / r["levers"]["restriction_max"]
+        assert np.all(out["bus_boost"] == 0)
+    assert done and used == pytest.approx(5.0, rel=1e-6)
+    calm = StaticPolicy("calm", 0.3, 0.0, feature=0, below=-1.0)
+    e.reset(seed=0)
+    assert e.levers(calm.act(None, e))[0].max() > 0                    # day 0 is calm
+    e.t = 1
+    assert e.levers(calm.act(None, e))[0].max() == 0                   # day 1 is not

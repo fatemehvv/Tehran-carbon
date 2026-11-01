@@ -5,7 +5,11 @@ For every study year a (training year):
   2. train the agent on a, one model per seed (models/ppo_<a>_s<seed>.zip)
 Then every policy (all static grid members, every agent) is evaluated on every year b with common random numbers:
 episode k of year b draws the same behaviour parameters and noise for every policy, so comparisons are paired.
-Outputs: preds/returns_<a>to<b>.npz (names, returns (P, K), components (P, K, 4), mean agent actions by month),
+Daily design (rl.temporal = daily; docs/preregistration_rq3_daily.md): one step = one day; the agent sees the day's
+weather (rl.daily.weather_features of the frozen daily model's dataset) and the exposure term is weighted by the day's
+observed pollution severity (city mean of the daily NO2 relative to the year's mean; days without a retrieval take the
+mean of their month).
+Outputs: preds/returns_<a>to<b>.npz (names, returns (P, K), components (P, K, 4), mean levers of every step),
 tuned.json (tuned static policy per family and training year), metrics.json (mean returns).
 """
 from __future__ import annotations
@@ -27,20 +31,45 @@ class PolicySearch:
         self.cfg, self.run, self.r = cfg, run, cfg["rl"]
 
     def env(self, year: int) -> CarbonPolicyEnv:
-        if year not in self.envs:
+        """A new environment of a year (its inputs are built once and shared)."""
+        if year not in self.inputs:
             ex = Exposure(self.frozen, year, self.r["exposure"], float(self.frozen.cfg["data"]["target"]["hotspot_quantile"]))
             city = CityTransport.from_config(self.cfg, year, self.frozen.F, self.frozen.ids)
-            self.envs[year] = CarbonPolicyEnv(city, self.r, ex)
+            weather = severity = None
+            if self.r.get("temporal") == "daily":
+                city = city.daily()
+                weather, severity = self.daily_inputs(year)
+            self.inputs[year] = (city, ex, weather, severity)
             self.run.log(f"  {year}: car EF {city.ef * 1e6:.1f} g/vkm, car trips {city.C.sum():,.0f}/day, "
-                         f"road CO2 {city.road_co2.sum() / 1e6:.2f} Mt (22 districts), baseline PEX {ex.pex0.mean():.3f}")
-        return self.envs[year]
+                         f"road CO2 {city.road_co2.sum() / 1e6:.2f} Mt (22 districts), baseline PEX {ex.pex0.mean():.3f}, "
+                         f"{city.T} steps")
+        city, ex, weather, severity = self.inputs[year]
+        return CarbonPolicyEnv(city, self.r, ex, weather, severity)
+
+    def daily_inputs(self, year: int) -> tuple[np.ndarray, np.ndarray]:
+        """(T, k) standardised weather seen by the agent and the (T,) pollution severity of every day."""
+        from ..data.sources import SOURCES
+        d, fr = self.r["daily"], self.frozen
+        X = fr.data.X[year]
+        w = np.stack([X[:, 0, 0, fr.data.features.index(n)] for n in d["weather_features"]], 1)   # city-wide values
+        w = (w - w.mean(0)) / np.maximum(w.std(0), 1e-12)
+        sv = d["severity"]
+        no2 = SOURCES.get(sv["source"])(fr.cfg, fr.grid).load(year)[sv["layer"]]
+        dom = fr.data.label_domain
+        day = np.array([np.nanmean(no2[t][dom]) if np.isfinite(no2[t][dom]).any() else np.nan for t in range(len(no2))])
+        month = CityTransport.daily_months(year)
+        for m in range(1, 13):
+            sel = month == m
+            day[sel & ~np.isfinite(day)] = np.nanmean(day[sel]) if np.isfinite(day[sel]).any() else np.nan
+        day = np.where(np.isfinite(day), day, np.nanmean(day))
+        return w, day / day.mean()
 
     @staticmethod
     def rollout(env: CarbonPolicyEnv, policy, seed: int) -> tuple[float, np.ndarray, np.ndarray]:
-        """Return, summed components (4,) and the levers of every month (12, 2 D) of one episode."""
+        """Return, summed components (4,) and the levers of every step (T, 2 D) of one episode."""
         obs, _ = env.reset(seed=seed)
         total, comp, acts = 0.0, np.zeros(len(COMPONENTS)), []
-        for _ in range(12):
+        for _ in range(env.T):
             obs, reward, done, _, out = env.step(policy.act(obs, env))
             total += reward
             comp += [out[k] for k in COMPONENTS]
@@ -50,7 +79,7 @@ class PolicySearch:
     def evaluate(self, env, policies, seeds) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         R = np.zeros((len(policies), len(seeds)))
         C = np.zeros((len(policies), len(seeds), len(COMPONENTS)))
-        A = np.zeros((len(policies), 12, 2 * env.city.D))
+        A = np.zeros((len(policies), env.T, 2 * env.city.D))
         for i, p in enumerate(policies):
             for k, s in enumerate(seeds):
                 R[i, k], C[i, k], a = self.rollout(env, p, int(s))
@@ -60,7 +89,7 @@ class PolicySearch:
     def train_agent(self, year: int, seed: int, timesteps: int):
         from stable_baselines3 import PPO
         a = self.r["agent"]
-        env = CarbonPolicyEnv(self.env(year).city, self.r, self.env(year).exposure)
+        env = self.env(year)
         model = PPO("MlpPolicy", env, seed=seed, device=a["device"], verbose=0, **a["params"])
         model.learn(total_timesteps=timesteps)
         model.save(self.run.path("models", f"ppo_{year}_s{seed}.zip"))
@@ -74,8 +103,8 @@ class PolicySearch:
             ag.update(r["smoke"]["agent"])
         self.frozen = FrozenResponseModel(self.cfg, r["response_experiment"], self.run.log)
         self.run.log(f"frozen response model: {self.frozen.run_id}")
-        self.envs = {}
-        statics = StaticPolicy.grid(r["static"])
+        self.inputs = {}
+        statics = StaticPolicy.grid(r["static"], (r.get("daily") or {}).get("weather_features", ()))
         eval_seeds = int(ev["seed"]) + np.arange(int(ev["episodes"]))
         tune_seeds = int(ev["tune_seed"]) + np.arange(int(ev["tune_episodes"]))
 
