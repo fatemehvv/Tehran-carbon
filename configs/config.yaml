@@ -657,7 +657,7 @@ experiments:
     inherits: rq3_daily_v1
     rl:
       static:
-        hotkm: {districts: [3, 5, 8], restriction: [0.1, 0.2, 0.3], bus_boost: [0.0], rank: trip_km}
+        hotkm: {districts: [1, 2, 3, 5, 8], restriction: [0.1, 0.2, 0.3], bus_boost: [0.0], rank: trip_km}
   rq3_daily_g0999_v1:             # (2) a less impatient agent: gamma 0.99 discounts day 100 to 37 %
     rq: RQ3
     kind: rl

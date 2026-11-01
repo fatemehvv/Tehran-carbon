@@ -17,7 +17,7 @@ Two explanations follow, and each check tests one.
 
 The CO₂ term dominates the reward, and the hotspot reference does not rank districts by CO₂. New static family
 `hotkm`: r every day in the k districts with the most car-km of the trips into them (`rank: trip_km`),
-k ∈ {3, 5, 8}, r ∈ {0.1, 0.2, 0.3}. It is tuned on the training year like the other families. Everything else is as in
+k ∈ {1, 2, 3, 5, 8}, r ∈ {0.1, 0.2, 0.3}. It is tuned on the training year like the other families. Everything else is as in
 `rq3_daily_v1`, and the agent (γ = 0.99, same seeds) is retrained. The H3d rule is applied with `hotkm` among the
 references.
 
@@ -26,3 +26,9 @@ references.
 With γ = 0.99 over 365 steps, a reward 100 days ahead counts 37 % (γ = 0.999: 90 %). Spending the budget early is then
 optimal for the agent, whatever the season. The evaluation sums undiscounted returns. As check 1, with γ = 0.999 and
 γ = 1.0. Reported: the decision rule as in check 1, and when in the year the agent spends its budget.
+
+## Change before the full runs
+
+The smoke run (1 tuning episode) chose `hotkm` k = 3, the edge of the first grid k ∈ {3, 5, 8}. The grid was widened to
+k ∈ {1, 2, 3, 5, 8} so that the reference is not cut off by its grid. A stronger reference only makes the check harder
+for the agent.
