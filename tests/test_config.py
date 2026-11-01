@@ -79,3 +79,15 @@ def test_project_config_resolves():
     conf = Config()
     for name in conf.experiments:
         assert conf.resolve(name)
+
+
+def test_source_file_per_year_and_stand_in_year(tmp_path):
+    from tehran_carbon.data.grid import Grid
+    from tehran_carbon.data.sources.base import Source
+    for name in ["a_1403.csv", "b_1402.csv", "b_1404.csv"]:
+        (tmp_path / name).write_text("x")
+    cfg = {"paths": {"raw": str(tmp_path)}, "grid": Config().defaults["grid"],
+           "data": {"inputs": {"t": {"inv": "a_{year}.csv", "year_proxy": {1404: 1403}, "sat": {1402: "b_1402.csv", 1404: "b_1404.csv"}}}}}
+    s = type("T", (Source,), {"name": "t"})(cfg, Grid(cfg))
+    assert s.file("inv", 1404).name == "a_1403.csv"                     # stand-in year
+    assert s.file("sat", 1404).name == "b_1404.csv"                     # per-year file

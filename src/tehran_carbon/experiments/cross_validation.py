@@ -6,6 +6,9 @@
                folds are stitched into one out-of-fold map per month -> preds/cv_<year>.npz (+ weights_<year>.npz)
   transfer     train on all label cells of one year, predict the other -> preds/transfer_<a>to<b>.npz
   final        train on all label cells of all years -> models/final.pt (reused by init_from: RQ1 -> RQ2 -> RQ3)
+  test year    (split.test_year) confirmatory design: for every fold, train on that fold's training cells of ALL other
+               years and predict the test fold of the test year (new places and a new year); only the test year is
+               scored -> preds/cv_<test year>.npz
 Out-of-fold arrays are (T steps, n_domain) in the order of dataset.cells.
 """
 from __future__ import annotations
@@ -61,15 +64,19 @@ class CrossValidation:
         metrics = {"cv": {}, "transfer": {}}
 
         # ------------------------------------------------------------ spatial CV
-        for y in data.years:
+        test = cfg["split"].get("test_year")
+        dev = [y for y in data.years if y != int(test)] if test else []
+        for y in [int(test)] if test else data.years:
             X, z = data.X[y], data.z[y]
+            Xs, zs = ([data.X[t] for t in dev], [data.z[t] for t in dev]) if test else ([X], [z])
             for k in range(split.n_folds):
                 f = run.path("preds", "folds", str(y), f"fold{k:02d}.npz")
                 if f.exists():
                     continue
                 tr, te = split.masks(k)
                 va = split.inner_val(tr, k) if self.use_val else None
-                p = self.predictor().fit([X], [z], [tr & ~va if va is not None else tr], [va] if va is not None else None)
+                p = self.predictor().fit(Xs, zs, [tr & ~va if va is not None else tr] * len(Xs),
+                                         [va] * len(Xs) if va is not None else None)
                 pred, w = p.predict(X, te, return_weights=True)
                 te_cells = np.flatnonzero(te.ravel())
                 extra = {}
@@ -100,7 +107,7 @@ class CrossValidation:
             run.log(f"  {y} CV: " + ", ".join(f"{n}={v:.3f}" for n, v in metrics["cv"][str(y)].items()))
 
         # ------------------------------------------------------------ temporal transfer
-        if cfg["split"]["transfer"] and len(data.years) > 1:
+        if cfg["split"]["transfer"] and len(data.years) > 1 and not test:
             for a, b in permutations(data.years, 2):
                 va = split.inner_val(dom, -1) if self.use_val else None
                 p = self.predictor().fit([data.X[a]], [data.z[a]], [dom & ~va if va is not None else dom],

@@ -55,7 +55,7 @@ class HypothesisTest:
             raise ValueError(f"{self.name}: no finished reference runs")
         cid, cdir, ccfg = cands[0]
         data = CellMonthDataset.build(ccfg, log=run.log)
-        years = data.years
+        years = [int(y) for y in self.spec.get("years") or data.years]       # e.g. only the held-out test year
         truth = {y: (data.z[y].reshape(data.z[y].shape[0], -1)[:, data.cells], data.hot[y].reshape(data.z[y].shape[0], -1)[:, data.cells]) for y in years}
 
         def oof(folder, y):

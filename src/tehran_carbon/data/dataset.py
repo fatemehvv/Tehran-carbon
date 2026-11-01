@@ -103,7 +103,8 @@ class CellMonthDataset:
         ld = d["label_domain"]
         domain = in_core.copy()
         for y in years:
-            inv = pd.read_csv(raw / ld["file"].format(year=y), encoding="utf-8-sig").sort_values(ld["cell_column"])
+            yf = (ld.get("year_proxy") or {}).get(y, y)
+            inv = pd.read_csv(raw / ld["file"].format(year=yf), encoding="utf-8-sig").sort_values(ld["cell_column"])
             domain &= (inv[ld["columns"]].sum(axis=1).values > 0).reshape(grid.H, grid.W)
 
         # layers of every enabled source and year (interim cache per source and year)

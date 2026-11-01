@@ -471,6 +471,40 @@ experiments:
     inherits: rq2d_base_ols_v1
     model: {baseline: {name: forward_operator}}
 
+  # ---------------------------------------------------------------- rehearsal of the confirmatory design (1402 / 1403 only)
+  # Development data only: train on the training blocks of one year, predict the held-out blocks of the other year
+  # (split.test_year), i.e. the design of the confirmatory 1404 test with the years we already have. These runs choose
+  # the candidates of docs/preregistration_confirmatory_1404.md; they are not hypothesis tests.
+  dev_sage_v1:
+    rq: RQ2
+    description: rehearsal - SAGE (3 domains, gated), 3 and 4 layers
+    inherits: rq2_sage_v2
+    split: {transfer: false}
+    train: {save_final: false}
+    sweep: {split.test_year: [1402, 1403], model.backbone.layers: [3, 4]}
+  dev_sage4_fusion_v1:
+    rq: RQ1
+    description: rehearsal - SAGE 4 layers, single domains vs all three, gated
+    inherits: dev_sage_v1
+    model: {backbone: {layers: 4}}
+    sweep: {split.test_year: [1402, 1403], model.modalities: [[traffic], [energy], [pollution]]}
+  dev_rq1_fusion_v1:
+    rq: RQ1
+    description: rehearsal - RQ1 network (no graph), single domains and all three, 3 fusion types
+    inherits: rq1_ablation_v2
+    split: {transfer: false}
+    train: {save_final: false}
+    sweep:
+      split.test_year: [1402, 1403]
+      model.modalities: [[traffic], [energy], [pollution], [traffic, energy, pollution]]
+      model.fusion.type: [early, late, gated]
+  dev_base_ols_v1: {rq: RQ2, inherits: rq2_base_ols_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+  dev_base_slx_ols_v1: {rq: RQ2, inherits: rq2_base_slx_ols_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+  dev_base_gbm_v1: {rq: RQ2, inherits: rq2_base_gbm_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+  dev_base_slx_gbm_v1: {rq: RQ2, inherits: rq2_base_slx_gbm_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+  dev_base_slx_rf_v1: {rq: RQ2, inherits: rq2_base_slx_rf_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+  dev_base_forward_v1: {rq: RQ2, inherits: rq2_base_forward_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1

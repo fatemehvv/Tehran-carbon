@@ -28,8 +28,14 @@ class Source:
         self.p = cfg["data"]["inputs"][self.name]
 
     def file(self, key: str, year: int | None = None) -> Path:
-        """Raw file of setting `key`; the path may contain {year} and {gyear} (Gregorian year of Nowruz)."""
-        name = self.p[key].format(year=year, gyear=JalaliYear(year).gregorian_year if year else None)
+        """Raw file of setting `key`: a path, or {year: path} for files that differ by year. The path may contain {year}
+        and {gyear} (Gregorian year of Nowruz). `year_proxy: {1404: 1403}` reads another year's file where a year has
+        no data of this source (stated as a limitation wherever it is used)."""
+        spec = self.p[key]
+        if isinstance(spec, dict):
+            spec = spec[year]
+        year = (self.p.get("year_proxy") or {}).get(year, year) if year else year
+        name = spec.format(year=year, gyear=JalaliYear(year).gregorian_year if year else None)
         path = self.raw / name
         if not path.exists():
             raise FileNotFoundError(f"raw file missing: {path} (see data/raw/MANIFEST.csv and README)")
