@@ -14,7 +14,7 @@ class SatelliteSource(Source):
 
     def load(self, year):
         jy = JalaliYear(year)
-        with rasterio.open(self.file("file")) as r:
+        with rasterio.open(self.file("file", year)) as r:
             self.grid.check_raster(r.transform, r.shape)
             bands = {d: r.read(i + 1).astype(np.float64) for i, d in enumerate(r.descriptions)}
         # Jalali month -> Gregorian month of largest overlap (Farvardin -> April ... Esfand -> March)

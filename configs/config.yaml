@@ -510,6 +510,45 @@ experiments:
   dev_base_slx_rf_v1: {rq: RQ2, inherits: rq2_base_slx_rf_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
   dev_base_forward_v1: {rq: RQ2, inherits: rq2_base_forward_v1, split: {transfer: false}, sweep: {split.test_year: [1402, 1403]}}
 
+  # ---------------------------------------------------------------- confirmatory test on the held-out year 1404
+  # docs/preregistration_confirmatory_1404.md (written before any 1404 result). For every fold: train on the training
+  # blocks of 1402 + 1403, predict the held-out block of 1404. The 1404 inventory and traffic are not available: the
+  # 1403 files stand in (year_proxy). 1404 NO2: gee/GEE_grid_NO2_weather_1404.js; 1404 weather harmonised with
+  # gee/harmonise_weather_1404.py.
+  c1404_sage5_v1:
+    rq: RQ2
+    description: confirmatory - SAGE 5 layers, 3 domains gated (H2c candidate)
+    inherits: rq2_sage_v2
+    years: [1402, 1403, 1404]
+    data: &data1404
+      label_domain: {year_proxy: {1404: 1403}}
+      inputs:
+        satellite: {file: {1402: satellite/Tehran_NO2_grid_2023_2025.tif, 1403: satellite/Tehran_NO2_grid_2023_2025.tif,
+                           1404: satellite/Tehran_NO2_grid_1404.tif}}
+        context: {weather_file: weather/weather_daily_era5_1402_1404.csv}
+        traffic: {year_proxy: {1404: 1403}}
+        energy: {year_proxy: {1404: 1403}}
+        pollution: {air_files: {1404: pollution/air_daily_1403_1404.csv}}
+    split: &split1404 {test_year: 1404, transfer: false}
+    train: {save_final: false}
+    model: {backbone: {layers: 5}}
+  c1404_sage4_v1:
+    rq: RQ1
+    description: confirmatory - SAGE 4 layers, 3 domains gated (H1c candidate)
+    inherits: c1404_sage5_v1
+    model: {backbone: {layers: 4}}
+  c1404_sage4_single_v1:
+    rq: RQ1
+    description: confirmatory - SAGE 4 layers, one domain (H1c reference = energy; the others descriptive)
+    inherits: c1404_sage4_v1
+    sweep: {model.modalities: [[energy], [traffic], [pollution]]}
+  c1404_base_slx_rf_v1: {rq: RQ2, inherits: rq2_base_slx_rf_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+  c1404_base_slx_gbm_v1: {rq: RQ2, inherits: rq2_base_slx_gbm_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+  c1404_base_slx_ols_v1: {rq: RQ2, inherits: rq2_base_slx_ols_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+  c1404_base_gbm_v1: {rq: RQ2, inherits: rq2_base_gbm_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+  c1404_base_ols_v1: {rq: RQ2, inherits: rq2_base_ols_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+  c1404_base_forward_v1: {rq: RQ2, inherits: rq2_base_forward_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1
@@ -623,6 +662,18 @@ hypotheses:
       - {experiment: rq2d_base_gbm_v1}
       - {experiment: rq2d_base_slx_gbm_v1}
       - {experiment: rq2d_base_forward_v1}
+  H2c:                            # confirmatory, held-out year 1404 (docs/preregistration_confirmatory_1404.md)
+    rq: RQ2
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: c1404_sage5_v1}
+    references: [{experiment: c1404_base_slx_rf_v1}]           # fixed in advance: best traditional model of the rehearsal
+  H1c:                            # confirmatory, held-out year 1404
+    rq: RQ1
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: c1404_sage4_v1}
+    references: [{experiment: c1404_sage4_single_v1, where: {model.modalities: [energy]}}]   # best single domain of the rehearsal
   H3:                             # RL vs the best tuned static policy, transfers (docs/preregistration_rq3.md)
     rq: RQ3
     kind: policy
