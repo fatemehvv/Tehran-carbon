@@ -495,11 +495,13 @@ class ThesisFigures:
         s = s.sort_values("return_mean", ascending=False)
         self.table(t.round(3), "t09_scorecard_by_transfer")
         self.table(s.round(3), "t10_scorecard")
+        LABEL_AT = {"RL (gamma 1)": (-6, 5, "right"), "RL (gamma 0.999)": (6, -11, "left"),
+                    "Winter only": (-6, 5, "right"), "Calm days": (6, 5, "left")}           # clear of the neighbours
         fig, ax = self.plt.subplots(figsize=(WIDTH * 0.75, 3.0))
         for r in s.itertuples():
             ax.plot(r.hours_lost_M, r.co2_saved_kt, "o", color=_emphasis(r.policy), ms=8, mec="white", mew=1)
-            ax.annotate(r.policy, (r.hours_lost_M, r.co2_saved_kt), xytext=(5, -11 if r.policy == "Calm days" else 4),
-                        textcoords="offset points",
+            dx, dy, ha = LABEL_AT.get(r.policy, (5, 4, "left"))
+            ax.annotate(r.policy, (r.hours_lost_M, r.co2_saved_kt), xytext=(dx, dy), textcoords="offset points", ha=ha,
                         fontsize=7, color=INK2)
         ax.axvline(0, color=MUTED, lw=0.8)
         ax.set_xlabel("travel time lost (million person-hours per year; < 0 = saved)")
