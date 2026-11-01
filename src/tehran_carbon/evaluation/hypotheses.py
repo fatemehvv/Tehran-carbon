@@ -98,9 +98,10 @@ class HypothesisTest:
                 sc = score(np.load(cdir / "preds" / f"transfer_{a}to{b}.npz")["pred"], b)
                 sr = score(np.load(rdir / "preds" / f"transfer_{a}to{b}.npz")["pred"], b)
                 # persistence = last year's OBSERVED map: a reference ceiling, not a competitor (it cannot respond
-                # to scenarios, so it is useless for RQ3)
+                # to scenarios, so it is useless for RQ3); only defined when both years have the same steps (monthly)
+                same = truth[a][0].shape == truth[b][0].shape
                 rows.append(dict(test=f"transfer_{a}to{b}", candidate=sc, reference=sr, delta=sc - sr, ci_low=np.nan,
-                                 ci_high=np.nan, persistence=score(truth[a][0], b)))
+                                 ci_high=np.nan, persistence=score(truth[a][0], b) if same else np.nan))
                 ok_all &= sc > sr
         verdict = "supported" if ok_all and ci_all else ("partial" if ok_all else "not supported")
         decision = pd.DataFrame(rows)
