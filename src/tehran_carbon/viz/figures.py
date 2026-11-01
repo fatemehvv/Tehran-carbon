@@ -496,7 +496,8 @@ class ThesisFigures:
         self.table(t.round(3), "t09_scorecard_by_transfer")
         self.table(s.round(3), "t10_scorecard")
         LABEL_AT = {"RL (gamma 1)": (-6, 5, "right"), "RL (gamma 0.999)": (6, -11, "left"),
-                    "Winter only": (-6, 5, "right"), "Calm days": (6, 5, "left")}           # clear of the neighbours
+                    "Winter only": (-6, 5, "right"), "Calm days": (6, 5, "left"),
+                    "Uniform": (5, -12, "left")}                                              # clear of the neighbours
         fig, ax = self.plt.subplots(figsize=(WIDTH * 0.75, 3.0))
         for r in s.itertuples():
             ax.plot(r.hours_lost_M, r.co2_saved_kt, "o", color=_emphasis(r.policy), ms=8, mec="white", mew=1)
@@ -504,6 +505,7 @@ class ThesisFigures:
             ax.annotate(r.policy, (r.hours_lost_M, r.co2_saved_kt), xytext=(dx, dy), textcoords="offset points", ha=ha,
                         fontsize=7, color=INK2)
         ax.axvline(0, color=MUTED, lw=0.8)
+        ax.margins(y=0.12)
         ax.set_xlabel("travel time lost (million person-hours per year; < 0 = saved)")
         ax.set_ylabel("CO2 saved (kt per year)")
         ax.set_title("RQ4: CO2 saved vs travel time, same 30-day budget", loc="left")
