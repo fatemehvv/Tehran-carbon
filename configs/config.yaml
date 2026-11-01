@@ -648,6 +648,28 @@ experiments:
       smoke:
         agent: {timesteps: 3650}
         evaluation: {episodes: 1, tune_episodes: 1}
+  # NOT pre-registered (added after the H3d result; docs/robustness_rq3_daily.md). The H3d agent spent its whole
+  # budget in months 1-4, in the 5 districts with the most car traffic, not on the polluted days. Two checks:
+  rq3_daily_robust_v1:            # (1) a fairer static reference: hotspot ranked by car-km into the district, not by z
+    rq: RQ3
+    kind: rl
+    description: H3d robustness - adds the static family hotkm (districts by car-km of the trips into them)
+    inherits: rq3_daily_v1
+    rl:
+      static:
+        hotkm: {districts: [3, 5, 8], restriction: [0.1, 0.2, 0.3], bus_boost: [0.0], rank: trip_km}
+  rq3_daily_g0999_v1:             # (2) a less impatient agent: gamma 0.99 discounts day 100 to 37 %
+    rq: RQ3
+    kind: rl
+    description: H3d robustness - as rq3_daily_robust_v1 with gamma 0.999
+    inherits: rq3_daily_robust_v1
+    rl: {agent: {params: {gamma: 0.999}}}
+  rq3_daily_g1_v1:
+    rq: RQ3
+    kind: rl
+    description: H3d robustness - as rq3_daily_robust_v1 with gamma 1.0 (no discount, as in the evaluation)
+    inherits: rq3_daily_robust_v1
+    rl: {agent: {params: {gamma: 1.0}}}
   rq3_lambda_v1:
     rq: RQ3
     description: secondary - trade-off curve over the travel-time weight (1 agent seed)
@@ -724,6 +746,27 @@ hypotheses:
     experiment: rq3_daily_v1
     test: effectiveness
     exclude_families: [calm]      # the reactive weather rule is a secondary comparison, not a static reference
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
+  H3d_robust:                     # NOT pre-registered: the H3d rule with hotkm among the static references
+    rq: RQ3
+    kind: policy
+    experiment: rq3_daily_robust_v1
+    test: effectiveness
+    exclude_families: [calm]
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
+  H3d_g0999:
+    rq: RQ3
+    kind: policy
+    experiment: rq3_daily_g0999_v1
+    test: effectiveness
+    exclude_families: [calm]
+    bootstrap: {n: 2000, seed: 0, level: 0.95}
+  H3d_g1:
+    rq: RQ3
+    kind: policy
+    experiment: rq3_daily_g1_v1
+    test: effectiveness
+    exclude_families: [calm]
     bootstrap: {n: 2000, seed: 0, level: 0.95}
   H4:                             # CVaR of the policy screened by simulation vs a choice made without simulation
     rq: RQ3

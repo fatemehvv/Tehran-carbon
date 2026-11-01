@@ -88,6 +88,8 @@ def test_static_policies():
     hot = StaticPolicy("hotspot", 0.2, 0.5, districts=1)
     r, b = e.levers(hot.act(None, e))
     assert (r > 0).sum() == 1 and r[e.hot_rank[0]] == pytest.approx(0.2)
+    km = StaticPolicy("hotkm", 0.2, 0.0, districts=1, rank="trip_km")
+    assert km.name == "hotkm r=0.2 b=0 k=1 rank=trip_km" and e.levers(km.act(None, e))[0][e.trip_km_rank[0]] > 0
     winter = StaticPolicy("winter", 0.2, 0.0, months=[8])
     assert np.allclose(e.levers(winter.act(None, e))[0], 0.0)           # month 1: off
 

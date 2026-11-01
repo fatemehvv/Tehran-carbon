@@ -91,6 +91,7 @@ class CarbonPolicyEnv(gym.Env):
         self.lam, self.mu, self.kappa = float(w["lambda_mobility"]), float(w["mu_energy"]), float(w["kappa_exposure"])
         self.zbar = exposure.zbar if exposure is not None else np.zeros((self.T, D))
         self.hot_rank = np.argsort(-self.zbar.mean(0))                 # districts by baseline predicted z, highest first
+        self.trip_km_rank = np.argsort(-(city.C * city.L).sum(0))      # districts by car-km of the trips into them
         self.weather = np.zeros((self.T, 0)) if weather is None else np.asarray(weather, float)
         self.severity = np.ones(self.T) if severity is None else np.asarray(severity, float)
         self.r_budget = rl.get("restriction_budget_days")              # None = no limit (monthly design)
