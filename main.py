@@ -12,6 +12,7 @@
     python main.py analyze   response  --exp rq2_sage_v1        response checks of the final model (for RQ3)
     python main.py summarize --exp rq1_ablation_v1              table of all finished runs / sweep variants
     python main.py runs      [--rq RQ1] [--exp rq1_] [--last 30]   run history (runs/registry.csv)
+    python main.py figures                                      thesis figures and tables (docs/figures, docs/tables)
 """
 from __future__ import annotations
 
@@ -182,6 +183,12 @@ def cmd_runs(args):
         print(t[cols].tail(args.last).to_string(index=False) if len(t) else "no runs yet")
 
 
+def cmd_figures(args):
+    from tehran_carbon.viz.figures import ThesisFigures
+    out = ThesisFigures(Config().defaults).run_all()
+    print(f"{len(out['done'])} figures written, skipped: {out['skipped'] or 'none'}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -202,6 +209,7 @@ def main():
     p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)
     p = sub.add_parser("runs"); p.add_argument("--rq"); p.add_argument("--exp"); p.add_argument("--last", type=int, default=30)
     p.set_defaults(fn=cmd_runs)
+    p = sub.add_parser("figures"); p.set_defaults(fn=cmd_figures)
     args = ap.parse_args()
     if args.cmd == "train" and not (args.exp or args.resume):
         ap.error("train needs --exp or --resume")
