@@ -25,6 +25,13 @@ WIDTH = 6.3                                         # inches, A4 text width
 YEARS = ["1402", "1403"]
 POLICY_LABEL = {"none": "No action", "uniform": "Uniform", "winter": "Winter only", "hotspot": "Hotspot (by NO2)",
                 "calm": "Calm days", "hotkm": "Hotspot (by car-km)"}
+POLICY_COLOR = {"RL (gamma 0.99)": SERIES[0], "RL (gamma 0.999)": SERIES[2], "RL (gamma 1)": SERIES[6],
+                "Hotspot (by car-km)": SERIES[1], "Hotspot (by NO2)": SERIES[3], "Winter only": MUTED}
+
+
+def _emphasis(policy: str) -> str:
+    """Bars and dots: the agents in blue, the car-km hotspot rule in orange, every other static rule in grey."""
+    return SERIES[0] if policy.startswith("RL") else SERIES[1] if "car-km" in policy else MUTED
 
 
 def _style():
@@ -113,8 +120,8 @@ class ThesisFigures:
             pos = y0 + (0.2 if i == 0 else -0.2)
             ax.barh(pos, d.MtCO2, height=0.36, color=SERIES[i], label=y, edgecolor="white", linewidth=1)
             ax.errorbar(d.MtCO2, pos, xerr=[d.MtCO2 - d.p05, d.p95 - d.MtCO2], fmt="none", ecolor=INK2, lw=0.8, capsize=2)
-            for p, v in zip(pos, d.MtCO2):
-                ax.text(v + 0.9, p, f"{v:.1f}", va="center", fontsize=7.5, color=INK2)
+            for p, v, hi in zip(pos, d.MtCO2, d.p95):
+                ax.text(hi + 0.3, p, f"{v:.1f}", va="center", fontsize=7.5, color=INK2)
         ax.set_yticks(y0, labels)
         ax.set_xlabel("Mt CO2 per year (central; bars: 5-95 % Monte Carlo)")
         ax.grid(axis="y", visible=False)
@@ -154,13 +161,13 @@ class ThesisFigures:
         cb = fig.colorbar(im, ax=axes, shrink=0.8, pad=0.02)
         cb.set_label("PR-AUC (random = 0.10)")
         fig.suptitle("RQ1: PR-AUC by input domains and fusion  (T traffic, E energy, P pollution)", x=0.02, ha="left",
-                     fontsize=9)
+                     fontsize=9, y=1.04)
         self.save(fig, "fig02_rq1_ablation")
 
     # ------------------------------------------------------------------ RQ2
     def fig03_rq2_models(self):
         models = [  # label, development experiment (1402 / 1403), confirmatory experiment (1404)
-            ("GNN (SAGE)", "rq2_sage_v2", "c1404_sage5_v1"),
+            ("GNN (SAGE; 3 layers, 1404: 5)", "rq2_sage_v2", "c1404_sage5_v1"),
             ("SLX-RF", "rq2_base_slx_rf_v1", "c1404_base_slx_rf_v1"),
             ("SLX-GBM", "rq2_base_slx_gbm_v1", "c1404_base_slx_gbm_v1"),
             ("SLX-OLS", "rq2_base_slx_ols_v1", "c1404_base_slx_ols_v1"),
@@ -178,7 +185,7 @@ class ThesisFigures:
         fig, ax = self.plt.subplots(figsize=(WIDTH, 3.0))
         y0 = np.arange(len(t))[::-1]
         ax.axvline(0.10, color=MUTED, lw=1, ls="--")
-        ax.text(0.105, y0[-1] - 0.45, "random", fontsize=7, color=MUTED)
+        ax.text(0.105, y0[0] + 0.2, "random", fontsize=7, color=MUTED)
         for i, (col, name) in enumerate([("1402", "1402 (development)"), ("1403", "1403 (development)"),
                                          ("1404", "1404 (confirmatory)")]):
             ax.plot(t[col], y0, "o", ms=6, color=SERIES[i], label=name, mec="white", mew=1)
@@ -256,7 +263,7 @@ class ThesisFigures:
         ax.grid(axis="y", visible=False)
         from matplotlib.lines import Line2D
         ax.legend([Line2D([], [], color=c, marker="o", lw=2) for c in colors.values()], list(colors),
-                  loc="lower right", title="verdict", title_fontsize=8)
+                  loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=3, title="verdict", title_fontsize=8)
         ax.set_title("RQ1 / RQ2 decision rules (positive = hypothesis direction)", loc="left")
         self.save(fig, "fig05_hypotheses")
 
@@ -283,7 +290,7 @@ class ThesisFigures:
         q = 0.9
         ho, hp = obs >= np.nanquantile(obs, q), pred >= np.nanquantile(pred, q)
         agree = np.where(ho & hp, 3, np.where(ho, 2, np.where(hp, 1, 0))).astype(float)
-        fig, axes = self.plt.subplots(1, 3, figsize=(WIDTH, 2.3))
+        fig, axes = self.plt.subplots(1, 3, figsize=(WIDTH, 2.6), layout="constrained")
         for ax, v, title in [(axes[0], obs, "Observed NO2 (z, mean 1404)"), (axes[1], pred, "GNN out-of-fold prediction")]:
             im = ax.imshow(field(v), extent=ext, cmap=div, vmin=-lim, vmax=lim)
             ax.set_title(title, loc="left", fontsize=8)
@@ -373,17 +380,16 @@ class ThesisFigures:
         for ax, (k, g) in zip(axes, t.groupby("transfer", sort=False)):
             g = g.set_index("policy").loc[order]
             y0 = np.arange(len(g))
-            colors = [SERIES[0] if s.startswith("RL") else SERIES[1] if "car-km" in s else MUTED for s in g.index]
-            ax.barh(y0, g["mean"], color=colors, height=0.6, edgecolor="white")
+            ax.barh(y0, g["mean"], color=[_emphasis(p) for p in g.index], height=0.6, edgecolor="white")
             ax.errorbar(g["mean"], y0, xerr=[g["mean"] - g.ci_low, g.ci_high - g["mean"]], fmt="none", ecolor=INK2, lw=0.8)
-            for yy, v in zip(y0, g["mean"]):
-                ax.text(v + 0.4, yy, f"{v:.1f}", va="center", fontsize=7.5, color=INK2)
+            for yy, v, hi in zip(y0, g["mean"], g.ci_high):
+                ax.text(hi + 0.4, yy, f"{v:.1f}", va="center", fontsize=7.5, color=INK2)
             ax.set_yticks(y0, order)
             ax.grid(axis="y", visible=False)
             ax.set_title(f"train {k[:4]} -> test {k[-4:]}", loc="left")
             ax.set_xlabel("mean episode return (30 episodes)")
         fig.suptitle("RQ3 daily: annual return of each policy under the 30-day restriction budget", x=0.02,
-                     ha="left", fontsize=9)
+                     ha="left", fontsize=9, y=1.04)
         self.save(fig, "fig08_daily_returns")
 
     def fig09_daily_timing(self):
@@ -410,12 +416,12 @@ class ThesisFigures:
         show = ["RL (gamma 0.99)", "RL (gamma 0.999)", "RL (gamma 1)", "Hotspot (by car-km)", "Hotspot (by NO2)",
                 "Winter only"]
         rows = []
-        for i, name in enumerate(show):
+        for name in show:
             p = next((q for q in pols if q["policy"] == name), None)
             if p is None:
                 continue
             used = np.cumsum(p["act"][:len(sev), :p["act"].shape[1] // 2].mean(1) / rmax)
-            a2.plot(days, used, color=SERIES[i], lw=2 if name.startswith("RL") else 1.4,
+            a2.plot(days, used, color=POLICY_COLOR[name], lw=2 if name.startswith("RL") else 1.4,
                     ls="-" if name.startswith("RL") else "--", label=name)
             day = p["act"][:len(sev), :p["act"].shape[1] // 2].mean(1)
             top = sev >= np.quantile(sev, 0.9)
@@ -428,7 +434,7 @@ class ThesisFigures:
         a2.set_xticks(starts, ["Far", "Ord", "Kho", "Tir", "Mor", "Sha", "Meh", "Aba", "Aza", "Dey", "Bah", "Esf"])
         a2.set_ylabel("budget used (days)")
         a2.set_ylim(0, 32)
-        a2.legend(ncol=2, loc="lower right", fontsize=7.5)
+        a2.legend(ncol=3, loc="upper center", bbox_to_anchor=(0.5, -0.15), fontsize=7.5)
         for ax in (a1, a2):
             ax.grid(axis="x", visible=False)
         self.save(fig, "fig09_daily_timing")
@@ -445,7 +451,8 @@ class ThesisFigures:
         pols = {p["policy"]: p for p in self.daily_policies("1402", "1403")}
         show = [n for n in ["RL (gamma 0.99)", "Hotspot (by car-km)", "Hotspot (by NO2)"] if n in pols]
         owner = np.where(F.sum(1) > 0, F.argmax(1), -1)
-        ext = [grid.lon0, grid.lon0 + grid.W * grid.res, grid.lat0 - grid.H * grid.res, grid.lat0]
+        rr, cc = np.nonzero(owner.reshape(grid.H, grid.W) >= 0)
+        r0, r1, c0, c1 = rr.min(), rr.max() + 1, cc.min(), cc.max() + 1          # crop to the 22 districts
         from matplotlib.colors import LinearSegmentedColormap
         cmap = LinearSegmentedColormap.from_list("seq", ["#f0efec"] + SEQ[1:])
         fig, axes = self.plt.subplots(1, len(show), figsize=(WIDTH, 2.4))
@@ -454,8 +461,8 @@ class ThesisFigures:
             act = pols[name]["act"]
             r = act[:, :act.shape[1] // 2].mean(0)
             rows.append(dict(policy=name, **{d: round(float(v), 4) for d, v in zip(ids, r)}))
-            field = np.where(owner >= 0, r[np.maximum(owner, 0)], np.nan).reshape(grid.H, grid.W)
-            im = ax.imshow(field, extent=ext, cmap=cmap, vmin=0, vmax=0.1, interpolation="nearest")
+            field = np.where(owner >= 0, r[np.maximum(owner, 0)], np.nan).reshape(grid.H, grid.W)[r0:r1, c0:c1]
+            im = ax.imshow(field, cmap=cmap, vmin=0, vmax=0.1, interpolation="nearest")
             ax.set_title(name, loc="left", fontsize=8)
             ax.grid(False)
             ax.set_xticks([])
@@ -490,9 +497,9 @@ class ThesisFigures:
         self.table(s.round(3), "t10_scorecard")
         fig, ax = self.plt.subplots(figsize=(WIDTH * 0.75, 3.0))
         for r in s.itertuples():
-            c = SERIES[0] if r.policy.startswith("RL") else SERIES[1] if "car-km" in r.policy else MUTED
-            ax.plot(r.hours_lost_M, r.co2_saved_kt, "o", color=c, ms=8, mec="white", mew=1)
-            ax.annotate(r.policy, (r.hours_lost_M, r.co2_saved_kt), xytext=(5, 3), textcoords="offset points",
+            ax.plot(r.hours_lost_M, r.co2_saved_kt, "o", color=_emphasis(r.policy), ms=8, mec="white", mew=1)
+            ax.annotate(r.policy, (r.hours_lost_M, r.co2_saved_kt), xytext=(5, -11 if r.policy == "Calm days" else 4),
+                        textcoords="offset points",
                         fontsize=7, color=INK2)
         ax.axvline(0, color=MUTED, lw=0.8)
         ax.set_xlabel("travel time lost (million person-hours per year; < 0 = saved)")
