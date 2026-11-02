@@ -48,3 +48,34 @@ The expected direction of a bias against buildings is Δ₁ > 0 and Δ₃ > 0.
 - `docs/analysis/sector_bias_check.py` is a standalone script, run once on the laptop because the server was off. It does
   not import the project code and it is not a tracked run in `runs/`. To make it a tracked run, it needs an `analyze`
   command on a server.
+
+## Results (2026-11-02)
+
+Tables: `docs/tables/t11_sector_bias.csv`, `t12_sector_bias_sigma.csv`. The first version of the script failed on a year
+conversion (`year - 621`) before it produced any number; that line was fixed, nothing else changed.
+
+| sector | share of the domain's CO₂ (1402 / 1403) | CO₂ inside the NO₂ hotspots, 95 % interval (1402) | same (1403) | Spearman with z (1402 / 1403) |
+|---|---|---|---|---|
+| road | 34.4 % / 33.5 % | 34.3 % [2.1, 46.9] | 34.5 % [1.9, 52.2] | 0.89 / 0.90 |
+| buildings | 48.7 % / 50.5 % | 32.9 % [2.6, 45.7] | 33.7 % [2.5, 53.4] | 0.90 / 0.91 |
+| industry | 9.5 % / 9.3 % | 1.1 % [0.0, 3.0] | 0.8 % [0.0, 2.4] | −0.07 / −0.10 |
+| power | 7.4 % / 6.7 % | 3.8 % [0.0, 9.8] | 3.6 % [0.0, 12.6] | 0.26 / 0.26 |
+
+| test | 1402 | 1403 |
+|---|---|---|
+| Δ₁ capture, road − buildings | +0.014 [−0.042, +0.049] | +0.008 [−0.063, +0.042] |
+| Δ₃ NO₂ per Mt CO₂, road − buildings (σ = 12 km) | +0.32 [−8.8, +10.2] | −3.67 [−12.6, +5.5] |
+| correlation of the road and buildings layers (σ = 12 km) | 0.999 | 0.999 |
+| total CO₂ in the NO₂ hotspots / in the best 10 % of the cells | 27.6 % / 45.5 % | 28.2 % / 44.7 % |
+
+**Verdict under the rule: a bias against buildings is not shown.** This does not prove there is no bias:
+- After smoothing, the road and buildings layers are almost the same map (r = 0.999; r = 0.58 for unsmoothed cells), so a
+  spatial test cannot separate them. Δ₃ also changes sign with σ in 1402, and its intervals are very wide.
+- The direction does not favour the guess either: Spearman is slightly higher for buildings at every σ.
+
+**Not expected in advance (descriptive, outside the rule).** The NO₂ hotspots hold little of the CO₂ of industry (about 1 %, on
+10 % of the cells, interval clearly below 10 %). Power is low too, but its interval reaches 10 %. Industry and power are
+16 to 17 % of the domain's CO₂. A NO₂ hotspot therefore marks the dense urban core: it holds about a third of the road and
+buildings CO₂, and not the industrial sites. The right wording is "hotspot of urban combustion", not "hotspot of CO₂".
+
+The intervals of the capture are wide because two of the 12 blocks hold about 95 % of the hotspot cell-months (blocks 6 and 2).

@@ -39,7 +39,7 @@ K = int(blocks.max()) + 1
 
 def no2_months(year):
     """(12, H, W) NO2 of a Jalali year: Gregorian month of largest overlap, Farvardin -> April .. Esfand -> March."""
-    gy = year - 621
+    gy = year + 621
     months = [(gy, m) for m in range(4, 13)] + [(gy + 1, m) for m in range(1, 4)]
     with rasterio.open(raw / inputs["satellite"]["file"]) as r:
         bands = {d: i + 1 for i, d in enumerate(r.descriptions)}
