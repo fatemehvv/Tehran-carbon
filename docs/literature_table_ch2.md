@@ -130,6 +130,27 @@
 | مش چندمقیاسی | Lam و همکاران، GraphCast، *Science* 2023 |
 | SLX | Halleck Vega و Elhorst، *J. Regional Science* 2015 (در پایان‌نامه [۳۰]) |
 
+### ز. یادگیری تقویتی برای سیاست ترافیک و آلودگی (برای RQ3 و RQ4)
+
+افزوده‌شده پس از پرسش دربارهٔ RL، با همان روش و همان محدودیت (فقط خلاصه‌های جستجو).
+
+| # | مقاله | اهرم و محیط | ربط به کار شما | اطمینان |
+|---|---|---|---|---|
+| R1 | Mania، Guy، Recht، NeurIPS 2018 | جستجوی تصادفی سیاست‌های خطی ایستا در MuJoCo | سیاست ساده و ایستای خوب‌تنظیم‌شده با RL رقابت می‌کند؛ پشتوانهٔ اصلی یافتهٔ `hotkm` | ✔ |
+| R2 | Henderson و همکاران، AAAI 2018 | بازتولیدپذیری PPO، TRPO و ... | نتایج RL به seed و تنظیم حساس است؛ ۳ seed و یک الگوریتم را داور ضعیف می‌داند | ✔ |
+| R3 | RESCO (Ault و Sharon، NeurIPS 2021، Datasets & Benchmarks) و مرورهای کنترل چراغ | چراغ راهنمایی در SUMO | max-pressure (قاعدهٔ بدون یادگیری) رقیبی است که RL اغلب به‌سختی از آن جلو می‌زند؛ همتای `hotkm` در حمل‌ونقل | ✔ RESCO؛ ◐ بقیه |
+| R4 | مقاله‌های کنترل چراغ با هدف انتشار (مثلاً EcoMRL؛ مطالعهٔ Nicosia) | چراغ راهنمایی | RL با هدف CO₂ زیاد است، ولی اهرمش چراغ است، نه محدودیت تردد | ◐ |
+| R5 | «Learning to incentivise» (LSE، ۲۰۲۵) | RL چندعاملی برای مشوق رانندگان در شبیه‌ساز ترافیک | ۹٪ کاهش CO₂؛ **همان مصالحهٔ زمان سفر در برابر انتشار** که در RQ3 شما با λ دیده شد | ◐ |
+| R6 | MAGT-toll، *PLOS ONE* 2024 | قیمت‌گذاری پویای ازدحام با RL چندعاملی | قیمت‌گذاری با RL وجود دارد | ◐ |
+| R7 | طرح LEZ پاریس با MATSim (همایش کاربران MATSim 2025) | جستجوی عددی روی سناریوهای منع تردد | **جستجوی سیاست با شبیه‌ساز، بدون RL**؛ همان کاری که `hotkm` با grid کرد | ◐ |
+| R8 | Natterer و همکاران، ۲۰۲۵ (جانشین یادگیری ماشین برای مدل عامل‌محور)؛ GNN جانشین MATSim پاریس (arXiv، ۲۰۲۴) | جانشین سریع شبیه‌ساز برای سنجش سیاست | همتای emulator خطی GNN شما | ◐ |
+| R9 | DeepRSM (۲۰۲۰، روی CMAQ چین)؛ CleanAir (arXiv 2506.18018، ۲۰۲۵) | جانشین یادگیری عمیق مدل شیمی برای پاسخ آلودگی به کاهش انتشار | همان نقش مدل GNN شما در RQ3؛ ولی برای بهینه‌سازی با RL به کار نرفته‌اند | ◐ |
+| R10 | PPO برای جانمایی ایستگاه‌های پالایش هوا در دهلی (arXiv 2505.00668) | مسئلهٔ مکانی، نه زمانی | RL برای مدیریت آلودگی شهری | ◐ |
+| R11 | «Traffic congestion, ambient air pollution, and health: evidence from driving restrictions in Beijing» (University of Chicago Press) | شواهد تجربی محدودیت تردد پکن | پشتوانهٔ تجربی اثر محدودیت | ◐ (فقط عنوان دیده شد) |
+| R12 | مطالعهٔ پویایی سیستم برای محدودیت زوج‌وفرد در شهرهای چین | ۴۳٫۵٪ کاهش سفر خودرو؛ اثر بیشتر کوتاه‌مدت | پشتوانهٔ فرض‌های رفتاری | ◐ |
+
+**شکاف:** کاری پیدا نکردم که با RL تصمیم بگیرد **کدام روزها و کدام مناطق** با **بودجهٔ سالانهٔ روزهای محدودیت** محدود شوند، با هدف کربن و مواجهه. نزدیک‌ترین‌ها چراغ راهنمایی (R4)، قیمت‌گذاری و مشوق (R5، R6) و جستجوی عددی LEZ (R7) هستند.
+
 ---
 
 ## ۳. ماتریس شکاف (برای «نتیجه‌گیری از پژوهش‌های پیشین»)
@@ -260,3 +281,11 @@
 - [LSTM چندوجهی تهران، EOGE](https://eoge.ut.ac.ir/article_106432.html)
 - [NO₂ تهران در کرونا، Air Qual. Atmos. Health](https://link.springer.com/doi/10.1007/s11869-023-01450-w) · [MDPI](https://www.mdpi.com/2673-4672/2/2/12)
 - [ClusLite-STGCN-GRU، Land 2025](https://www.mdpi.com/2073-445X/14/8/1589)
+- [Mania و همکاران 2018، NeurIPS](https://papers.nips.cc/paper/2018/hash/7634ea65a4e6d9041cfd3f7de18e334a-Abstract.html) · [Henderson و همکاران 2018، AAAI](https://ojs.aaai.org/index.php/AAAI/article/view/11694)
+- [RESCO، NeurIPS 2021](https://neurips.cc/virtual/2021/22729) · [مرور کنترل چراغ و MPC، arXiv 2211.14426](https://arxiv.org/pdf/2211.14426)
+- [EcoMRL](https://bohrium.dp.tech/paper/arxiv/42e85ff23514c3042e121fb8fdf1c4f0a040dd84c6713ed413d1784551a30116)
+- [Learning to incentivise، LSE](https://researchonline.lse.ac.uk/id/eprint/128507) · [MAGT-toll، PLOS ONE](https://ideas.repec.org/a/plo/pone00/0313828.html)
+- [LEZ پاریس، MATSim 2025](https://matsim.org/conferences/mum2025/presentations/diallo_lez.pdf) · [MATSim-AI و Natterer و همکاران](https://matsim.org/conferences/mum2025/abstracts/Seregina__MUM-2025.pdf) · [GNN جانشین MATSim، arXiv 2408.06762](https://arxiv.org/html/2408.06762v1)
+- [DeepRSM (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7375937) · [CleanAir، arXiv 2506.18018](https://arxiv.org/pdf/2506.18018)
+- [PPO دهلی، arXiv 2505.00668](https://arxiv.org/pdf/2505.00668)
+- [محدودیت تردد پکن](https://www.journals.uchicago.edu/doi/pdfplus/10.1086/692115)
