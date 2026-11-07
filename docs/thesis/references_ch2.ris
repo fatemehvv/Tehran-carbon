@@ -1,0 +1,787 @@
+TY  - JOUR
+TI  - Towards monitoring localized CO2 emissions from space: co-located regional CO2 and NO2 enhancements observed by the OCO-2 and S5P satellites
+AU  - Maximilian Reuter
+AU  - Michael Buchwitz
+AU  - Oliver Schneising
+AU  - Sven Krautwurst
+AU  - Christopher W. O'Dell
+AU  - Andreas Richter
+AU  - Heinrich Bovensmann
+AU  - John P. Burrows
+PY  - 2019
+T2  - Atmospheric Chemistry and Physics
+VL  - 19
+IS  - 14
+SP  - 9371-9383
+DO  - 10.5194/acp-19-9371-2019
+ER  - 
+
+TY  - JOUR
+TI  - Methodologies for Cross-Domain Data Fusion: An Overview
+AU  - Yu Zheng
+PY  - 2015
+T2  - IEEE Transactions on Big Data
+VL  - 1
+IS  - 1
+SP  - 16-34
+DO  - 10.1109/TBDATA.2015.2465959
+ER  - 
+
+TY  - JOUR
+TI  - Multimodal Machine Learning: A Survey and Taxonomy
+AU  - Tadas Baltrusaitis
+AU  - Chaitanya Ahuja
+AU  - Louis-Philippe Morency
+PY  - 2019
+T2  - IEEE Transactions on Pattern Analysis and Machine Intelligence
+VL  - 41
+IS  - 2
+SP  - 423-443
+DO  - 10.1109/TPAMI.2018.2798607
+ER  - 
+
+TY  - GEN
+TI  - Inductive Representation Learning on Large Graphs
+AU  - William L. Hamilton
+AU  - Rex Ying
+AU  - Jure Leskovec
+PY  - 2017
+UR  - https://arxiv.org/abs/1706.02216
+N1  - Published in NIPS 2017; version with full appendix and minor corrections
+ER  - 
+
+TY  - JOUR
+TI  - TROPOMI on the ESA Sentinel-5 Precursor: A GMES mission for global observations of the atmospheric composition for climate, air quality and ozone layer applications
+AU  - J.P. Veefkind
+AU  - I. Aben
+AU  - K. McMullan
+AU  - H. Förster
+AU  - J. de Vries
+AU  - G. Otter
+AU  - J. Claas
+AU  - H.J. Eskes
+AU  - J.F. de Haan
+AU  - Q. Kleipool
+AU  - M. van Weele
+AU  - O. Hasekamp
+AU  - R. Hoogeveen
+AU  - J. Landgraf
+AU  - R. Snel
+AU  - P. Tol
+AU  - P. Ingmann
+AU  - R. Voors
+AU  - B. Kruizinga
+AU  - R. Vink
+AU  - H. Visser
+AU  - P.F. Levelt
+PY  - 2012
+T2  - Remote Sensing of Environment
+VL  - 120
+SP  - 70-83
+DO  - 10.1016/j.rse.2011.09.027
+ER  - 
+
+TY  - JOUR
+TI  - Pinpointing nitrogen oxide emissions from space
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Steffen Dörner
+AU  - Ang Li
+AU  - Zhaokun Hu
+AU  - Fei Liu
+AU  - Yang Wang
+AU  - Thomas Wagner
+PY  - 2019
+T2  - Science Advances
+VL  - 5
+IS  - 11
+SP  - eaax9800
+DO  - 10.1126/sciadv.aax9800
+ER  - 
+
+TY  - JOUR
+TI  - Enhanced Capabilities of TROPOMI NO2 : Estimating NOX from North American Cities and Power Plants
+AU  - Daniel L. Goldberg
+AU  - Zifeng Lu
+AU  - David G. Streets
+AU  - Benjamin de Foy
+AU  - Debora Griffin
+AU  - Chris A. McLinden
+AU  - Lok N. Lamsal
+AU  - Nickolay A. Krotkov
+AU  - Henk Eskes
+PY  - 2019
+T2  - Environmental Science & Technology
+VL  - 53
+IS  - 21
+SP  - 12594-12601
+DO  - 10.1021/acs.est.9b04488
+ER  - 
+
+TY  - JOUR
+TI  - Exploiting OMI NO2 satellite observations to infer fossil-fuel CO2 emissions from U.S. megacities
+AU  - Daniel L. Goldberg
+AU  - Zifeng Lu
+AU  - Tomohiro Oda
+AU  - Lok N. Lamsal
+AU  - Fei Liu
+AU  - Debora Griffin
+AU  - Chris A. McLinden
+AU  - Nickolay A. Krotkov
+AU  - Bryan N. Duncan
+AU  - David G. Streets
+PY  - 2019
+T2  - Science of The Total Environment
+VL  - 695
+SP  - 133805
+DO  - 10.1016/j.scitotenv.2019.133805
+ER  - 
+
+TY  - JOUR
+TI  - Catalog of NOx emissions from point sources as derived from the divergence of the NO2 flux for TROPOMI
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Steffen Dörner
+AU  - Henk Eskes
+AU  - Vinod Kumar
+AU  - Adrianus de Laat
+AU  - Thomas Wagner
+PY  - 2021
+T2  - Earth System Science Data
+VL  - 13
+IS  - 6
+SP  - 2995-3012
+DO  - 10.5194/essd-13-2995-2021
+ER  - 
+
+TY  - JOUR
+TI  - Improved catalog of NOx point source emissions (version 2)
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Adrian Jost
+AU  - Thomas Wagner
+PY  - 2023
+T2  - Earth System Science Data
+VL  - 15
+IS  - 7
+SP  - 3051-3073
+DO  - 10.5194/essd-15-3051-2023
+ER  - 
+
+TY  - JOUR
+TI  - Quantifying daily NOx and CO2 emissions from Wuhan using satellite observations from TROPOMI and OCO-2
+AU  - Qianqian Zhang
+AU  - K. Folkert Boersma
+AU  - Bin Zhao
+AU  - Henk Eskes
+AU  - Cuihong Chen
+AU  - Haotian Zheng
+AU  - Xingying Zhang
+PY  - 2023
+T2  - Atmospheric Chemistry and Physics
+VL  - 23
+IS  - 1
+SP  - 551-563
+DO  - 10.5194/acp-23-551-2023
+ER  - 
+
+TY  - JOUR
+TI  - Estimating enhancement ratios of nitrogen dioxide, carbon monoxide and carbon dioxide using satellite observations
+AU  - Cameron G. MacDonald
+AU  - Jon-Paul Mastrogiacomo
+AU  - Joshua L. Laughner
+AU  - Jacob K. Hedelius
+AU  - Ray Nassar
+AU  - Debra Wunch
+PY  - 2023
+T2  - Atmospheric Chemistry and Physics
+VL  - 23
+IS  - 6
+SP  - 3493-3516
+DO  - 10.5194/acp-23-3493-2023
+ER  - 
+
+TY  - JOUR
+TI  - Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO2
+AU  - Daniel L. Goldberg
+AU  - Madankui Tao
+AU  - Gaige Hunter Kerr
+AU  - Siqi Ma
+AU  - Daniel Q. Tong
+AU  - Arlene M. Fiore
+AU  - Angela F. Dickens
+AU  - Zachariah E. Adelman
+AU  - Susan C. Anenberg
+PY  - 2024
+T2  - Remote Sensing of Environment
+VL  - 300
+SP  - 113917
+DO  - 10.1016/j.rse.2023.113917
+ER  - 
+
+TY  - JOUR
+TI  - Monitoring fossil fuel CO2 emissions from co-emitted NO2 observed from space: progress, challenges, and future perspectives
+AU  - Hui Li
+AU  - Jiaxin Qiu
+AU  - Kexin Zhang
+AU  - Bo Zheng
+PY  - 2024
+T2  - Frontiers of Environmental Science & Engineering
+VL  - 19
+IS  - 1
+SP  - 2
+DO  - 10.1007/s11783-025-1922-x
+ER  - 
+
+TY  - JOUR
+TI  - Global NO2 changes between 2019 and 2024 as observed by TROPOMI in urban areas and emerging hotspots
+AU  - Daniel E. Huber
+AU  - Gaige H. Kerr
+AU  - M. Omar Nawaz
+AU  - Sara Runkel
+AU  - Susan C. Anenberg
+AU  - Daniel L. Goldberg
+PY  - 2026
+T2  - Atmospheric Chemistry and Physics
+VL  - 26
+IS  - 5
+SP  - 3783-3803
+DO  - 10.5194/acp-26-3783-2026
+ER  - 
+
+TY  - JOUR
+TI  - The Open-source Data Inventory for Anthropogenic CO2 , version 2016 (ODIAC2016): a global monthly fossil fuel CO2 gridded emissions data product for tracer transport simulations and surface flux inversions
+AU  - Tomohiro Oda
+AU  - Shamil Maksyutov
+AU  - Robert J. Andres
+PY  - 2018
+T2  - Earth System Science Data
+VL  - 10
+IS  - 1
+SP  - 87-107
+DO  - 10.5194/essd-10-87-2018
+ER  - 
+
+TY  - JOUR
+TI  - Comparison of Global Downscaled Versus Bottom‐Up Fossil Fuel CO2 Emissions at the Urban Scale in Four U.S. Urban Areas
+AU  - Kevin R. Gurney
+AU  - J. Liang
+AU  - D. O'Keeffe
+AU  - R. Patarasuk
+AU  - M. Hutchins
+AU  - J. Huang
+AU  - P. Rao
+AU  - Y. Song
+PY  - 2019
+T2  - Journal of Geophysical Research: Atmospheres
+VL  - 124
+IS  - 5
+SP  - 2823-2840
+DO  - 10.1029/2018JD028859
+ER  - 
+
+TY  - JOUR
+TI  - High resolution temporal profiles in the Emissions Database for Global Atmospheric Research
+AU  - Monica Crippa
+AU  - Efisio Solazzo
+AU  - Ganlin Huang
+AU  - Diego Guizzardi
+AU  - Ernest Koffi
+AU  - Marilena Muntean
+AU  - Christian Schieberle
+AU  - Rainer Friedrich
+AU  - Greet Janssens-Maenhout
+PY  - 2020
+T2  - Scientific Data
+VL  - 7
+IS  - 1
+SP  - 121
+DO  - 10.1038/s41597-020-0462-2
+ER  - 
+
+TY  - JOUR
+TI  - High-resolution modeling of gaseous air pollutants over Tehran and validation with surface and satellite data
+AU  - Nasimeh Shahrokhishahraki
+AU  - Peter Julian Rayner
+AU  - Jeremy David Silver
+AU  - Steven Thomas
+AU  - Robyn Schofield
+PY  - 2022
+T2  - Atmospheric Environment
+VL  - 270
+SP  - 118881
+DO  - 10.1016/j.atmosenv.2021.118881
+ER  - 
+
+TY  - JOUR
+TI  - An emission inventory update for Tehran: The difference between air pollution and greenhouse gas source contributions
+AU  - Hossein Shahbazi
+AU  - Ali Mostafazade Abolmaali
+AU  - Hossein Alizadeh
+AU  - Hooman Salavati
+AU  - Hamidreza Zokaei
+AU  - Reza Zandavi
+AU  - Sara Torbatian
+AU  - Daniel Yazgi
+AU  - Vahid Hosseini
+PY  - 2022
+T2  - Atmospheric Research
+VL  - 275
+SP  - 106240
+DO  - 10.1016/j.atmosres.2022.106240
+ER  - 
+
+TY  - JOUR
+TI  - Machine learning for predicting urban greenhouse gas emissions: A systematic literature review
+AU  - Yukai Jin
+AU  - Ayyoob Sharifi
+PY  - 2025
+T2  - Renewable and Sustainable Energy Reviews
+VL  - 215
+SP  - 115625
+DO  - 10.1016/j.rser.2025.115625
+ER  - 
+
+TY  - GEN
+N1  - Y. Chen, Y. Xie, X. Dang, B. Huang, C. Wu, and D. Jiao, "Spatiotemporal prediction of carbon emissions using a hybrid deep learning model considering temporal and spatial correlations," Environmental Modelling & Software, vol. 172, 105937, 2024.
+ER  - 
+
+TY  - GEN
+TI  - Estimating On-road Transportation Carbon Emissions from Open Data of Road Network and Origin-destination Flow Data
+AU  - Jinwei Zeng
+AU  - Yu Liu
+AU  - Jingtao Ding
+AU  - Jian Yuan
+AU  - Yong Li
+PY  - 2024
+UR  - https://arxiv.org/abs/2402.05153
+ER  - 
+
+TY  - CPAPER
+TI  - OpenCarbon: A Contrastive Learning-based Cross-Modality Neural Approach for High-Resolution Carbon Emission Prediction Using Open Data
+AU  - Jinwei Zeng
+AU  - Yu Liu
+AU  - Guozhen Zhang
+AU  - Jingtao Ding
+AU  - Yuming Lin
+AU  - Jian Yuan
+AU  - Yong Li
+PY  - 2025
+T2  - Proceedings of the Thirty-Fourth International Joint Conference on Artificial Intelligence
+SP  - 9999-10007
+DO  - 10.24963/ijcai.2025/1111
+ER  - 
+
+TY  - JOUR
+TI  - Revealing building operating carbon dynamics for multiple cities
+AU  - Winston Yap
+AU  - Abraham Noah Wu
+AU  - Clayton Miller
+AU  - Filip Biljecki
+PY  - 2025
+T2  - Nature Sustainability
+VL  - 8
+IS  - 10
+SP  - 1199-1210
+DO  - 10.1038/s41893-025-01615-8
+ER  - 
+
+TY  - GEN
+TI  - Estimating Anthropogenic NOx Emissions Using Convolutional Neural Networks with Horizontal Transport Considerations
+AU  - Yucong Zhang
+AU  - Steffen Beirle
+AU  - Leon Kuhn
+AU  - Thomas Wagner
+AU  - Liangyun Liu
+PY  - 2025
+DO  - 10.5194/egusphere-egu25-11971
+ER  - 
+
+TY  - GEN
+TI  - Bridging the Gap in Emission Reporting: Synergistic Use of AI and Earth Observation for Real-Time Insight on Urban CO&amp;#8322; Emissions.
+AU  - R. Lyana Curier
+AU  - Sonja Ham
+AU  - Jetse. J. Stoorvogel
+AU  - Stefano Bromuri
+PY  - 2025
+DO  - 10.5194/egusphere-egu25-9108
+ER  - 
+
+TY  - GEN
+TI  - Gated Multimodal Units for Information Fusion
+AU  - John Arevalo
+AU  - Thamar Solorio
+AU  - Manuel Montes-y-Gómez
+AU  - Fabio A. González
+PY  - 2017
+UR  - https://arxiv.org/abs/1702.01992
+ER  - 
+
+TY  - GEN
+ER  - 
+
+TY  - JOUR
+TI  - Random forest as a generic framework for predictive modeling of spatial and spatio-temporal variables
+AU  - Tomislav Hengl
+AU  - Madlene Nussbaum
+AU  - Marvin N. Wright
+AU  - Gerard B.M. Heuvelink
+AU  - Benedikt Gräler
+PY  - 2018
+T2  - PeerJ
+VL  - 6
+SP  - e5518
+DO  - 10.7717/peerj.5518
+ER  - 
+
+TY  - JOUR
+TI  - Random Forest Spatial Interpolation
+AU  - Aleksandar Sekulić
+AU  - Milan Kilibarda
+AU  - Gerard B.M. Heuvelink
+AU  - Mladen Nikolić
+AU  - Branislav Bajat
+PY  - 2020
+T2  - Remote Sensing
+VL  - 12
+IS  - 10
+SP  - 1687
+DO  - 10.3390/rs12101687
+ER  - 
+
+TY  - JOUR
+TI  - Kriging Convolutional Networks
+AU  - Gabriel Appleby
+AU  - Linfeng Liu
+AU  - Li-Ping Liu
+PY  - 2020
+T2  - Proceedings of the AAAI Conference on Artificial Intelligence
+VL  - 34
+IS  - 04
+SP  - 3187-3194
+DO  - 10.1609/aaai.v34i04.5716
+ER  - 
+
+TY  - GEN
+TI  - Inductive Graph Neural Networks for Spatiotemporal Kriging
+AU  - Yuankai Wu
+AU  - Dingyi Zhuang
+AU  - Aurelie Labbe
+AU  - Lijun Sun
+PY  - 2020
+UR  - https://arxiv.org/abs/2006.07527
+N1  - AAAI 2021
+ER  - 
+
+TY  - CPAPER
+TI  - PM2.5-GNN
+AU  - Shuo Wang
+AU  - Yanran Li
+AU  - Jiang Zhang
+AU  - Qingye Meng
+AU  - Lingwei Meng
+AU  - Fei Gao
+PY  - 2020
+T2  - Proceedings of the 28th International Conference on Advances in Geographic Information Systems
+SP  - 163-166
+DO  - 10.1145/3397536.3422208
+ER  - 
+
+TY  - JOUR
+TI  - Ground-Level NO2 Surveillance from Space Across China for High Resolution Using Interpretable Spatiotemporally Weighted Artificial Intelligence
+AU  - Jing Wei
+AU  - Song Liu
+AU  - Zhanqing Li
+AU  - Cheng Liu
+AU  - Kai Qin
+AU  - Xiong Liu
+AU  - Rachel T. Pinker
+AU  - Russell R. Dickerson
+AU  - Jintai Lin
+AU  - K. F. Boersma
+AU  - Lin Sun
+AU  - Runze Li
+AU  - Wenhao Xue
+AU  - Yuanzheng Cui
+AU  - Chengxin Zhang
+AU  - Jun Wang
+PY  - 2022
+T2  - Environmental Science & Technology
+VL  - 56
+IS  - 14
+SP  - 9988-9998
+DO  - 10.1021/acs.est.2c03834
+ER  - 
+
+TY  - GEN
+TI  - Positional Encoder Graph Neural Networks for Geographic Data
+AU  - Konstantin Klemmer
+AU  - Nathan Safir
+AU  - Daniel B. Neill
+PY  - 2021
+UR  - https://arxiv.org/abs/2111.10144
+N1  - AISTATS 2023
+ER  - 
+
+TY  - JOUR
+TI  - Improving air quality assessment using physics-inspired deep graph learning
+AU  - Lianfa Li
+AU  - Jinfeng Wang
+AU  - Meredith Franklin
+AU  - Qian Yin
+AU  - Jiajie Wu
+AU  - Gustau Camps-Valls
+AU  - Zhiping Zhu
+AU  - Chengyi Wang
+AU  - Yong Ge
+AU  - Markus Reichstein
+PY  - 2023
+T2  - npj Climate and Atmospheric Science
+VL  - 6
+IS  - 1
+SP  - 152
+DO  - 10.1038/s41612-023-00475-3
+ER  - 
+
+TY  - GEN
+TI  - AirPhyNet: Harnessing Physics-Guided Neural Networks for Air Quality Prediction
+AU  - Kethmi Hirushini Hettige
+AU  - Jiahao Ji
+AU  - Shili Xiang
+AU  - Cheng Long
+AU  - Gao Cong
+AU  - Jingyuan Wang
+PY  - 2024
+UR  - https://arxiv.org/abs/2402.03784
+N1  - Accepted by the 12th International Conference on Learning Representations (ICLR 2024)
+ER  - 
+
+TY  - GEN
+TI  - Improving Local Air Quality Predictions Using Transfer Learning on Satellite Data and Graph Neural Networks
+AU  - Finn Gueterbock
+AU  - Raul Santos-Rodriguez
+AU  - Jeffrey N. Clark
+PY  - 2025
+UR  - https://arxiv.org/abs/2505.05479
+ER  - 
+
+TY  - GEN
+TI  - Estimating street-scale NO2 surface concentrations from TROPOMI observations and high-resolution geographic data
+AU  - Leon Kuhn
+AU  - Thomas Wagner
+AU  - Steffen Beirle
+PY  - 2026
+DO  - 10.5194/egusphere-egu26-4421
+ER  - 
+
+TY  - GEN
+TI  - Why do tree-based models still outperform deep learning on tabular data?
+AU  - Léo Grinsztajn
+AU  - Edouard Oyallon
+AU  - Gaël Varoquaux
+PY  - 2022
+UR  - https://arxiv.org/abs/2207.08815
+ER  - 
+
+TY  - JOUR
+TI  - Spatial leave‐one‐out cross‐validation for variable selection in the presence of spatial autocorrelation
+AU  - Kévin Le Rest
+AU  - David Pinaud
+AU  - Pascal Monestiez
+AU  - Joël Chadoeuf
+AU  - Vincent Bretagnolle
+PY  - 2014
+T2  - Global Ecology and Biogeography
+VL  - 23
+IS  - 7
+SP  - 811-820
+DO  - 10.1111/geb.12161
+ER  - 
+
+TY  - JOUR
+TI  - Cross‐validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure
+AU  - David R. Roberts
+AU  - Volker Bahn
+AU  - Simone Ciuti
+AU  - Mark S. Boyce
+AU  - Jane Elith
+AU  - Gurutzeta Guillera‐Arroita
+AU  - Severin Hauenstein
+AU  - José J. Lahoz‐Monfort
+AU  - Boris Schröder
+AU  - Wilfried Thuiller
+AU  - David I. Warton
+AU  - Brendan A. Wintle
+AU  - Florian Hartig
+AU  - Carsten F. Dormann
+PY  - 2017
+T2  - Ecography
+VL  - 40
+IS  - 8
+SP  - 913-929
+DO  - 10.1111/ecog.02881
+ER  - 
+
+TY  - JOUR
+TI  - Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation
+AU  - Hanna Meyer
+AU  - Christoph Reudenbach
+AU  - Tomislav Hengl
+AU  - Marwan Katurji
+AU  - Thomas Nauss
+PY  - 2018
+T2  - Environmental Modelling & Software
+VL  - 101
+SP  - 1-9
+DO  - 10.1016/j.envsoft.2017.12.001
+ER  - 
+
+TY  - JOUR
+TI  - The preregistration revolution
+AU  - Brian A. Nosek
+AU  - Charles R. Ebersole
+AU  - Alexander C. DeHaven
+AU  - David T. Mellor
+PY  - 2018
+T2  - Proceedings of the National Academy of Sciences
+VL  - 115
+IS  - 11
+SP  - 2600-2606
+DO  - 10.1073/pnas.1708274114
+ER  - 
+
+TY  - JOUR
+TI  - block CV : An r package for generating spatially or environmentally separated folds for k ‐fold cross‐validation of species distribution models
+AU  - Roozbeh Valavi
+AU  - Jane Elith
+AU  - José J. Lahoz‐Monfort
+AU  - Gurutzeta Guillera‐Arroita
+PY  - 2018
+T2  - Methods in Ecology and Evolution
+VL  - 10
+IS  - 2
+SP  - 225-232
+DO  - 10.1111/2041-210X.13107
+ER  - 
+
+TY  - JOUR
+TI  - Spatial validation reveals poor predictive performance of large-scale ecological mapping models
+AU  - Pierre Ploton
+AU  - Frédéric Mortier
+AU  - Maxime Réjou-Méchain
+AU  - Nicolas Barbier
+AU  - Nicolas Picard
+AU  - Vivien Rossi
+AU  - Carsten Dormann
+AU  - Guillaume Cornu
+AU  - Gaëlle Viennois
+AU  - Nicolas Bayol
+AU  - Alexei Lyapustin
+AU  - Sylvie Gourlet-Fleury
+AU  - Raphaël Pélissier
+PY  - 2020
+T2  - Nature Communications
+VL  - 11
+IS  - 1
+SP  - 4540
+DO  - 10.1038/s41467-020-18321-y
+ER  - 
+
+TY  - JOUR
+TI  - Spatial cross-validation is not the right way to evaluate map accuracy
+AU  - Alexandre M.J.-C. Wadoux
+AU  - Gerard B.M. Heuvelink
+AU  - Sytze de Bruin
+AU  - Dick J. Brus
+PY  - 2021
+T2  - Ecological Modelling
+VL  - 457
+SP  - 109692
+DO  - 10.1016/j.ecolmodel.2021.109692
+ER  - 
+
+TY  - JOUR
+TI  - Machine learning-based global maps of ecological variables and the challenge of assessing them
+AU  - Hanna Meyer
+AU  - Edzer Pebesma
+PY  - 2022
+T2  - Nature Communications
+VL  - 13
+IS  - 1
+SP  - 2208
+DO  - 10.1038/s41467-022-29838-9
+ER  - 
+
+TY  - JOUR
+TI  - Nearest neighbour distance matching Leave‐One‐Out Cross‐Validation for map validation
+AU  - Carles Milà
+AU  - Jorge Mateu
+AU  - Edzer Pebesma
+AU  - Hanna Meyer
+PY  - 2022
+T2  - Methods in Ecology and Evolution
+VL  - 13
+IS  - 6
+SP  - 1304-1316
+DO  - 10.1111/2041-210X.13851
+ER  - 
+
+TY  - JOUR
+TI  - kNNDM CV: k -fold nearest-neighbour distance matching cross-validation for map accuracy estimation
+AU  - Jan Linnenbrink
+AU  - Carles Milà
+AU  - Marvin Ludwig
+AU  - Hanna Meyer
+PY  - 2024
+T2  - Geoscientific Model Development
+VL  - 17
+IS  - 15
+SP  - 5897-5912
+DO  - 10.5194/gmd-17-5897-2024
+ER  - 
+
+TY  - GEN
+TI  - Evaluation Challenges for Geospatial ML
+AU  - Esther Rolf
+PY  - 2023
+UR  - https://arxiv.org/abs/2303.18087
+N1  - ICLR 2023 Workshop on Machine Learning for Remote Sensing
+ER  - 
+
+TY  - JOUR
+TI  - Investigation of the spatiotemporal patterns of air quality over the metropolitan area of Tehran, using TROPOMI and OMI data
+AU  - Ayoub Moradi
+AU  - Dirk Zeuss
+PY  - 2023
+T2  - Air Quality, Atmosphere & Health
+VL  - 17
+IS  - 2
+SP  - 371-387
+DO  - 10.1007/s11869-023-01450-w
+ER  - 
+
+TY  - JOUR
+TI  - A Lightweight Spatiotemporal Graph Framework Leveraging Clustered Monitoring Networks and Copula-Based Pollutant Dependency for PM2.5 Forecasting
+AU  - Mohammad Taghi Abbasi
+AU  - Ali Asghar Alesheikh
+AU  - Fatemeh Rezaie
+PY  - 2025
+T2  - Land
+VL  - 14
+IS  - 8
+SP  - 1589
+DO  - 10.3390/land14081589
+ER  - 
+
+TY  - JOUR
+TI  - Assessing the Feasibility of Landsat-Driven NO2 Prediction: A Spatial Cross-Validation Framework
+AU  - Amir Tahooni
+AU  - Ata Kakroodi
+AU  - Majid Kiavarz
+AU  - Hossein Mansourian
+PY  - 2026
+T2  - ISPRS Annals of the Photogrammetry, Remote Sensing and Spatial Information Sciences
+VL  - X-4/W8-2025
+SP  - 751-757
+DO  - 10.5194/isprs-annals-X-4-W8-2025-751-2026
+ER  - 
