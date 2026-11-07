@@ -13,6 +13,10 @@
     python main.py analyze   response  --exp rq2_sage_v1        response checks of the final model (for RQ3)
     python main.py summarize --exp rq1_ablation_v1              table of all finished runs / sweep variants
     python main.py runs      [--rq RQ1] [--exp rq1_] [--last 30]   run history (runs/registry.csv)
+    python main.py paper evaluate --hypothesis PA_H1 PA_H2      paper inference: sign-flip, jackknife, four-way verdict, Holm
+    python main.py paper power    --hypothesis H2 H2c           power of the block-level tests from existing comparisons
+    python main.py paper target   [--exp rq2_sage_v2 ...]       what the target measures: stations, elevation, daily, n_eff
+    python main.py paper timing   --exp paper2_rq2_sage_v1      timing pilot: cost of one run and of a 50-trial search
     python main.py figures                                      thesis figures and tables (docs/figures, docs/tables)
     python main.py dashboard                                    data of the offline dashboard (docs/dashboard/data.js)
 """
@@ -160,6 +164,47 @@ def cmd_analyze(args):
             run.finish("done", ResponseChecks(cfg, args.exp[0]).run(run))
 
 
+def cmd_paper(args):
+    """Analyses of the paper (branch paper_TC; docs/paper/plan_q1_fa.md). Each is a tracked analysis run."""
+    specs = Config().hypotheses
+    if args.what in ("evaluate", "power"):
+        names = args.hypothesis or []
+        if not names:
+            raise SystemExit(f"paper {args.what} needs --hypothesis")
+        bad = [n for n in names if n not in specs or specs[n].get("kind") == "policy"]
+        if bad:
+            raise SystemExit(f"not prediction hypotheses in configs/config.yaml: {bad}")
+        cfg = analysis_config(f"paper_{args.what}", specs[names[0]].get("rq"),
+                              f"paper {args.what} of {', '.join(names)}", hypotheses=names)
+        with Run(cfg) as run:
+            if args.what == "evaluate":
+                from tehran_carbon.analysis.paper_eval import evaluate_family
+                run.finish("done", evaluate_family(cfg, names, specs, run))
+            else:
+                from tehran_carbon.analysis.power import power_family
+                run.finish("done", power_family(cfg, names, specs, run))
+    elif args.what == "target":
+        from tehran_carbon.analysis.target_validity import TargetValidity
+        cfg = analysis_config("paper_target", "RQ2", "what the TROPOMI target measures", experiments=args.exp or [])
+        with Run(cfg) as run:
+            run.finish("done", TargetValidity(cfg, args.exp).run(run))
+    elif args.what == "timing":
+        from tehran_carbon.analysis.timing import summarize, time_experiment
+        if not args.exp:
+            raise SystemExit("paper timing needs --exp")
+        rows = []
+        for name in args.exp:
+            cfgs = Config().resolve(name)
+            cfgs = [cfgs[args.variant]] if args.variant is not None else cfgs[:1]
+            for c in cfgs:
+                acfg = analysis_config(f"paper_timing_{name}", c["experiment"]["rq"], f"timing pilot of {name}",
+                                       timed=c["experiment"]["variant_label"])
+                with Run(acfg) as run:
+                    rows.append(time_experiment(c, run, epochs=args.epochs))
+                    run.finish("done", rows[-1])
+        print(json.dumps(summarize(rows), indent=2))
+
+
 def cmd_summarize(args):
     import pandas as pd
     cfg = Config().defaults
@@ -226,6 +271,13 @@ def main():
     p.add_argument("--hypothesis", required=True); p.set_defaults(fn=cmd_robustness)
     p = sub.add_parser("analyze"); p.add_argument("what", choices=["districts", "response"])
     p.add_argument("--exp", nargs="+", required=True); p.set_defaults(fn=cmd_analyze)
+    p = sub.add_parser("paper", help="paper analyses (branch paper_TC)")
+    p.add_argument("what", choices=["evaluate", "power", "target", "timing"])
+    p.add_argument("--hypothesis", nargs="+", help="evaluate / power: hypotheses of configs/config.yaml")
+    p.add_argument("--exp", nargs="+", help="target: runs to score against elevation; timing: experiments to time")
+    p.add_argument("--variant", type=int, help="timing: sweep variant (0-based; default the first)")
+    p.add_argument("--epochs", type=int, default=20, help="timing: epochs of the pilot fit")
+    p.set_defaults(fn=cmd_paper)
     p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)
     p = sub.add_parser("runs"); p.add_argument("--rq"); p.add_argument("--exp"); p.add_argument("--last", type=int, default=30)
     p.set_defaults(fn=cmd_runs)

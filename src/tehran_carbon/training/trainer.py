@@ -166,6 +166,22 @@ class NeuralPredictor:
         full[:, rows if rows is not None else slice(None)] = w
         return pred, full.reshape(T, self.H, self.W, -1)
 
+    @torch.no_grad()
+    def predict_members(self, X: np.ndarray, mask: np.ndarray | None = None) -> np.ndarray:
+        """(S, T, H, W): the prediction of every seed (their mean is predict()); NaN where predict() is NaN.
+        Stored by the paper runs (train.save_members) so that the seed-to-seed spread can be reported."""
+        T, N = X.shape[0], self.H * self.W
+        rows = None if (self.needs_graph or mask is None) else np.flatnonzero(mask.ravel())
+        P = np.full((len(self.models), T, N), np.nan, np.float32)
+        for i, model in enumerate(self.models):
+            for a in range(0, T, self.mpb):
+                p = model(self._inputs(X[a:a + self.mpb], rows), self.graph, self._wind(X[a:a + self.mpb])).cpu().numpy()
+                if rows is None:
+                    P[i, a:a + self.mpb] = p
+                else:
+                    P[i, a:a + self.mpb][:, rows] = p
+        return P.reshape(len(self.models), T, self.H, self.W)
+
     def checkpoint(self) -> dict:
         return dict(mu=torch.as_tensor(self.mu), sd=torch.as_tensor(self.sd),
                     cols={k: v.tolist() for k, v in self.cols.items()}, dims=self.dims, model_cfg=self.cfg["model"],

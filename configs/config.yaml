@@ -178,6 +178,22 @@ defaults:
       total_cut: 0.10             # uniform vs targeted cut of the same total CO2
       targeted_districts: 4       # the districts with the highest baseline predicted z
       max_local_cut: 0.9          # upper bound of the cut inside the targeted districts
+    paper:                        # paper analyses (branch paper_TC; python main.py paper ...). `analysis` is outside the
+                                  # config hash, so this block changes the hash of no experiment
+      metrics: [pr_auc, spearman] # co-primary metrics (Spearman: every block contributes, not only the hotspot blocks)
+      alpha: 0.025                # per co-primary metric (0.05 split in two)
+      margin: 0.02                # equivalence / non-inferiority margin; final value by the rule of
+                                  # docs/paper/preregistration_paper_v2.md: max(0.02, 2 x seed SD of stage A)
+      thresholds: [0.80, 0.90, 0.95]   # hotspot labels (q = 0.90 is the thesis label)
+      superpixel: 5               # cells per side, about one TROPOMI pixel
+      footprint_km: [3.5, 5.5]    # TROPOMI nadir pixel since August 2019
+      correlogram: {max_km: 40.0, bin_km: 2.0}
+      signflip: {max_exact: 16, n_random: 20000, seed: 0}
+      power: {effects: [0.01, 0.02, 0.03, 0.05, 0.08], n_sim: 2000, seed: 0}
+      dem_file: spatial/dem_L0.tif          # gee/GEE_DEM_L0.js
+      station_pollutant: NO2                # station series compared with the satellite target
+      daily_experiment: rq2d_mlp_v1         # the config that knows the daily NO2 files
+      daily_min_days: 3                     # clear days a cell needs in a month for the daily-based target
 
   # ================================================================================================= inventory L1
   # IPCC (2006) Tier 1: E = sum_f A_f x NCV_f x density_f x EF_f. Lists are triangular [central, low, high].
@@ -588,6 +604,88 @@ experiments:
     data: *data1404
     split: *split1404
 
+  # ---------------------------------------------------------------- paper v2, stage A (docs/paper/plan_q1_fa.md)
+  # Leakage-free re-runs. The station (pollution) layers were interpolated once per year from ALL stations, the
+  # stations inside the held-out block included; here every fold rebuilds them from the stations farther than the
+  # buffer from its test block (split.fold_aware_stations; models without the pollution domain are unaffected).
+  # Every seed is stored (5 seeds, train.save_members) so that the seed-to-seed spread is known. NOT thesis
+  # hypotheses; reading rules: docs/paper/preregistration_paper_v2.md. Defaults untouched: thesis hashes unchanged.
+  paper2_rq1_ablation_v1:
+    rq: RQ1
+    description: paper v2 - the RQ1 ablation without station leakage, 5 seeds stored
+    inherits: rq1_ablation_v2
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+    sweep:
+      model.modalities: [[traffic], [energy], [pollution], [traffic, energy], [traffic, pollution], [energy, pollution],
+                         [traffic, energy, pollution]]
+      model.fusion.type: [early, late, gated]
+  paper2_rq1_context_only_v1:
+    rq: RQ1
+    description: paper v2 - context only (the empty coalition of the modality Shapley values), 5 seeds stored
+    inherits: rq1_context_only_v2
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+  paper2_rq2_sage_v1:
+    rq: RQ2
+    description: paper v2 - the primary GNN (SAGE, 3 layers, 3 domains) without station leakage, 5 seeds stored
+    inherits: rq2_sage_v2
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+  paper2_rq2_mlp_v1:
+    rq: RQ2
+    description: paper v2 - the no-graph control without station leakage, 5 seeds stored
+    inherits: rq2_mlp_v2
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+  paper2_base_v1:
+    rq: RQ2
+    description: paper v2 - traditional models (own cell and SLX; OLS, GBM, RF) without station leakage
+    inherits: rq2_base_ols_v1
+    split: {fold_aware_stations: true}
+    train: {save_final_baseline: true}
+    sweep:
+      model.baseline.name: [ols, gbm, rf]
+      model.baseline.lags: [[], [1, 3, 9, 15]]
+  paper2_slx_reach_v1:
+    rq: RQ2
+    description: paper v2 - the reach-matched SLX models (paper check 1) without station leakage
+    inherits: paper_slx_reach_v1
+    split: {fold_aware_stations: true}
+    sweep: *reach_sweep
+  paper2_c1404_sage5_v1:
+    rq: RQ2
+    description: paper v2 - the H2c candidate (SAGE 5 layers, 1404 design) without station leakage, 5 seeds stored
+    inherits: c1404_sage5_v1
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+  paper2_c1404_sage4_v1:
+    rq: RQ1
+    description: paper v2 - the H1c candidate (SAGE 4 layers, 3 domains, 1404 design) without station leakage
+    inherits: c1404_sage4_v1
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+  paper2_c1404_sage4_single_v1:
+    rq: RQ1
+    description: paper v2 - SAGE 4 layers with one domain (1404 design), without station leakage
+    inherits: c1404_sage4_single_v1
+    split: {fold_aware_stations: true}
+    train: {seeds: [0, 1, 2, 3, 4], save_members: true}
+    sweep: {model.modalities: [[energy], [traffic], [pollution]]}
+  paper2_c1404_base_v1:
+    rq: RQ2
+    description: paper v2 - traditional models on the 1404 design without station leakage
+    inherits: c1404_base_slx_ols_v1
+    split: {fold_aware_stations: true}
+    sweep:
+      model.baseline.name: [ols, gbm, rf]
+      model.baseline.lags: [[], [1, 3, 9, 15]]
+  paper2_c1404_slx_reach_v1:
+    rq: RQ2
+    description: paper v2 - the reach-matched SLX models on the 1404 design without station leakage
+    inherits: paper_c1404_slx_reach_v1
+    split: {fold_aware_stations: true}
+    sweep: *reach_sweep
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1
@@ -846,3 +944,59 @@ hypotheses:
       - {experiment: c1404_base_slx_gbm_v1}
       - {experiment: c1404_base_slx_ols_v1}
       - {experiment: paper_c1404_slx_reach_v1}
+
+  # ---------------------------------------------------------------- paper v2, stage A: the thesis comparisons again,
+  # without station leakage (python main.py paper evaluate --hypothesis PA_H1 PA_H2 ...). Descriptive readings with the
+  # paper's inference (exact block sign-flip, jackknife, four-way verdict with a margin); the confirmatory tests of the
+  # paper are written in docs/paper/preregistration_paper_v2.md and added in a later stage.
+  PA_H1:                          # fusion of the three domains vs the best single domain
+    rq: RQ1
+    metric: pr_auc
+    candidate: {experiment: paper2_rq1_ablation_v1, where: {model.modalities: [traffic, energy, pollution], model.fusion.type: gated}}
+    references:
+      - {experiment: paper2_rq1_ablation_v1, where: {model.modalities: {in: [[traffic], [energy], [pollution]]}}}
+  PA_H1_drivers:                  # fusion of the driver domains only (no station layer) vs the better of the two
+    rq: RQ1
+    metric: pr_auc
+    candidate: {experiment: paper2_rq1_ablation_v1, where: {model.modalities: [traffic, energy], model.fusion.type: gated}}
+    references:
+      - {experiment: paper2_rq1_ablation_v1, where: {model.modalities: {in: [[traffic], [energy]]}}}
+  PA_H2:                          # the thesis H2 set of references, leakage-free, plus the sector-yield physical operator
+    rq: RQ2
+    metric: pr_auc
+    candidate: {experiment: paper2_rq2_sage_v1}
+    references:
+      - {experiment: paper2_base_v1}
+      - {experiment: rq2_base_forward_v1}
+      - {experiment: paper_forward_sectors_v1}
+  PA_H2_reach:                    # the same GNN vs every SLX including the reach-matched windows
+    rq: RQ2
+    metric: pr_auc
+    candidate: {experiment: paper2_rq2_sage_v1}
+    references:
+      - {experiment: paper2_base_v1}
+      - {experiment: paper2_slx_reach_v1}
+  PA_H2c:                         # 1404 design, the pre-specified reference of H2c (SLX-RF)
+    rq: RQ2
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: paper2_c1404_sage5_v1}
+    references:
+      - {experiment: paper2_c1404_base_v1, where: {model.baseline.name: rf, model.baseline.lags: [1, 3, 9, 15]}}
+  PA_H2c_all:                     # 1404 design, the best of every traditional and physical model, reach-matched included
+    rq: RQ2
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: paper2_c1404_sage5_v1}
+    references:
+      - {experiment: paper2_c1404_base_v1}
+      - {experiment: paper2_c1404_slx_reach_v1}
+      - {experiment: c1404_base_forward_v1}
+      - {experiment: paper_c1404_forward_sectors_v1}
+  PA_H1c:                         # 1404 design, fusion vs the pre-specified single domain (energy)
+    rq: RQ1
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: paper2_c1404_sage4_v1}
+    references:
+      - {experiment: paper2_c1404_sage4_single_v1, where: {model.modalities: [energy]}}

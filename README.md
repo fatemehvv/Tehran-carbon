@@ -129,6 +129,49 @@ python main.py robustness --hypothesis H2                 #    و به همین 
 
 اجراهای یک sweep را می‌شود موازی فرستاد (`--variant 0` تا `--variant 8`). خروجی `robustness` در پوشهٔ اجرا: `<name>_robustness.csv` (خلاصه و برداشت robust / fragile / no effect shown)، `<name>_blocks.csv`، `<name>_jackknife.csv`، `<name>_persistence.csv`.
 
+### مقالهٔ Q1، نسخهٔ ۲: مرحلهٔ الف
+
+- **طرح:** `docs/paper/plan_q1_fa.md`.
+- **پیش‌ثبت:** `docs/paper/preregistration_paper_v2.md`. پیش‌نویس است و بعد از مرحلهٔ الف، پیش از مراحل بعد، نهایی می‌شود.
+- **رفع نشت:** در پایان‌نامه لایهٔ ایستگاه‌ها (حوزهٔ آلودگی) با همهٔ ایستگاه‌ها درون‌یابی شده، از جمله ایستگاه‌های بلوک آزمون. آزمایش‌های `paper2_*` این لایه را برای هر fold بدون ایستگاه‌های بلوک آزمون و بافرش می‌سازند (`split.fold_aware_stations`).
+- **ذخیرهٔ seedها:** مدل‌های عصبی با ۵ seed اجرا می‌شوند و پیش‌بینی هر seed جدا ذخیره می‌شود (`preds/cv_<سال>_members.npz`).
+- **هش‌ها:** `defaults` دست نخورده. تنظیمات تحلیل در `analysis.paper` است، که بیرون از هش کانفیگ است.
+
+پیش از اجرا: فایل `dem_L0.tif` را با `gee/GEE_DEM_L0.js` بسازید، در `data/raw/spatial/` بگذارید و `python main.py manifest --write` را اجرا کنید. با تغییر MANIFEST کش داده یک بار از نو ساخته می‌شود.
+
+```bash
+pytest                                                     # همهٔ آزمون‌ها، از جمله test_paper_inference و test_station_holdout
+python main.py train --exp paper_forward_sectors_v1        # بررسی‌های پیش‌ثبت‌شدهٔ قبلی که هنوز اجرا نشده‌اند
+python main.py train --exp paper_c1404_forward_sectors_v1
+python main.py train --exp paper_slx_reach_v1
+python main.py train --exp paper_c1404_slx_reach_v1
+python main.py paper timing --exp paper2_rq2_sage_v1 paper2_c1404_sage5_v1 paper2_rq1_ablation_v1 paper2_base_v1
+python main.py paper power  --hypothesis H1 H2 H2c H1c     # توان آزمون‌های بلوکی از مقایسه‌های موجود
+python main.py paper target --exp rq2_sage_v2 rq2_base_slx_gbm_v1   # ایستگاه‌ها، ارتفاع، هدف روزانه، n_eff
+python main.py train --exp paper2_rq1_ablation_v1          # ۲۱ اجرا (موازی: --variant 0 تا 20)
+python main.py train --exp paper2_rq1_context_only_v1
+python main.py train --exp paper2_rq2_sage_v1
+python main.py train --exp paper2_rq2_mlp_v1
+python main.py train --exp paper2_base_v1                  # ۶ اجرا (ols/gbm/rf × خود سلول/SLX)
+python main.py train --exp paper2_slx_reach_v1             # ۹ اجرا
+python main.py train --exp paper2_c1404_sage5_v1
+python main.py train --exp paper2_c1404_sage4_v1
+python main.py train --exp paper2_c1404_sage4_single_v1    # ۳ اجرا
+python main.py train --exp paper2_c1404_base_v1            # ۶ اجرا
+python main.py train --exp paper2_c1404_slx_reach_v1       # ۹ اجرا
+python main.py paper evaluate --hypothesis PA_H1 PA_H1_drivers PA_H2 PA_H2_reach PA_H2c PA_H2c_all PA_H1c
+python main.py paper evaluate --hypothesis H1 H2 H2c H1c P2_reach P2c_reach   # همان آمار تازه روی اجراهای پایان‌نامه، برای مقایسه
+```
+
+**خروجی `paper evaluate`** (در پوشهٔ اجرا):
+- `paper_<name>.csv`:
+  - اختلاف، بازهٔ jackknife و بوت‌استرپ؛
+  - p آزمون جایگشت بلوکی (sign-flip دقیق)؛
+  - حکم چهارحالته با حاشیهٔ هم‌ارزی؛
+  - آستانه‌های دیگر کانون و ابرپیکسل ۵×۵؛
+  - اختلاف هر seed، اگر ذخیره شده باشد.
+- `paper_holm.csv`: تصحیح Holm روی همهٔ فرضیه‌های داده‌شده.
+
 **خروجی هر اجرا:** `runs/<زمان>_<آزمایش>_<هش>/` شامل:
 - `config.yaml` و `meta.json` (کامیت git، نسخهٔ پکیج‌ها و هش داده)
 - `metrics.json`

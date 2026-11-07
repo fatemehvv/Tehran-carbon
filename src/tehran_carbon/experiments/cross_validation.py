@@ -5,14 +5,21 @@
                (a fold that already exists is skipped, so an interrupted run can be resumed)
                folds are stitched into one out-of-fold map per month -> preds/cv_<year>.npz (+ weights_<year>.npz)
   transfer     train on all label cells of one year, predict the other -> preds/transfer_<a>to<b>.npz
-  final        train on all label cells of all years -> models/final.pt (reused by init_from: RQ1 -> RQ2 -> RQ3)
+  final        train on all label cells of all years -> models/final.pt (reused by init_from: RQ1 -> RQ2 -> RQ3);
+               with train.save_final_baseline a traditional model is pickled too -> models/final_baseline.pkl
   test year    (split.test_year) confirmatory design: for every fold, train on that fold's training cells of ALL other
                years and predict the test fold of the test year (new places and a new year); only the test year is
                scored -> preds/cv_<test year>.npz
 Out-of-fold arrays are (T steps, n_domain) in the order of dataset.cells.
+
+Paper options (branch paper_TC; absent in the thesis configs, so their hashes do not change):
+  split.fold_aware_stations  rebuild the station (pollution) layers of every fold without the stations within the buffer
+                             of the test block (data/sources/pollution.py: StationHoldout)
+  train.save_members         also store the prediction of every seed -> preds/cv_<year>_members.npz (S, T, n_domain)
 """
 from __future__ import annotations
 
+import pickle
 from itertools import permutations
 
 import numpy as np
@@ -22,6 +29,7 @@ import torch
 from ..data.dataset import CellMonthDataset
 from ..data.graphs import GridGraph, ODOperator
 from ..data.grid import Grid
+from ..data.sources.pollution import StationHoldout
 from ..data.splits import SpatialSplit
 from ..evaluation.metrics import monthly_scores
 from ..models.backbones import BACKBONES
@@ -47,6 +55,10 @@ class CrossValidation:
             self.graph.od = ODOperator.from_config(cfg, self.grid.n)
         self.use_val = self.neural and bool(cfg["split"]["inner_val"])
         self.branches = list(self.data.columns(m["modalities"], m["use_context"]))
+        # station hold-out per fold: only needed when the model reads the station layers
+        self.holdout = (StationHoldout(cfg, self.grid, self.data)
+                        if cfg["split"].get("fold_aware_stations") and "pollution" in self.branches else None)
+        self.members = self.neural and bool(cfg["train"].get("save_members"))
 
     def predictor(self):
         if self.neural:
@@ -75,21 +87,32 @@ class CrossValidation:
                     continue
                 tr, te = split.masks(k)
                 va = split.inner_val(tr, k) if self.use_val else None
-                p = self.predictor().fit(Xs, zs, [tr & ~va if va is not None else tr] * len(Xs),
-                                         [va] * len(Xs) if va is not None else None)
-                pred, w = p.predict(X, te, return_weights=True)
+                Xs_k, X_k, note = Xs, X, ""
+                if self.holdout is not None:                # station layers without the stations near the test block
+                    keep = self.holdout.keep(te, split.buffer_km)
+                    Xs_k = [self.holdout.patch(Xt, t, keep) for Xt, t in zip(Xs, dev if test else [y])]
+                    X_k = self.holdout.patch(X, y, keep) if test else Xs_k[0]
+                    note = f", stations kept {len(keep)} of {len(self.holdout.names)}"
+                p = self.predictor().fit(Xs_k, zs, [tr & ~va if va is not None else tr] * len(Xs_k),
+                                         [va] * len(Xs_k) if va is not None else None)
+                pred, w = p.predict(X_k, te, return_weights=True)
                 te_cells = np.flatnonzero(te.ravel())
                 extra = {}
                 if w is not None:
                     extra["weights"] = (w.reshape(w.shape[0], -1, w.shape[-1])[:, te_cells] if w.ndim == 4 else w).astype(np.float32)
+                if self.members:
+                    mem = p.predict_members(X_k, te)
+                    extra["members"] = mem.reshape(mem.shape[0], mem.shape[1], -1)[:, :, te_cells].astype(np.float32)
+                if self.holdout is not None:
+                    extra["stations_kept"] = np.array(keep)
                 np.savez_compressed(f, pred=pred.reshape(pred.shape[0], -1)[:, te_cells].astype(np.float32), cells=te_cells, **extra)
-                run.log(f"  {y} fold {k:02d}: train {int(tr.sum())} cells, test {int(te.sum())}")
+                run.log(f"  {y} fold {k:02d}: train {int(tr.sum())} cells, test {int(te.sum())}{note}")
                 if smoke:
                     run.log("smoke run: one fold only, no scoring")
                     return {"smoke": True}
 
             full = np.full((X.shape[0], self.grid.n), np.nan, np.float32)
-            wfull = None
+            wfull, mfull = None, None
             for k in range(split.n_folds):
                 a = np.load(run.path("preds", "folds", str(y), f"fold{k:02d}.npz"))
                 full[:, a["cells"]] = a["pred"]
@@ -97,8 +120,14 @@ class CrossValidation:
                     if wfull is None:
                         wfull = np.full((X.shape[0], self.grid.n, a["weights"].shape[-1]), np.nan, np.float32)
                     wfull[:, a["cells"]] = a["weights"]
+                if "members" in a:                                       # (S, T, fold cells)
+                    if mfull is None:
+                        mfull = np.full((a["members"].shape[0], X.shape[0], self.grid.n), np.nan, np.float32)
+                    mfull[:, :, a["cells"]] = a["members"]
             oof = full[:, cells]
             np.savez_compressed(run.path("preds", f"cv_{y}.npz"), pred=oof, cells=cells)
+            if mfull is not None:
+                np.savez_compressed(run.path("preds", f"cv_{y}_members.npz"), pred=mfull[:, :, cells], cells=cells)
             if wfull is not None:
                 np.savez_compressed(run.path("preds", f"weights_{y}.npz"), weights=wfull[:, cells], cells=cells,
                                     branches=np.array(self.branches))
@@ -114,6 +143,10 @@ class CrossValidation:
                                          [va] if va is not None else None)
                 pred = p.predict(data.X[b], dom).reshape(data.X[b].shape[0], -1)[:, cells]
                 np.savez_compressed(run.path("preds", f"transfer_{a}to{b}.npz"), pred=pred, cells=cells)
+                if self.members:
+                    mem = p.predict_members(data.X[b], dom)
+                    np.savez_compressed(run.path("preds", f"transfer_{a}to{b}_members.npz"),
+                                        pred=mem.reshape(mem.shape[0], mem.shape[1], -1)[:, :, cells], cells=cells)
                 s = monthly_scores(data.z[b].reshape(data.z[b].shape[0], -1)[:, cells], data.hot[b].reshape(data.z[b].shape[0], -1)[:, cells], pred, names)
                 metrics["transfer"][f"{a}to{b}"] = {n: float(np.nanmean(v)) for n, v in s.items()}
                 run.log(f"  transfer {a}->{b}: " + ", ".join(f"{n}={v:.3f}" for n, v in metrics["transfer"][f"{a}to{b}"].items()))
@@ -128,6 +161,13 @@ class CrossValidation:
             ck.update(features=data.features, data_hash=data.hash, experiment=cfg["experiment"])
             torch.save(ck, run.path("models", "final.pt"))
             run.log("  final model saved: models/final.pt")
+        if cfg["train"].get("save_final_baseline") and not self.neural and not test:
+            n = len(data.years)
+            p = self.predictor().fit([data.X[y] for y in data.years], [data.z[y] for y in data.years], [dom] * n)
+            with open(run.path("models", "final_baseline.pkl"), "wb") as fh:
+                pickle.dump(dict(predictor=p, features=data.features, data_hash=data.hash,
+                                 experiment=cfg["experiment"]), fh)
+            run.log("  final traditional model saved: models/final_baseline.pkl")
 
         run.save_json("metrics.json", metrics)
         RunMaps(run, data, self.grid).draw()

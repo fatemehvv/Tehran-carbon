@@ -41,6 +41,10 @@ class ContextSource(Source):
         met["t2m"] = met[c["t2m"]] + (met[c["t2m_bias"]] if c.get("t2m_bias") else 0.0)
         month = JalaliYear(year).month_of(met[c["date"]])
         means = met.assign(m=month.values)[month.values > 0].groupby("m")[["t2m", c["wind"]]].mean()
+        if len(means) != 12 and int(year) in {int(y) for y in self.cfg["data"].get("partial_years") or []}:
+            # a partial test year (paper, 1405): months after the last weather day repeat the last month. Those months
+            # have no target, so they are never trained on or scored; the values only keep the features finite
+            means = means.reindex(range(1, 13)).ffill().bfill()
         if len(means) != 12:
             raise ValueError(f"weather file does not cover all 12 months of {year}")
         out["t2m"] = np.broadcast_to(means["t2m"].values[:, None, None], (12, g.H, g.W)).copy()
