@@ -549,6 +549,45 @@ experiments:
   c1404_base_ols_v1: {rq: RQ2, inherits: rq2_base_ols_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
   c1404_base_forward_v1: {rq: RQ2, inherits: rq2_base_forward_v1, years: [1402, 1403, 1404], data: *data1404, split: *split1404}
 
+  # ---------------------------------------------------------------- paper (branch paper_TC): checks after the thesis
+  # NOT thesis hypotheses. Added after the H2 / H2c results; their reading rules are written in
+  # docs/paper/preregistration_paper_checks.md BEFORE any of these runs. Defaults are untouched, so the config hashes of
+  # every thesis experiment stay the same.
+  #
+  # (1) Reach: the largest SLX window of the thesis (box half-width 15 cells, ~12 km) sees less far than the GNN
+  #     (L layers x 9 cells: 27 cells for 3 layers, 45 for 5). These SLX models get the GNN's reach.
+  paper_slx_reach_v1:
+    rq: RQ2
+    description: paper check - SLX models with the reach of the GNN (half-widths up to 27 / 36 / 45 cells = 3 / 4 / 5 layers)
+    inherits: rq2_base_slx_ols_v1
+    sweep: &reach_sweep
+      model.baseline.name: [ols, gbm, rf]
+      model.baseline.lags: [[1, 3, 9, 15, 27], [1, 3, 9, 15, 27, 36], [1, 3, 9, 15, 27, 36, 45]]
+  paper_c1404_slx_reach_v1:
+    rq: RQ2
+    description: paper check - the reach-matched SLX models on the held-out year 1404 (confirmatory design)
+    inherits: paper_slx_reach_v1
+    years: [1402, 1403, 1404]
+    data: *data1404
+    split: *split1404
+    sweep: *reach_sweep
+  # (2) A fairer physical baseline: one non-negative NO2 yield per inventory sector (models/baselines.py)
+  paper_forward_sectors_v1:
+    rq: RQ2
+    description: paper check - physical operator with one NO2 yield per inventory sector
+    inherits: rq2_base_forward_v1
+    model:
+      baseline:
+        name: forward_sectors
+        params: {forward_sectors: {inventory_prefix: inv_, sigmas_km: [0, 1, 2, 3, 4, 6, 8, 10, 12, 15]}}
+  paper_c1404_forward_sectors_v1:
+    rq: RQ2
+    description: paper check - the sector-yield physical operator on the held-out year 1404
+    inherits: paper_forward_sectors_v1
+    years: [1402, 1403, 1404]
+    data: *data1404
+    split: *split1404
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1
@@ -775,3 +814,35 @@ hypotheses:
     test: risk
     cvar: 0.10
     bootstrap: {n: 2000, seed: 0, level: 0.95}
+
+  # ---------------------------------------------------------------- paper checks (branch paper_TC): NOT thesis decisions
+  # The thesis rule (supported / partial / not supported) applied to new comparisons, written before the reference
+  # runs exist (docs/paper/preregistration_paper_checks.md). The candidates' results were already known.
+  P2_reach:                       # 3-layer GNN (dev years) vs the best SLX including the reach-matched windows
+    rq: RQ2
+    metric: pr_auc
+    candidate: {experiment: rq2_sage_v2}
+    references:
+      - {experiment: rq2_base_slx_ols_v1}
+      - {experiment: rq2_base_slx_gbm_v1}
+      - {experiment: rq2_base_slx_rf_v1}
+      - {experiment: paper_slx_reach_v1}
+  P2_reach4:                      # 4-layer GNN (dev years; the receptive-field run) vs the same references
+    rq: RQ2
+    metric: pr_auc
+    candidate: {experiment: rq2_receptive_field_v2, where: {model.backbone.layers: 4}}
+    references:
+      - {experiment: rq2_base_slx_ols_v1}
+      - {experiment: rq2_base_slx_gbm_v1}
+      - {experiment: rq2_base_slx_rf_v1}
+      - {experiment: paper_slx_reach_v1}
+  P2c_reach:                      # the H2c candidate (5 layers, 1404) vs every SLX model including the matched reach
+    rq: RQ2
+    metric: pr_auc
+    years: [1404]
+    candidate: {experiment: c1404_sage5_v1}
+    references:
+      - {experiment: c1404_base_slx_rf_v1}
+      - {experiment: c1404_base_slx_gbm_v1}
+      - {experiment: c1404_base_slx_ols_v1}
+      - {experiment: paper_c1404_slx_reach_v1}

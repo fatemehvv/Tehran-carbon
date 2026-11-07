@@ -5,6 +5,8 @@ ols / gbm / rf      own-cell features of the selected branches, plus optional SL
 forward_operator    physics baseline: what a km-scale satellite column would see of the inventory:
                     score = log1p(Gaussian-smoothed total inventory CO2); sigma (from model.baseline.params) and a
                     linear map to z are fitted on the training cells only
+forward_sectors     the same, with one non-negative NO2 yield per inventory sector (paper check): sectors emit very
+                    different NOx per tonne of CO2, so the plain total lets large point sources (power plants) dominate
 """
 from __future__ import annotations
 
@@ -77,16 +79,18 @@ class RF(TabularBaseline):
 @BASELINES.register("forward_operator")
 class ForwardOperator:
     kind = "baseline"
+    params_key = "forward_operator"          # block of model.baseline.params read by this class
 
     def __init__(self, cfg: dict, data, graph=None, log=print):
         b = cfg["model"]["baseline"]
-        prefix = b["params"]["forward_operator"]["inventory_prefix"]
+        p = b["params"][self.params_key]
+        prefix = p["inventory_prefix"]
         self.inv = [j for j, (n, k) in enumerate(zip(data.base_of, data.lag_of)) if n.startswith(prefix) and k == 0]
         if not self.inv:
-            raise ValueError(f"forward_operator needs the {prefix}* features in the dataset")
+            raise ValueError(f"{self.params_key} needs the {prefix}* features in the dataset")
         logged = set(cfg["data"].get("log1p") or [])
         self.logged = [data.base_of[j] in logged for j in self.inv]
-        self.sigmas = [float(s) for s in b["params"]["forward_operator"]["sigmas_km"]]
+        self.sigmas = [float(s) for s in p["sigmas_km"]]
         self.grid = Grid(cfg)
 
     def score(self, X: np.ndarray, sigma: float) -> np.ndarray:
@@ -114,6 +118,50 @@ class ForwardOperator:
     def predict(self, X, mask=None, return_weights=False):
         sc = self.score(X, self.sigma)
         pred = self.lr.predict(sc.reshape(-1, 1)).reshape(sc.shape).astype(np.float32)
+        if mask is not None:
+            pred = np.where(mask[None], pred, np.nan)
+        return (pred, None) if return_weights else pred
+
+
+@BASELINES.register("forward_sectors")
+class ForwardSectors(ForwardOperator):
+    """z ~ a + sum_s b_s * log1p(K_sigma * E_s), b_s >= 0: every inventory sector s gets its own NO2 yield.
+
+    One Gaussian width sigma (the column footprint) for all sectors, chosen on the training cells by the Spearman
+    correlation of the fitted score, as forward_operator. The yields are non-negative, so a sector can only add NO2;
+    a sector with no NO2 signal (e.g. gas-fired power plants) gets a yield near 0 instead of dominating the total."""
+    params_key = "forward_sectors"
+
+    def layers(self, X: np.ndarray, sigma: float) -> np.ndarray:
+        """(T, H, W, S): log1p of every smoothed sector layer."""
+        out = []
+        for i, j in enumerate(self.inv):
+            e = X[..., j].astype(np.float64)
+            e = np.expm1(e) if self.logged[i] else e
+            if sigma > 0:
+                e = gaussian_filter(e, sigma=(0, sigma / self.grid.km_y, sigma / self.grid.km_x), mode="constant")
+            out.append(np.log1p(np.clip(e, 0, None)))
+        return np.stack(out, -1)
+
+    def fit(self, Xs, ys, train_masks, val_masks=None):
+        y = np.concatenate([Y[:, m].ravel() for Y, m in zip(ys, train_masks)])
+        ok = np.isfinite(y)
+        y = y[ok]
+        S = len(self.inv)
+        best, self.sigma, self.lr = -np.inf, None, None
+        for s in self.sigmas:
+            A = np.concatenate([self.layers(X, s)[:, m].reshape(-1, S) for X, m in zip(Xs, train_masks)])[ok]
+            lr = LinearRegression(positive=True).fit(A, y)
+            rho = spearmanr(lr.predict(A), y).correlation
+            if np.isfinite(rho) and rho > best:
+                best, self.sigma, self.lr = rho, s, lr
+        if self.sigma is None:
+            raise ValueError("forward_sectors: no smoothing scale gives a valid correlation on the training cells")
+        return self
+
+    def predict(self, X, mask=None, return_weights=False):
+        L = self.layers(X, self.sigma)
+        pred = self.lr.predict(L.reshape(-1, L.shape[-1])).reshape(L.shape[:-1]).astype(np.float32)
         if mask is not None:
             pred = np.where(mask[None], pred, np.nan)
         return (pred, None) if return_weights else pred

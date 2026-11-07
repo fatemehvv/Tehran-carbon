@@ -108,6 +108,27 @@ python main.py runs --rq RQ1                      # تاریخچه
 python main.py train --resume <run_id>            # ادامهٔ اجرای قطع‌شده (foldهای تمام‌شده دوباره اجرا نمی‌شوند)
 ```
 
+### مقاله (شاخهٔ `paper_TC`)
+
+بررسی‌هایی که داور احتمالاً می‌خواهد. **فرضیهٔ پایان‌نامه نیستند** و حکم‌های پایان‌نامه را تغییر نمی‌دهند. قاعدهٔ خواندن نتایج پیش از اجرا در `docs/paper/preregistration_paper_checks.md` نوشته شده.
+`defaults` دست نخورده، پس هش آزمایش‌های پایان‌نامه عوض نشده است.
+
+این‌ها را در یک پوشهٔ جدا روی سرور اجرا کنید (`~/Tehran-carbon-paper`، با کپی `data/raw` و `runs/` پوشهٔ پایان‌نامه)، تا تاریخچهٔ اجراهای پایان‌نامه قاطی نشود.
+
+```bash
+python main.py train --exp paper_slx_reach_v1             # ۱. SLX با شعاع دید GNN (۹ اجرا: ols/gbm/rf × پنجرهٔ ۲۷، ۳۶، ۴۵ سلولی)
+python main.py train --exp paper_c1404_slx_reach_v1       #    همان، روی سال ۱۴۰۴
+python main.py train --exp paper_forward_sectors_v1       # ۴. عملگر فیزیکی با ضریب جدا برای هر بخش
+python main.py train --exp paper_c1404_forward_sectors_v1
+python main.py evaluate --hypothesis P2_reach             # GNN سه‌لایه در برابر SLX هم‌شعاع
+python main.py evaluate --hypothesis P2_reach4            # GNN چهارلایه
+python main.py evaluate --hypothesis P2c_reach            # GNN پنج‌لایه روی ۱۴۰۴
+python main.py robustness --hypothesis H2c                # ۲ و ۳. ماندگاری ۱۴۰۴، نتیجهٔ هر بلوک، jackknife
+python main.py robustness --hypothesis H2                 #    و به همین ترتیب H2c_robust، H1c، P2_reach، P2_reach4، P2c_reach
+```
+
+اجراهای یک sweep را می‌شود موازی فرستاد (`--variant 0` تا `--variant 8`). خروجی `robustness` در پوشهٔ اجرا: `<name>_robustness.csv` (خلاصه و برداشت robust / fragile / no effect shown)، `<name>_blocks.csv`، `<name>_jackknife.csv`، `<name>_persistence.csv`.
+
 **خروجی هر اجرا:** `runs/<زمان>_<آزمایش>_<هش>/` شامل:
 - `config.yaml` و `meta.json` (کامیت git، نسخهٔ پکیج‌ها و هش داده)
 - `metrics.json`

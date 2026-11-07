@@ -8,6 +8,7 @@
     python main.py train     --exp rq3_policy_v1                RQ3: RL agent vs static policies (kind: rl)
     python main.py inventory --exp inv_l1_v1                    L1 sector totals (IPCC + Monte Carlo)
     python main.py evaluate  --hypothesis H1                    pre-registered decision rule on finished runs
+    python main.py robustness --hypothesis H2c                  per-block, jackknife, persistence checks (paper)
     python main.py analyze   districts --exp rq2_sage_v1 rq2_base_slx_gbm_v1   district classes vs RQ1 (kappa)
     python main.py analyze   response  --exp rq2_sage_v1        response checks of the final model (for RQ3)
     python main.py summarize --exp rq1_ablation_v1              table of all finished runs / sweep variants
@@ -134,6 +135,17 @@ def cmd_evaluate(args):
         run.finish("done", test(cfg, args.hypothesis, spec).run(run))
 
 
+def cmd_robustness(args):
+    from tehran_carbon.evaluation.robustness import RobustnessChecks
+    spec = Config().hypotheses[args.hypothesis]
+    if spec.get("kind") == "policy":
+        raise SystemExit(f"{args.hypothesis} is a policy hypothesis: robustness checks are for prediction hypotheses")
+    cfg = analysis_config(f"robustness_{args.hypothesis}", spec.get("rq"),
+                          f"robustness checks of {args.hypothesis} (paper; not a thesis decision)", spec=spec)
+    with Run(cfg) as run:
+        run.finish("done", RobustnessChecks(cfg, args.hypothesis, spec).run(run))
+
+
 def cmd_analyze(args):
     if args.what == "districts":
         from tehran_carbon.evaluation.districts import DistrictComparison
@@ -210,6 +222,8 @@ def main():
     p = sub.add_parser("inventory"); p.add_argument("--exp", required=True); p.add_argument("--set", nargs="*", default=[])
     p.set_defaults(fn=cmd_inventory)
     p = sub.add_parser("evaluate"); p.add_argument("--hypothesis", required=True); p.set_defaults(fn=cmd_evaluate)
+    p = sub.add_parser("robustness", help="per-block, jackknife and persistence checks of a hypothesis (paper)")
+    p.add_argument("--hypothesis", required=True); p.set_defaults(fn=cmd_robustness)
     p = sub.add_parser("analyze"); p.add_argument("what", choices=["districts", "response"])
     p.add_argument("--exp", nargs="+", required=True); p.set_defaults(fn=cmd_analyze)
     p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)

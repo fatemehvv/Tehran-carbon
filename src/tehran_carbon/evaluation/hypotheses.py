@@ -11,6 +11,7 @@ Verdict
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
@@ -46,7 +47,9 @@ class HypothesisTest:
                 found[r.variant] = (r.run_id, folder, rcfg)          # later rows overwrite earlier ones
         return list(found.values())
 
-    def run(self, run) -> dict:
+    def prepare(self, run) -> SimpleNamespace:
+        """Everything the decision needs: candidate, best reference (chosen after the results), truth, block
+        bootstrap. Shared with RobustnessChecks so both always compare the same two runs."""
         cands = self.select(self.spec["candidate"])
         if len(cands) != 1:
             raise ValueError(f"{self.name}: candidate selector matches {len(cands)} runs (need exactly 1)")
@@ -79,8 +82,16 @@ class HypothesisTest:
 
         split = SpatialSplit(ccfg["split"], Grid(ccfg), data.label_domain, seed=int(ccfg["seed"]))
         bcfg = ccfg["eval"]["bootstrap"]
-        boot = BlockBootstrap(split.blocks(split.block_km), int(bcfg["n"]), int(bcfg["seed"]))
-        level = float(bcfg["level"])
+        blocks = split.blocks(split.block_km)
+        boot = BlockBootstrap(blocks, int(bcfg["n"]), int(bcfg["seed"]))
+        return SimpleNamespace(cid=cid, cdir=cdir, ccfg=ccfg, best=best, rdir=rdir, table=table, data=data,
+                               years=years, truth=truth, oof=oof, score=score, blocks=blocks, boot=boot,
+                               level=float(bcfg["level"]))
+
+    def run(self, run) -> dict:
+        p = self.prepare(run)
+        cid, cdir, rdir, best, table = p.cid, p.cdir, p.rdir, p.best, p.table
+        years, truth, oof, score, boot, level = p.years, p.truth, p.oof, p.score, p.boot, p.level
         rows, ok_all, ci_all = [], True, True
         for y in years:
             pc, pr = oof(cdir, y), oof(rdir, y)
