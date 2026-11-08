@@ -142,7 +142,7 @@ class ReachCurve:
                             label=f"{fam} {y}" + (" (ensemble; bar = single seeds)" if seeds else ""))
             if np.isfinite(zc):
                 ax.axvline(zc, color="0.4", ls="--", lw=1)
-                ax.text(zc, ax.get_ylim()[0], " correlation range", rotation=90, va="bottom", ha="right",
+                ax.text(zc, ax.get_ylim()[1], "correlation range ", rotation=90, va="top", ha="right",   # top: clear of the legend
                         fontsize=8, color="0.4")
             ax.set_xlabel("reach (km)")
             ax.set_ylabel(m)
