@@ -1,5 +1,5 @@
-[04:56:52] dataset 1e0281290a88: from cache
-[04:56:52] reach curve:
+[22:00:05] dataset 1e0281290a88: from cache
+[22:00:12] reach curve:
  family  year  reach_km  pr_auc  spearman
     MLP  1402     0.000   0.490     0.685
     MLP  1403     0.000   0.449     0.676

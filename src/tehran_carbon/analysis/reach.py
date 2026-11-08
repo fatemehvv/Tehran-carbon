@@ -133,10 +133,13 @@ class ReachCurve:
                     if seeds:
                         ax.fill_between(g.reach_km, g[lo], g[hi], color=colour[fam], alpha=0.15, lw=0)
                 else:
-                    err = None if not seeds else [g[m].to_numpy() - g[lo].to_numpy(), g[hi].to_numpy() - g[m].to_numpy()]
-                    ax.errorbar(g.reach_km + (0.4 if years.index(y) else -0.4), g[m], yerr=err, color=colour[fam],
-                                fmt="s" if years.index(y) else "o", ms=5, capsize=3, lw=1.2,
-                                label=f"{fam} {y}" + (" (ensemble; bar = single seeds)" if seeds else ""))
+                    # the seed range is drawn on its own: the ensemble can lie outside it (it can beat every seed)
+                    x = (g.reach_km + (0.4 if years.index(y) else -0.4)).to_numpy()
+                    if seeds:
+                        ax.vlines(x, g[lo], g[hi], color=colour[fam], lw=1.2)
+                        ax.scatter(np.r_[x, x], np.r_[g[lo], g[hi]], color=colour[fam], marker="_", s=40)
+                    ax.plot(x, g[m], color=colour[fam], ls="none", marker="s" if years.index(y) else "o", ms=5,
+                            label=f"{fam} {y}" + (" (ensemble; bar = single seeds)" if seeds else ""))
             if np.isfinite(zc):
                 ax.axvline(zc, color="0.4", ls="--", lw=1)
                 ax.text(zc, ax.get_ylim()[0], " correlation range", rotation=90, va="bottom", ha="right",
