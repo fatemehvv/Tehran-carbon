@@ -3,10 +3,11 @@
 The same two runs as the thesis decision rule (HypothesisTest.prepare: candidate and best reference chosen after the
 results) are read with the inference of the paper (evaluation/inference.py; settings: analysis.paper):
 
-  primary      city-wide hotspots (q = 0.90) with PR-AUC, and Spearman over all cells (the co-primary metric, which
-               every block contributes to): difference, delete-one-block jackknife intervals (95 % and 90 %), the thesis
-               block-bootstrap interval, exact block sign-flip tests (pooled metric and per-block mean) and the four-way
-               verdict with the equivalence margin
+  primary      the metrics of analysis.paper.metrics (PR-AUC of the city-wide hotspots, q = 0.90, and Spearman over all
+               cells), or only the metrics a hypothesis names (`metrics:` in its spec; the others become `descriptive`
+               rows): difference, delete-one-block jackknife intervals (95 % and 90 %), the thesis block-bootstrap
+               interval, exact block sign-flip tests (pooled metric, and the cell-weighted mean of the per-block
+               differences) and the four-way verdict with the margin (`margin:` in the spec, else analysis.paper.margin)
   thresholds   PR-AUC with the other hotspot labels (q in analysis.paper.thresholds)
   superpixel   the same metrics on groups of size x size cells (about one TROPOMI pixel)
   seeds        if the runs stored every seed (train.save_members): the difference for every candidate seed and the
@@ -59,7 +60,8 @@ class PaperEvaluation(HypothesisTest):
                 boot.scores(z, hot, pc, metric) - boot.scores(z, hot, pr, metric), 0.95)
         if tests:
             s = signflip_pooled(z, hot, pc, pr, blocks, metric, **self.sf)
-            b = signflip_mean(block_table(z, hot, pc, pr, blocks, metric).delta.to_numpy(), **self.sf)
+            bt = block_table(z, hot, pc, pr, blocks, metric)
+            b = signflip_mean(bt.delta.to_numpy(), weights=bt.cells.to_numpy(), **self.sf)   # cell-weighted
             r.update(p_signflip_pooled=s["p_greater"], p_signflip_pooled_two=s["p_two"], signflip_exact=s["exact"],
                      blocks_valid=b["blocks"], p_signflip_blocks=b["p_greater"])
         return r
@@ -67,13 +69,15 @@ class PaperEvaluation(HypothesisTest):
     def run(self, run) -> dict:
         p = self.prepare(run)
         metrics = list(self.pc["metrics"])
+        primary = list(self.spec.get("metrics") or metrics)              # a hypothesis may name its primary metric(s)
         size, W = int(self.pc["superpixel"]), int(p.data.shape[1])
         rows = []
         for y in p.years:
             z, hot = p.truth[y]
             pc, pr = p.oof(p.cdir, y), p.oof(p.rdir, y)
-            for m in metrics:                                           # primary
-                rows.append(dict(year=y, part="primary", **self.row(z, hot, pc, pr, p.blocks, m, "q=0.90", p.boot)))
+            for m in primary + [m for m in metrics if m not in primary]:  # primary rows enter Holm; others are descriptive
+                rows.append(dict(year=y, part="primary" if m in primary else "descriptive",
+                                 **self.row(z, hot, pc, pr, p.blocks, m, "q=0.90", p.boot)))
             for q in self.pc["thresholds"]:                             # other hotspot labels
                 if abs(float(q) - 0.90) < 1e-9:
                     continue

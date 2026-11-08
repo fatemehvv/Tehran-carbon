@@ -17,6 +17,8 @@
     python main.py paper power    --hypothesis H2 H2c           power of the block-level tests from existing comparisons
     python main.py paper target   [--exp rq2_sage_v2 ...]       what the target measures: stations, elevation, daily, n_eff
     python main.py paper timing   --exp paper2_rq2_sage_v1      timing pilot: cost of one run and of a 50-trial search
+    python main.py paper reach    --exp paper3_reach_slx_v1 ... skill against reach (the main figure of the paper)
+    python main.py tune           --exp paper3_tune_sage_v1     random search of hyper-parameters (kind: tune)
     python main.py figures                                      thesis figures and tables (docs/figures, docs/tables)
     python main.py dashboard                                    data of the offline dashboard (docs/dashboard/data.js)
 """
@@ -92,6 +94,8 @@ def cmd_train(args):
     if args.variant is not None:
         cfgs = [cfgs[args.variant]]
     for cfg in cfgs:
+        if cfg["experiment"]["kind"] == "tune":
+            raise SystemExit(f"{cfg['experiment']['name']} is a hyper-parameter search: python main.py tune --exp ...")
         RunRegistry(cfg).check_drift(cfg)
     for i, cfg in enumerate(cfgs):
         print(f"\n=== {i + 1}/{len(cfgs)}  {cfg['experiment']['name']} [{cfg['experiment']['variant_label'] or '-'}]")
@@ -188,6 +192,13 @@ def cmd_paper(args):
         cfg = analysis_config("paper_target", "RQ2", "what the TROPOMI target measures", experiments=args.exp or [])
         with Run(cfg) as run:
             run.finish("done", TargetValidity(cfg, args.exp).run(run))
+    elif args.what == "reach":
+        from tehran_carbon.analysis.reach import ReachCurve
+        if not args.exp:
+            raise SystemExit("paper reach needs --exp")
+        cfg = analysis_config("paper_reach", "RQ2", "skill against reach", experiments=args.exp)
+        with Run(cfg) as run:
+            run.finish("done", ReachCurve(cfg, args.exp).run(run))
     elif args.what == "timing":
         from tehran_carbon.analysis.timing import summarize, time_experiment
         if not args.exp:
@@ -203,6 +214,18 @@ def cmd_paper(args):
                     rows.append(time_experiment(c, run, epochs=args.epochs))
                     run.finish("done", rows[-1])
         print(json.dumps(summarize(rows), indent=2))
+
+
+def cmd_tune(args):
+    """Random search of hyper-parameters of an experiment of kind `tune` (experiments/tuning.py)."""
+    from tehran_carbon.experiments.tuning import RandomSearch
+    cfgs = Config().resolve(args.exp, args.set)
+    if len(cfgs) != 1 or cfgs[0]["experiment"]["kind"] != "tune" or "tune" not in cfgs[0]:
+        raise SystemExit(f"{args.exp} is not a single experiment of kind 'tune' with a `tune` block")
+    cfg = cfgs[0]
+    RunRegistry(cfg).check_drift(cfg)
+    with Run(cfg) as run:
+        run.finish("done", RandomSearch(cfg, run).run_all())
 
 
 def cmd_summarize(args):
@@ -272,12 +295,14 @@ def main():
     p = sub.add_parser("analyze"); p.add_argument("what", choices=["districts", "response"])
     p.add_argument("--exp", nargs="+", required=True); p.set_defaults(fn=cmd_analyze)
     p = sub.add_parser("paper", help="paper analyses (branch paper_TC)")
-    p.add_argument("what", choices=["evaluate", "power", "target", "timing"])
+    p.add_argument("what", choices=["evaluate", "power", "target", "timing", "reach"])
     p.add_argument("--hypothesis", nargs="+", help="evaluate / power: hypotheses of configs/config.yaml")
     p.add_argument("--exp", nargs="+", help="target: runs to score against elevation; timing: experiments to time")
     p.add_argument("--variant", type=int, help="timing: sweep variant (0-based; default the first)")
     p.add_argument("--epochs", type=int, default=20, help="timing: epochs of the pilot fit")
     p.set_defaults(fn=cmd_paper)
+    p = sub.add_parser("tune", help="random search of hyper-parameters (experiments of kind tune)")
+    p.add_argument("--exp", required=True); p.add_argument("--set", nargs="*", default=[]); p.set_defaults(fn=cmd_tune)
     p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)
     p = sub.add_parser("runs"); p.add_argument("--rq"); p.add_argument("--exp"); p.add_argument("--last", type=int, default=30)
     p.set_defaults(fn=cmd_runs)

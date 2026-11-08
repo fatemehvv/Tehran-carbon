@@ -686,6 +686,61 @@ experiments:
     split: {fold_aware_stations: true}
     sweep: *reach_sweep
 
+  # ---------------------------------------------------------------- paper v2, stage B (docs/paper/assessment_stageA_fa.md)
+  # Driver inputs only (traffic, energy, context): the station layer is an outcome, not a cause, its leak-free removal
+  # changed nothing in stage A, and 1405 has no station data. Rules: docs/paper/preregistration_paper_v2.md (final).
+  # (1) Skill against reach on 1402 / 1403 (python main.py paper reach): nested SLX windows up to R cells and SAGE with
+  #     1-6 layers (9 cells per layer); reach 0 = own cell / no graph.
+  paper3_reach_slx_v1:
+    rq: RQ2
+    description: paper v2 stage B - SLX (OLS, GBM) with nested windows up to R cells, driver inputs (reach curve)
+    inherits: rq2_base_ols_v1
+    model: {modalities: [traffic, energy]}
+    split: {transfer: false}
+    sweep:
+      model.baseline.name: [ols, gbm]
+      model.baseline.lags: [[], [1], [1, 3], [1, 3, 9], [1, 3, 9, 15], [1, 3, 9, 15, 18], [1, 3, 9, 15, 18, 27],
+                            [1, 3, 9, 15, 18, 27, 36], [1, 3, 9, 15, 18, 27, 36, 45], [1, 3, 9, 15, 18, 27, 36, 45, 54]]
+  paper3_reach_sage_v1:
+    rq: RQ2
+    description: paper v2 stage B - SAGE with 1-6 layers (reach 9 ... 54 cells), driver inputs, 3 seeds stored
+    inherits: rq2_sage_v2
+    model: {modalities: [traffic, energy]}
+    split: {transfer: false}
+    train: {seeds: [0, 1, 2], save_members: true, save_final: false}
+    sweep: {model.backbone.layers: [1, 2, 3, 4, 5, 6]}
+  paper3_reach_mlp_v1:
+    rq: RQ2
+    description: paper v2 stage B - the same network without a graph (reach 0), driver inputs, 3 seeds stored
+    inherits: rq2_mlp_v2
+    model: {modalities: [traffic, energy]}
+    split: {transfer: false}
+    train: {seeds: [0, 1, 2], save_members: true, save_final: false}
+  # (2) Random search of the GNN on 1402-1403 (python main.py tune). The reach is NOT searched: it is fixed by the rule
+  #     (zero crossing of the target's correlogram on 1402-1403 = 24 km -> the first SAGE depth whose reach covers it:
+  #     4 layers = 36 cells = 30 km). Space: the GraphGym design space (You, Ying & Leskovec 2020) restricted to this
+  #     architecture. The best values go into the stage C configs (1405) as a new version.
+  paper3_tune_sage_v1:
+    rq: RQ2
+    kind: tune
+    description: paper v2 stage B - 50-trial random search of the GNN (4 layers by the reach rule), driver inputs
+    inherits: rq2_sage_v2
+    model: {modalities: [traffic, energy], backbone: {layers: 4}}
+    tune:
+      trials: 50
+      seed: 0
+      inner_folds: 4
+      metric: spearman
+      years: [1402, 1403]
+      space:
+        model.encoder.hidden: {choice: [32, 64, 128]}
+        model.encoder.layers: {choice: [1, 2, 3]}
+        model.encoder.dropout: {choice: [0.0, 0.3, 0.6]}
+        model.backbone.dropout: {choice: [0.0, 0.3, 0.6]}
+        train.lr: {loguniform: [1.0e-4, 1.0e-2]}
+        train.weight_decay: {loguniform: [1.0e-6, 1.0e-3]}
+        train.epochs: {choice: [100, 200, 300, 400]}
+
   # ---------------------------------------------------------------- inventory
   inv_l1_v1:
     rq: RQ1
@@ -1000,3 +1055,15 @@ hypotheses:
     candidate: {experiment: paper2_c1404_sage4_v1}
     references:
       - {experiment: paper2_c1404_sage4_single_v1, where: {model.modalities: [energy]}}
+
+  # ---------------------------------------------------------------- paper v2, stage B: descriptive reading on 1402-1403 of
+  # the pair that is tested on 1405 (stage C): SAGE with 4 layers vs SLX-OLS with windows up to the same reach (36
+  # cells), driver inputs, untuned. Spearman is the primary metric (preregistration_paper_v2.md, final).
+  PB_T1_dev:
+    rq: RQ2
+    metric: spearman
+    metrics: [spearman]
+    margin: 0.02
+    candidate: {experiment: paper3_reach_sage_v1, where: {model.backbone.layers: 4}}
+    references:
+      - {experiment: paper3_reach_slx_v1, where: {model.baseline.name: ols, model.baseline.lags: [1, 3, 9, 15, 18, 27, 36]}}

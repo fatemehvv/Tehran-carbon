@@ -77,14 +77,18 @@ def signflip_pooled(z, hot, pc, pr, blocks: np.ndarray, metric: str, max_exact: 
     return out
 
 
-def signflip_mean(d: np.ndarray, max_exact: int = 16, n_random: int = 20000, seed: int = 0) -> dict:
-    """Randomisation test of the mean of per-block differences d (NaN = block without a defined value, dropped)."""
+def signflip_mean(d: np.ndarray, max_exact: int = 16, n_random: int = 20000, seed: int = 0,
+                  weights: np.ndarray | None = None) -> dict:
+    """Randomisation test of the (weighted) mean of per-block differences d (NaN = block without a defined value,
+    dropped). weights: e.g. the number of cells of every block, so that edge blocks of a few cells count little."""
     d = np.asarray(d, float)
-    d = d[np.isfinite(d)]
+    w = np.ones_like(d) if weights is None else np.asarray(weights, float)
+    ok = np.isfinite(d) & np.isfinite(w) & (w > 0)
+    d, w = d[ok], w[ok] / w[ok].sum() if ok.any() else w[ok]
     if len(d) == 0:
         return dict(stat=np.nan, p_greater=np.nan, p_two=np.nan, n_perm=0, exact=True, blocks=0)
     flips, exact = assignments(len(d), max_exact, n_random, seed)
-    st = (np.where(flips, -1.0, 1.0) * d).mean(1)
+    st = (np.where(flips, -1.0, 1.0) * d * w).sum(1)
     out = _pvalues(st)
     out.update(exact=exact, blocks=len(d))
     return out

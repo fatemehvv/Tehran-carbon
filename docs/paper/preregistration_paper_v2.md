@@ -1,105 +1,103 @@
-# Paper v2 (branch `paper_TC`): pre-registration of the stages and the confirmatory tests
+# Paper v2 (branch `paper_TC`): pre-registration of the confirmatory test
 
-**Status: DRAFT, written 2026-11-07, before any `paper2_*` run.** Plan: `docs/paper/plan_q1_fa.md` (version 4).
-This draft is finalised once, after stage A, with three numbers that stage A measures (the margin δ, the power of every
-confirmatory test, the compute budget) and the names of the frozen candidate configs. Finalisation happens **before any
-stage B, C or D run is scored and before the 1405 data are opened**. The commit that finalises it is pushed to GitHub;
-its push time is the registration time (an OSF copy is optional). After that, nothing here changes; a deviation becomes
-a new config version and is listed under *Deviations*.
+**Status: FINAL, 2026-11-08.** Draft written 2026-11-07 before any `paper2_*` run. Finalised after stage A with the three
+numbers stage A measured, **before any stage B run and before the 1405 data are opened**. The push time of this commit on
+GitHub is the registration time. After it, nothing here changes; a deviation becomes a new config version and is listed
+under *Deviations*. Plan: `docs/paper/plan_q1_fa.md`; stage A results and assessment: `docs/paper/results_stageA/`,
+`docs/paper/assessment_stageA_fa.md`.
 
-These are **not thesis hypotheses**. The thesis verdicts (H1, H2, H1c, H2c, ...) stay as they are and are reported.
+These are **not thesis hypotheses**. The thesis verdicts stay as they are and are reported.
 
-## What is known before writing
+## What is known when this is finalised (stage A, 1402–1404)
 
-- All thesis results (`docs/results_summary_fa.md`, `docs/tables/`), in particular:
-  - one Gaussian-smoothed sector layer of the inventory (buildings, σ = 8 km) has a mean monthly Spearman of 0.90–0.91
-    with z, and four sector layers reach R² = 0.89 at σ = 12 km (`t12`, in-sample);
-  - with the same inputs, the RQ1 fusion types differ by up to 0.18 PR-AUC (`t02`);
-  - the road and building layers correlate 0.999 once smoothed by 8 km or more (`t12`).
-- **Not known:** every `paper2_*` result, the stage A readings of the existing thesis comparisons with the new inference,
-  the paper checks of `preregistration_paper_checks.md` (not run yet), and everything about 1405.
+- Against SLX models with the thesis windows (≤ 15 cells), the GNN is better in Spearman (+0.025 / +0.035).
+- Against reach-matched SLX models, the GNN is not better: Spearman −0.001 / +0.010 (dev years), +0.004 on 1404. On
+  1404, SLX-OLS with windows up to 27 cells ties the 5-layer GNN.
+- The physical operator (sector yields, smoothed inventory) scores clearly lower (Spearman ≈ 0.85, PR-AUC ≈ 0.55).
+- The target correlogram on 1402–1403 falls to zero at **24 km**; its effective sample size is about 5.
+- Neural PR-AUC varies strongly between seeds (SD 0.03–0.075); Spearman does not (SD ≈ 0.005).
+- PR-AUC has 5 valid blocks, so no sign-flip test of it can reach p < 0.031.
+- The station leak was real; fixing it changed nothing.
+- **Unknown:** everything about 1405, every stage B result (reach curve, tuned GNN).
 
-## Stage A (descriptive; no verdict of the paper depends on it except through the three numbers below)
+## The three numbers of the draft, now fixed
 
-1. **Leakage fix.** In the thesis the station layers (pollution domain) are interpolated once per year from all
-   stations, the stations inside the held-out block included. `split.fold_aware_stations` rebuilds them in every fold
-   from the stations farther than the buffer (2 km) from the test block, for every year the fold uses (the 1404 design
-   included). The RQ1 ablation, the primary GNN, the no-graph control, the traditional models, the reach-matched SLX
-   and the 1404 designs are re-run that way (`paper2_*`), neural models with 5 seeds, every seed stored.
-2. **Readings** (`python main.py paper evaluate`): `PA_H1`, `PA_H1_drivers`, `PA_H2`, `PA_H2_reach`, `PA_H2c`,
-   `PA_H2c_all`, `PA_H1c`, and the thesis hypotheses with the same inference for comparison. Reported as sensitivity
-   of the thesis results to the leakage fix. They are not confirmatory: 1402–1404 have been seen.
-3. **Target validity** (`paper target`): stations vs TROPOMI, elevation, the daily cloud-screened target, n_eff.
-4. **Power** (`paper power`, on the existing comparisons H1, H2, H2c, H1c) and **timing** (`paper timing`).
+| number | rule (draft) | value |
+|---|---|---|
+| margin δ | max(0.02, 2 × SD_seed) | **Spearman: δ = 0.02** (SD_seed 0.0077). PR-AUC: 0.073 (SD_seed 0.037): PR-AUC is descriptive only |
+| power | block-level simulation | PR-AUC: 0 at every effect (5 valid blocks, smallest p 0.031). Spearman (block-mean approximation): below 0.5 at δ, labelled **low power**; the pooled sign-flip test used for the decision gave p ≈ 0.001 for effects of +0.025 in stage A |
+| compute | Hyperband if the searches exceed 168 GPU-hours | timing pilot: about 1.2 GPU-hours per search → full random search, no Hyperband |
 
-## The three numbers fixed after stage A
+## Confirmatory test (one family, Holm over its tests)
 
-- **Margin δ** (equivalence and non-inferiority), per co-primary metric:
-  δ = max(0.02, 2 × SD_seed), where SD_seed is the standard deviation over the 5 stored seeds of the city-wide metric,
-  averaged over the test years and over the two neural models `paper2_rq2_sage_v1` and the three-domain gated variant
-  of `paper2_rq1_ablation_v1`. Sensitivity readings with δ = 0.01 and 0.03 are reported next to the main one.
-- **Power** of each confirmatory test at δ and 2δ (block-level approximation, `paper power`). A test with power below
-  0.5 at δ is labelled *low power* in the paper. It is **not** dropped.
-- **Compute rule.** If `paper timing` estimates more than 168 GPU-hours for the 50-trial searches of all neural families
-  together, the neural searches use Hyperband / successive halving (Li et al. 2018, JMLR) with the same 50 trials; the
-  tree models always use full 50-trial random search.
+**Test year: 1405, months 1–7** (Farvardin–Mehr 1405), new places and a new year: training on the training blocks of
+1402–1404 (`split.test_year`, the design of H2c). Inventory and traffic of 1403 stand in for 1405. **Driver inputs only**
+(traffic, energy, context), with no station layer.
 
-## Inference (fixed now)
-
-- **Co-primary metrics:** PR-AUC of the city-wide hotspots (top 10 % of every month, the thesis label) and Spearman of
-  the predicted and observed z over all domain cells. Each is tested at α = 0.025.
-- **Test of superiority:** exact block sign-flip randomisation test of the city-wide difference (one-sided; candidate
-  and reference swapped block by block; rank metrics on predictions rank-normalised within each month). Holm's
-  adjustment over the whole confirmatory family (hypotheses × metrics).
-- **Intervals:** delete-one-block jackknife, t with K − 1 degrees of freedom (95 % and 90 %). The thesis block bootstrap
-  is reported next to them.
-- **Four-way verdict** (per hypothesis and metric): *superior* (95 % interval above 0; *beyond margin* if above δ),
-  *equivalent* (90 % interval inside (−δ, δ)), *non-inferior* (95 % lower bound above −δ), *inferior* (95 % interval
-  below 0), otherwise *inconclusive*. A Holm-adjusted p-value above α overrides *superior* to "superior, not significant
-  after Holm".
-- **Comparisons with many references:** the reference is the best of its set on the test year, chosen after the results
-  (conservative for the candidate), as in the thesis.
-
-## Confirmatory tests (structure fixed now; candidate configs frozen at the end of stage C)
-
-**Test year: 1405, months 1–7** (Farvardin–Mehr 1405), new places and a new year (training on the training blocks of
-1402–1404). Only **driver** inputs (traffic, energy, context): there are no 1405 station data, and a station layer is an
-outcome, not a cause, so it does not belong in a scenario model. Inventory and traffic of 1403 stand in for 1405
-(as in the 1404 design). 1404 and the cross-validation on 1402–1403 are reported as secondary, descriptive results.
+**Primary metric: Spearman** of predicted and observed z over all domain cells, mean over months. PR-AUC and the other
+metrics are reported as descriptive results.
 
 | name | comparison | reading |
 |---|---|---|
-| T1 | the graph model with the physical reach R vs the best SLX model with the same reach | four-way verdict |
-| T2 | physics + GNN residual (P2) vs physics alone (P0): does learning add more than δ? | four-way verdict; "learning adds" only if *superior beyond margin* |
-| T3 | fusion of the driver domains (traffic + energy) vs the better single driver domain | four-way verdict |
-| T4 | the response half-distance of P2 and of the pure GNN lies inside [σ̂/2, 2σ̂] | inside / outside, with a bootstrap interval over the probed cells |
+| **T1** | **GNN vs SLX at the same reach.** Candidate: SAGE, 4 layers (36 cells), gated fusion of traffic + energy + context, the hyper-parameters of the stage B search, 5 seeds averaged. Reference, fixed now: SLX-OLS with windows [1, 3, 9, 15, 18, 27, 36], the same inputs | four-way verdict with δ = 0.02 |
+| **T3** | **Fusion of the drivers vs the better single driver.** Candidate: the T1 GNN. References: the same GNN with traffic only and with energy only; the better one on 1405 is chosen after the results | four-way verdict with δ = 0.02 |
 
-- **Physical reach R = 3σ̂.** σ̂ is the Gaussian width that the sector-yield operator (`forward_sectors`) selects on the
-  training cells, over the grid 0–15 km. It is cross-checked, not tuned, against x₀ = τ·u with τ = 2.44 ± 0.68 h
-  (Beirle & Wagner 2024, AMT) and the ERA5 wind.
-- **P0** = a + b·log(B(h) + Σ_s β_s·(G_σ̂ ∗ E_s)), β_s ≥ 0, with road and buildings merged (they are collinear at σ̂).
-  B(h) is a background that depends on elevation (Fioletov et al. 2025). **P2** = P0 + a GNN fitted on the residual of
-  P0, with the context inputs orthogonalised on the emissions.
-- **Hyper-parameters:** 50-trial random search per family on 1402–1403 (inner block CV, 4 inner folds). Search spaces:
-  trees from Probst, Boulesteix & Bischl (2019, JMLR), GNN from You, Ying & Leskovec (2020, NeurIPS). They are written
-  in the config before the search starts.
+- **Reach rule, fixed now.** R* = the zero crossing of the target correlogram on 1402–1403 = 24 km. The GNN depth is the
+  smallest whose reach (9 cells per layer, mean cell size 0.84 km) covers R*: 4 layers = 36 cells ≈ 30 km. The reference
+  sees exactly as far. Cross-check, not tuned: x₀ = τ·u, with τ = 2.44 ± 0.68 h (Beirle & Wagner 2024) and the ERA5 wind.
+- **Tests.**
+  - Superiority: exact block sign-flip test of the pooled difference, one-sided; ranks rank-normalised within each month.
+  - Equivalence and non-inferiority: delete-one-block jackknife, t with K − 1 df (90 % and 95 % intervals).
+  - Family α = 0.05, Holm over T1 and T3.
+  - A *superior* reading whose Holm-adjusted p is ≥ 0.05 is reported as "superior, not significant after Holm".
+- **Seeds.** The candidate is the 5-seed average, as in the thesis. The spread of single seeds is reported next to it.
+  A verdict that holds for the average but not for most single seeds is reported as such.
+- **Expected directions** (written now, so that the opposite result is visible):
+  - T1 **equivalent** (or non-inferior);
+  - T3 equivalent or inconclusive.
 
-**Expected directions** (written now so that the opposite result is visible): T1 non-inferior or equivalent;
-T2 not beyond margin; T3 equivalent; T4 outside for the pure GNN.
+## Stage B (before 1405; nothing in it is confirmatory)
+
+- **Skill against reach on 1402–1403** (`paper3_reach_*`, `python main.py paper reach`): SLX-OLS and SLX-GBM with nested
+  windows up to 0–54 cells, SAGE with 1–6 layers, the no-graph network; driver inputs.
+- **GNN hyper-parameters** (`paper3_tune_sage_v1`, `python main.py tune`):
+  - 50-trial random search on 1402–1403, 4 inner block folds, Spearman.
+  - The reach is not searched (rule above).
+  - Search space from the GraphGym design space (You, Ying & Leskovec 2020): hidden size, encoder depth, dropouts,
+    learning rate, weight decay, epochs.
+  - The best values are written into the stage C configs as a new version.
+  - The reference (OLS) has no hyper-parameters.
+- **Descriptive reading of the T1 pair on 1402–1403**, untuned (`PB_T1_dev`).
 
 ## Exploratory (no verdict)
 
-CNN vs SAGE at the same reach; modality Shapley values and interactions; redundancy as a function of smoothing scale;
-satellite-based diagnosis of the inventory (residual maps, Rey-Pommier et al. 2025); the other hotspot labels
-(q = 0.80, 0.95); superpixels; elevation; the daily cloud-screened target; ModDrop.
+- the hotspot labels q = 0.80 / 0.95, superpixels, the daily cloud-screened target, elevation, stations;
+- modality Shapley values and redundancy as a function of smoothing scale;
+- impulse response of the final models;
+- the physical operator;
+- persistence (the observed maps of 1402–1404 scored on 1405).
 
 ## Known limitations
 
-- One city; two development years and 1404 already seen.
-- Hotspots sit in about two of the twelve blocks, so PR-AUC tests have little power; this is why Spearman is co-primary.
-- 1405 has seven warm months only (weaker contrast than winter), stand-in inventory, no station data.
-- Blocks are treated as exchangeable units; months are not independent and are not counted as units.
+- One city (by choice: no second city is added). Two development years; 1404 has been seen.
+- The effective sample size of the target is about 5, so tests have little power. "Equivalent" needs the jackknife interval
+  inside ±0.02, which may not be reached ("inconclusive").
+- 1405 has seven warm months only, stand-in inventory and traffic, and no station data.
+- The authors saw, in stage A, that a reach-matched SLX ties the GNN. The reach rule, the reference and the candidate's
+  architecture are fixed here before 1405 is opened. The reference's windows are fixed by the rule, not by the stage A
+  results (the best stage A window on 1404 was 27 cells; the rule gives 36).
 
-## Deviations
+## Deviations from the draft of 2026-11-07 (made before any stage B run and before 1405)
 
-None yet.
+1. **Primary metric:** Spearman alone, instead of PR-AUC and Spearman co-primary. Reason: PR-AUC cannot reach significance
+   with 5 valid blocks, and its seed-to-seed SD makes its margin (0.073) uninformative. Family α = 0.05 instead of
+   0.025 per metric.
+2. **T2 (physics + GNN vs physics) and T4 (response half-distance) are exploratory, not confirmatory.** Reason: the
+   physical operator alone is far behind (Spearman 0.85 vs ≈ 0.93), and the stage A result moved the paper's question to
+   reach.
+3. **Hyper-parameter search for the GNN only.** The reference (OLS) has none. The GBM of the reach curve keeps its defaults.
+4. **The reach rule is now concrete** (24 km → 4 layers / 36 cells), and the T1 reference is a single model fixed in
+   advance instead of "the best SLX with the same reach".
+5. **Block-level sign-flip test (secondary): cell-weighted mean.** Two edge blocks hold 3 and 5 cells, where per-block
+   Spearman means nothing.
+6. **No second city** (decision of the author, 2026-11-08).

@@ -163,6 +163,28 @@ python main.py paper evaluate --hypothesis PA_H1 PA_H1_drivers PA_H2 PA_H2_reach
 python main.py paper evaluate --hypothesis H1 H2 H2c H1c P2_reach P2c_reach   # همان آمار تازه روی اجراهای پایان‌نامه، برای مقایسه
 ```
 
+### مقالهٔ Q1، نسخهٔ ۲: مرحلهٔ ب (منحنی شعاع و تنظیم GNN)
+
+- **پایه:** ارزیابی مرحلهٔ الف (`docs/paper/assessment_stageA_fa.md`) و پیش‌ثبت نهایی (`docs/paper/preregistration_paper_v2.md`، ۱۸ آبان).
+- **ورودی‌ها:** فقط محرک‌ها (ترافیک، انرژی، context).
+- **معیار اصلی:** Spearman.
+- **قاعدهٔ شعاع:** برد همبستگی هدف ۲۴ km است، پس GNN چهارلایه (۳۶ سلول) و رقیب SLX-OLS با همان شعاع.
+
+```bash
+pytest tests/test_paper_stageB.py tests/test_paper_inference.py
+python main.py train --exp paper3_reach_slx_v1             # ۲۰ اجرا (CPU): OLS و GBM با پنجره تا ۰ ... ۵۴ سلول
+python main.py train --exp paper3_reach_mlp_v1             # بدون گراف (شعاع ۰)
+python main.py train --exp paper3_reach_sage_v1            # ۶ اجرا (GPU): SAGE با ۱ تا ۶ لایه (موازی: --variant 0 تا 5)
+python main.py tune  --exp paper3_tune_sage_v1             # جستجوی تصادفی ۵۰ آزمایشی GNN روی ۱۴۰۲ و ۱۴۰۳ (چند ساعت GPU)
+python main.py paper reach --exp paper3_reach_slx_v1 paper3_reach_sage_v1 paper3_reach_mlp_v1   # شکل اصلی: reach_curve.png
+python main.py paper evaluate --hypothesis PB_T1_dev       # جفت T1 روی ۱۴۰۲ و ۱۴۰۳ (توصیفی، بدون تنظیم)
+```
+
+**دادهٔ ۱۴۰۵ (برای مرحلهٔ ج):**
+- `gee/GEE_grid_NO2_weather_1405.js` را اجرا کنید و فایل‌ها را طبق توضیح سر اسکریپت بگذارید.
+- بعد اسکریپت هماهنگ‌سازی هواشناسی و `manifest --write` را اجرا کنید.
+- هیچ اجرایی تا مرحلهٔ ج این داده را نمی‌خواند. پیکربندی آزمون ۱۴۰۵، با ابرپارامترهای `tune_best.json`، بعد از این مرحله اضافه می‌شود.
+
 **خروجی `paper evaluate`** (در پوشهٔ اجرا):
 - `paper_<name>.csv`:
   - اختلاف، بازهٔ jackknife و بوت‌استرپ؛
