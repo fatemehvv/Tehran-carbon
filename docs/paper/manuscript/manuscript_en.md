@@ -64,45 +64,79 @@ Recent models learn urban carbon emissions from satellite images and points of i
 networks and origin–destination flows (Zeng et al., 2024), at the level of individual buildings (Yap et al., 2025), or
 across 329 Chinese cities with a graph-based multi-branch framework (Shao et al., 2026). GNNs with physically
 motivated edges are used for air-quality prediction (Wang et al., 2020; Hettige et al., 2024). Graph networks have been
-fused with high-resolution satellite data to predict PM2.5 and NO₂ (Wang et al., 2025), and GraphSAGE has been applied
-to urban NO₂ (Gueterbock et al., 2025). The gains of these models are usually credited to the graph: to learning how
-information should flow between neighbouring places.
+fused with high-resolution satellite data to predict PM2.5 and NO₂ (Wang et al., 2025), and used to map PM2.5 from
+satellite and station data at scales from city regions to the globe (Bai et al., 2025; Teng et al., 2026; Yuan et al.,
+2026). GraphSAGE has been applied to urban NO₂ (Gueterbock et al., 2025). The gains of these models are usually
+credited to the graph: to learning how information should flow between neighbouring places.
 
 A graph model, however, differs from a conventional model in two ways at once. It *learns* how to combine its
 neighbourhood, and it *sees* a neighbourhood whose size grows with every message-passing layer: its receptive field, or
-reach (Luo et al., 2016). Conventional spatial models used as baselines are often given no neighbourhood at all (own-cell
-regression, random forests on local features), or a much smaller one than the GNN. Under such comparisons, any
-advantage of the GNN may simply reflect that it looks further. The spatial econometric answer to "the neighbours
-matter" is the spatial lag of X (SLX) model, which adds neighbourhood means of the predictors (Halleck Vega & Elhorst,
-2015). In air-quality science, land-use regression does the same with buffers (Hoek et al., 2008). Both can be given any
-reach at negligible cost.
+reach (Luo et al., 2016). Within graph learning, the receptive field is treated as a design choice to be tuned or
+learned (Gao et al., 2025), and convolutional models have been found to fail where their effective receptive field is
+too small for the process (Chen et al., 2026). Yet conventional spatial models used as baselines are often given
+no neighbourhood at all (own-cell regression, random forests on local features), or a much smaller one than the GNN.
+Under such comparisons, any advantage of the GNN may simply reflect that it looks further.
+
+The spatial econometric answer to "the neighbours matter" is the spatial lag of X (SLX) model, which adds neighbourhood
+means of the predictors (Halleck Vega & Elhorst, 2015). In air-quality science, land-use regression does the same with
+buffers (Hoek et al., 2008). Both can be given any reach at negligible cost. Explicit neighbourhood information of this
+kind helps other learners too:
+
+- spatial-lag inputs improve neural networks (Xiao et al., 2023);
+- spatial context in the modelling step improves convolutional classifiers of urban form (Fleischmann & Arribas-Bel,
+  2024);
+- kriging-based spatial-lag features improve tabular learners in soil mapping (Schmidinger et al., 2026).
 
 Evaluation adds a second difficulty. Satellite NO₂ is strongly autocorrelated, so random cross-validation overstates
 skill and blocks of the autocorrelation range are needed (Roberts et al., 2017; Ploton et al., 2020; Meyer & Pebesma,
-2022). The appropriate design depends on the intended prediction task (Wadoux et al., 2021; Milà et al., 2022;
+2022). A recent review of machine learning for satellite NO₂ finds that reported skill varies widely between studies,
+partly because their validation strategies differ (Zhang et al., 2026). The appropriate design depends on the intended
+prediction task (Wadoux et al., 2021; Milà et al., 2022;
 Linnenbrink et al., 2026). With blocks of tens of kilometres, a single city yields only a dozen blocks, and hotspots
 concentrate in a few of them. Standard bootstrap inference is unreliable with so few, so unequal clusters (Cameron et
 al., 2008; MacKinnon et al., 2023). The randomness of training also matters, because deep models vary from seed to seed
 (Bouthillier et al., 2021). Pre-processing that uses information from the test area can inflate skill (Kapoor &
 Narayanan, 2023).
 
-The question has begun to surface in GIScience:
+The question has begun to surface in GIScience and environmental modelling:
 
-- **GNNs against spatial regression.** Graph convolutional networks have been compared with spatial and geographically
-  weighted regression (Zhu et al., 2021; Liu et al., 2025). A recent GNN for neighbourhood health outcomes beat
-  spatial-lag, geographically weighted and gradient-boosting baselines under spatial cross-validation (Zhao et al.,
-  2026).
-- **The link to geostatistics.** Neural networks for geospatial data admit a graph representation whose aggregation
-  weights resemble kriging (Zhan & Datta, 2024), and graph convolutions have been used for the spatial interpolation of
-  correlated data (Abémgnigni Njifon & Schuhmacher, 2024).
-- **Simple baselines remain strong.** In urban PM2.5 imputation, simple spatial interpolation outperformed standard
-  data-driven GNNs unless physics was built in (Du et al., 2026).
+- **GNNs against spatial regression.**
+  - Graph convolutional networks have been compared with spatial and geographically weighted regression (Zhu et al.,
+    2021; Liu et al., 2025).
+  - Graph-based deep spatial regression fitted house prices better than spatial-regression baselines (Zhu et al.,
+    2026).
+  - GNNs have beaten spatial-lag, geographically weighted and gradient-boosting baselines for neighbourhood health
+    outcomes under spatial cross-validation (Zhao et al., 2026).
+  - They have also beaten linear, spatial-regression and XGBoost baselines for bike-share ridership (Mohseni et al.,
+    2026).
+- **The link to spatial regression and geostatistics.**
+  - An attention-based GNN can be read as a generalised spatial regression model (Liang et al., 2023).
+  - GNNs entered spatial statistics because message passing mimics interaction between geographical neighbours (Ma et
+    al., 2025).
+  - Neural networks for geospatial data admit a graph representation whose aggregation weights resemble kriging (Zhan &
+    Datta, 2024).
+  - Graph convolutions have been used for the spatial interpolation of correlated data (Abémgnigni Njifon &
+    Schuhmacher, 2024).
+- **Simple baselines remain strong.**
+  - For urban NO₂ in Berlin, a random forest and a spatial GNN reached the same accuracy (R² ≈ 0.6; Schmidt & Ong,
+    2026).
+  - In urban PM2.5 imputation, simple spatial interpolation outperformed standard data-driven GNNs unless physics was
+    built in (Du et al., 2026).
+- **Graph models are sensitive to evaluation.**
+  - GNN residuals can remain spatially autocorrelated (Bao et al., 2024).
+  - A GNN that generalised within a fixed graph struggled under leave-one-cluster-out validation (Flores et al., 2026).
 
 In none of these comparisons, however, is the neighbourhood that the baseline sees held equal to the receptive field of
-the graph model. A literature search across GIScience, remote sensing and urban environmental modelling found no study
-that compares a GNN with a spatial-lag or buffer baseline constrained to the same reach, nor one that varies the reach of
-both. To our knowledge, the reach of a GNN has therefore never been separated from its graph architecture, in urban
-emission and air-pollution mapping or elsewhere. Here we do so for intra-urban combustion hotspots observed by TROPOMI in
+the graph model. We searched for such a study in two ways:
+
+- a structured ScienceDirect search: five Boolean queries combining graph neural networks with spatial lag, receptive
+  field, air pollution, satellite NO₂ and urban emissions, giving 191 unique records, most from 2025–2026;
+- a semantic search of the wider literature.
+
+Neither found a study that compares a GNN with a spatial-lag or buffer baseline constrained to the same reach, nor one
+that varies the reach of both. The search record is in the repository (`docs/paper/lit/`). To our knowledge, the reach
+of a GNN has therefore never been separated from its graph architecture, in urban emission and air-pollution mapping or
+elsewhere. Here we do so for intra-urban combustion hotspots observed by TROPOMI in
 Tehran. Tehran is a megacity of about nine million people at the foot of the Alborz mountains, with the highest mean NO₂ column among large
 cities worldwide (Huber et al., 2026). Our contributions are:
 
@@ -402,8 +436,20 @@ length and flatten before it.
 ### 5.2 Implications for spatial deep learning
 
 The graph-learning literature for urban emissions and air quality has grown rapidly, but its baselines are rarely given
-the same reach as the proposed models. Our results suggest that part of the reported gains may be gains of reach. We
-recommend five practices:
+the same reach as the proposed models. Our results suggest that part of the reported gains may be gains of reach.
+
+Our results agree with scattered evidence and make it sharper:
+
+- In Berlin, a random forest matched a spatial GNN for urban NO₂ (Schmidt & Ong, 2026).
+- GNNs can be written as generalised spatial regressions (Liang et al., 2023; Zhu et al., 2026).
+- Explicit spatial-lag inputs recover much of what spatial context offers (Xiao et al., 2023; Schmidinger et al., 2026).
+
+What these studies leave open is whether the remaining gains of graph models come from the graph or from the size of
+the neighbourhood. Holding reach equal answers this for a smooth target: the extra flexibility of the graph adds little.
+The graph should matter where its edges carry information that a distance-based neighbourhood does not, such as climate
+teleconnections (Chen et al., 2026) or flows on a transport network (Mohseni et al., 2026).
+
+We recommend five practices:
 
 1. **Reach-matched baselines.** Report a spatial-lag (SLX or buffer-based) baseline whose reach equals the model's
    receptive field. It costs seconds.
@@ -481,12 +527,18 @@ to be checked in the final proof.
 
 - Abémgnigni Njifon, M., & Schuhmacher, D. (2024). Graph convolutional networks for spatial interpolation of correlated data. *Spatial Statistics*, 60, 100822. https://doi.org/10.1016/j.spasta.2024.100822
 - Ahn, D., Goldberg, D., Liu, F., Anderson, D., Coombes, T., Loughner, C., et al. (2025). Satellite-based analysis of CO₂ emissions from global cities: regional, economic, and demographic attributes. *AGU Advances*, 6, e2025AV001747. https://doi.org/10.1029/2025AV001747
+- Bai, K., Li, K., Qiu, S., Zheng, Z., Jiao, P., Sun, Y., et al. (2025). SCAGAT: a scene-aware ensemble graph attention network for global PM2.5 pollution mapping via land–atmosphere interactions. *ISPRS Journal of Photogrammetry and Remote Sensing*, 225, 19–35. https://doi.org/10.1016/j.isprsjprs.2025.04.019
+- Bao, L.-L., Zhang, C.-X., Zhang, J.-S., & Guo, R. (2024). A two-stage spatial prediction modeling approach based on graph neural networks and neural processes. *Expert Systems with Applications*, 258, 125173. https://doi.org/10.1016/j.eswa.2024.125173
 - Beirle, S., Boersma, K. F., Platt, U., Lawrence, M. G., & Wagner, T. (2011). Megacity emissions and lifetimes of nitrogen oxides probed from space. *Science*, 333, 1737–1739.
 - Beirle, S., Borger, C., Dörner, S., Li, A., Hu, Z., Liu, F., Wang, Y., & Wagner, T. (2019). Pinpointing nitrogen oxide emissions from space. *Science Advances*, 5, eaax9800.
 - Beirle, S., & Wagner, T. (2024). A new method for estimating megacity NOx emissions and lifetimes from satellite observations. *Atmospheric Measurement Techniques*, 17, 3439–3453. https://doi.org/10.5194/amt-17-3439-2024
 - Bouthillier, X., et al. (2021). Accounting for variance in machine learning benchmarks. *Proceedings of Machine Learning and Systems*, 3.
 - Cameron, A. C., Gelbach, J. B., & Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. *Review of Economics and Statistics*, 90, 414–427.
+- Chen, D., Yang, Y., Hu, J., Kasoar, M., Arcucci, R., & Cheng, S. (2026). Explainable global wildfire prediction model using graph neural networks. *Geodata and AI*, 7, 100052. https://doi.org/10.1016/j.geoai.2026.100052
 - Du, S., Wei, H., Lee, D., Hu, Z., & Pan, S. (2026). Graph-based physics-guided urban PM2.5 air quality imputation with constrained monitoring data. *ACM Transactions on Sensor Networks*, 22, 1–23. https://doi.org/10.1145/3734869
+- Fleischmann, M., & Arribas-Bel, D. (2024). Decoding (urban) form and function using spatially explicit deep learning. *Computers, Environment and Urban Systems*, 112, 102147. https://doi.org/10.1016/j.compenvurbsys.2024.102147
+- Flores, M., Soliz, M., & Mollineda, R. A. (2026). Graph neural networks for soil organic carbon estimation: data-efficient modeling of multimodal spatial dependencies. *Machine Learning with Applications*, 24, 100878. https://doi.org/10.1016/j.mlwa.2026.100878
+- Gao, H., Yang, F., Yang, Y., Xu, Y., & Su, Y. (2025). Adaptive receptive field graph neural networks. *Neural Networks*, 190, 107658. https://doi.org/10.1016/j.neunet.2025.107658
 - Goldberg, D. L., Tao, M., Kerr, G. H., Ma, S., Tong, D. Q., Fiore, A. M., et al. (2024). Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO₂. *Remote Sensing of Environment*, 300, 113917. https://doi.org/10.1016/j.rse.2023.113917
 - Griffith, D. A. (2005). Effective geographic sample size in the presence of spatial autocorrelation. *Annals of the Association of American Geographers*, 95, 740–760.
 - Gueterbock, F., Santos-Rodriguez, R., & Clark, J. N. (2025). Improving local air quality predictions using transfer learning on satellite data and graph neural networks. arXiv:2505.05479.
@@ -500,27 +552,37 @@ to be checked in the final proof.
 - Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. *Patterns*, 4, 100804.
 - Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. *Social Psychological and Personality Science*, 8, 355–362.
 - Li, H., Qiu, J., Zhang, K., & Zheng, B. (2025). Monitoring fossil fuel CO₂ emissions from co-emitted NO₂ observed from space: progress, challenges, and future perspectives. *Frontiers of Environmental Science & Engineering*, 19, 2. https://doi.org/10.1007/s11783-025-1922-x
+- Liang, Y., Ding, F., Huang, G., & Zhao, Z. (2023). Deep trip generation with graph neural networks for bike sharing system expansion. *Transportation Research Part C: Emerging Technologies*, 154, 104241. https://doi.org/10.1016/j.trc.2023.104241
 - Linnenbrink, J., Nowosad, J., & Meyer, H. (2026). Moving beyond spatial and random cross-validation in environmental modelling: a call for prediction-domain adaptive evaluation. arXiv:2605.13689.
 - Liu, P., Chen, Y., Liang, X., Li, H., Biljecki, F., & Stouffs, R. (2025). A graph neural network for small-area estimation: integrating spatial regularisation, heterogeneous spatial units, and Bayesian inference. *International Journal of Geographical Information Science*, 40, 2358–2396. https://doi.org/10.1080/13658816.2025.2597971
 - Luo, W., Li, Y., Urtasun, R., & Zemel, R. (2016). Understanding the effective receptive field in deep convolutional neural networks. *Advances in Neural Information Processing Systems*, 29.
+- Ma, X., Zhang, Z., & Song, Y. (2025). Geographically informed graph neural networks. *Spatial Statistics*, 69, 100920. https://doi.org/10.1016/j.spasta.2025.100920
 - MacKinnon, J. G., Nielsen, M. Ø., & Webb, M. D. (2023). Cluster-robust inference: a guide to empirical practice. *Journal of Econometrics*, 232, 272–299.
 - Meyer, H., Reudenbach, C., Hengl, T., Katurji, M., & Nauss, T. (2018). Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation. *Environmental Modelling & Software*, 101, 1–9.
 - Meyer, H., & Pebesma, E. (2022). Machine learning-based global maps of ecological variables and the challenge of assessing them. *Nature Communications*, 13, 2208.
 - Milà, C., Mateu, J., Pebesma, E., & Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. *Methods in Ecology and Evolution*, 13, 1304–1316.
+- Mohseni, G., Nourinejad, M., & Park, P. Y. (2026). Bike-sharing ridership prediction for network expansion using graph neural networks. *Transportation Research Part A: Policy and Practice*, 203, 104701. https://doi.org/10.1016/j.tra.2025.104701
 - Ploton, P., et al. (2020). Spatial validation reveals poor predictive performance of large-scale ecological mapping models. *Nature Communications*, 11, 4540.
 - Reuter, M., Buchwitz, M., Schneising, O., Krautwurst, S., O'Dell, C. W., Richter, A., et al. (2019). Towards monitoring localized CO₂ emissions from space: co-located regional CO₂ and NO₂ enhancements observed by the OCO-2 and S5P satellites. *Atmospheric Chemistry and Physics*, 19, 9371–9383. https://doi.org/10.5194/acp-19-9371-2019
 - Rey-Pommier, A., Héraud, A., Chevallier, F., Ciais, P., Christoudias, T., Kushta, J., & Sciare, J. (2025). Global gridded NOx emissions using TROPOMI observations. *Earth System Science Data*, 17, 3329–3351. https://doi.org/10.5194/essd-17-3329-2025
 - Roberts, D. R., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40, 913–929.
+- Schmidinger, J., Barkov, V., Vogel, S., Atzmueller, M., & Heuvelink, G. B. M. (2026). Kriging prior regression: a case for kriging-based spatial features with TabPFN in soil mapping. *Computers and Electronics in Agriculture*, 243, 111352. https://doi.org/10.1016/j.compag.2025.111352
+- Schmidt, R., & Ong, L. L. S. (2026). From leaves to breezes: machine learning based prediction of nitrogen dioxide concentration from surrounding urban greenery and meteorological, spatial, and traffic characteristics in Berlin, Germany. *Ecological Informatics*, 93, 103568. https://doi.org/10.1016/j.ecoinf.2025.103568
 - Shao, W., Tu, Y., Yue, T., Zhao, N., Zhou, H., Zhang, L., et al. (2026). Mapping Chinese urban carbon emissions with a graph-based multi-branch deep learning framework. *GIScience & Remote Sensing*, 63, 2631837. https://doi.org/10.1080/15481603.2026.2631837
+- Teng, M., Liang, M., Wang, S., & Ding, Y. (2026). Seamless hourly PM2.5 mapping across China with a graph spatiotemporal deep neural network. *Environmental Modelling & Software*, 198, 106915. https://doi.org/10.1016/j.envsoft.2026.106915
 - Wadoux, A. M. J.-C., Heuvelink, G. B. M., de Bruin, S., & Brus, D. J. (2021). Spatial cross-validation is not the right way to evaluate map accuracy. *Ecological Modelling*, 457, 109692.
 - Wang, S., et al. (2020). PM2.5-GNN: a domain knowledge enhanced graph neural network for PM2.5 forecasting. *Proceedings of the 28th International Conference on Advances in Geographic Information Systems (SIGSPATIAL)*.
 - Wang, S., Zhang, Y., Lin, X., Piao, X., Hu, Y., & Yin, B. (2025). CMDNet: a cross-modality spatiotemporal graph network for enhanced air pollution prediction with high-resolution satellite data. *IEEE Transactions on Geoscience and Remote Sensing*, 63, 1–14. https://doi.org/10.1109/TGRS.2025.3569594
+- Xiao, S., Song, Y., & Wang, Z. (2023). Nonparametric spatial autoregressive model using deep neural networks. *Spatial Statistics*, 57, 100766. https://doi.org/10.1016/j.spasta.2023.100766
 - Yap, W., Wu, A. N., Miller, C., & Biljecki, F. (2025). Revealing building operating carbon dynamics for multiple cities. *Nature Sustainability*, 8, 1199–1210. https://doi.org/10.1038/s41893-025-01615-8
+- Yuan, D., Wang, Z., Huang, H., Fu, Z., Wu, Q., Jhang, S., & Pedrycz, W. (2026). Spatially directional dual-attention graph networks for fine-grained PM2.5 mapping. *Applied Soft Computing*, 203, 116231. https://doi.org/10.1016/j.asoc.2026.116231
 - Zeng, J., Liu, Y., Ding, J., Yuan, J., & Li, Y. (2024). Estimating on-road transportation carbon emissions from open data of road network and origin-destination flow data. *Proceedings of the AAAI Conference on Artificial Intelligence*, 38, 22493–22501. https://doi.org/10.1609/aaai.v38i20.30257
 - Zeng, J., Liu, Y., Zhang, G., Ding, J., Lin, Y., Yuan, J., & Li, Y. (2025). OpenCarbon: a contrastive learning-based cross-modality neural approach for high-resolution carbon emission prediction using open data. *Proceedings of IJCAI 2025*; arXiv:2506.03224.
 - Zhan, W., & Datta, A. (2024). Neural networks for geospatial data. *Journal of the American Statistical Association*, 120, 535–547. https://doi.org/10.1080/01621459.2024.2356293
+- Zhang, R., Bao, Z., Bai, S., Sumiya, E., Dalantai, S., & Bao, Y. (2026). Advances and challenges of machine learning in satellite-based atmospheric NO₂ monitoring. *Atmospheric Pollution Research*, 17, 103066. https://doi.org/10.1016/j.apr.2026.103066
 - Zhao, M., Šćepanović, S., Law, S., Obadić, I., Wu, C., & Quercia, D. (2026). UST-GNN: a unified spatial–topological graph neural network framework for urban analytics demonstrated through a case study on urban health prediction. *Computers, Environment and Urban Systems*, 129, 102466. https://doi.org/10.1016/j.compenvurbsys.2026.102466
 - Zhu, D., Liu, Y., Yao, X., & Fischer, M. M. (2021). Spatial regression graph convolutional neural networks: a deep learning paradigm for spatial multivariate distributions. *GeoInformatica*, 26, 645–676. https://doi.org/10.1007/s10707-021-00454-x
+- Zhu, D., Wang, S., & Luo, P. (2026). Uncovering spatial process heterogeneity from graph-based deep spatial regression. *ISPRS Journal of Photogrammetry and Remote Sensing*, 232, 509–523. https://doi.org/10.1016/j.isprsjprs.2025.12.008
 
 ---
 
