@@ -101,3 +101,15 @@ metrics are reported as descriptive results.
 5. **Block-level sign-flip test (secondary): cell-weighted mean.** Two edge blocks hold 3 and 5 cells, where per-block
    Spearman means nothing.
 6. **No second city** (decision of the author, 2026-11-08).
+
+## Deviations after finalisation
+
+7. **Stage B and the confirmatory test on 1405 were not carried out** (decision of the author, 2026-11-08: no new
+   training runs). This covers the `paper3_*` runs, the 50-trial search and T1 / T3 on 1405. Their configs and code stay
+   on the branch.
+   - The paper reports stage A, which includes the held-out-year design on 1404 registered for the thesis.
+   - It also reports one analysis-only command run on 2026-11-08: `python main.py paper reach` on the stage A runs
+     (`paper2_base_v1`, `paper2_slx_reach_v1`, `paper2_rq2_mlp_v1`, `paper2_rq2_sage_v1`). It trains nothing, and its
+     skill-against-reach curve is **exploratory**.
+   - No verdict of the paper is called confirmatory beyond what stage A and the thesis registrations support. The paper
+     states that the registered 1405 test and the hyper-parameter search were not run.

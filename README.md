@@ -163,7 +163,14 @@ python main.py paper evaluate --hypothesis PA_H1 PA_H1_drivers PA_H2 PA_H2_reach
 python main.py paper evaluate --hypothesis H1 H2 H2c H1c P2_reach P2c_reach   # همان آمار تازه روی اجراهای پایان‌نامه، برای مقایسه
 ```
 
-### مقالهٔ Q1، نسخهٔ ۲: مرحلهٔ ب (منحنی شعاع و تنظیم GNN)
+### پیش‌نویس مقاله
+
+- **متن:** `docs/paper/manuscript/manuscript_en.md` (انگلیسی).
+- **ایده:** با شعاع دید برابر، یک مدل SLX خطی هم‌پای GNN است. برتری GNN از شعاع دید می‌آید، نه از گراف.
+- **پایه:** نتایج مرحلهٔ الف و منحنی شعاع (`paper reach` روی همان اجراها).
+- **مراحل ب و ج اجرا نشدند** (تصمیم ۱۸ آبان؛ بخش Deviations پیش‌ثبت).
+
+### مقالهٔ Q1، نسخهٔ ۲: مرحلهٔ ب (منحنی شعاع و تنظیم GNN؛ اجرا نشد)
 
 - **پایه:** ارزیابی مرحلهٔ الف (`docs/paper/assessment_stageA_fa.md`) و پیش‌ثبت نهایی (`docs/paper/preregistration_paper_v2.md`، ۱۸ آبان).
 - **ورودی‌ها:** فقط محرک‌ها (ترافیک، انرژی، context).
