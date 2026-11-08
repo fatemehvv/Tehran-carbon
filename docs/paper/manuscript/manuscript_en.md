@@ -85,8 +85,13 @@ al., 2008; MacKinnon et al., 2023). The randomness of training also matters, bec
 (Bouthillier et al., 2021). Pre-processing that uses information from the test area can inflate skill (Kapoor &
 Narayanan, 2023).
 
-To our knowledge, no study of urban emission or pollution mapping has separated the reach of a graph neural network from
-its graph architecture. Here we do so for intra-urban combustion hotspots observed by TROPOMI in Tehran. Tehran is a
+The question has begun to surface in urban analytics. A recent GNN for neighbourhood health outcomes was compared with
+spatial-lag and geographically weighted regression baselines, and its authors noted that the effectiveness of
+spatially explicit GNNs depends as much on how spatial relationships are encoded as on the architecture (UST-GNN; [authors to be
+completed], 2026). To our knowledge, however, no study of urban emission or air-pollution mapping from satellite
+observations has compared a GNN with spatial-lag baselines of the *same* reach. None has, therefore, separated the
+reach of a GNN from its graph architecture. Here we do so for intra-urban combustion hotspots observed by TROPOMI in
+Tehran. Tehran is a
 megacity of about nine million people at the foot of the Alborz mountains, with the highest mean NO₂ column among large
 cities worldwide (Huber et al., 2026). Our contributions are:
 
@@ -493,6 +498,7 @@ against the full text, and completed where marked, before submission.
 - Reuter, M. et al. (2019). Towards monitoring localized CO₂ emissions from space: co-located regional CO₂ and NO₂ enhancements observed by the OCO-2 and S5P satellites. *Atmospheric Chemistry and Physics*, 19, 9371–9383.
 - Rey-Pommier, A. et al. (2025). Global gridded NOx emissions using TROPOMI observations. *Earth System Science Data*, 17, 3329–3351. †
 - Roberts, D. R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40, 913–929.
+- [Authors to be completed] (2026). UST-GNN: a unified spatial–topological graph neural network framework for urban analytics demonstrated through a case study on urban health prediction. *Computers, Environment and Urban Systems*, 129, 102466. †
 - Wadoux, A. M. J.-C., Heuvelink, G. B. M., de Bruin, S., & Brus, D. J. (2021). Spatial cross-validation is not the right way to evaluate map accuracy. *Ecological Modelling*, 457, 109692.
 - Wang, S. et al. (2020). PM2.5-GNN: a domain knowledge enhanced graph neural network for PM2.5 forecasting. *Proceedings of the 28th International Conference on Advances in Geographic Information Systems (SIGSPATIAL)*.
 - Yap, W., Wu, A. N., Miller, C., & Biljecki, F. (2025). [Title to be completed]. *Nature Sustainability*, 8, 1199–1210. †
