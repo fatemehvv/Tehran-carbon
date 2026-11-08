@@ -1,0 +1,10 @@
+{
+  "rows": {
+    "stations": 48,
+    "elevation": 72,
+    "daily": 24,
+    "neff": 2
+  },
+  "n_eff_1402": 4.9,
+  "n_eff_1403": 4.9
+}

@@ -1,0 +1,695 @@
+
+=== 1/21  paper2_rq1_ablation_v1 [modalities=traffic|fusion=early]
+[21:01:29] dataset 4e800dee03d6: from cache
+[21:01:29] paper2_rq1_ablation_v1 [modalities=traffic|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:01:39]   1402 fold 00: train 2428 cells, test 3
+[21:01:48]   1402 fold 01: train 2185 cells, test 178
+[21:01:57]   1402 fold 02: train 2011 cells, test 332
+[21:02:06]   1402 fold 03: train 2201 cells, test 189
+[21:02:15]   1402 fold 04: train 2430 cells, test 5
+[21:02:24]   1402 fold 05: train 2094 cells, test 243
+[21:02:32]   1402 fold 06: train 1671 cells, test 595
+[21:02:40]   1402 fold 07: train 2246 cells, test 140
+[21:02:48]   1402 fold 08: train 2374 cells, test 52
+[21:02:57]   1402 fold 09: train 2076 cells, test 319
+[21:03:05]   1402 fold 10: train 1996 cells, test 343
+[21:03:14]   1402 fold 11: train 2368 cells, test 37
+[21:03:14]   1402 CV: pr_auc=0.719, roc_auc=0.959, f1_top=0.647, spearman=0.891, r2=0.761, mae=0.364, rmse=0.487
+[21:03:23]   1403 fold 00: train 2428 cells, test 3
+[21:03:32]   1403 fold 01: train 2185 cells, test 178
+[21:03:41]   1403 fold 02: train 2011 cells, test 332
+[21:03:50]   1403 fold 03: train 2201 cells, test 189
+[21:03:59]   1403 fold 04: train 2430 cells, test 5
+[21:04:08]   1403 fold 05: train 2094 cells, test 243
+[21:04:14]   1403 fold 06: train 1671 cells, test 595
+[21:04:23]   1403 fold 07: train 2246 cells, test 140
+[21:04:32]   1403 fold 08: train 2374 cells, test 52
+[21:04:40]   1403 fold 09: train 2076 cells, test 319
+[21:04:49]   1403 fold 10: train 1996 cells, test 343
+[21:04:58]   1403 fold 11: train 2368 cells, test 37
+[21:04:58]   1403 CV: pr_auc=0.707, roc_auc=0.961, f1_top=0.675, spearman=0.893, r2=0.759, mae=0.359, rmse=0.488
+[21:05:07]   transfer 1402->1403: pr_auc=0.845, roc_auc=0.977, f1_top=0.753, spearman=0.959, r2=0.909, mae=0.218, rmse=0.297
+[21:05:16]   transfer 1403->1402: pr_auc=0.824, roc_auc=0.976, f1_top=0.721, spearman=0.955, r2=0.906, mae=0.223, rmse=0.301
+[21:05:34]   final model saved: models/final.pt
+
+=== 2/21  paper2_rq1_ablation_v1 [modalities=traffic|fusion=late]
+[21:05:34] dataset 4e800dee03d6: from cache
+[21:05:34] paper2_rq1_ablation_v1 [modalities=traffic|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:05:42]   1402 fold 00: train 2428 cells, test 3
+[21:05:51]   1402 fold 01: train 2185 cells, test 178
+[21:06:00]   1402 fold 02: train 2011 cells, test 332
+[21:06:10]   1402 fold 03: train 2201 cells, test 189
+[21:06:19]   1402 fold 04: train 2430 cells, test 5
+[21:06:28]   1402 fold 05: train 2094 cells, test 243
+[21:06:37]   1402 fold 06: train 1671 cells, test 595
+[21:06:47]   1402 fold 07: train 2246 cells, test 140
+[21:06:56]   1402 fold 08: train 2374 cells, test 52
+[21:07:05]   1402 fold 09: train 2076 cells, test 319
+[21:07:12]   1402 fold 10: train 1996 cells, test 343
+[21:07:22]   1402 fold 11: train 2368 cells, test 37
+[21:07:22]   1402 CV: pr_auc=0.656, roc_auc=0.954, f1_top=0.619, spearman=0.911, r2=0.807, mae=0.332, rmse=0.438
+[21:07:31]   1403 fold 00: train 2428 cells, test 3
+[21:07:40]   1403 fold 01: train 2185 cells, test 178
+[21:07:49]   1403 fold 02: train 2011 cells, test 332
+[21:07:59]   1403 fold 03: train 2201 cells, test 189
+[21:08:08]   1403 fold 04: train 2430 cells, test 5
+[21:08:18]   1403 fold 05: train 2094 cells, test 243
+[21:08:27]   1403 fold 06: train 1671 cells, test 595
+[21:08:36]   1403 fold 07: train 2246 cells, test 140
+[21:08:44]   1403 fold 08: train 2374 cells, test 52
+[21:08:53]   1403 fold 09: train 2076 cells, test 319
+[21:09:03]   1403 fold 10: train 1996 cells, test 343
+[21:09:13]   1403 fold 11: train 2368 cells, test 37
+[21:09:13]   1403 CV: pr_auc=0.620, roc_auc=0.953, f1_top=0.605, spearman=0.910, r2=0.803, mae=0.329, rmse=0.441
+[21:09:22]   transfer 1402->1403: pr_auc=0.823, roc_auc=0.976, f1_top=0.739, spearman=0.955, r2=0.903, mae=0.225, rmse=0.307
+[21:09:32]   transfer 1403->1402: pr_auc=0.806, roc_auc=0.973, f1_top=0.712, spearman=0.952, r2=0.897, mae=0.231, rmse=0.313
+[21:09:50]   final model saved: models/final.pt
+
+=== 3/21  paper2_rq1_ablation_v1 [modalities=traffic|fusion=gated]
+[21:09:50] dataset 4e800dee03d6: from cache
+[21:09:50] paper2_rq1_ablation_v1 [modalities=traffic|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:10:00]   1402 fold 00: train 2428 cells, test 3
+[21:10:09]   1402 fold 01: train 2185 cells, test 178
+[21:10:17]   1402 fold 02: train 2011 cells, test 332
+[21:10:26]   1402 fold 03: train 2201 cells, test 189
+[21:10:35]   1402 fold 04: train 2430 cells, test 5
+[21:10:45]   1402 fold 05: train 2094 cells, test 243
+[21:10:54]   1402 fold 06: train 1671 cells, test 595
+[21:11:03]   1402 fold 07: train 2246 cells, test 140
+[21:11:13]   1402 fold 08: train 2374 cells, test 52
+[21:11:22]   1402 fold 09: train 2076 cells, test 319
+[21:11:31]   1402 fold 10: train 1996 cells, test 343
+[21:11:41]   1402 fold 11: train 2368 cells, test 37
+[21:11:41]   1402 CV: pr_auc=0.683, roc_auc=0.955, f1_top=0.644, spearman=0.893, r2=0.769, mae=0.354, rmse=0.479
+[21:11:48]   1403 fold 00: train 2428 cells, test 3
+[21:11:58]   1403 fold 01: train 2185 cells, test 178
+[21:12:07]   1403 fold 02: train 2011 cells, test 332
+[21:12:17]   1403 fold 03: train 2201 cells, test 189
+[21:12:26]   1403 fold 04: train 2430 cells, test 5
+[21:12:35]   1403 fold 05: train 2094 cells, test 243
+[21:12:45]   1403 fold 06: train 1671 cells, test 595
+[21:12:54]   1403 fold 07: train 2246 cells, test 140
+[21:13:03]   1403 fold 08: train 2374 cells, test 52
+[21:13:13]   1403 fold 09: train 2076 cells, test 319
+[21:13:20]   1403 fold 10: train 1996 cells, test 343
+[21:13:29]   1403 fold 11: train 2368 cells, test 37
+[21:13:29]   1403 CV: pr_auc=0.585, roc_auc=0.946, f1_top=0.574, spearman=0.886, r2=0.750, mae=0.362, rmse=0.496
+[21:13:40]   transfer 1402->1403: pr_auc=0.833, roc_auc=0.976, f1_top=0.740, spearman=0.955, r2=0.901, mae=0.227, rmse=0.310
+[21:13:50]   transfer 1403->1402: pr_auc=0.783, roc_auc=0.968, f1_top=0.691, spearman=0.942, r2=0.872, mae=0.257, rmse=0.342
+[21:14:09]   final model saved: models/final.pt
+
+=== 4/21  paper2_rq1_ablation_v1 [modalities=energy|fusion=early]
+[21:14:10] dataset 4e800dee03d6: from cache
+[21:14:10] paper2_rq1_ablation_v1 [modalities=energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:14:19]   1402 fold 00: train 2428 cells, test 3
+[21:14:28]   1402 fold 01: train 2185 cells, test 178
+[21:14:37]   1402 fold 02: train 2011 cells, test 332
+[21:14:46]   1402 fold 03: train 2201 cells, test 189
+[21:14:48]   1402 fold 04: train 2430 cells, test 5
+[21:14:49]   1402 fold 05: train 2094 cells, test 243
+[21:14:51]   1402 fold 06: train 1671 cells, test 595
+[21:14:52]   1402 fold 07: train 2246 cells, test 140
+[21:14:54]   1402 fold 08: train 2374 cells, test 52
+[21:14:56]   1402 fold 09: train 2076 cells, test 319
+[21:14:58]   1402 fold 10: train 1996 cells, test 343
+[21:15:00]   1402 fold 11: train 2368 cells, test 37
+[21:15:00]   1402 CV: pr_auc=0.621, roc_auc=0.957, f1_top=0.638, spearman=0.923, r2=0.820, mae=0.320, rmse=0.423
+[21:15:02]   1403 fold 00: train 2428 cells, test 3
+[21:15:04]   1403 fold 01: train 2185 cells, test 178
+[21:15:06]   1403 fold 02: train 2011 cells, test 332
+[21:15:08]   1403 fold 03: train 2201 cells, test 189
+[21:15:10]   1403 fold 04: train 2430 cells, test 5
+[21:15:12]   1403 fold 05: train 2094 cells, test 243
+[21:15:14]   1403 fold 06: train 1671 cells, test 595
+[21:15:17]   1403 fold 07: train 2246 cells, test 140
+[21:15:19]   1403 fold 08: train 2374 cells, test 52
+[21:15:21]   1403 fold 09: train 2076 cells, test 319
+[21:15:23]   1403 fold 10: train 1996 cells, test 343
+[21:15:25]   1403 fold 11: train 2368 cells, test 37
+[21:15:25]   1403 CV: pr_auc=0.676, roc_auc=0.962, f1_top=0.670, spearman=0.928, r2=0.831, mae=0.309, rmse=0.410
+[21:15:27]   transfer 1402->1403: pr_auc=0.821, roc_auc=0.974, f1_top=0.733, spearman=0.954, r2=0.900, mae=0.232, rmse=0.312
+[21:15:30]   transfer 1403->1402: pr_auc=0.806, roc_auc=0.972, f1_top=0.723, spearman=0.951, r2=0.895, mae=0.236, rmse=0.319
+[21:15:34]   final model saved: models/final.pt
+
+=== 5/21  paper2_rq1_ablation_v1 [modalities=energy|fusion=late]
+[21:15:34] dataset 4e800dee03d6: from cache
+[21:15:34] paper2_rq1_ablation_v1 [modalities=energy|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:15:37]   1402 fold 00: train 2428 cells, test 3
+[21:15:40]   1402 fold 01: train 2185 cells, test 178
+[21:15:42]   1402 fold 02: train 2011 cells, test 332
+[21:15:45]   1402 fold 03: train 2201 cells, test 189
+[21:15:48]   1402 fold 04: train 2430 cells, test 5
+[21:15:50]   1402 fold 05: train 2094 cells, test 243
+[21:15:53]   1402 fold 06: train 1671 cells, test 595
+[21:15:55]   1402 fold 07: train 2246 cells, test 140
+[21:15:58]   1402 fold 08: train 2374 cells, test 52
+[21:16:01]   1402 fold 09: train 2076 cells, test 319
+[21:16:03]   1402 fold 10: train 1996 cells, test 343
+[21:16:04]   1402 fold 11: train 2368 cells, test 37
+[21:16:04]   1402 CV: pr_auc=0.582, roc_auc=0.949, f1_top=0.565, spearman=0.918, r2=0.814, mae=0.327, rmse=0.430
+[21:16:06]   1403 fold 00: train 2428 cells, test 3
+[21:16:07]   1403 fold 01: train 2185 cells, test 178
+[21:16:08]   1403 fold 02: train 2011 cells, test 332
+[21:16:09]   1403 fold 03: train 2201 cells, test 189
+[21:16:11]   1403 fold 04: train 2430 cells, test 5
+[21:16:12]   1403 fold 05: train 2094 cells, test 243
+[21:16:13]   1403 fold 06: train 1671 cells, test 595
+[21:16:15]   1403 fold 07: train 2246 cells, test 140
+[21:16:16]   1403 fold 08: train 2374 cells, test 52
+[21:16:17]   1403 fold 09: train 2076 cells, test 319
+[21:16:19]   1403 fold 10: train 1996 cells, test 343
+[21:16:20]   1403 fold 11: train 2368 cells, test 37
+[21:16:20]   1403 CV: pr_auc=0.677, roc_auc=0.960, f1_top=0.636, spearman=0.926, r2=0.832, mae=0.310, rmse=0.408
+[21:16:21]   transfer 1402->1403: pr_auc=0.813, roc_auc=0.974, f1_top=0.733, spearman=0.954, r2=0.900, mae=0.230, rmse=0.312
+[21:16:23]   transfer 1403->1402: pr_auc=0.795, roc_auc=0.970, f1_top=0.711, spearman=0.949, r2=0.887, mae=0.243, rmse=0.328
+[21:16:25]   final model saved: models/final.pt
+
+=== 6/21  paper2_rq1_ablation_v1 [modalities=energy|fusion=gated]
+[21:16:26] dataset 4e800dee03d6: from cache
+[21:16:26] paper2_rq1_ablation_v1 [modalities=energy|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:16:27]   1402 fold 00: train 2428 cells, test 3
+[21:16:28]   1402 fold 01: train 2185 cells, test 178
+[21:16:30]   1402 fold 02: train 2011 cells, test 332
+[21:16:31]   1402 fold 03: train 2201 cells, test 189
+[21:16:32]   1402 fold 04: train 2430 cells, test 5
+[21:16:34]   1402 fold 05: train 2094 cells, test 243
+[21:16:35]   1402 fold 06: train 1671 cells, test 595
+[21:16:36]   1402 fold 07: train 2246 cells, test 140
+[21:16:37]   1402 fold 08: train 2374 cells, test 52
+[21:16:39]   1402 fold 09: train 2076 cells, test 319
+[21:16:40]   1402 fold 10: train 1996 cells, test 343
+[21:16:41]   1402 fold 11: train 2368 cells, test 37
+[21:16:41]   1402 CV: pr_auc=0.770, roc_auc=0.968, f1_top=0.699, spearman=0.918, r2=0.813, mae=0.326, rmse=0.431
+[21:16:43]   1403 fold 00: train 2428 cells, test 3
+[21:16:44]   1403 fold 01: train 2185 cells, test 178
+[21:16:45]   1403 fold 02: train 2011 cells, test 332
+[21:16:47]   1403 fold 03: train 2201 cells, test 189
+[21:16:48]   1403 fold 04: train 2430 cells, test 5
+[21:16:49]   1403 fold 05: train 2094 cells, test 243
+[21:16:51]   1403 fold 06: train 1671 cells, test 595
+[21:16:52]   1403 fold 07: train 2246 cells, test 140
+[21:16:53]   1403 fold 08: train 2374 cells, test 52
+[21:16:55]   1403 fold 09: train 2076 cells, test 319
+[21:16:56]   1403 fold 10: train 1996 cells, test 343
+[21:16:58]   1403 fold 11: train 2368 cells, test 37
+[21:16:58]   1403 CV: pr_auc=0.757, roc_auc=0.967, f1_top=0.712, spearman=0.927, r2=0.838, mae=0.301, rmse=0.401
+[21:16:59]   transfer 1402->1403: pr_auc=0.839, roc_auc=0.977, f1_top=0.744, spearman=0.958, r2=0.910, mae=0.220, rmse=0.295
+[21:17:01]   transfer 1403->1402: pr_auc=0.794, roc_auc=0.970, f1_top=0.712, spearman=0.950, r2=0.899, mae=0.235, rmse=0.311
+[21:17:03]   final model saved: models/final.pt
+
+=== 7/21  paper2_rq1_ablation_v1 [modalities=pollution|fusion=early]
+[21:17:04] dataset 4e800dee03d6: from cache
+[21:17:04] paper2_rq1_ablation_v1 [modalities=pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:17:05]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:17:06]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:17:06]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:17:07]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:17:08]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:17:09]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:17:10]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:17:11]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:17:12]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:17:13]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:17:14]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:17:15]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:17:15]   1402 CV: pr_auc=0.582, roc_auc=0.946, f1_top=0.574, spearman=0.914, r2=0.805, mae=0.336, rmse=0.440
+[21:17:15]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:17:16]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:17:17]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:17:18]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:17:19]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:17:20]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:17:21]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:17:22]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:17:23]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:17:24]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:17:25]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:17:25]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:17:25]   1403 CV: pr_auc=0.647, roc_auc=0.958, f1_top=0.669, spearman=0.920, r2=0.819, mae=0.319, rmse=0.423
+[21:17:26]   transfer 1402->1403: pr_auc=0.779, roc_auc=0.969, f1_top=0.691, spearman=0.952, r2=0.894, mae=0.240, rmse=0.322
+[21:17:27]   transfer 1403->1402: pr_auc=0.722, roc_auc=0.963, f1_top=0.668, spearman=0.949, r2=0.892, mae=0.245, rmse=0.325
+[21:17:29]   final model saved: models/final.pt
+
+=== 8/21  paper2_rq1_ablation_v1 [modalities=pollution|fusion=late]
+[21:17:29] dataset 4e800dee03d6: from cache
+[21:17:29] paper2_rq1_ablation_v1 [modalities=pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:17:31]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:17:32]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:17:34]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:17:35]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:17:37]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:17:38]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:17:40]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:17:41]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:17:43]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:17:45]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:17:46]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:17:47]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:17:47]   1402 CV: pr_auc=0.562, roc_auc=0.946, f1_top=0.579, spearman=0.913, r2=0.805, mae=0.336, rmse=0.440
+[21:17:49]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:17:50]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:17:51]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:17:53]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:17:54]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:17:55]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:17:57]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:17:58]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:17:59]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:18:01]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:18:02]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:18:03]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:18:03]   1403 CV: pr_auc=0.600, roc_auc=0.955, f1_top=0.641, spearman=0.918, r2=0.819, mae=0.322, rmse=0.423
+[21:18:05]   transfer 1402->1403: pr_auc=0.766, roc_auc=0.970, f1_top=0.702, spearman=0.950, r2=0.892, mae=0.243, rmse=0.326
+[21:18:06]   transfer 1403->1402: pr_auc=0.761, roc_auc=0.965, f1_top=0.682, spearman=0.945, r2=0.881, mae=0.252, rmse=0.338
+[21:18:08]   final model saved: models/final.pt
+
+=== 9/21  paper2_rq1_ablation_v1 [modalities=pollution|fusion=gated]
+[21:18:09] dataset 4e800dee03d6: from cache
+[21:18:09] paper2_rq1_ablation_v1 [modalities=pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:18:10]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:18:12]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:18:13]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:18:14]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:18:16]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:18:17]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:18:18]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:18:20]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:18:21]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:18:22]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:18:24]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:18:25]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:18:25]   1402 CV: pr_auc=0.715, roc_auc=0.957, f1_top=0.644, spearman=0.914, r2=0.811, mae=0.332, rmse=0.433
+[21:18:26]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:18:28]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:18:29]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:18:31]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:18:32]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:18:33]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:18:35]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:18:36]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:18:38]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:18:39]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:18:40]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:18:42]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:18:42]   1403 CV: pr_auc=0.726, roc_auc=0.964, f1_top=0.684, spearman=0.921, r2=0.825, mae=0.315, rmse=0.416
+[21:18:43]   transfer 1402->1403: pr_auc=0.806, roc_auc=0.974, f1_top=0.723, spearman=0.952, r2=0.896, mae=0.236, rmse=0.319
+[21:18:44]   transfer 1403->1402: pr_auc=0.785, roc_auc=0.969, f1_top=0.708, spearman=0.947, r2=0.888, mae=0.246, rmse=0.330
+[21:18:47]   final model saved: models/final.pt
+
+=== 10/21  paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=early]
+[21:18:47] dataset 4e800dee03d6: from cache
+[21:18:47] paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:18:48]   1402 fold 00: train 2428 cells, test 3
+[21:18:49]   1402 fold 01: train 2185 cells, test 178
+[21:18:50]   1402 fold 02: train 2011 cells, test 332
+[21:18:51]   1402 fold 03: train 2201 cells, test 189
+[21:18:51]   1402 fold 04: train 2430 cells, test 5
+[21:18:52]   1402 fold 05: train 2094 cells, test 243
+[21:18:53]   1402 fold 06: train 1671 cells, test 595
+[21:18:54]   1402 fold 07: train 2246 cells, test 140
+[21:18:55]   1402 fold 08: train 2374 cells, test 52
+[21:18:55]   1402 fold 09: train 2076 cells, test 319
+[21:18:56]   1402 fold 10: train 1996 cells, test 343
+[21:18:58]   1402 fold 11: train 2368 cells, test 37
+[21:18:58]   1402 CV: pr_auc=0.698, roc_auc=0.962, f1_top=0.675, spearman=0.902, r2=0.784, mae=0.346, rmse=0.463
+[21:18:59]   1403 fold 00: train 2428 cells, test 3
+[21:18:59]   1403 fold 01: train 2185 cells, test 178
+[21:19:00]   1403 fold 02: train 2011 cells, test 332
+[21:19:01]   1403 fold 03: train 2201 cells, test 189
+[21:19:02]   1403 fold 04: train 2430 cells, test 5
+[21:19:03]   1403 fold 05: train 2094 cells, test 243
+[21:19:04]   1403 fold 06: train 1671 cells, test 595
+[21:19:04]   1403 fold 07: train 2246 cells, test 140
+[21:19:05]   1403 fold 08: train 2374 cells, test 52
+[21:19:06]   1403 fold 09: train 2076 cells, test 319
+[21:19:07]   1403 fold 10: train 1996 cells, test 343
+[21:19:08]   1403 fold 11: train 2368 cells, test 37
+[21:19:08]   1403 CV: pr_auc=0.740, roc_auc=0.966, f1_top=0.686, spearman=0.910, r2=0.791, mae=0.341, rmse=0.456
+[21:19:09]   transfer 1402->1403: pr_auc=0.841, roc_auc=0.977, f1_top=0.750, spearman=0.957, r2=0.907, mae=0.222, rmse=0.298
+[21:19:10]   transfer 1403->1402: pr_auc=0.830, roc_auc=0.976, f1_top=0.724, spearman=0.954, r2=0.905, mae=0.225, rmse=0.301
+[21:19:11]   final model saved: models/final.pt
+
+=== 11/21  paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=late]
+[21:19:11] dataset 4e800dee03d6: from cache
+[21:19:11] paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:19:13]   1402 fold 00: train 2428 cells, test 3
+[21:19:15]   1402 fold 01: train 2185 cells, test 178
+[21:19:16]   1402 fold 02: train 2011 cells, test 332
+[21:19:18]   1402 fold 03: train 2201 cells, test 189
+[21:19:20]   1402 fold 04: train 2430 cells, test 5
+[21:19:21]   1402 fold 05: train 2094 cells, test 243
+[21:19:23]   1402 fold 06: train 1671 cells, test 595
+[21:19:25]   1402 fold 07: train 2246 cells, test 140
+[21:19:26]   1402 fold 08: train 2374 cells, test 52
+[21:19:28]   1402 fold 09: train 2076 cells, test 319
+[21:19:29]   1402 fold 10: train 1996 cells, test 343
+[21:19:31]   1402 fold 11: train 2368 cells, test 37
+[21:19:31]   1402 CV: pr_auc=0.682, roc_auc=0.959, f1_top=0.645, spearman=0.910, r2=0.799, mae=0.340, rmse=0.447
+[21:19:33]   1403 fold 00: train 2428 cells, test 3
+[21:19:34]   1403 fold 01: train 2185 cells, test 178
+[21:19:36]   1403 fold 02: train 2011 cells, test 332
+[21:19:38]   1403 fold 03: train 2201 cells, test 189
+[21:19:39]   1403 fold 04: train 2430 cells, test 5
+[21:19:41]   1403 fold 05: train 2094 cells, test 243
+[21:19:42]   1403 fold 06: train 1671 cells, test 595
+[21:19:44]   1403 fold 07: train 2246 cells, test 140
+[21:19:46]   1403 fold 08: train 2374 cells, test 52
+[21:19:48]   1403 fold 09: train 2076 cells, test 319
+[21:19:50]   1403 fold 10: train 1996 cells, test 343
+[21:19:52]   1403 fold 11: train 2368 cells, test 37
+[21:19:52]   1403 CV: pr_auc=0.702, roc_auc=0.960, f1_top=0.638, spearman=0.911, r2=0.803, mae=0.334, rmse=0.441
+[21:19:54]   transfer 1402->1403: pr_auc=0.830, roc_auc=0.975, f1_top=0.734, spearman=0.956, r2=0.906, mae=0.224, rmse=0.302
+[21:19:55]   transfer 1403->1402: pr_auc=0.818, roc_auc=0.974, f1_top=0.722, spearman=0.952, r2=0.893, mae=0.236, rmse=0.318
+[21:19:59]   final model saved: models/final.pt
+
+=== 12/21  paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=gated]
+[21:19:59] dataset 4e800dee03d6: from cache
+[21:19:59] paper2_rq1_ablation_v1 [modalities=traffic+energy|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:20:01]   1402 fold 00: train 2428 cells, test 3
+[21:20:02]   1402 fold 01: train 2185 cells, test 178
+[21:20:04]   1402 fold 02: train 2011 cells, test 332
+[21:20:05]   1402 fold 03: train 2201 cells, test 189
+[21:20:07]   1402 fold 04: train 2430 cells, test 5
+[21:20:08]   1402 fold 05: train 2094 cells, test 243
+[21:20:10]   1402 fold 06: train 1671 cells, test 595
+[21:20:11]   1402 fold 07: train 2246 cells, test 140
+[21:20:13]   1402 fold 08: train 2374 cells, test 52
+[21:20:15]   1402 fold 09: train 2076 cells, test 319
+[21:20:16]   1402 fold 10: train 1996 cells, test 343
+[21:20:18]   1402 fold 11: train 2368 cells, test 37
+[21:20:18]   1402 CV: pr_auc=0.749, roc_auc=0.968, f1_top=0.706, spearman=0.890, r2=0.756, mae=0.364, rmse=0.492
+[21:20:19]   1403 fold 00: train 2428 cells, test 3
+[21:20:21]   1403 fold 01: train 2185 cells, test 178
+[21:20:22]   1403 fold 02: train 2011 cells, test 332
+[21:20:24]   1403 fold 03: train 2201 cells, test 189
+[21:20:26]   1403 fold 04: train 2430 cells, test 5
+[21:20:27]   1403 fold 05: train 2094 cells, test 243
+[21:20:29]   1403 fold 06: train 1671 cells, test 595
+[21:20:31]   1403 fold 07: train 2246 cells, test 140
+[21:20:33]   1403 fold 08: train 2374 cells, test 52
+[21:20:34]   1403 fold 09: train 2076 cells, test 319
+[21:20:36]   1403 fold 10: train 1996 cells, test 343
+[21:20:37]   1403 fold 11: train 2368 cells, test 37
+[21:20:37]   1403 CV: pr_auc=0.749, roc_auc=0.969, f1_top=0.730, spearman=0.901, r2=0.773, mae=0.344, rmse=0.474
+[21:20:39]   transfer 1402->1403: pr_auc=0.847, roc_auc=0.978, f1_top=0.756, spearman=0.959, r2=0.912, mae=0.216, rmse=0.289
+[21:20:41]   transfer 1403->1402: pr_auc=0.804, roc_auc=0.972, f1_top=0.711, spearman=0.949, r2=0.894, mae=0.238, rmse=0.314
+[21:20:44]   final model saved: models/final.pt
+
+=== 13/21  paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=early]
+[21:20:44] dataset 4e800dee03d6: from cache
+[21:20:44] paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:20:46]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:20:47]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:20:48]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:20:49]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:20:50]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:20:52]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:20:53]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:20:54]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:20:55]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:20:56]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:20:58]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:20:59]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:20:59]   1402 CV: pr_auc=0.701, roc_auc=0.962, f1_top=0.659, spearman=0.897, r2=0.769, mae=0.358, rmse=0.479
+[21:21:00]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:21:01]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:21:02]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:21:03]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:21:04]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:21:05]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:21:06]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:21:07]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:21:08]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:21:09]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:21:10]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:21:10]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:21:11]   1403 CV: pr_auc=0.717, roc_auc=0.964, f1_top=0.676, spearman=0.899, r2=0.772, mae=0.353, rmse=0.475
+[21:21:11]   transfer 1402->1403: pr_auc=0.805, roc_auc=0.972, f1_top=0.714, spearman=0.958, r2=0.908, mae=0.220, rmse=0.300
+[21:21:12]   transfer 1403->1402: pr_auc=0.799, roc_auc=0.975, f1_top=0.716, spearman=0.957, r2=0.908, mae=0.222, rmse=0.300
+[21:21:14]   final model saved: models/final.pt
+
+=== 14/21  paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=late]
+[21:21:14] dataset 4e800dee03d6: from cache
+[21:21:14] paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:21:16]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:21:18]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:21:20]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:21:22]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:21:23]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:21:25]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:21:27]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:21:29]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:21:30]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:21:32]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:21:33]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:21:35]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:21:35]   1402 CV: pr_auc=0.647, roc_auc=0.954, f1_top=0.611, spearman=0.910, r2=0.804, mae=0.333, rmse=0.441
+[21:21:37]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:21:38]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:21:40]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:21:42]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:21:43]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:21:45]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:21:47]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:21:48]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:21:50]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:21:51]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:21:53]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:21:55]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:21:55]   1403 CV: pr_auc=0.653, roc_auc=0.959, f1_top=0.645, spearman=0.910, r2=0.803, mae=0.327, rmse=0.442
+[21:21:56]   transfer 1402->1403: pr_auc=0.824, roc_auc=0.975, f1_top=0.737, spearman=0.955, r2=0.902, mae=0.226, rmse=0.308
+[21:21:58]   transfer 1403->1402: pr_auc=0.807, roc_auc=0.973, f1_top=0.714, spearman=0.951, r2=0.894, mae=0.234, rmse=0.318
+[21:22:01]   final model saved: models/final.pt
+
+=== 15/21  paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=gated]
+[21:22:02] dataset 4e800dee03d6: from cache
+[21:22:02] paper2_rq1_ablation_v1 [modalities=traffic+pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:22:03]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:22:05]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:22:07]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:22:09]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:22:11]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:22:12]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:22:14]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:22:16]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:22:17]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:22:19]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:22:20]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:22:22]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:22:22]   1402 CV: pr_auc=0.740, roc_auc=0.963, f1_top=0.684, spearman=0.900, r2=0.780, mae=0.350, rmse=0.468
+[21:22:24]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:22:26]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:22:28]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:22:29]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:22:31]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:22:33]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:22:35]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:22:37]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:22:38]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:22:40]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:22:42]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:22:43]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:22:43]   1403 CV: pr_auc=0.686, roc_auc=0.960, f1_top=0.669, spearman=0.892, r2=0.756, mae=0.359, rmse=0.491
+[21:22:45]   transfer 1402->1403: pr_auc=0.836, roc_auc=0.976, f1_top=0.741, spearman=0.959, r2=0.907, mae=0.220, rmse=0.301
+[21:22:47]   transfer 1403->1402: pr_auc=0.786, roc_auc=0.971, f1_top=0.701, spearman=0.948, r2=0.890, mae=0.238, rmse=0.321
+[21:22:50]   final model saved: models/final.pt
+
+=== 16/21  paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=early]
+[21:22:50] dataset 4e800dee03d6: from cache
+[21:22:50] paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:22:51]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:22:52]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:22:53]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:22:54]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:22:55]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:22:56]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:22:57]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:22:58]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:22:59]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:23:00]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:23:00]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:23:01]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:23:01]   1402 CV: pr_auc=0.601, roc_auc=0.952, f1_top=0.612, spearman=0.921, r2=0.814, mae=0.326, rmse=0.430
+[21:23:02]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:23:03]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:23:04]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:23:05]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:23:06]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:23:07]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:23:08]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:23:09]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:23:09]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:23:10]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:23:11]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:23:12]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:23:12]   1403 CV: pr_auc=0.694, roc_auc=0.964, f1_top=0.692, spearman=0.930, r2=0.832, mae=0.307, rmse=0.408
+[21:23:13]   transfer 1402->1403: pr_auc=0.833, roc_auc=0.976, f1_top=0.736, spearman=0.957, r2=0.902, mae=0.233, rmse=0.309
+[21:23:14]   transfer 1403->1402: pr_auc=0.775, roc_auc=0.970, f1_top=0.714, spearman=0.953, r2=0.899, mae=0.232, rmse=0.313
+[21:23:15]   final model saved: models/final.pt
+
+=== 17/21  paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=late]
+[21:23:16] dataset 4e800dee03d6: from cache
+[21:23:16] paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:23:17]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:23:19]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:23:21]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:23:22]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:23:24]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:23:25]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:23:27]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:23:29]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:23:31]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:23:33]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:23:35]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:23:36]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:23:36]   1402 CV: pr_auc=0.625, roc_auc=0.954, f1_top=0.609, spearman=0.918, r2=0.814, mae=0.327, rmse=0.430
+[21:23:38]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:23:40]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:23:41]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:23:43]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:23:45]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:23:47]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:23:49]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:23:51]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:23:53]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:23:54]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:23:56]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:23:58]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:23:58]   1403 CV: pr_auc=0.698, roc_auc=0.963, f1_top=0.667, spearman=0.927, r2=0.833, mae=0.308, rmse=0.406
+[21:24:00]   transfer 1402->1403: pr_auc=0.819, roc_auc=0.974, f1_top=0.732, spearman=0.955, r2=0.901, mae=0.229, rmse=0.310
+[21:24:01]   transfer 1403->1402: pr_auc=0.800, roc_auc=0.971, f1_top=0.718, spearman=0.950, r2=0.890, mae=0.239, rmse=0.324
+[21:24:05]   final model saved: models/final.pt
+
+=== 18/21  paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=gated]
+[21:24:05] dataset 4e800dee03d6: from cache
+[21:24:05] paper2_rq1_ablation_v1 [modalities=energy+pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:24:07]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:24:09]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:24:11]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:24:13]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:24:14]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:24:16]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:24:18]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:24:20]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:24:21]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:24:23]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:24:25]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:24:26]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:24:26]   1402 CV: pr_auc=0.793, roc_auc=0.970, f1_top=0.718, spearman=0.922, r2=0.825, mae=0.315, rmse=0.417
+[21:24:28]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:24:29]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:24:31]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:24:33]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:24:34]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:24:36]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:24:38]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:24:39]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:24:41]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:24:43]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:24:44]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:24:46]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:24:46]   1403 CV: pr_auc=0.824, roc_auc=0.971, f1_top=0.717, spearman=0.930, r2=0.843, mae=0.297, rmse=0.395
+[21:24:47]   transfer 1402->1403: pr_auc=0.836, roc_auc=0.977, f1_top=0.745, spearman=0.961, r2=0.914, mae=0.215, rmse=0.288
+[21:24:49]   transfer 1403->1402: pr_auc=0.794, roc_auc=0.972, f1_top=0.712, spearman=0.955, r2=0.906, mae=0.227, rmse=0.301
+[21:24:52]   final model saved: models/final.pt
+
+=== 19/21  paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=early]
+[21:24:53] dataset 4e800dee03d6: from cache
+[21:24:53] paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:24:54]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:24:55]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:24:56]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:24:57]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:24:58]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:24:58]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:24:59]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:25:00]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:25:01]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:25:03]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:25:04]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:25:05]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:25:05]   1402 CV: pr_auc=0.713, roc_auc=0.964, f1_top=0.687, spearman=0.907, r2=0.791, mae=0.335, rmse=0.455
+[21:25:06]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:25:07]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:25:08]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:25:09]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:25:10]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:25:11]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:25:12]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:25:13]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:25:14]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:25:14]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:25:15]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:25:16]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:25:16]   1403 CV: pr_auc=0.773, roc_auc=0.967, f1_top=0.690, spearman=0.910, r2=0.792, mae=0.337, rmse=0.454
+[21:25:17]   transfer 1402->1403: pr_auc=0.823, roc_auc=0.974, f1_top=0.736, spearman=0.959, r2=0.911, mae=0.222, rmse=0.293
+[21:25:18]   transfer 1403->1402: pr_auc=0.795, roc_auc=0.973, f1_top=0.703, spearman=0.957, r2=0.910, mae=0.221, rmse=0.295
+[21:25:20]   final model saved: models/final.pt
+
+=== 20/21  paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=late]
+[21:25:20] dataset 4e800dee03d6: from cache
+[21:25:20] paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:25:22]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:25:24]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:25:26]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:25:28]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:25:30]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:25:32]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:25:34]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:25:35]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:25:37]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:25:39]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:25:41]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:25:43]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:25:43]   1402 CV: pr_auc=0.683, roc_auc=0.957, f1_top=0.636, spearman=0.908, r2=0.796, mae=0.342, rmse=0.451
+[21:25:45]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:25:46]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:25:48]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:25:50]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:25:52]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:25:54]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:25:56]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:25:58]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:25:59]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:26:01]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:26:03]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:26:05]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:26:05]   1403 CV: pr_auc=0.704, roc_auc=0.960, f1_top=0.657, spearman=0.911, r2=0.803, mae=0.334, rmse=0.441
+[21:26:07]   transfer 1402->1403: pr_auc=0.830, roc_auc=0.976, f1_top=0.736, spearman=0.956, r2=0.905, mae=0.225, rmse=0.304
+[21:26:08]   transfer 1403->1402: pr_auc=0.822, roc_auc=0.974, f1_top=0.728, spearman=0.952, r2=0.896, mae=0.233, rmse=0.315
+[21:26:12]   final model saved: models/final.pt
+
+=== 21/21  paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=gated]
+[21:26:12] dataset 4e800dee03d6: from cache
+[21:26:12] paper2_rq1_ablation_v1 [modalities=traffic+energy+pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:26:14]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:26:16]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:26:18]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:26:20]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:26:22]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:26:24]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:26:26]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:26:28]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:26:30]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:26:32]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:26:34]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:26:36]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:26:36]   1402 CV: pr_auc=0.792, roc_auc=0.970, f1_top=0.713, spearman=0.898, r2=0.775, mae=0.351, rmse=0.473
+[21:26:38]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[21:26:40]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:26:42]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:26:44]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:26:46]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:26:48]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:26:50]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:26:52]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:26:54]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:26:56]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:26:57]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:26:59]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:26:59]   1403 CV: pr_auc=0.797, roc_auc=0.973, f1_top=0.735, spearman=0.906, r2=0.785, mae=0.336, rmse=0.459
+[21:27:01]   transfer 1402->1403: pr_auc=0.849, roc_auc=0.978, f1_top=0.760, spearman=0.962, r2=0.915, mae=0.214, rmse=0.287
+[21:27:03]   transfer 1403->1402: pr_auc=0.812, roc_auc=0.975, f1_top=0.730, spearman=0.956, r2=0.908, mae=0.223, rmse=0.296
+[21:27:07]   final model saved: models/final.pt
+
+[train finished in 25.7 min]

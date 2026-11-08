@@ -1,0 +1,19 @@
+﻿hypothesis,year,metric,delta,p_signflip_pooled,p_holm,verdict,verdict_holm
+H1,1402,pr_auc,-0.02131502853467737,0.84375,1.0,inconclusive,inconclusive
+H1,1402,spearman,-0.020784828661304378,0.91552734375,1.0,inconclusive,inconclusive
+H1,1403,pr_auc,0.1008457364355152,0.091796875,1.0,inconclusive,inconclusive
+H1,1403,spearman,-0.020671018577553824,0.844482421875,1.0,inconclusive,inconclusive
+H2,1402,pr_auc,0.01242145723032051,0.09375,1.0,inconclusive,inconclusive
+H2,1402,spearman,0.0231655649927347,0.0029296875,0.0498046875,non-inferior,non-inferior
+H2,1403,pr_auc,0.039533654526574646,0.080078125,1.0,superior,"superior, not significant after Holm"
+H2,1403,spearman,0.03388059581613723,0.00244140625,0.0439453125,non-inferior,non-inferior
+H2c,1404,pr_auc,0.06472870068971115,0.1015625,1.0,non-inferior,non-inferior
+H2c,1404,spearman,0.02970363320606173,0.011474609375,0.18359375,non-inferior,non-inferior
+H1c,1404,pr_auc,0.0021972251028622436,0.1875,1.0,equivalent,equivalent
+H1c,1404,spearman,-0.005771401491376338,0.880615234375,1.0,inconclusive,inconclusive
+P2_reach,1402,pr_auc,-0.003669631285922903,0.53125,1.0,inconclusive,inconclusive
+P2_reach,1402,spearman,-0.0027275853706889563,0.695556640625,1.0,inconclusive,inconclusive
+P2_reach,1403,pr_auc,0.03799751190700762,0.23828125,1.0,inconclusive,inconclusive
+P2_reach,1403,spearman,0.008444123624911093,0.158447265625,1.0,inconclusive,inconclusive
+P2c_reach,1404,pr_auc,-0.0057199154636419225,0.5234375,1.0,inconclusive,inconclusive
+P2c_reach,1404,spearman,0.006589577405333169,0.1923828125,1.0,inconclusive,inconclusive

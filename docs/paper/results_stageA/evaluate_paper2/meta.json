@@ -1,0 +1,44 @@
+{
+  "run_id": "20261107-221058_paper_evaluate_6b2e82",
+  "experiment": "paper_evaluate",
+  "variant": {},
+  "variant_label": "",
+  "rq": "RQ1",
+  "kind": "analysis",
+  "version": null,
+  "overrides": {},
+  "config_hash": "6b2e8234d2cc",
+  "data_hash": "4e800dee03d6",
+  "git": {
+    "commit": "679d0ba",
+    "branch": "paper_TC",
+    "dirty": true
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu132",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-07 22:10:58",
+  "status": "done",
+  "finished": "2026-11-07 22:17:00",
+  "duration_s": 361.5,
+  "summary": {
+    "PA_H1": "20261107-212612_paper2_rq1_ablation_v1_fc07f9",
+    "PA_H1_drivers": "20261107-211959_paper2_rq1_ablation_v1_ba8da3",
+    "PA_H2": "20261107-202233_paper2_rq2_sage_v1_02683d",
+    "PA_H2_reach": "20261107-202233_paper2_rq2_sage_v1_02683d",
+    "PA_H2c": "20261107-202233_paper2_c1404_sage5_v1_50d17e",
+    "PA_H2c_all": "20261107-202233_paper2_c1404_sage5_v1_50d17e",
+    "PA_H1c": "20261107-205232_paper2_c1404_sage4_v1_108bbd"
+  }
+}

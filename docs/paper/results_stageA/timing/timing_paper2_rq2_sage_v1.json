@@ -1,0 +1,17 @@
+{
+  "experiment": "paper2_rq2_sage_v1",
+  "variant": "",
+  "neural": true,
+  "pilot_epochs": 20,
+  "pilot_fit_s": 1.47,
+  "per_fit_full_s": 22.03,
+  "fits_per_run": 130,
+  "run_hours": 0.8,
+  "search_hours": 1.22,
+  "device": "cuda",
+  "folds": 12,
+  "train_cells_fold0": 2428,
+  "years": [
+    1402
+  ]
+}

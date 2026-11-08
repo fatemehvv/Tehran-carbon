@@ -1,0 +1,23 @@
+﻿hypothesis,year,metric,delta,p_signflip_pooled,p_holm,verdict,verdict_holm
+PA_H1,1402,pr_auc,0.02180629080167429,0.078125,1.0,non-inferior,non-inferior
+PA_H1,1402,spearman,-0.020925533098602678,0.890380859375,1.0,inconclusive,inconclusive
+PA_H1,1403,pr_auc,0.04012795267469227,0.091796875,1.0,non-inferior,non-inferior
+PA_H1,1403,spearman,-0.021688117601823764,0.790283203125,1.0,inconclusive,inconclusive
+PA_H1_drivers,1402,pr_auc,-0.021440848850876604,0.587890625,1.0,inconclusive,inconclusive
+PA_H1_drivers,1402,spearman,-0.028056270701594777,0.913818359375,1.0,inconclusive,inconclusive
+PA_H1_drivers,1403,pr_auc,-0.007493219133065221,0.8388671875,1.0,inconclusive,inconclusive
+PA_H1_drivers,1403,spearman,-0.026283893070193853,0.805419921875,1.0,inconclusive,inconclusive
+PA_H2,1402,pr_auc,0.037237244316076556,0.03125,0.59375,superior beyond margin,"superior, not significant after Holm"
+PA_H2,1402,spearman,0.024706329842969055,0.0009765625,0.0205078125,non-inferior,non-inferior
+PA_H2,1403,pr_auc,0.05072308126141489,0.1015625,1.0,superior beyond margin,"superior, not significant after Holm"
+PA_H2,1403,spearman,0.03470132480169008,0.000732421875,0.01611328125,non-inferior,non-inferior
+PA_H2_reach,1402,pr_auc,0.019135520997219935,0.09375,1.0,inconclusive,inconclusive
+PA_H2_reach,1402,spearman,-0.0010524329569312485,0.578369140625,1.0,inconclusive,inconclusive
+PA_H2_reach,1403,pr_auc,0.05339646773220652,0.11328125,1.0,inconclusive,inconclusive
+PA_H2_reach,1403,spearman,0.010131441894421056,0.129150390625,1.0,inconclusive,inconclusive
+PA_H2c,1404,pr_auc,0.04615918982070588,0.09765625,1.0,superior,"superior, not significant after Holm"
+PA_H2c,1404,spearman,0.02898304909905547,0.009521484375,0.1904296875,superior,"superior, not significant after Holm"
+PA_H2c_all,1404,pr_auc,-0.003326772460433336,0.62890625,1.0,inconclusive,inconclusive
+PA_H2c_all,1404,spearman,0.0042170538881591835,0.30322265625,1.0,inconclusive,inconclusive
+PA_H1c,1404,pr_auc,-0.011299495038768037,0.84375,1.0,inconclusive,inconclusive
+PA_H1c,1404,spearman,-0.007382260620894643,0.913330078125,1.0,equivalent,equivalent

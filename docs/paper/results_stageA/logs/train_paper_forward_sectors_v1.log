@@ -1,0 +1,34 @@
+
+=== 1/1  paper_forward_sectors_v1 [-]
+[20:09:43] dataset 1e0281290a88: from cache
+[20:09:43] paper_forward_sectors_v1 [-]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[20:09:43]   1402 fold 00: train 2428 cells, test 3
+[20:09:43]   1402 fold 01: train 2185 cells, test 178
+[20:09:43]   1402 fold 02: train 2011 cells, test 332
+[20:09:44]   1402 fold 03: train 2201 cells, test 189
+[20:09:44]   1402 fold 04: train 2430 cells, test 5
+[20:09:44]   1402 fold 05: train 2094 cells, test 243
+[20:09:45]   1402 fold 06: train 1671 cells, test 595
+[20:09:45]   1402 fold 07: train 2246 cells, test 140
+[20:09:45]   1402 fold 08: train 2374 cells, test 52
+[20:09:46]   1402 fold 09: train 2076 cells, test 319
+[20:09:46]   1402 fold 10: train 1996 cells, test 343
+[20:09:46]   1402 fold 11: train 2368 cells, test 37
+[20:09:46]   1402 CV: pr_auc=0.547, roc_auc=0.917, f1_top=0.494, spearman=0.853, r2=0.646, mae=0.475, rmse=0.591
+[20:09:47]   1403 fold 00: train 2428 cells, test 3
+[20:09:47]   1403 fold 01: train 2185 cells, test 178
+[20:09:47]   1403 fold 02: train 2011 cells, test 332
+[20:09:48]   1403 fold 03: train 2201 cells, test 189
+[20:09:48]   1403 fold 04: train 2430 cells, test 5
+[20:09:48]   1403 fold 05: train 2094 cells, test 243
+[20:09:49]   1403 fold 06: train 1671 cells, test 595
+[20:09:49]   1403 fold 07: train 2246 cells, test 140
+[20:09:49]   1403 fold 08: train 2374 cells, test 52
+[20:09:50]   1403 fold 09: train 2076 cells, test 319
+[20:09:50]   1403 fold 10: train 1996 cells, test 343
+[20:09:50]   1403 fold 11: train 2368 cells, test 37
+[20:09:50]   1403 CV: pr_auc=0.508, roc_auc=0.904, f1_top=0.451, spearman=0.846, r2=0.615, mae=0.491, rmse=0.617
+[20:09:51]   transfer 1402->1403: pr_auc=0.645, roc_auc=0.943, f1_top=0.578, spearman=0.900, r2=0.768, mae=0.378, rmse=0.478
+[20:09:51]   transfer 1403->1402: pr_auc=0.663, roc_auc=0.945, f1_top=0.602, spearman=0.895, r2=0.766, mae=0.372, rmse=0.478
+
+[train finished in 0.2 min]

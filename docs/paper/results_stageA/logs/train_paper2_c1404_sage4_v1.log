@@ -1,0 +1,21 @@
+
+=== 1/1  paper2_c1404_sage4_v1 [-]
+[20:52:32] dataset 176851710abc: from cache
+[20:52:32] paper2_c1404_sage4_v1 [-]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+/venv/main/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+[20:55:21]   1404 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[20:58:10]   1404 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[21:00:58]   1404 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[21:02:40]   1404 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[21:04:09]   1404 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[21:05:37]   1404 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[21:07:09]   1404 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[21:08:40]   1404 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[21:10:12]   1404 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[21:11:44]   1404 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[21:13:17]   1404 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[21:14:48]   1404 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[21:14:48]   1404 CV: pr_auc=0.785, roc_auc=0.965, f1_top=0.712, spearman=0.931, r2=0.852, mae=0.278, rmse=0.373
+
+[train finished in 22.3 min]

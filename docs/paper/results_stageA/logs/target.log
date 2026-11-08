@@ -1,0 +1,28 @@
+[20:09:25] dataset 4e800dee03d6: from cache
+[20:09:25] stations vs TROPOMI (mean Spearman over months):
+                months  stations  spearman  p_below_005
+year satellite                                         
+1402 3x3            12      17.0     0.113            0
+     cell           12      17.0     0.110            0
+1403 3x3            12      16.0     0.316            4
+     cell           12      16.0     0.304            4
+[20:09:25] elevation (means over months):
+                                  spearman  pr_auc  partial_spearman
+year model                                                          
+1402 elevation only (-elevation)    -0.493   0.075               NaN
+     rq2_base_slx_gbm_v1 [-]         0.925   0.757             0.912
+     rq2_sage_v2 [-]                 0.949   0.769             0.940
+1403 elevation only (-elevation)    -0.492   0.073               NaN
+     rq2_base_slx_gbm_v1 [-]         0.912   0.791             0.905
+     rq2_sage_v2 [-]                 0.946   0.830             0.935
+[20:09:25] daily cloud-screened monthly target vs the target:
+        cells  median_days  spearman  hotspot_jaccard
+year                                                 
+1402  2433.25       23.417     0.981            0.732
+1403  2436.00       24.167     0.988            0.757
+[20:09:26] effective sample size:
+ year  cells  n_eff_correlogram  n_tropomi_pixels
+ 1402   2436                4.9              88.5
+ 1403   2436                4.9              88.5
+
+[paper finished in 0.0 min]

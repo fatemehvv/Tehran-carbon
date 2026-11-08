@@ -1,0 +1,17 @@
+{
+  "experiment": "paper2_rq1_ablation_v1",
+  "variant": "modalities=traffic|fusion=early",
+  "neural": true,
+  "pilot_epochs": 20,
+  "pilot_fit_s": 0.03,
+  "per_fit_full_s": 0.44,
+  "fits_per_run": 130,
+  "run_hours": 0.02,
+  "search_hours": 0.02,
+  "device": "cuda",
+  "folds": 12,
+  "train_cells_fold0": 2428,
+  "years": [
+    1402
+  ]
+}

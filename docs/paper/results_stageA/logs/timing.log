@@ -1,0 +1,51 @@
+[20:09:00] dataset 1e0281290a88: building
+[20:09:00]   source 'satellite' 1402
+[20:09:01]   source 'satellite' 1403
+[20:09:01]   source 'context' 1402
+[20:09:01]   source 'context' 1403
+[20:09:02]   source 'traffic' 1402
+[20:09:02]   source 'traffic' 1403
+[20:09:02]   source 'energy' 1402
+[20:09:02]   source 'energy' 1403
+[20:09:02]   source 'pollution' 1402
+[20:09:02]   source 'pollution' 1403
+[20:09:02]   1402: 12 steps, 12 with a target
+[20:09:03]   1403: 12 steps, 12 with a target
+[20:09:03] dataset 1e0281290a88: 20 features, 2436 label cells (CORE 4484)
+/venv/main/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+[20:09:04] experiment=paper2_rq2_sage_v1 variant= neural=True pilot_epochs=20 pilot_fit_s=1.47 per_fit_full_s=22.03 fits_per_run=130 run_hours=0.8 search_hours=1.22 device=cuda folds=12 train_cells_fold0=2428 years=[1402]
+[20:09:04] dataset 176851710abc: building
+[20:09:04]   source 'satellite' 1402
+[20:09:04]   source 'satellite' 1403
+[20:09:04]   source 'satellite' 1404
+[20:09:04]   source 'context' 1402
+[20:09:05]   source 'context' 1403
+[20:09:06]   source 'context' 1404
+[20:09:07]   source 'traffic' 1402
+[20:09:07]   source 'traffic' 1403
+[20:09:07]   source 'traffic' 1404
+[20:09:07]   source 'energy' 1402
+[20:09:07]   source 'energy' 1403
+[20:09:07]   source 'energy' 1404
+[20:09:07]   source 'pollution' 1402
+[20:09:07]   source 'pollution' 1403
+[20:09:07]   source 'pollution' 1404
+[20:09:07]   1402: 12 steps, 12 with a target
+[20:09:08]   1403: 12 steps, 12 with a target
+[20:09:08]   1404: 12 steps, 12 with a target
+[20:09:08] dataset 176851710abc: 20 features, 2436 label cells (CORE 4484)
+[20:09:09] experiment=paper2_c1404_sage5_v1 variant= neural=True pilot_epochs=20 pilot_fit_s=1.28 per_fit_full_s=19.26 fits_per_run=60 run_hours=0.32 search_hours=1.07 device=cuda folds=12 train_cells_fold0=2428 years=[1402, 1403]
+[20:09:09] dataset 4e800dee03d6: building
+[20:09:09]   1402: 12 steps, 12 with a target
+[20:09:09]   1403: 12 steps, 12 with a target
+[20:09:10] dataset 4e800dee03d6: 54 features, 2436 label cells (CORE 4484)
+[20:09:10] experiment=paper2_rq1_ablation_v1 variant=modalities=traffic|fusion=early neural=True pilot_epochs=20 pilot_fit_s=0.03 per_fit_full_s=0.44 fits_per_run=130 run_hours=0.02 search_hours=0.02 device=cuda folds=12 train_cells_fold0=2428 years=[1402]
+[20:09:10] dataset 1e0281290a88: from cache
+[20:09:11] experiment=paper2_base_v1 variant=baseline.name=ols|baseline.lags= neural=False pilot_epochs=None pilot_fit_s=0.01 per_fit_full_s=0.01 fits_per_run=26 run_hours=0.0 search_hours=0.0 device=cpu folds=12 train_cells_fold0=2428 years=[1402]
+{
+  "run_hours_total": 1.1400000000000001,
+  "search_hours_total": 2.31
+}
+
+[paper finished in 0.2 min]

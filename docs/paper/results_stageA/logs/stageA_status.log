@@ -1,0 +1,37 @@
+[20:09:41] START train_paper_forward_sectors_v1
+[20:09:52] END train_paper_forward_sectors_v1 exit=0
+[20:09:52] START train_paper_c1404_forward_sectors_v1
+[20:10:00] END train_paper_c1404_forward_sectors_v1 exit=0
+[20:10:00] START train_paper_slx_reach_v1
+[20:22:31] START train_paper2_base_v1
+[20:22:31] START train_paper2_c1404_sage5_v1
+[20:22:31] START train_paper2_rq2_sage_v1
+[20:22:31] END train_paper_slx_reach_v1 (process finished; exit code not captured)
+[20:22:31] START train_paper_c1404_slx_reach_v1
+[20:23:04] NOTE previous END line for train_paper_slx_reach_v1 was wrong (pid check bug); it is still running as pid 2451
+[20:33:09] END train_paper_slx_reach_v1 (pid 2451 exited)
+[20:37:28] END train_paper2_base_v1 exit=0
+[20:37:28] START train_paper2_c1404_base_v1
+[20:43:55] END train_paper2_c1404_base_v1 exit=0
+[20:51:49] END train_paper_c1404_slx_reach_v1 exit=0
+[20:51:49] START train_paper2_slx_reach_v1
+[20:52:30] END train_paper2_rq2_sage_v1 exit=0
+[20:52:30] START train_paper2_c1404_sage4_v1
+[21:01:28] END train_paper2_c1404_sage5_v1 exit=0
+[21:01:28] START train_paper2_rq1_ablation_v1
+[21:13:26] END train_paper2_slx_reach_v1 exit=0
+[21:13:26] START train_paper2_c1404_slx_reach_v1
+[21:14:49] END train_paper2_c1404_sage4_v1 exit=0
+[21:14:49] START train_paper2_rq2_mlp_v1
+[21:16:04] END train_paper2_rq2_mlp_v1 exit=0
+[21:27:08] END train_paper2_rq1_ablation_v1 exit=0
+[21:27:08] START train_paper2_rq1_context_only_v1
+[21:27:37] END train_paper2_rq1_context_only_v1 exit=0
+[21:27:37] START train_paper2_c1404_sage4_single_v1
+[21:34:41] END train_paper2_c1404_slx_reach_v1 exit=0
+[22:10:58] END train_paper2_c1404_sage4_single_v1 exit=0
+[22:10:58] START evaluate_paper2
+[22:17:00] END evaluate_paper2 exit=0
+[22:17:00] START evaluate_thesis
+[22:22:10] END evaluate_thesis exit=0
+[22:22:10] ALL DONE

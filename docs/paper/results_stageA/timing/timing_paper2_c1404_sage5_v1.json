@@ -1,0 +1,18 @@
+{
+  "experiment": "paper2_c1404_sage5_v1",
+  "variant": "",
+  "neural": true,
+  "pilot_epochs": 20,
+  "pilot_fit_s": 1.28,
+  "per_fit_full_s": 19.26,
+  "fits_per_run": 60,
+  "run_hours": 0.32,
+  "search_hours": 1.07,
+  "device": "cuda",
+  "folds": 12,
+  "train_cells_fold0": 2428,
+  "years": [
+    1402,
+    1403
+  ]
+}

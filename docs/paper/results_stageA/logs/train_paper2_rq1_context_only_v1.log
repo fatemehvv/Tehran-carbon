@@ -1,0 +1,35 @@
+
+=== 1/1  paper2_rq1_context_only_v1 [-]
+[21:27:10] dataset 4e800dee03d6: from cache
+[21:27:10] paper2_rq1_context_only_v1 [-]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[21:27:11]   1402 fold 00: train 2428 cells, test 3
+[21:27:12]   1402 fold 01: train 2185 cells, test 178
+[21:27:14]   1402 fold 02: train 2011 cells, test 332
+[21:27:15]   1402 fold 03: train 2201 cells, test 189
+[21:27:15]   1402 fold 04: train 2430 cells, test 5
+[21:27:16]   1402 fold 05: train 2094 cells, test 243
+[21:27:17]   1402 fold 06: train 1671 cells, test 595
+[21:27:18]   1402 fold 07: train 2246 cells, test 140
+[21:27:19]   1402 fold 08: train 2374 cells, test 52
+[21:27:20]   1402 fold 09: train 2076 cells, test 319
+[21:27:20]   1402 fold 10: train 1996 cells, test 343
+[21:27:21]   1402 fold 11: train 2368 cells, test 37
+[21:27:21]   1402 CV: pr_auc=0.576, roc_auc=0.949, f1_top=0.607, spearman=0.914, r2=0.807, mae=0.334, rmse=0.438
+[21:27:22]   1403 fold 00: train 2428 cells, test 3
+[21:27:23]   1403 fold 01: train 2185 cells, test 178
+[21:27:24]   1403 fold 02: train 2011 cells, test 332
+[21:27:25]   1403 fold 03: train 2201 cells, test 189
+[21:27:26]   1403 fold 04: train 2430 cells, test 5
+[21:27:26]   1403 fold 05: train 2094 cells, test 243
+[21:27:27]   1403 fold 06: train 1671 cells, test 595
+[21:27:28]   1403 fold 07: train 2246 cells, test 140
+[21:27:29]   1403 fold 08: train 2374 cells, test 52
+[21:27:30]   1403 fold 09: train 2076 cells, test 319
+[21:27:31]   1403 fold 10: train 1996 cells, test 343
+[21:27:32]   1403 fold 11: train 2368 cells, test 37
+[21:27:32]   1403 CV: pr_auc=0.592, roc_auc=0.953, f1_top=0.637, spearman=0.914, r2=0.810, mae=0.331, rmse=0.433
+[21:27:33]   transfer 1402->1403: pr_auc=0.792, roc_auc=0.973, f1_top=0.718, spearman=0.950, r2=0.891, mae=0.242, rmse=0.326
+[21:27:34]   transfer 1403->1402: pr_auc=0.742, roc_auc=0.964, f1_top=0.669, spearman=0.945, r2=0.884, mae=0.252, rmse=0.335
+[21:27:36]   final model saved: models/final.pt
+
+[train finished in 0.5 min]

@@ -1,0 +1,37 @@
+
+=== 1/1  paper2_rq2_sage_v1 [-]
+[20:22:33] dataset 1e0281290a88: from cache
+[20:22:33] paper2_rq2_sage_v1 [-]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+/venv/main/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+[20:23:39]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[20:24:43]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[20:25:47]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[20:26:51]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[20:27:55]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[20:29:00]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[20:30:04]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[20:31:08]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[20:32:12]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[20:33:16]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[20:34:20]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[20:35:24]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[20:35:24]   1402 CV: pr_auc=0.800, roc_auc=0.971, f1_top=0.719, spearman=0.949, r2=0.893, mae=0.245, rmse=0.324
+[20:36:28]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[20:37:32]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[20:38:37]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[20:39:41]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[20:40:45]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[20:41:49]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[20:42:52]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[20:43:57]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[20:45:01]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[20:46:05]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[20:47:08]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[20:48:13]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[20:48:13]   1403 CV: pr_auc=0.841, roc_auc=0.975, f1_top=0.741, spearman=0.947, r2=0.880, mae=0.253, rmse=0.340
+[20:49:17]   transfer 1402->1403: pr_auc=0.835, roc_auc=0.975, f1_top=0.745, spearman=0.963, r2=0.919, mae=0.204, rmse=0.275
+[20:50:21]   transfer 1403->1402: pr_auc=0.822, roc_auc=0.975, f1_top=0.729, spearman=0.960, r2=0.921, mae=0.210, rmse=0.274
+[20:52:28]   final model saved: models/final.pt
+
+[train finished in 30.0 min]

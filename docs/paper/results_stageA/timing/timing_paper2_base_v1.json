@@ -1,0 +1,17 @@
+{
+  "experiment": "paper2_base_v1",
+  "variant": "baseline.name=ols|baseline.lags=",
+  "neural": false,
+  "pilot_epochs": null,
+  "pilot_fit_s": 0.01,
+  "per_fit_full_s": 0.01,
+  "fits_per_run": 26,
+  "run_hours": 0.0,
+  "search_hours": 0.0,
+  "device": "cpu",
+  "folds": 12,
+  "train_cells_fold0": 2428,
+  "years": [
+    1402
+  ]
+}
