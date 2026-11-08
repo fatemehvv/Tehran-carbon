@@ -115,14 +115,28 @@ class ReachCurve:
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
+        # one colour per model family, one line style per year; single-reach families (e.g. one GNN depth) are drawn as
+        # points with the range over single seeds as an error bar, so the ensemble is not mistaken for one model
+        fams = sorted(table.family.unique())
+        colour = {f: plt.get_cmap("tab10")(i % 10) for i, f in enumerate(fams)}
+        years = sorted(table.year.unique())
+        style = {y: ["-", "--", ":", "-."][i % 4] for i, y in enumerate(years)}
         fig, axes = plt.subplots(1, len(self.metrics), figsize=(5.2 * len(self.metrics), 4.2), squeeze=False)
         for ax, m in zip(axes[0], self.metrics):
             for (fam, y), g in table.groupby(["family", "year"]):
                 g = g.dropna(subset=["reach_km"]).sort_values("reach_km")
-                line, = ax.plot(g.reach_km, g[m], marker="o", ms=3.5, lw=1.4, label=f"{fam} {y}")
-                if f"{m}_seed_min" in g and g[f"{m}_seed_min"].notna().any():
-                    ax.fill_between(g.reach_km, g[f"{m}_seed_min"], g[f"{m}_seed_max"], color=line.get_color(),
-                                    alpha=0.15, lw=0)
+                lo, hi = f"{m}_seed_min", f"{m}_seed_max"
+                seeds = lo in g and g[lo].notna().any()
+                if len(g) > 1:
+                    ax.plot(g.reach_km, g[m], color=colour[fam], ls=style[y], marker="o", ms=3.5, lw=1.4,
+                            label=f"{fam} {y}")
+                    if seeds:
+                        ax.fill_between(g.reach_km, g[lo], g[hi], color=colour[fam], alpha=0.15, lw=0)
+                else:
+                    err = None if not seeds else [g[m].to_numpy() - g[lo].to_numpy(), g[hi].to_numpy() - g[m].to_numpy()]
+                    ax.errorbar(g.reach_km + (0.4 if years.index(y) else -0.4), g[m], yerr=err, color=colour[fam],
+                                fmt="s" if years.index(y) else "o", ms=5, capsize=3, lw=1.2,
+                                label=f"{fam} {y}" + (" (ensemble; bar = single seeds)" if seeds else ""))
             if np.isfinite(zc):
                 ax.axvline(zc, color="0.4", ls="--", lw=1)
                 ax.text(zc, ax.get_ylim()[0], " correlation range", rotation=90, va="bottom", ha="right",

@@ -542,9 +542,11 @@ to be checked in the final proof.
 **Figure 2.** Correlogram of the monthly target (1402, 1403), with its zero crossing at 24 km and the effective sample
 size. Source: `docs/paper/results_stageA/target/target_neff.csv`.
 
-**Figure 3.** Skill against reach, Spearman and PR-AUC, for every model family and both development years. The shaded
-band shows the range over single GNN seeds; the dashed line marks the correlation length. Source: the `paper reach` run
-of 8 November 2026 (`reach_curve.png`, `reach_curve.csv`).
+**Figure 3.** Skill against reach, PR-AUC (left) and Spearman (right), 1402 (solid / circles) and 1403 (dashed /
+squares). Lines: own-cell and SLX models (one colour per estimator). Points: the networks, which were run at one reach
+each (no-graph network at 0 km, GNN at 22.7 km); the point is the five-seed ensemble and the bar the range of single
+seeds. Dashed vertical line: zero crossing of the target correlogram (24.0 km). File:
+`docs/paper/results_stageA/reach/reach_curve.png` (data: `reach_curve.csv`).
 
 **Figure 4.** Differences GNN minus reference with jackknife intervals and the ±0.02 equivalence band, for the
 shorter-reach SLX, the reach-matched SLX and the held-out year. Source: `docs/paper/results_stageA/evaluate_paper2/`.
