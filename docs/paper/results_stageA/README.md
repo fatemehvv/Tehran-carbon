@@ -13,6 +13,7 @@
 | `target/` | `paper target`: ایستگاه‌ها، ارتفاع، هدف روزانه، n_eff |
 | `timing/` | `paper timing`: هزینهٔ اجرا |
 | `logs/` | لاگ هر فرمان. `stageA_status.log` ترتیب، زمان و کد خروج را دارد و `stageA_parallel.sh` صف اجراهاست |
+| `reach/` | `paper reach --exp paper2_base_v1 paper2_slx_reach_v1 paper2_rq2_mlp_v1 paper2_rq2_sage_v1` (اجرا ۱۷ آبان، کد 0315ca7، فقط خواندن اجراهای مرحلهٔ الف): منحنی معیار در برابر شعاع دید، با میانگین و SD هر seed، و نقطهٔ صفر همبستگی‌نگار (۲۴ کیلومتر) |
 | `runs_stageA.csv` | ردیف‌های `runs/registry.csv` برای ۸۷ اجرای این مرحله، با هش کانفیگ، هش داده و خلاصهٔ معیارها |
 
 `data/raw/MANIFEST.csv` در همین کامیت `spatial/dem_L0.tif` را هم دارد (از `gee/GEE_DEM_L0.js`).
