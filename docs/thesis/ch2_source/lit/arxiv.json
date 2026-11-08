@@ -1,0 +1,375 @@
+{
+ "1803.07055": {
+  "title": "Simple random search provides a competitive approach to reinforcement learning",
+  "published": "2018-03-19",
+  "authors": [
+   "Horia Mania",
+   "Aurelia Guy",
+   "Benjamin Recht"
+  ],
+  "comment": "22 pages, 5 figures, 9 tables",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2408.06762": {
+  "title": "Graph Neural Network Approach to Predict the Effects of Road Capacity Reduction Policies: A Case Study for Paris, France",
+  "published": "2024-08-13",
+  "authors": [
+   "Elena Natterer",
+   "Roman Engelhardt",
+   "Sebastian Hörl",
+   "Klaus Bogenberger"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2206.12188": {
+  "title": "Dynamic network congestion pricing based on deep reinforcement learning",
+  "published": "2022-06-24",
+  "authors": [
+   "Kimihiro Sato",
+   "Toru Seo",
+   "Takashi Fuse"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2108.13264": {
+  "title": "Deep Reinforcement Learning at the Edge of the Statistical Precipice",
+  "published": "2021-08-30",
+  "authors": [
+   "Rishabh Agarwal",
+   "Max Schwarzer",
+   "Pablo Samuel Castro",
+   "Aaron Courville",
+   "Marc G. Bellemare"
+  ],
+  "comment": "Outstanding Paper Award at NeurIPS 2021. Website: https://agarwl.github.io/rliable. 28 Pages, 33 Figures",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "1707.06347": {
+  "title": "Proximal Policy Optimization Algorithms",
+  "published": "2017-07-20",
+  "authors": [
+   "John Schulman",
+   "Filip Wolski",
+   "Prafulla Dhariwal",
+   "Alec Radford",
+   "Oleg Klimov"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2004.13332": {
+  "title": "The AI Economist: Improving Equality and Productivity with AI-Driven Tax Policies",
+  "published": "2020-04-28",
+  "authors": [
+   "Stephan Zheng",
+   "Alexander Trott",
+   "Sunil Srinivasa",
+   "Nikhil Naik",
+   "Melvin Gruesbeck",
+   "David C. Parkes",
+   "Richard Socher"
+  ],
+  "comment": "46 pages, 21 figures",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "1709.06560": {
+  "title": "Deep Reinforcement Learning that Matters",
+  "published": "2017-09-19",
+  "authors": [
+   "Peter Henderson",
+   "Riashat Islam",
+   "Philip Bachman",
+   "Joelle Pineau",
+   "Doina Precup",
+   "David Meger"
+  ],
+  "comment": "Accepted to the Thirthy-Second AAAI Conference On Artificial Intelligence (AAAI), 2018",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2501.11057": {
+  "title": "Machine Learning Surrogates for Optimizing Transportation Policies with Agent-Based Models",
+  "published": "2025-01-19",
+  "authors": [
+   "Elena Natterer",
+   "Roman Engelhardt",
+   "Sebastian Hörl",
+   "Klaus Bogenberger"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2505.00668": {
+  "title": "Deep Reinforcement Learning for Urban Air Quality Management: Multi-Objective Optimization of Pollution Mitigation Booth Placement in Metropolitan Environments",
+  "published": "2025-05-01",
+  "authors": [
+   "Kirtan Rajesh",
+   "Suvidha Rupesh Kumar"
+  ],
+  "comment": "This is the preprint version of the article published in IEEE Access vol. 13, pp. 146503--146526, 2025, doi:10.1109/ACCESS.2025.3599541. Please cite the published version",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2505.07451": {
+  "title": "Optimal Low Emission Zones scheduling as an example of transport policy backcasting",
+  "published": "2025-05-12",
+  "authors": [
+   "Asmae Alami",
+   "Vinith Lakshmanan",
+   "Antonio Sciarretta"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2408.05609": {
+  "title": "Mitigating Metropolitan Carbon Emissions with Dynamic Eco-driving at Scale",
+  "published": "2024-08-10",
+  "authors": [
+   "Vindula Jayawardana",
+   "Baptiste Freydt",
+   "Ao Qu",
+   "Cameron Hickert",
+   "Edgar Sanchez",
+   "Catherine Tang",
+   "Mark Taylor",
+   "Blaine Leonard",
+   "Cathy Wu"
+  ],
+  "comment": "Accepted for publication at Transportation Research Part C: Emerging Technologies",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2506.18018": {
+  "title": "A deep-learning model for predicting daily PM2.5 concentration in response to emission reduction",
+  "published": "2025-06-22",
+  "authors": [
+   "Shigan Liu",
+   "Guannan Geng",
+   "Yanfei Xiang",
+   "Hejun Hu",
+   "Xiaodong Liu",
+   "Xiaomeng Huang",
+   "Qiang Zhang"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2601.07735": {
+  "title": "Evaluating Impacts of Traffic Regulations in Complex Mobility Systems Using Scenario-Based Simulations",
+  "published": "2026-01-12",
+  "authors": [
+   "Arianna Burzacchi",
+   "Marco Pistore"
+  ],
+  "comment": "",
+  "journal_ref": "Transport Policy 189 (2026) 104381",
+  "doi": "10.1016/j.tranpol.2026.104381"
+ },
+ "1904.08117": {
+  "title": "A Survey on Traffic Signal Control Methods",
+  "published": "2019-04-17",
+  "authors": [
+   "Hua Wei",
+   "Guanjie Zheng",
+   "Vikash Gayah",
+   "Zhenhui Li"
+  ],
+  "comment": "32 pages",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2606.23257": {
+  "title": "Dynamic multi-agent deep reinforcement learning-based pricing and incentivization approach in multimodal transportation networks",
+  "published": "2026-06-22",
+  "authors": [
+   "Khadidja Kadem",
+   "Mostafa Ameli",
+   "Carlos Lima Azevedo",
+   "Mahdi Zargayouna",
+   "Latifa Oukhellou"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2010.06187": {
+  "title": "Deep Reinforcement Learning and Transportation Research: A Comprehensive Review",
+  "published": "2020-10-13",
+  "authors": [
+   "Nahid Parvez Farazi",
+   "Tanvir Ahamed",
+   "Limon Barua",
+   "Bo Zou"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "1506.02188": {
+  "title": "Risk-Sensitive and Robust Decision-Making: a CVaR Optimization Approach",
+  "published": "2015-06-06",
+  "authors": [
+   "Yinlam Chow",
+   "Aviv Tamar",
+   "Shie Mannor",
+   "Marco Pavone"
+  ],
+  "comment": "Submitted to NIPS 15",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2607.07292": {
+  "title": "CarbonCLIP: Enhance Carbon Prediction from Satellite Imagery via Integrated Street-View Semantics and Temporal Context Training",
+  "published": "2026-07-08",
+  "authors": [
+   "Zeru Yang",
+   "Fang-Ying Gong",
+   "Steve H. L. Yim",
+   "Chau Yuen"
+  ],
+  "comment": "Accepted by IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing. 21 pages, 6 figures, 9 tables",
+  "journal_ref": "",
+  "doi": "10.1109/JSTARS.2026.3710502"
+ },
+ "2601.22746": {
+  "title": "UrbanMoE: A Sparse Multi-Modal Mixture-of-Experts Framework for Multi-Task Urban Region Profiling",
+  "published": "2026-01-30",
+  "authors": [
+   "Pingping Liu",
+   "Jiamiao Liu",
+   "Zijian Zhang",
+   "Hao Miao",
+   "Qi Jiang",
+   "Qingliang Li",
+   "Qiuzhan Zhou",
+   "Irwin King"
+  ],
+  "comment": "12 pages, 6 figures, 5tables, Proceedings of the ACM Web Conference 2026 (WWW '26), April 13--17, 2026, Dubai, United Arab Emirates",
+  "journal_ref": "",
+  "doi": "10.1145/3774904.3792701"
+ },
+ "2303.18087": {
+  "title": "Evaluation Challenges for Geospatial ML",
+  "published": "2023-03-31",
+  "authors": [
+   "Esther Rolf"
+  ],
+  "comment": "ICLR 2023 Workshop on Machine Learning for Remote Sensing",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2207.08815": {
+  "title": "Why do tree-based models still outperform deep learning on tabular data?",
+  "published": "2022-07-18",
+  "authors": [
+   "Léo Grinsztajn",
+   "Edouard Oyallon",
+   "Gaël Varoquaux"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2402.05153": {
+  "title": "Estimating On-road Transportation Carbon Emissions from Open Data of Road Network and Origin-destination Flow Data",
+  "published": "2024-02-07",
+  "authors": [
+   "Jinwei Zeng",
+   "Yu Liu",
+   "Jingtao Ding",
+   "Jian Yuan",
+   "Yong Li"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2111.10144": {
+  "title": "Positional Encoder Graph Neural Networks for Geographic Data",
+  "published": "2021-11-19",
+  "authors": [
+   "Konstantin Klemmer",
+   "Nathan Safir",
+   "Daniel B. Neill"
+  ],
+  "comment": "AISTATS 2023",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2402.03784": {
+  "title": "AirPhyNet: Harnessing Physics-Guided Neural Networks for Air Quality Prediction",
+  "published": "2024-02-06",
+  "authors": [
+   "Kethmi Hirushini Hettige",
+   "Jiahao Ji",
+   "Shili Xiang",
+   "Cheng Long",
+   "Gao Cong",
+   "Jingyuan Wang"
+  ],
+  "comment": "Accepted by the 12th International Conference on Learning Representations (ICLR 2024)",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2505.05479": {
+  "title": "Improving Local Air Quality Predictions Using Transfer Learning on Satellite Data and Graph Neural Networks",
+  "published": "2025-04-23",
+  "authors": [
+   "Finn Gueterbock",
+   "Raul Santos-Rodriguez",
+   "Jeffrey N. Clark"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "2006.07527": {
+  "title": "Inductive Graph Neural Networks for Spatiotemporal Kriging",
+  "published": "2020-06-13",
+  "authors": [
+   "Yuankai Wu",
+   "Dingyi Zhuang",
+   "Aurelie Labbe",
+   "Lijun Sun"
+  ],
+  "comment": "AAAI 2021",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "1702.01992": {
+  "title": "Gated Multimodal Units for Information Fusion",
+  "published": "2017-02-07",
+  "authors": [
+   "John Arevalo",
+   "Thamar Solorio",
+   "Manuel Montes-y-Gómez",
+   "Fabio A. González"
+  ],
+  "comment": "",
+  "journal_ref": "",
+  "doi": ""
+ },
+ "1706.02216": {
+  "title": "Inductive Representation Learning on Large Graphs",
+  "published": "2017-06-07",
+  "authors": [
+   "William L. Hamilton",
+   "Rex Ying",
+   "Jure Leskovec"
+  ],
+  "comment": "Published in NIPS 2017; version with full appendix and minor corrections",
+  "journal_ref": "",
+  "doi": ""
+ }
+}

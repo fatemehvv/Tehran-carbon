@@ -1,0 +1,1456 @@
+{
+ "10.1016/j.cities.2024.104881": {
+  "type": "journal-article",
+  "title": "Carbon emission causal discovery and multi-step forecasting for global cities",
+  "authors": [
+   "Xuedong Liang",
+   "Xiaoyan Li"
+  ],
+  "year": 2024,
+  "venue": "Cities",
+  "volume": "148",
+  "issue": "",
+  "page": "104881",
+  "article": "104881"
+ },
+ "10.1016/j.scs.2025.106407": {
+  "type": "journal-article",
+  "title": "AI-Driven urban planning optimization: A graph neural network and genetic algorithm framework for tackling peak-hour challenges",
+  "authors": [
+   "Jianyi Li",
+   "Yin Zhang",
+   "Shuo Yu",
+   "Haochen Qin",
+   "Zhen Xu"
+  ],
+  "year": 2025,
+  "venue": "Sustainable Cities and Society",
+  "volume": "126",
+  "issue": "",
+  "page": "106407",
+  "article": "106407"
+ },
+ "10.1016/j.uclim.2019.01.002": {
+  "type": "journal-article",
+  "title": "Evaluation of Tehran clean air action plan using emission inventory approach",
+  "authors": [
+   "Hossein Shahbazi",
+   "Amin Hassani",
+   "Vahid Hosseini"
+  ],
+  "year": 2019,
+  "venue": "Urban Climate",
+  "volume": "27",
+  "issue": "",
+  "page": "446-456",
+  "article": ""
+ },
+ "10.1016/j.trd.2017.08.001": {
+  "type": "journal-article",
+  "title": "Investigating the influence of traffic emission reduction plans on Tehran air quality using WRF/CAMx modeling tools",
+  "authors": [
+   "Hossein Shahbazi",
+   "Rouhollah Ganjiazad",
+   "Vahid Hosseini",
+   "Masoud Hamedi"
+  ],
+  "year": 2017,
+  "venue": "Transportation Research Part D: Transport and Environment",
+  "volume": "57",
+  "issue": "",
+  "page": "484-495",
+  "article": ""
+ },
+ "10.18502/japh.v5i3.5388": {
+  "type": "journal-article",
+  "title": "Impact of suspending traffic management plan in Tehran on air quality and COVID-19 mortality and morbidity",
+  "authors": [
+   "Masoumeh Rahmatinia",
+   "Anooshiravan Mohseni Bandpey",
+   "Abbas Shahsavani",
+   "Mostafa Hadei",
+   "Ahmad Jonidi Jafari",
+   "Alireza Raeisi",
+   "Vajeh Hasanzade",
+   "Alireza Zali",
+   "Maryam Yarahmadi",
+   "Majid Kermani",
+   "Mehdi Amouei Torkmahalleh",
+   "Zahra Namvar",
+   "Shahriyar Bazzazpour"
+  ],
+  "year": 2021,
+  "venue": "Journal of Air Pollution and Health",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.1086/529398": {
+  "type": "journal-article",
+  "title": "The Effect of Driving Restrictions on Air Quality in Mexico City",
+  "authors": [
+   "Lucas W. Davis"
+  ],
+  "year": 2008,
+  "venue": "Journal of Political Economy",
+  "volume": "116",
+  "issue": "1",
+  "page": "38-81",
+  "article": ""
+ },
+ "10.1016/j.jpubeco.2015.02.003": {
+  "type": "journal-article",
+  "title": "The effect of Beijing's driving restrictions on pollution and economic activity",
+  "authors": [
+   "V. Brian Viard",
+   "Shihe Fu"
+  ],
+  "year": 2015,
+  "venue": "Journal of Public Economics",
+  "volume": "125",
+  "issue": "",
+  "page": "98-115",
+  "article": ""
+ },
+ "10.1080/01441647.2021.1998244": {
+  "type": "journal-article",
+  "title": "Does rationing really backfire? A critical review of the literature on license-plate-based driving restrictions",
+  "authors": [
+   "Erick Guerra",
+   "Andrew Sandweiss",
+   "Seunglee David Park"
+  ],
+  "year": 2021,
+  "venue": "Transport Reviews",
+  "volume": "42",
+  "issue": "5",
+  "page": "604-625",
+  "article": ""
+ },
+ "10.1016/j.regsciurbeco.2020.103573": {
+  "type": "journal-article",
+  "title": "Did the London congestion charge reduce pollution?",
+  "authors": [
+   "Colin P. Green",
+   "John S. Heywood",
+   "Maria Navarro Paniagua"
+  ],
+  "year": 2020,
+  "venue": "Regional Science and Urban Economics",
+  "volume": "84",
+  "issue": "",
+  "page": "103573",
+  "article": "103573"
+ },
+ "10.3368/jhr.56.4.0218-9363r2": {
+  "type": "journal-article",
+  "title": "Congestion Pricing, Air Pollution, and Children’s Health",
+  "authors": [
+   "Emilia Simeonova",
+   "Janet Currie",
+   "Peter Nilsson",
+   "Reed Walker"
+  ],
+  "year": 2019,
+  "venue": "Journal of Human Resources",
+  "volume": "56",
+  "issue": "4",
+  "page": "971-996",
+  "article": ""
+ },
+ "10.1111/ecoj.12091": {
+  "type": "journal-article",
+  "title": "Keep Your Clunker in the Suburb: Low‐Emission Zones and Adoption of Green Vehicles",
+  "authors": [
+   "Hendrik Wolff"
+  ],
+  "year": 2014,
+  "venue": "The Economic Journal",
+  "volume": "124",
+  "issue": "578",
+  "page": "F481-F512",
+  "article": ""
+ },
+ "10.3386/w33584": {
+  "type": "report",
+  "title": "The Network-Wide Effects of Congestion Pricing: Evidence from New York City",
+  "authors": [
+   "Cody Cook",
+   "Aboudy Kreidieh",
+   "Shoshana Vasserman",
+   "Hunt Allcott",
+   "Neha Arora",
+   "Andrew Tomkins",
+   "Eray Turkel",
+   "Freek van Sambeek"
+  ],
+  "year": 2025,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.1016/j.jeem.2016.12.002": {
+  "type": "journal-article",
+  "title": "The effects of license plate-based driving restrictions on air quality: Theory and empirical evidence",
+  "authors": [
+   "Wei Zhang",
+   "C.-Y. Cynthia Lin Lawell",
+   "Victoria I. Umanskaya"
+  ],
+  "year": 2017,
+  "venue": "Journal of Environmental Economics and Management",
+  "volume": "82",
+  "issue": "",
+  "page": "181-220",
+  "article": ""
+ },
+ "10.1016/j.trc.2025.105146": {
+  "type": "journal-article",
+  "title": "Mitigating metropolitan carbon emissions with dynamic eco-driving at scale",
+  "authors": [
+   "Vindula Jayawardana",
+   "Baptiste Freydt",
+   "Ao Qu",
+   "Cameron Hickert",
+   "Edgar Sanchez",
+   "Catherine Tang",
+   "Mark Taylor",
+   "Blaine Leonard",
+   "Cathy Wu"
+  ],
+  "year": 2025,
+  "venue": "Transportation Research Part C: Emerging Technologies",
+  "volume": "179",
+  "issue": "",
+  "page": "105146",
+  "article": "105146"
+ },
+ "10.1080/15568318.2024.2364728": {
+  "type": "journal-article",
+  "title": "EcoMRL: Deep reinforcement learning-based traffic signal control for urban air quality",
+  "authors": [
+   "Jaeeun Jung",
+   "Inhi Kim",
+   "Jinwon Yoon"
+  ],
+  "year": 2024,
+  "venue": "International Journal of Sustainable Transportation",
+  "volume": "19",
+  "issue": "8",
+  "page": "720-729",
+  "article": ""
+ },
+ "10.1371/journal.pone.0313828": {
+  "type": "journal-article",
+  "title": "MAGT-toll: A multi-agent reinforcement learning approach to dynamic traffic congestion pricing",
+  "authors": [
+   "Jiaming Lu",
+   "Chuanyang Hong",
+   "Rui Wang"
+  ],
+  "year": 2024,
+  "venue": "PLOS ONE",
+  "volume": "19",
+  "issue": "11",
+  "page": "e0313828",
+  "article": ""
+ },
+ "10.1016/j.trc.2020.102715": {
+  "type": "journal-article",
+  "title": "Deep reinforcement learning algorithm for dynamic pricing of express lanes with multiple access locations",
+  "authors": [
+   "Venktesh Pandey",
+   "Evana Wang",
+   "Stephen D. Boyles"
+  ],
+  "year": 2020,
+  "venue": "Transportation Research Part C: Emerging Technologies",
+  "volume": "119",
+  "issue": "",
+  "page": "102715",
+  "article": "102715"
+ },
+ "10.1126/sciadv.abk2607": {
+  "type": "journal-article",
+  "title": "The AI Economist: Taxation policy design via two-level deep multiagent reinforcement learning",
+  "authors": [
+   "Stephan Zheng",
+   "Alexander Trott",
+   "Sunil Srinivasa",
+   "David C. Parkes",
+   "Richard Socher"
+  ],
+  "year": 2022,
+  "venue": "Science Advances",
+  "volume": "8",
+  "issue": "18",
+  "page": "",
+  "article": "eabk2607"
+ },
+ "10.1063/1.5124673": {
+  "type": "journal-article",
+  "title": "Deep reinforcement learning in World-Earth system models to discover sustainable management strategies",
+  "authors": [
+   "Felix M. Strnad",
+   "Wolfram Barfuss",
+   "Jonathan F. Donges",
+   "Jobst Heitzig"
+  ],
+  "year": 2019,
+  "venue": "Chaos: An Interdisciplinary Journal of Nonlinear Science",
+  "volume": "29",
+  "issue": "12",
+  "page": "",
+  "article": "123122"
+ },
+ "10.1021/acs.est.0c02923": {
+  "type": "journal-article",
+  "title": "Deep Learning for Prediction of the Air Quality Response to Emission Changes",
+  "authors": [
+   "Jia Xing",
+   "Shuxin Zheng",
+   "Dian Ding",
+   "James T. Kelly",
+   "Shuxiao Wang",
+   "Siwei Li",
+   "Tao Qin",
+   "Mingyuan Ma",
+   "Zhaoxin Dong",
+   "Carey Jang",
+   "Yun Zhu",
+   "Haotian Zheng",
+   "Lu Ren",
+   "Tie-Yan Liu",
+   "Jiming Hao"
+  ],
+  "year": 2020,
+  "venue": "Environmental Science &amp; Technology",
+  "volume": "54",
+  "issue": "14",
+  "page": "8589-8600",
+  "article": ""
+ },
+ "10.1016/j.trc.2013.08.014": {
+  "type": "journal-article",
+  "title": "Max pressure control of a network of signalized intersections",
+  "authors": [
+   "Pravin Varaiya"
+  ],
+  "year": 2013,
+  "venue": "Transportation Research Part C: Emerging Technologies",
+  "volume": "36",
+  "issue": "",
+  "page": "177-195",
+  "article": ""
+ },
+ "10.1287/mnsc.1050.0472": {
+  "type": "journal-article",
+  "title": "A General, Analytic Method for Generating Robust Strategies and Narrative Scenarios",
+  "authors": [
+   "Robert J. Lempert",
+   "David G. Groves",
+   "Steven W. Popper",
+   "Steve C. Bankes"
+  ],
+  "year": 2006,
+  "venue": "Management Science",
+  "volume": "52",
+  "issue": "4",
+  "page": "514-528",
+  "article": ""
+ },
+ "10.1287/opre.2013.1226": {
+  "type": "journal-article",
+  "title": "A Simulation-Based Optimization Framework for Urban Transportation Problems",
+  "authors": [
+   "Carolina Osorio",
+   "Michel Bierlaire"
+  ],
+  "year": 2013,
+  "venue": "Operations Research",
+  "volume": "61",
+  "issue": "6",
+  "page": "1333-1345",
+  "article": ""
+ },
+ "10.24963/ijcai.2019/635": {
+  "type": "proceedings-article",
+  "title": "Dynamic Electronic Toll Collection via Multi-Agent Deep Reinforcement Learning with Edge-Based Graph Convolutional Networks",
+  "authors": [
+   "Wei Qiu",
+   "Haipeng Chen",
+   "Bo An"
+  ],
+  "year": 2019,
+  "venue": "Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence",
+  "volume": "",
+  "issue": "",
+  "page": "4568-4574",
+  "article": ""
+ },
+ "10.1038/s43588-023-00503-5": {
+  "type": "journal-article",
+  "title": "Spatial planning of urban communities via deep reinforcement learning",
+  "authors": [
+   "Yu Zheng",
+   "Yuming Lin",
+   "Liang Zhao",
+   "Tinghai Wu",
+   "Depeng Jin",
+   "Yong Li"
+  ],
+  "year": 2023,
+  "venue": "Nature Computational Science",
+  "volume": "3",
+  "issue": "9",
+  "page": "748-762",
+  "article": ""
+ },
+ "10.1016/j.envsoft.2017.06.054": {
+  "type": "journal-article",
+  "title": "The Exploratory Modeling Workbench: An open source toolkit for exploratory modeling, scenario discovery, and (multi-objective) robust decision making",
+  "authors": [
+   "Jan H. Kwakkel"
+  ],
+  "year": 2017,
+  "venue": "Environmental Modelling &amp; Software",
+  "volume": "96",
+  "issue": "",
+  "page": "239-250",
+  "article": ""
+ },
+ "10.1088/1748-9326/ac30c1": {
+  "type": "journal-article",
+  "title": "Has the ultra low emission zone in London improved air quality?",
+  "authors": [
+   "Liang Ma",
+   "Daniel J Graham",
+   "Marc E J Stettler"
+  ],
+  "year": 2021,
+  "venue": "Environmental Research Letters",
+  "volume": "16",
+  "issue": "12",
+  "page": "124001",
+  "article": ""
+ },
+ "10.3390/land14122368": {
+  "type": "journal-article",
+  "title": "Optimizing Urban Land-Use Through Deep Reinforcement Learning: A Case Study in Hangzhou for Reducing Carbon Emissions",
+  "authors": [
+   "Jie Shen",
+   "Fanghao Zheng",
+   "Tianyi Chen",
+   "Wu Deng",
+   "Anthony Bellotti",
+   "Fiseha Berhanu Tesema",
+   "Elena Lucchi"
+  ],
+  "year": 2025,
+  "venue": "Land",
+  "volume": "14",
+  "issue": "12",
+  "page": "2368",
+  "article": ""
+ },
+ "10.1109/tits.2020.3008612": {
+  "type": "journal-article",
+  "title": "Deep Reinforcement Learning for Intelligent Transportation Systems: A Survey",
+  "authors": [
+   "Ammar Haydari",
+   "Yasin Yilmaz"
+  ],
+  "year": 2022,
+  "venue": "IEEE Transactions on Intelligent Transportation Systems",
+  "volume": "23",
+  "issue": "1",
+  "page": "11-32",
+  "article": ""
+ },
+ "10.1093/ijlct/ctz043": {
+  "type": "journal-article",
+  "title": "Introducing the RZ model for definition and optimization of the boundary of low emission zones",
+  "authors": [
+   "Shahab Kabiri",
+   "Mansour Hajihosseinlou",
+   "Shabnam Kabiri"
+  ],
+  "year": 2019,
+  "venue": "International Journal of Low-Carbon Technologies",
+  "volume": "14",
+  "issue": "4",
+  "page": "516-532",
+  "article": ""
+ },
+ "10.1016/j.trc.2026.105713": {
+  "type": "journal-article",
+  "title": "An equity-aware, data-driven congestion pricing: Application of constrained deep reinforcement learning",
+  "authors": [
+   "Nasser Parishad",
+   "Mehmet Yildirimoglu",
+   "Mark Hickman"
+  ],
+  "year": 2026,
+  "venue": "Transportation Research Part C: Emerging Technologies",
+  "volume": "189",
+  "issue": "",
+  "page": "105713",
+  "article": "105713"
+ },
+ "10.1016/j.tra.2026.105086": {
+  "type": "journal-article",
+  "title": "Digital twin federation for urban mobility assessment: Definition, pillars, and a human-in-the-loop functional architecture",
+  "authors": [
+   "Jingjun Li",
+   "Jascha Grübel",
+   "Ali Nadi",
+   "Maaike Snelder",
+   "Bart van Arem",
+   "Jie Gao"
+  ],
+  "year": 2026,
+  "venue": "Transportation Research Part A: Policy and Practice",
+  "volume": "211",
+  "issue": "",
+  "page": "105086",
+  "article": "105086"
+ },
+ "10.1016/j.tranpol.2026.104381": {
+  "type": "journal-article",
+  "title": "Evaluating impacts of traffic regulations in complex mobility systems using scenario-based simulations",
+  "authors": [
+   "Arianna Burzacchi",
+   "Marco Pistore"
+  ],
+  "year": 2026,
+  "venue": "Transport Policy",
+  "volume": "189",
+  "issue": "",
+  "page": "104381",
+  "article": "104381"
+ },
+ "10.1109/access.2025.3599541": {
+  "type": "journal-article",
+  "title": "Deep Reinforcement Learning for Urban Air Quality Management: Multi-Objective Optimization of Pollution Mitigation Booth Placement in Metropolitan Environments",
+  "authors": [
+   "Kirtan Rajesh",
+   "Suvidha Rupesh Kumar"
+  ],
+  "year": 2025,
+  "venue": "IEEE Access",
+  "volume": "13",
+  "issue": "",
+  "page": "146503-146526",
+  "article": ""
+ },
+ "10.1016/j.tra.2008.11.014": {
+  "type": "journal-article",
+  "title": "A cost–benefit analysis of the Stockholm congestion charging system",
+  "authors": [
+   "Jonas Eliasson"
+  ],
+  "year": 2009,
+  "venue": "Transportation Research Part A: Policy and Practice",
+  "volume": "43",
+  "issue": "4",
+  "page": "468-480",
+  "article": ""
+ },
+ "10.21314/jor.2000.038": {
+  "type": "journal-article",
+  "title": "Optimization of conditional value-at-risk",
+  "authors": [
+   "R. Tyrrell Rockafellar",
+   "Stanislav Uryasev"
+  ],
+  "year": 2000,
+  "venue": "The Journal of Risk",
+  "volume": "2",
+  "issue": "3",
+  "page": "21-41",
+  "article": ""
+ },
+ "10.1007/978-3-030-05252-2": {
+  "type": "book",
+  "title": "Decision Making under Deep Uncertainty",
+  "authors": [],
+  "year": 2019,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.1201/9781315140223": {
+  "type": "monograph",
+  "title": "Constrained Markov Decision Processes",
+  "authors": [
+   "Eitan Altman"
+  ],
+  "year": 2021,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.1016/j.rse.2011.09.027": {
+  "type": "journal-article",
+  "title": "TROPOMI on the ESA Sentinel-5 Precursor: A GMES mission for global observations of the atmospheric composition for climate, air quality and ozone layer applications",
+  "authors": [
+   "J.P. Veefkind",
+   "I. Aben",
+   "K. McMullan",
+   "H. Förster",
+   "J. de Vries",
+   "G. Otter",
+   "J. Claas",
+   "H.J. Eskes",
+   "J.F. de Haan",
+   "Q. Kleipool",
+   "M. van Weele",
+   "O. Hasekamp",
+   "R. Hoogeveen",
+   "J. Landgraf",
+   "R. Snel",
+   "P. Tol",
+   "P. Ingmann",
+   "R. Voors",
+   "B. Kruizinga",
+   "R. Vink",
+   "H. Visser",
+   "P.F. Levelt"
+  ],
+  "year": 2012,
+  "venue": "Remote Sensing of Environment",
+  "volume": "120",
+  "issue": "",
+  "page": "70-83",
+  "article": ""
+ },
+ "10.1126/sciadv.aax9800": {
+  "type": "journal-article",
+  "title": "Pinpointing nitrogen oxide emissions from space",
+  "authors": [
+   "Steffen Beirle",
+   "Christian Borger",
+   "Steffen Dörner",
+   "Ang Li",
+   "Zhaokun Hu",
+   "Fei Liu",
+   "Yang Wang",
+   "Thomas Wagner"
+  ],
+  "year": 2019,
+  "venue": "Science Advances",
+  "volume": "5",
+  "issue": "11",
+  "page": "",
+  "article": "eaax9800"
+ },
+ "10.5194/essd-13-2995-2021": {
+  "type": "journal-article",
+  "title": "Catalog of NO\n                    <sub>\n                      <i>x</i>\n                    </sub>\n                    emissions from point sources as derived from the divergence of the NO\n                    <sub>2</sub>\n                    flux for TROPOMI",
+  "authors": [
+   "Steffen Beirle",
+   "Christian Borger",
+   "Steffen Dörner",
+   "Henk Eskes",
+   "Vinod Kumar",
+   "Adrianus de Laat",
+   "Thomas Wagner"
+  ],
+  "year": 2021,
+  "venue": "Earth System Science Data",
+  "volume": "13",
+  "issue": "6",
+  "page": "2995-3012",
+  "article": ""
+ },
+ "10.5194/essd-15-3051-2023": {
+  "type": "journal-article",
+  "title": "Improved catalog of NO\n                    <sub>\n                      <i>x</i>\n                    </sub>\n                    point source  emissions (version 2)",
+  "authors": [
+   "Steffen Beirle",
+   "Christian Borger",
+   "Adrian Jost",
+   "Thomas Wagner"
+  ],
+  "year": 2023,
+  "venue": "Earth System Science Data",
+  "volume": "15",
+  "issue": "7",
+  "page": "3051-3073",
+  "article": ""
+ },
+ "10.5194/acp-19-9371-2019": {
+  "type": "journal-article",
+  "title": "Towards monitoring localized CO\n                    <sub>2</sub>\n                    emissions from space: co-located regional CO\n                    <sub>2</sub>\n                    and NO\n                    <sub>2</sub>\n                    enhancements observed by the OCO-2 and S5P satellites",
+  "authors": [
+   "Maximilian Reuter",
+   "Michael Buchwitz",
+   "Oliver Schneising",
+   "Sven Krautwurst",
+   "Christopher W. O'Dell",
+   "Andreas Richter",
+   "Heinrich Bovensmann",
+   "John P. Burrows"
+  ],
+  "year": 2019,
+  "venue": "Atmospheric Chemistry and Physics",
+  "volume": "19",
+  "issue": "14",
+  "page": "9371-9383",
+  "article": ""
+ },
+ "10.1016/j.scitotenv.2019.133805": {
+  "type": "journal-article",
+  "title": "Exploiting OMI NO2 satellite observations to infer fossil-fuel CO2 emissions from U.S. megacities",
+  "authors": [
+   "Daniel L. Goldberg",
+   "Zifeng Lu",
+   "Tomohiro Oda",
+   "Lok N. Lamsal",
+   "Fei Liu",
+   "Debora Griffin",
+   "Chris A. McLinden",
+   "Nickolay A. Krotkov",
+   "Bryan N. Duncan",
+   "David G. Streets"
+  ],
+  "year": 2019,
+  "venue": "Science of The Total Environment",
+  "volume": "695",
+  "issue": "",
+  "page": "133805",
+  "article": "133805"
+ },
+ "10.1021/acs.est.9b04488": {
+  "type": "journal-article",
+  "title": "Enhanced Capabilities of TROPOMI NO\n                    <sub>2</sub>\n                    : Estimating NO\n                    <sub>\n                      <i>X</i>\n                    </sub>\n                    from North American Cities and Power Plants",
+  "authors": [
+   "Daniel L. Goldberg",
+   "Zifeng Lu",
+   "David G. Streets",
+   "Benjamin de Foy",
+   "Debora Griffin",
+   "Chris A. McLinden",
+   "Lok N. Lamsal",
+   "Nickolay A. Krotkov",
+   "Henk Eskes"
+  ],
+  "year": 2019,
+  "venue": "Environmental Science &amp; Technology",
+  "volume": "53",
+  "issue": "21",
+  "page": "12594-12601",
+  "article": ""
+ },
+ "10.5194/acp-23-551-2023": {
+  "type": "journal-article",
+  "title": "Quantifying daily NO\n                    <sub>\n                      <i>x</i>\n                    </sub>\n                    and CO\n                    <sub>2</sub>\n                    emissions from Wuhan using satellite observations from TROPOMI and OCO-2",
+  "authors": [
+   "Qianqian Zhang",
+   "K. Folkert Boersma",
+   "Bin Zhao",
+   "Henk Eskes",
+   "Cuihong Chen",
+   "Haotian Zheng",
+   "Xingying Zhang"
+  ],
+  "year": 2023,
+  "venue": "Atmospheric Chemistry and Physics",
+  "volume": "23",
+  "issue": "1",
+  "page": "551-563",
+  "article": ""
+ },
+ "10.5194/acp-23-3493-2023": {
+  "type": "journal-article",
+  "title": "Estimating enhancement ratios of nitrogen  dioxide, carbon monoxide and carbon dioxide  using satellite observations",
+  "authors": [
+   "Cameron G. MacDonald",
+   "Jon-Paul Mastrogiacomo",
+   "Joshua L. Laughner",
+   "Jacob K. Hedelius",
+   "Ray Nassar",
+   "Debra Wunch"
+  ],
+  "year": 2023,
+  "venue": "Atmospheric Chemistry and Physics",
+  "volume": "23",
+  "issue": "6",
+  "page": "3493-3516",
+  "article": ""
+ },
+ "10.1007/s11783-025-1922-x": {
+  "type": "journal-article",
+  "title": "Monitoring fossil fuel CO2 emissions from co-emitted NO2 observed from space: progress, challenges, and future perspectives",
+  "authors": [
+   "Hui Li",
+   "Jiaxin Qiu",
+   "Kexin Zhang",
+   "Bo Zheng"
+  ],
+  "year": 2024,
+  "venue": "Frontiers of Environmental Science &amp; Engineering",
+  "volume": "19",
+  "issue": "1",
+  "page": "",
+  "article": "2"
+ },
+ "10.1016/j.rse.2023.113917": {
+  "type": "journal-article",
+  "title": "Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO2",
+  "authors": [
+   "Daniel L. Goldberg",
+   "Madankui Tao",
+   "Gaige Hunter Kerr",
+   "Siqi Ma",
+   "Daniel Q. Tong",
+   "Arlene M. Fiore",
+   "Angela F. Dickens",
+   "Zachariah E. Adelman",
+   "Susan C. Anenberg"
+  ],
+  "year": 2024,
+  "venue": "Remote Sensing of Environment",
+  "volume": "300",
+  "issue": "",
+  "page": "113917",
+  "article": "113917"
+ },
+ "10.5194/acp-26-3783-2026": {
+  "type": "journal-article",
+  "title": "Global NO\n                    <sub>2</sub>\n                    changes between 2019 and 2024 as observed by TROPOMI in urban areas and emerging hotspots",
+  "authors": [
+   "Daniel E. Huber",
+   "Gaige H. Kerr",
+   "M. Omar Nawaz",
+   "Sara Runkel",
+   "Susan C. Anenberg",
+   "Daniel L. Goldberg"
+  ],
+  "year": 2026,
+  "venue": "Atmospheric Chemistry and Physics",
+  "volume": "26",
+  "issue": "5",
+  "page": "3783-3803",
+  "article": ""
+ },
+ "10.5194/essd-10-87-2018": {
+  "type": "journal-article",
+  "title": "The Open-source Data Inventory for Anthropogenic CO\n                    <sub>2</sub>\n                    , version 2016 (ODIAC2016):   a global monthly fossil fuel CO\n                    <sub>2</sub>\n                    gridded emissions data product for tracer transport simulations and surface flux inversions",
+  "authors": [
+   "Tomohiro Oda",
+   "Shamil Maksyutov",
+   "Robert J. Andres"
+  ],
+  "year": 2018,
+  "venue": "Earth System Science Data",
+  "volume": "10",
+  "issue": "1",
+  "page": "87-107",
+  "article": ""
+ },
+ "10.1038/s41597-020-0462-2": {
+  "type": "journal-article",
+  "title": "High resolution temporal profiles in the Emissions Database for Global Atmospheric Research",
+  "authors": [
+   "Monica Crippa",
+   "Efisio Solazzo",
+   "Ganlin Huang",
+   "Diego Guizzardi",
+   "Ernest Koffi",
+   "Marilena Muntean",
+   "Christian Schieberle",
+   "Rainer Friedrich",
+   "Greet Janssens-Maenhout"
+  ],
+  "year": 2020,
+  "venue": "Scientific Data",
+  "volume": "7",
+  "issue": "1",
+  "page": "",
+  "article": "121"
+ },
+ "10.1029/2018JD028859": {
+  "type": "journal-article",
+  "title": "Comparison of Global Downscaled Versus Bottom‐Up Fossil Fuel CO<sub>2</sub> Emissions at the Urban Scale in Four U.S. Urban Areas",
+  "authors": [
+   "Kevin R. Gurney",
+   "J. Liang",
+   "D. O'Keeffe",
+   "R. Patarasuk",
+   "M. Hutchins",
+   "J. Huang",
+   "P. Rao",
+   "Y. Song"
+  ],
+  "year": 2019,
+  "venue": "Journal of Geophysical Research: Atmospheres",
+  "volume": "124",
+  "issue": "5",
+  "page": "2823-2840",
+  "article": ""
+ },
+ "10.1016/j.atmosres.2022.106240": {
+  "type": "journal-article",
+  "title": "An emission inventory update for Tehran: The difference between air pollution and greenhouse gas source contributions",
+  "authors": [
+   "Hossein Shahbazi",
+   "Ali Mostafazade Abolmaali",
+   "Hossein Alizadeh",
+   "Hooman Salavati",
+   "Hamidreza Zokaei",
+   "Reza Zandavi",
+   "Sara Torbatian",
+   "Daniel Yazgi",
+   "Vahid Hosseini"
+  ],
+  "year": 2022,
+  "venue": "Atmospheric Research",
+  "volume": "275",
+  "issue": "",
+  "page": "106240",
+  "article": "106240"
+ },
+ "10.1016/j.atmosenv.2021.118881": {
+  "type": "journal-article",
+  "title": "High-resolution modeling of gaseous air pollutants over Tehran and validation with surface and satellite data",
+  "authors": [
+   "Nasimeh Shahrokhishahraki",
+   "Peter Julian Rayner",
+   "Jeremy David Silver",
+   "Steven Thomas",
+   "Robyn Schofield"
+  ],
+  "year": 2022,
+  "venue": "Atmospheric Environment",
+  "volume": "270",
+  "issue": "",
+  "page": "118881",
+  "article": "118881"
+ },
+ "10.1016/j.envsoft.2023.105937": {
+  "type": "journal-article",
+  "title": "Spatiotemporal prediction of carbon emissions using a hybrid deep learning model considering temporal and spatial correlations",
+  "authors": [
+   "Yixiang Chen",
+   "Yuxin Xie",
+   "Xu Dang",
+   "Bo Huang",
+   "Chao Wu",
+   "Donglai Jiao"
+  ],
+  "year": 2024,
+  "venue": "Environmental Modelling &amp; Software",
+  "volume": "172",
+  "issue": "",
+  "page": "105937",
+  "article": "105937"
+ },
+ "10.24963/ijcai.2025/1111": {
+  "type": "proceedings-article",
+  "title": "OpenCarbon: A Contrastive Learning-based Cross-Modality Neural Approach for High-Resolution Carbon Emission Prediction Using Open Data",
+  "authors": [
+   "Jinwei Zeng",
+   "Yu Liu",
+   "Guozhen Zhang",
+   "Jingtao Ding",
+   "Yuming Lin",
+   "Jian Yuan",
+   "Yong Li"
+  ],
+  "year": 2025,
+  "venue": "Proceedings of the Thirty-Fourth International Joint Conference on Artificial Intelligence",
+  "volume": "",
+  "issue": "",
+  "page": "9999-10007",
+  "article": ""
+ },
+ "10.1038/s41893-025-01615-8": {
+  "type": "journal-article",
+  "title": "Revealing building operating carbon dynamics for multiple cities",
+  "authors": [
+   "Winston Yap",
+   "Abraham Noah Wu",
+   "Clayton Miller",
+   "Filip Biljecki"
+  ],
+  "year": 2025,
+  "venue": "Nature Sustainability",
+  "volume": "8",
+  "issue": "10",
+  "page": "1199-1210",
+  "article": ""
+ },
+ "10.1016/j.rser.2025.115625": {
+  "type": "journal-article",
+  "title": "Machine learning for predicting urban greenhouse gas emissions: A systematic literature review",
+  "authors": [
+   "Yukai Jin",
+   "Ayyoob Sharifi"
+  ],
+  "year": 2025,
+  "venue": "Renewable and Sustainable Energy Reviews",
+  "volume": "215",
+  "issue": "",
+  "page": "115625",
+  "article": "115625"
+ },
+ "10.5194/egusphere-egu25-11971": {
+  "type": "posted-content",
+  "title": "Estimating Anthropogenic NOx Emissions Using Convolutional Neural Networks with Horizontal Transport Considerations",
+  "authors": [
+   "Yucong Zhang",
+   "Steffen Beirle",
+   "Leon Kuhn",
+   "Thomas Wagner",
+   "Liangyun Liu"
+  ],
+  "year": 2025,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.5194/egusphere-egu25-9108": {
+  "type": "posted-content",
+  "title": "Bridging the Gap in Emission Reporting: Synergistic Use of AI and Earth Observation for Real-Time Insight on Urban CO&amp;#8322; Emissions.",
+  "authors": [
+   "R. Lyana Curier",
+   "Sonja Ham",
+   "Jetse. J. Stoorvogel",
+   "Stefano Bromuri"
+  ],
+  "year": 2025,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.5194/egusphere-egu26-4421": {
+  "type": "posted-content",
+  "title": "Estimating street-scale NO2 surface concentrations from TROPOMI observations and high-resolution geographic data",
+  "authors": [
+   "Leon Kuhn",
+   "Thomas Wagner",
+   "Steffen Beirle"
+  ],
+  "year": 2026,
+  "venue": "",
+  "volume": "",
+  "issue": "",
+  "page": "",
+  "article": ""
+ },
+ "10.1109/TBDATA.2015.2465959": {
+  "type": "journal-article",
+  "title": "Methodologies for Cross-Domain Data Fusion: An Overview",
+  "authors": [
+   "Yu Zheng"
+  ],
+  "year": 2015,
+  "venue": "IEEE Transactions on Big Data",
+  "volume": "1",
+  "issue": "1",
+  "page": "16-34",
+  "article": ""
+ },
+ "10.1109/TPAMI.2018.2798607": {
+  "type": "journal-article",
+  "title": "Multimodal Machine Learning: A Survey and Taxonomy",
+  "authors": [
+   "Tadas Baltrusaitis",
+   "Chaitanya Ahuja",
+   "Louis-Philippe Morency"
+  ],
+  "year": 2019,
+  "venue": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+  "volume": "41",
+  "issue": "2",
+  "page": "423-443",
+  "article": ""
+ },
+ "10.1021/acs.est.2c03834": {
+  "type": "journal-article",
+  "title": "Ground-Level NO\n                    <sub>2</sub>\n                    Surveillance from Space Across China for High Resolution Using Interpretable Spatiotemporally Weighted Artificial Intelligence",
+  "authors": [
+   "Jing Wei",
+   "Song Liu",
+   "Zhanqing Li",
+   "Cheng Liu",
+   "Kai Qin",
+   "Xiong Liu",
+   "Rachel T. Pinker",
+   "Russell R. Dickerson",
+   "Jintai Lin",
+   "K. F. Boersma",
+   "Lin Sun",
+   "Runze Li",
+   "Wenhao Xue",
+   "Yuanzheng Cui",
+   "Chengxin Zhang",
+   "Jun Wang"
+  ],
+  "year": 2022,
+  "venue": "Environmental Science &amp; Technology",
+  "volume": "56",
+  "issue": "14",
+  "page": "9988-9998",
+  "article": ""
+ },
+ "10.1038/s41612-023-00475-3": {
+  "type": "journal-article",
+  "title": "Improving air quality assessment using physics-inspired deep graph learning",
+  "authors": [
+   "Lianfa Li",
+   "Jinfeng Wang",
+   "Meredith Franklin",
+   "Qian Yin",
+   "Jiajie Wu",
+   "Gustau Camps-Valls",
+   "Zhiping Zhu",
+   "Chengyi Wang",
+   "Yong Ge",
+   "Markus Reichstein"
+  ],
+  "year": 2023,
+  "venue": "npj Climate and Atmospheric Science",
+  "volume": "6",
+  "issue": "1",
+  "page": "",
+  "article": "152"
+ },
+ "10.1145/3397536.3422208": {
+  "type": "proceedings-article",
+  "title": "PM2.5-GNN",
+  "authors": [
+   "Shuo Wang",
+   "Yanran Li",
+   "Jiang Zhang",
+   "Qingye Meng",
+   "Lingwei Meng",
+   "Fei Gao"
+  ],
+  "year": 2020,
+  "venue": "Proceedings of the 28th International Conference on Advances in Geographic Information Systems",
+  "volume": "",
+  "issue": "",
+  "page": "163-166",
+  "article": ""
+ },
+ "10.1609/aaai.v34i04.5716": {
+  "type": "journal-article",
+  "title": "Kriging Convolutional Networks",
+  "authors": [
+   "Gabriel Appleby",
+   "Linfeng Liu",
+   "Li-Ping Liu"
+  ],
+  "year": 2020,
+  "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+  "volume": "34",
+  "issue": "04",
+  "page": "3187-3194",
+  "article": ""
+ },
+ "10.7717/peerj.5518": {
+  "type": "journal-article",
+  "title": "Random forest as a generic framework for predictive modeling of spatial and spatio-temporal variables",
+  "authors": [
+   "Tomislav Hengl",
+   "Madlene Nussbaum",
+   "Marvin N. Wright",
+   "Gerard B.M. Heuvelink",
+   "Benedikt Gräler"
+  ],
+  "year": 2018,
+  "venue": "PeerJ",
+  "volume": "6",
+  "issue": "",
+  "page": "e5518",
+  "article": "e5518"
+ },
+ "10.3390/rs12101687": {
+  "type": "journal-article",
+  "title": "Random Forest Spatial Interpolation",
+  "authors": [
+   "Aleksandar Sekulić",
+   "Milan Kilibarda",
+   "Gerard B.M. Heuvelink",
+   "Mladen Nikolić",
+   "Branislav Bajat"
+  ],
+  "year": 2020,
+  "venue": "Remote Sensing",
+  "volume": "12",
+  "issue": "10",
+  "page": "1687",
+  "article": ""
+ },
+ "10.1111/ecog.02881": {
+  "type": "journal-article",
+  "title": "Cross‐validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure",
+  "authors": [
+   "David R. Roberts",
+   "Volker Bahn",
+   "Simone Ciuti",
+   "Mark S. Boyce",
+   "Jane Elith",
+   "Gurutzeta Guillera‐Arroita",
+   "Severin Hauenstein",
+   "José J. Lahoz‐Monfort",
+   "Boris Schröder",
+   "Wilfried Thuiller",
+   "David I. Warton",
+   "Brendan A. Wintle",
+   "Florian Hartig",
+   "Carsten F. Dormann"
+  ],
+  "year": 2017,
+  "venue": "Ecography",
+  "volume": "40",
+  "issue": "8",
+  "page": "913-929",
+  "article": ""
+ },
+ "10.1038/s41467-020-18321-y": {
+  "type": "journal-article",
+  "title": "Spatial validation reveals poor predictive performance of large-scale ecological mapping models",
+  "authors": [
+   "Pierre Ploton",
+   "Frédéric Mortier",
+   "Maxime Réjou-Méchain",
+   "Nicolas Barbier",
+   "Nicolas Picard",
+   "Vivien Rossi",
+   "Carsten Dormann",
+   "Guillaume Cornu",
+   "Gaëlle Viennois",
+   "Nicolas Bayol",
+   "Alexei Lyapustin",
+   "Sylvie Gourlet-Fleury",
+   "Raphaël Pélissier"
+  ],
+  "year": 2020,
+  "venue": "Nature Communications",
+  "volume": "11",
+  "issue": "1",
+  "page": "",
+  "article": "4540"
+ },
+ "10.1016/j.envsoft.2017.12.001": {
+  "type": "journal-article",
+  "title": "Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation",
+  "authors": [
+   "Hanna Meyer",
+   "Christoph Reudenbach",
+   "Tomislav Hengl",
+   "Marwan Katurji",
+   "Thomas Nauss"
+  ],
+  "year": 2018,
+  "venue": "Environmental Modelling &amp; Software",
+  "volume": "101",
+  "issue": "",
+  "page": "1-9",
+  "article": ""
+ },
+ "10.1016/j.ecolmodel.2021.109692": {
+  "type": "journal-article",
+  "title": "Spatial cross-validation is not the right way to evaluate map accuracy",
+  "authors": [
+   "Alexandre M.J.-C. Wadoux",
+   "Gerard B.M. Heuvelink",
+   "Sytze de Bruin",
+   "Dick J. Brus"
+  ],
+  "year": 2021,
+  "venue": "Ecological Modelling",
+  "volume": "457",
+  "issue": "",
+  "page": "109692",
+  "article": "109692"
+ },
+ "10.1038/s41467-022-29838-9": {
+  "type": "journal-article",
+  "title": "Machine learning-based global maps of ecological variables and the challenge of assessing them",
+  "authors": [
+   "Hanna Meyer",
+   "Edzer Pebesma"
+  ],
+  "year": 2022,
+  "venue": "Nature Communications",
+  "volume": "13",
+  "issue": "1",
+  "page": "",
+  "article": "2208"
+ },
+ "10.5194/gmd-17-5897-2024": {
+  "type": "journal-article",
+  "title": "kNNDM CV:\n                    <i>k</i>\n                    -fold nearest-neighbour distance matching cross-validation for map accuracy estimation",
+  "authors": [
+   "Jan Linnenbrink",
+   "Carles Milà",
+   "Marvin Ludwig",
+   "Hanna Meyer"
+  ],
+  "year": 2024,
+  "venue": "Geoscientific Model Development",
+  "volume": "17",
+  "issue": "15",
+  "page": "5897-5912",
+  "article": ""
+ },
+ "10.1111/2041-210X.13851": {
+  "type": "journal-article",
+  "title": "Nearest neighbour distance matching\n                    <scp>Leave‐One‐Out Cross‐Validation</scp>\n                    for map validation",
+  "authors": [
+   "Carles Milà",
+   "Jorge Mateu",
+   "Edzer Pebesma",
+   "Hanna Meyer"
+  ],
+  "year": 2022,
+  "venue": "Methods in Ecology and Evolution",
+  "volume": "13",
+  "issue": "6",
+  "page": "1304-1316",
+  "article": ""
+ },
+ "10.1111/2041-210X.13107": {
+  "type": "journal-article",
+  "title": "<scp>block</scp>\n                    <scp>CV</scp>\n                    : An\n                    <scp>r</scp>\n                    package for generating spatially or environmentally separated folds for\n                    <i>k</i>\n                    ‐fold cross‐validation of species distribution models",
+  "authors": [
+   "Roozbeh Valavi",
+   "Jane Elith",
+   "José J. Lahoz‐Monfort",
+   "Gurutzeta Guillera‐Arroita"
+  ],
+  "year": 2018,
+  "venue": "Methods in Ecology and Evolution",
+  "volume": "10",
+  "issue": "2",
+  "page": "225-232",
+  "article": ""
+ },
+ "10.1111/geb.12161": {
+  "type": "journal-article",
+  "title": "Spatial leave‐one‐out cross‐validation for variable selection in the presence of spatial autocorrelation",
+  "authors": [
+   "Kévin Le Rest",
+   "David Pinaud",
+   "Pascal Monestiez",
+   "Joël Chadoeuf",
+   "Vincent Bretagnolle"
+  ],
+  "year": 2014,
+  "venue": "Global Ecology and Biogeography",
+  "volume": "23",
+  "issue": "7",
+  "page": "811-820",
+  "article": ""
+ },
+ "10.1073/pnas.1708274114": {
+  "type": "journal-article",
+  "title": "The preregistration revolution",
+  "authors": [
+   "Brian A. Nosek",
+   "Charles R. Ebersole",
+   "Alexander C. DeHaven",
+   "David T. Mellor"
+  ],
+  "year": 2018,
+  "venue": "Proceedings of the National Academy of Sciences",
+  "volume": "115",
+  "issue": "11",
+  "page": "2600-2606",
+  "article": ""
+ },
+ "10.5194/isprs-annals-X-4-W8-2025-751-2026": {
+  "type": "journal-article",
+  "title": "Assessing the Feasibility of Landsat-Driven NO\n                    <sub>2</sub>\n                    Prediction: A Spatial Cross-Validation Framework",
+  "authors": [
+   "Amir Tahooni",
+   "Ata Kakroodi",
+   "Majid Kiavarz",
+   "Hossein Mansourian"
+  ],
+  "year": 2026,
+  "venue": "ISPRS Annals of the Photogrammetry, Remote Sensing and Spatial Information Sciences",
+  "volume": "X-4/W8-2025",
+  "issue": "",
+  "page": "751-757",
+  "article": ""
+ },
+ "10.1007/s11869-023-01450-w": {
+  "type": "journal-article",
+  "title": "Investigation of the spatiotemporal patterns of air quality over the metropolitan area of Tehran, using TROPOMI and OMI data",
+  "authors": [
+   "Ayoub Moradi",
+   "Dirk Zeuss"
+  ],
+  "year": 2023,
+  "venue": "Air Quality, Atmosphere &amp; Health",
+  "volume": "17",
+  "issue": "2",
+  "page": "371-387",
+  "article": ""
+ },
+ "10.3390/land14081589": {
+  "type": "journal-article",
+  "title": "A Lightweight Spatiotemporal Graph Framework Leveraging Clustered Monitoring Networks and Copula-Based Pollutant Dependency for PM2.5 Forecasting",
+  "authors": [
+   "Mohammad Taghi Abbasi",
+   "Ali Asghar Alesheikh",
+   "Fatemeh Rezaie"
+  ],
+  "year": 2025,
+  "venue": "Land",
+  "volume": "14",
+  "issue": "8",
+  "page": "1589",
+  "article": ""
+ },
+ "10.1109/JSTARS.2026.3710502": {
+  "type": "journal-article",
+  "title": "CarbonCLIP: Enhance Carbon Prediction From Satellite Imagery via Integrated Street-View Semantics and Temporal Context Training",
+  "authors": [
+   "Zeru Yang",
+   "Fang-Ying Gong",
+   "Steve H. L. Yim",
+   "Chau Yuen"
+  ],
+  "year": 2026,
+  "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+  "volume": "19",
+  "issue": "",
+  "page": "23732-23746",
+  "article": ""
+ },
+ "10.1609/aaai.v32i1.11694": {
+  "type": "journal-article",
+  "title": "Deep Reinforcement Learning That Matters",
+  "authors": [
+   "Peter Henderson",
+   "Riashat Islam",
+   "Philip Bachman",
+   "Joelle Pineau",
+   "Doina Precup",
+   "David Meger"
+  ],
+  "year": 2018,
+  "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+  "volume": "32",
+  "issue": "1",
+  "page": "",
+  "article": ""
+ }
+}

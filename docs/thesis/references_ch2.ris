@@ -1,0 +1,1407 @@
+TY  - JOUR
+TI  - Towards monitoring localized CO 2 emissions from space: co-located regional CO 2 and NO 2 enhancements observed by the OCO-2 and S5P satellites
+AU  - Maximilian Reuter
+AU  - Michael Buchwitz
+AU  - Oliver Schneising
+AU  - Sven Krautwurst
+AU  - Christopher W. O'Dell
+AU  - Andreas Richter
+AU  - Heinrich Bovensmann
+AU  - John P. Burrows
+PY  - 2019
+T2  - Atmospheric Chemistry and Physics
+VL  - 19
+IS  - 14
+SP  - 9371-9383
+DO  - 10.5194/acp-19-9371-2019
+ER  - 
+
+TY  - JOUR
+TI  - Methodologies for Cross-Domain Data Fusion: An Overview
+AU  - Yu Zheng
+PY  - 2015
+T2  - IEEE Transactions on Big Data
+VL  - 1
+IS  - 1
+SP  - 16-34
+DO  - 10.1109/TBDATA.2015.2465959
+ER  - 
+
+TY  - JOUR
+TI  - Multimodal Machine Learning: A Survey and Taxonomy
+AU  - Tadas Baltrusaitis
+AU  - Chaitanya Ahuja
+AU  - Louis-Philippe Morency
+PY  - 2019
+T2  - IEEE Transactions on Pattern Analysis and Machine Intelligence
+VL  - 41
+IS  - 2
+SP  - 423-443
+DO  - 10.1109/TPAMI.2018.2798607
+ER  - 
+
+TY  - GEN
+TI  - Inductive Representation Learning on Large Graphs
+AU  - William L. Hamilton
+AU  - Rex Ying
+AU  - Jure Leskovec
+PY  - 2017
+UR  - https://arxiv.org/abs/1706.02216
+ER  - 
+
+TY  - GEN
+N1  - R. S. Sutton and A. G. Barto, Reinforcement Learning: An Introduction, 2nd ed. Cambridge, MA: MIT Press, 2018.
+ER  - 
+
+TY  - GEN
+TI  - Proximal Policy Optimization Algorithms
+AU  - John Schulman
+AU  - Filip Wolski
+AU  - Prafulla Dhariwal
+AU  - Alec Radford
+AU  - Oleg Klimov
+PY  - 2017
+UR  - https://arxiv.org/abs/1707.06347
+ER  - 
+
+TY  - GEN
+TI  - Constrained Markov Decision Processes
+AU  - Eitan Altman
+PY  - 2021
+DO  - 10.1201/9781315140223
+ER  - 
+
+TY  - JOUR
+TI  - A Simulation-Based Optimization Framework for Urban Transportation Problems
+AU  - Carolina Osorio
+AU  - Michel Bierlaire
+PY  - 2013
+T2  - Operations Research
+VL  - 61
+IS  - 6
+SP  - 1333-1345
+DO  - 10.1287/opre.2013.1226
+ER  - 
+
+TY  - JOUR
+TI  - Optimization of conditional value-at-risk
+AU  - R. Tyrrell Rockafellar
+AU  - Stanislav Uryasev
+PY  - 2000
+T2  - The Journal of Risk
+VL  - 2
+IS  - 3
+SP  - 21-41
+DO  - 10.21314/JOR.2000.038
+ER  - 
+
+TY  - JOUR
+TI  - TROPOMI on the ESA Sentinel-5 Precursor: A GMES mission for global observations of the atmospheric composition for climate, air quality and ozone layer applications
+AU  - J.P. Veefkind
+AU  - I. Aben
+AU  - K. McMullan
+AU  - H. Förster
+AU  - J. de Vries
+AU  - G. Otter
+AU  - J. Claas
+AU  - H.J. Eskes
+AU  - J.F. de Haan
+AU  - Q. Kleipool
+AU  - M. van Weele
+AU  - O. Hasekamp
+AU  - R. Hoogeveen
+AU  - J. Landgraf
+AU  - R. Snel
+AU  - P. Tol
+AU  - P. Ingmann
+AU  - R. Voors
+AU  - B. Kruizinga
+AU  - R. Vink
+AU  - H. Visser
+AU  - P.F. Levelt
+PY  - 2012
+T2  - Remote Sensing of Environment
+VL  - 120
+SP  - 70-83
+DO  - 10.1016/j.rse.2011.09.027
+ER  - 
+
+TY  - JOUR
+TI  - Pinpointing nitrogen oxide emissions from space
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Steffen Dörner
+AU  - Ang Li
+AU  - Zhaokun Hu
+AU  - Fei Liu
+AU  - Yang Wang
+AU  - Thomas Wagner
+PY  - 2019
+T2  - Science Advances
+VL  - 5
+IS  - 11
+SP  - eaax9800
+DO  - 10.1126/sciadv.aax9800
+ER  - 
+
+TY  - JOUR
+TI  - Enhanced Capabilities of TROPOMI NO 2 : Estimating NO X from North American Cities and Power Plants
+AU  - Daniel L. Goldberg
+AU  - Zifeng Lu
+AU  - David G. Streets
+AU  - Benjamin de Foy
+AU  - Debora Griffin
+AU  - Chris A. McLinden
+AU  - Lok N. Lamsal
+AU  - Nickolay A. Krotkov
+AU  - Henk Eskes
+PY  - 2019
+T2  - Environmental Science & Technology
+VL  - 53
+IS  - 21
+SP  - 12594-12601
+DO  - 10.1021/acs.est.9b04488
+ER  - 
+
+TY  - JOUR
+TI  - Exploiting OMI NO2 satellite observations to infer fossil-fuel CO2 emissions from U.S. megacities
+AU  - Daniel L. Goldberg
+AU  - Zifeng Lu
+AU  - Tomohiro Oda
+AU  - Lok N. Lamsal
+AU  - Fei Liu
+AU  - Debora Griffin
+AU  - Chris A. McLinden
+AU  - Nickolay A. Krotkov
+AU  - Bryan N. Duncan
+AU  - David G. Streets
+PY  - 2019
+T2  - Science of The Total Environment
+VL  - 695
+SP  - 133805
+DO  - 10.1016/j.scitotenv.2019.133805
+ER  - 
+
+TY  - JOUR
+TI  - Catalog of NO x emissions from point sources as derived from the divergence of the NO 2 flux for TROPOMI
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Steffen Dörner
+AU  - Henk Eskes
+AU  - Vinod Kumar
+AU  - Adrianus de Laat
+AU  - Thomas Wagner
+PY  - 2021
+T2  - Earth System Science Data
+VL  - 13
+IS  - 6
+SP  - 2995-3012
+DO  - 10.5194/essd-13-2995-2021
+ER  - 
+
+TY  - JOUR
+TI  - Improved catalog of NO x point source emissions (version 2)
+AU  - Steffen Beirle
+AU  - Christian Borger
+AU  - Adrian Jost
+AU  - Thomas Wagner
+PY  - 2023
+T2  - Earth System Science Data
+VL  - 15
+IS  - 7
+SP  - 3051-3073
+DO  - 10.5194/essd-15-3051-2023
+ER  - 
+
+TY  - JOUR
+TI  - Quantifying daily NO x and CO 2 emissions from Wuhan using satellite observations from TROPOMI and OCO-2
+AU  - Qianqian Zhang
+AU  - K. Folkert Boersma
+AU  - Bin Zhao
+AU  - Henk Eskes
+AU  - Cuihong Chen
+AU  - Haotian Zheng
+AU  - Xingying Zhang
+PY  - 2023
+T2  - Atmospheric Chemistry and Physics
+VL  - 23
+IS  - 1
+SP  - 551-563
+DO  - 10.5194/acp-23-551-2023
+ER  - 
+
+TY  - JOUR
+TI  - Estimating enhancement ratios of nitrogen dioxide, carbon monoxide and carbon dioxide using satellite observations
+AU  - Cameron G. MacDonald
+AU  - Jon-Paul Mastrogiacomo
+AU  - Joshua L. Laughner
+AU  - Jacob K. Hedelius
+AU  - Ray Nassar
+AU  - Debra Wunch
+PY  - 2023
+T2  - Atmospheric Chemistry and Physics
+VL  - 23
+IS  - 6
+SP  - 3493-3516
+DO  - 10.5194/acp-23-3493-2023
+ER  - 
+
+TY  - JOUR
+TI  - Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO2
+AU  - Daniel L. Goldberg
+AU  - Madankui Tao
+AU  - Gaige Hunter Kerr
+AU  - Siqi Ma
+AU  - Daniel Q. Tong
+AU  - Arlene M. Fiore
+AU  - Angela F. Dickens
+AU  - Zachariah E. Adelman
+AU  - Susan C. Anenberg
+PY  - 2024
+T2  - Remote Sensing of Environment
+VL  - 300
+SP  - 113917
+DO  - 10.1016/j.rse.2023.113917
+ER  - 
+
+TY  - JOUR
+TI  - Monitoring fossil fuel CO2 emissions from co-emitted NO2 observed from space: progress, challenges, and future perspectives
+AU  - Hui Li
+AU  - Jiaxin Qiu
+AU  - Kexin Zhang
+AU  - Bo Zheng
+PY  - 2024
+T2  - Frontiers of Environmental Science & Engineering
+VL  - 19
+IS  - 1
+SP  - 2
+DO  - 10.1007/s11783-025-1922-x
+ER  - 
+
+TY  - JOUR
+TI  - Global NO 2 changes between 2019 and 2024 as observed by TROPOMI in urban areas and emerging hotspots
+AU  - Daniel E. Huber
+AU  - Gaige H. Kerr
+AU  - M. Omar Nawaz
+AU  - Sara Runkel
+AU  - Susan C. Anenberg
+AU  - Daniel L. Goldberg
+PY  - 2026
+T2  - Atmospheric Chemistry and Physics
+VL  - 26
+IS  - 5
+SP  - 3783-3803
+DO  - 10.5194/acp-26-3783-2026
+ER  - 
+
+TY  - JOUR
+TI  - The Open-source Data Inventory for Anthropogenic CO 2 , version 2016 (ODIAC2016): a global monthly fossil fuel CO 2 gridded emissions data product for tracer transport simulations and surface flux inversions
+AU  - Tomohiro Oda
+AU  - Shamil Maksyutov
+AU  - Robert J. Andres
+PY  - 2018
+T2  - Earth System Science Data
+VL  - 10
+IS  - 1
+SP  - 87-107
+DO  - 10.5194/essd-10-87-2018
+ER  - 
+
+TY  - JOUR
+TI  - Comparison of Global Downscaled Versus Bottom‐Up Fossil Fuel CO2 Emissions at the Urban Scale in Four U.S. Urban Areas
+AU  - Kevin R. Gurney
+AU  - J. Liang
+AU  - D. O'Keeffe
+AU  - R. Patarasuk
+AU  - M. Hutchins
+AU  - J. Huang
+AU  - P. Rao
+AU  - Y. Song
+PY  - 2019
+T2  - Journal of Geophysical Research: Atmospheres
+VL  - 124
+IS  - 5
+SP  - 2823-2840
+DO  - 10.1029/2018JD028859
+ER  - 
+
+TY  - JOUR
+TI  - High resolution temporal profiles in the Emissions Database for Global Atmospheric Research
+AU  - Monica Crippa
+AU  - Efisio Solazzo
+AU  - Ganlin Huang
+AU  - Diego Guizzardi
+AU  - Ernest Koffi
+AU  - Marilena Muntean
+AU  - Christian Schieberle
+AU  - Rainer Friedrich
+AU  - Greet Janssens-Maenhout
+PY  - 2020
+T2  - Scientific Data
+VL  - 7
+IS  - 1
+SP  - 121
+DO  - 10.1038/s41597-020-0462-2
+ER  - 
+
+TY  - JOUR
+TI  - High-resolution modeling of gaseous air pollutants over Tehran and validation with surface and satellite data
+AU  - Nasimeh Shahrokhishahraki
+AU  - Peter Julian Rayner
+AU  - Jeremy David Silver
+AU  - Steven Thomas
+AU  - Robyn Schofield
+PY  - 2022
+T2  - Atmospheric Environment
+VL  - 270
+SP  - 118881
+DO  - 10.1016/j.atmosenv.2021.118881
+ER  - 
+
+TY  - JOUR
+TI  - An emission inventory update for Tehran: The difference between air pollution and greenhouse gas source contributions
+AU  - Hossein Shahbazi
+AU  - Ali Mostafazade Abolmaali
+AU  - Hossein Alizadeh
+AU  - Hooman Salavati
+AU  - Hamidreza Zokaei
+AU  - Reza Zandavi
+AU  - Sara Torbatian
+AU  - Daniel Yazgi
+AU  - Vahid Hosseini
+PY  - 2022
+T2  - Atmospheric Research
+VL  - 275
+SP  - 106240
+DO  - 10.1016/j.atmosres.2022.106240
+ER  - 
+
+TY  - JOUR
+TI  - Machine learning for predicting urban greenhouse gas emissions: A systematic literature review
+AU  - Yukai Jin
+AU  - Ayyoob Sharifi
+PY  - 2025
+T2  - Renewable and Sustainable Energy Reviews
+VL  - 215
+SP  - 115625
+DO  - 10.1016/j.rser.2025.115625
+ER  - 
+
+TY  - JOUR
+TI  - Carbon emission causal discovery and multi-step forecasting for global cities
+AU  - Xuedong Liang
+AU  - Xiaoyan Li
+PY  - 2024
+T2  - Cities
+VL  - 148
+SP  - 104881
+DO  - 10.1016/j.cities.2024.104881
+ER  - 
+
+TY  - JOUR
+TI  - Spatiotemporal prediction of carbon emissions using a hybrid deep learning model considering temporal and spatial correlations
+AU  - Yixiang Chen
+AU  - Yuxin Xie
+AU  - Xu Dang
+AU  - Bo Huang
+AU  - Chao Wu
+AU  - Donglai Jiao
+PY  - 2024
+T2  - Environmental Modelling & Software
+VL  - 172
+SP  - 105937
+DO  - 10.1016/j.envsoft.2023.105937
+ER  - 
+
+TY  - GEN
+TI  - Estimating On-road Transportation Carbon Emissions from Open Data of Road Network and Origin-destination Flow Data
+AU  - Jinwei Zeng
+AU  - Yu Liu
+AU  - Jingtao Ding
+AU  - Jian Yuan
+AU  - Yong Li
+PY  - 2024
+UR  - https://arxiv.org/abs/2402.05153
+ER  - 
+
+TY  - CPAPER
+TI  - OpenCarbon: A Contrastive Learning-based Cross-Modality Neural Approach for High-Resolution Carbon Emission Prediction Using Open Data
+AU  - Jinwei Zeng
+AU  - Yu Liu
+AU  - Guozhen Zhang
+AU  - Jingtao Ding
+AU  - Yuming Lin
+AU  - Jian Yuan
+AU  - Yong Li
+PY  - 2025
+T2  - Proceedings of the Thirty-Fourth International Joint Conference on Artificial Intelligence
+SP  - 9999-10007
+DO  - 10.24963/ijcai.2025/1111
+ER  - 
+
+TY  - JOUR
+TI  - Revealing building operating carbon dynamics for multiple cities
+AU  - Winston Yap
+AU  - Abraham Noah Wu
+AU  - Clayton Miller
+AU  - Filip Biljecki
+PY  - 2025
+T2  - Nature Sustainability
+VL  - 8
+IS  - 10
+SP  - 1199-1210
+DO  - 10.1038/s41893-025-01615-8
+ER  - 
+
+TY  - GEN
+TI  - Estimating Anthropogenic NOx Emissions Using Convolutional Neural Networks with Horizontal Transport Considerations
+AU  - Yucong Zhang
+AU  - Steffen Beirle
+AU  - Leon Kuhn
+AU  - Thomas Wagner
+AU  - Liangyun Liu
+PY  - 2025
+DO  - 10.5194/egusphere-egu25-11971
+ER  - 
+
+TY  - GEN
+TI  - Bridging the Gap in Emission Reporting: Synergistic Use of AI and Earth Observation for Real-Time Insight on Urban CO&#8322; Emissions.
+AU  - R. Lyana Curier
+AU  - Sonja Ham
+AU  - Jetse. J. Stoorvogel
+AU  - Stefano Bromuri
+PY  - 2025
+DO  - 10.5194/egusphere-egu25-9108
+ER  - 
+
+TY  - JOUR
+TI  - CarbonCLIP: Enhance Carbon Prediction From Satellite Imagery via Integrated Street-View Semantics and Temporal Context Training
+AU  - Zeru Yang
+AU  - Fang-Ying Gong
+AU  - Steve H. L. Yim
+AU  - Chau Yuen
+PY  - 2026
+T2  - IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing
+VL  - 19
+SP  - 23732-23746
+DO  - 10.1109/JSTARS.2026.3710502
+ER  - 
+
+TY  - GEN
+TI  - Gated Multimodal Units for Information Fusion
+AU  - John Arevalo
+AU  - Thamar Solorio
+AU  - Manuel Montes-y-Gómez
+AU  - Fabio A. González
+PY  - 2017
+UR  - https://arxiv.org/abs/1702.01992
+ER  - 
+
+TY  - GEN
+N1  - S. Halleck Vega and J. P. Elhorst, "The SLX model," Journal of Regional Science, vol. 55, no. 3, pp. 339–363, 2015.
+ER  - 
+
+TY  - JOUR
+TI  - Random forest as a generic framework for predictive modeling of spatial and spatio-temporal variables
+AU  - Tomislav Hengl
+AU  - Madlene Nussbaum
+AU  - Marvin N. Wright
+AU  - Gerard B.M. Heuvelink
+AU  - Benedikt Gräler
+PY  - 2018
+T2  - PeerJ
+VL  - 6
+SP  - e5518
+DO  - 10.7717/peerj.5518
+ER  - 
+
+TY  - JOUR
+TI  - Random Forest Spatial Interpolation
+AU  - Aleksandar Sekulić
+AU  - Milan Kilibarda
+AU  - Gerard B.M. Heuvelink
+AU  - Mladen Nikolić
+AU  - Branislav Bajat
+PY  - 2020
+T2  - Remote Sensing
+VL  - 12
+IS  - 10
+SP  - 1687
+DO  - 10.3390/rs12101687
+ER  - 
+
+TY  - JOUR
+TI  - Kriging Convolutional Networks
+AU  - Gabriel Appleby
+AU  - Linfeng Liu
+AU  - Li-Ping Liu
+PY  - 2020
+T2  - Proceedings of the AAAI Conference on Artificial Intelligence
+VL  - 34
+IS  - 04
+SP  - 3187-3194
+DO  - 10.1609/aaai.v34i04.5716
+ER  - 
+
+TY  - GEN
+TI  - Inductive Graph Neural Networks for Spatiotemporal Kriging
+AU  - Yuankai Wu
+AU  - Dingyi Zhuang
+AU  - Aurelie Labbe
+AU  - Lijun Sun
+PY  - 2020
+UR  - https://arxiv.org/abs/2006.07527
+ER  - 
+
+TY  - CPAPER
+TI  - PM2.5-GNN
+AU  - Shuo Wang
+AU  - Yanran Li
+AU  - Jiang Zhang
+AU  - Qingye Meng
+AU  - Lingwei Meng
+AU  - Fei Gao
+PY  - 2020
+T2  - Proceedings of the 28th International Conference on Advances in Geographic Information Systems
+SP  - 163-166
+DO  - 10.1145/3397536.3422208
+ER  - 
+
+TY  - JOUR
+TI  - Ground-Level NO 2 Surveillance from Space Across China for High Resolution Using Interpretable Spatiotemporally Weighted Artificial Intelligence
+AU  - Jing Wei
+AU  - Song Liu
+AU  - Zhanqing Li
+AU  - Cheng Liu
+AU  - Kai Qin
+AU  - Xiong Liu
+AU  - Rachel T. Pinker
+AU  - Russell R. Dickerson
+AU  - Jintai Lin
+AU  - K. F. Boersma
+AU  - Lin Sun
+AU  - Runze Li
+AU  - Wenhao Xue
+AU  - Yuanzheng Cui
+AU  - Chengxin Zhang
+AU  - Jun Wang
+PY  - 2022
+T2  - Environmental Science & Technology
+VL  - 56
+IS  - 14
+SP  - 9988-9998
+DO  - 10.1021/acs.est.2c03834
+ER  - 
+
+TY  - GEN
+TI  - Positional Encoder Graph Neural Networks for Geographic Data
+AU  - Konstantin Klemmer
+AU  - Nathan Safir
+AU  - Daniel B. Neill
+PY  - 2021
+UR  - https://arxiv.org/abs/2111.10144
+ER  - 
+
+TY  - JOUR
+TI  - Improving air quality assessment using physics-inspired deep graph learning
+AU  - Lianfa Li
+AU  - Jinfeng Wang
+AU  - Meredith Franklin
+AU  - Qian Yin
+AU  - Jiajie Wu
+AU  - Gustau Camps-Valls
+AU  - Zhiping Zhu
+AU  - Chengyi Wang
+AU  - Yong Ge
+AU  - Markus Reichstein
+PY  - 2023
+T2  - npj Climate and Atmospheric Science
+VL  - 6
+IS  - 1
+SP  - 152
+DO  - 10.1038/s41612-023-00475-3
+ER  - 
+
+TY  - GEN
+TI  - AirPhyNet: Harnessing Physics-Guided Neural Networks for Air Quality Prediction
+AU  - Kethmi Hirushini Hettige
+AU  - Jiahao Ji
+AU  - Shili Xiang
+AU  - Cheng Long
+AU  - Gao Cong
+AU  - Jingyuan Wang
+PY  - 2024
+UR  - https://arxiv.org/abs/2402.03784
+ER  - 
+
+TY  - GEN
+TI  - Improving Local Air Quality Predictions Using Transfer Learning on Satellite Data and Graph Neural Networks
+AU  - Finn Gueterbock
+AU  - Raul Santos-Rodriguez
+AU  - Jeffrey N. Clark
+PY  - 2025
+UR  - https://arxiv.org/abs/2505.05479
+ER  - 
+
+TY  - GEN
+TI  - Estimating street-scale NO2 surface concentrations from TROPOMI observations and high-resolution geographic data
+AU  - Leon Kuhn
+AU  - Thomas Wagner
+AU  - Steffen Beirle
+PY  - 2026
+DO  - 10.5194/egusphere-egu26-4421
+ER  - 
+
+TY  - GEN
+TI  - Why do tree-based models still outperform deep learning on tabular data?
+AU  - Léo Grinsztajn
+AU  - Edouard Oyallon
+AU  - Gaël Varoquaux
+PY  - 2022
+UR  - https://arxiv.org/abs/2207.08815
+ER  - 
+
+TY  - JOUR
+TI  - Spatial leave‐one‐out cross‐validation for variable selection in the presence of spatial autocorrelation
+AU  - Kévin Le Rest
+AU  - David Pinaud
+AU  - Pascal Monestiez
+AU  - Joël Chadoeuf
+AU  - Vincent Bretagnolle
+PY  - 2014
+T2  - Global Ecology and Biogeography
+VL  - 23
+IS  - 7
+SP  - 811-820
+DO  - 10.1111/geb.12161
+ER  - 
+
+TY  - JOUR
+TI  - Cross‐validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure
+AU  - David R. Roberts
+AU  - Volker Bahn
+AU  - Simone Ciuti
+AU  - Mark S. Boyce
+AU  - Jane Elith
+AU  - Gurutzeta Guillera‐Arroita
+AU  - Severin Hauenstein
+AU  - José J. Lahoz‐Monfort
+AU  - Boris Schröder
+AU  - Wilfried Thuiller
+AU  - David I. Warton
+AU  - Brendan A. Wintle
+AU  - Florian Hartig
+AU  - Carsten F. Dormann
+PY  - 2017
+T2  - Ecography
+VL  - 40
+IS  - 8
+SP  - 913-929
+DO  - 10.1111/ecog.02881
+ER  - 
+
+TY  - JOUR
+TI  - Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation
+AU  - Hanna Meyer
+AU  - Christoph Reudenbach
+AU  - Tomislav Hengl
+AU  - Marwan Katurji
+AU  - Thomas Nauss
+PY  - 2018
+T2  - Environmental Modelling & Software
+VL  - 101
+SP  - 1-9
+DO  - 10.1016/j.envsoft.2017.12.001
+ER  - 
+
+TY  - JOUR
+TI  - The preregistration revolution
+AU  - Brian A. Nosek
+AU  - Charles R. Ebersole
+AU  - Alexander C. DeHaven
+AU  - David T. Mellor
+PY  - 2018
+T2  - Proceedings of the National Academy of Sciences
+VL  - 115
+IS  - 11
+SP  - 2600-2606
+DO  - 10.1073/pnas.1708274114
+ER  - 
+
+TY  - JOUR
+TI  - block CV : An r package for generating spatially or environmentally separated folds for k ‐fold cross‐validation of species distribution models
+AU  - Roozbeh Valavi
+AU  - Jane Elith
+AU  - José J. Lahoz‐Monfort
+AU  - Gurutzeta Guillera‐Arroita
+PY  - 2018
+T2  - Methods in Ecology and Evolution
+VL  - 10
+IS  - 2
+SP  - 225-232
+DO  - 10.1111/2041-210X.13107
+ER  - 
+
+TY  - JOUR
+TI  - Spatial validation reveals poor predictive performance of large-scale ecological mapping models
+AU  - Pierre Ploton
+AU  - Frédéric Mortier
+AU  - Maxime Réjou-Méchain
+AU  - Nicolas Barbier
+AU  - Nicolas Picard
+AU  - Vivien Rossi
+AU  - Carsten Dormann
+AU  - Guillaume Cornu
+AU  - Gaëlle Viennois
+AU  - Nicolas Bayol
+AU  - Alexei Lyapustin
+AU  - Sylvie Gourlet-Fleury
+AU  - Raphaël Pélissier
+PY  - 2020
+T2  - Nature Communications
+VL  - 11
+IS  - 1
+SP  - 4540
+DO  - 10.1038/s41467-020-18321-y
+ER  - 
+
+TY  - JOUR
+TI  - Spatial cross-validation is not the right way to evaluate map accuracy
+AU  - Alexandre M.J.-C. Wadoux
+AU  - Gerard B.M. Heuvelink
+AU  - Sytze de Bruin
+AU  - Dick J. Brus
+PY  - 2021
+T2  - Ecological Modelling
+VL  - 457
+SP  - 109692
+DO  - 10.1016/j.ecolmodel.2021.109692
+ER  - 
+
+TY  - JOUR
+TI  - Machine learning-based global maps of ecological variables and the challenge of assessing them
+AU  - Hanna Meyer
+AU  - Edzer Pebesma
+PY  - 2022
+T2  - Nature Communications
+VL  - 13
+IS  - 1
+SP  - 2208
+DO  - 10.1038/s41467-022-29838-9
+ER  - 
+
+TY  - JOUR
+TI  - Nearest neighbour distance matching Leave‐One‐Out Cross‐Validation for map validation
+AU  - Carles Milà
+AU  - Jorge Mateu
+AU  - Edzer Pebesma
+AU  - Hanna Meyer
+PY  - 2022
+T2  - Methods in Ecology and Evolution
+VL  - 13
+IS  - 6
+SP  - 1304-1316
+DO  - 10.1111/2041-210X.13851
+ER  - 
+
+TY  - JOUR
+TI  - kNNDM CV: k -fold nearest-neighbour distance matching cross-validation for map accuracy estimation
+AU  - Jan Linnenbrink
+AU  - Carles Milà
+AU  - Marvin Ludwig
+AU  - Hanna Meyer
+PY  - 2024
+T2  - Geoscientific Model Development
+VL  - 17
+IS  - 15
+SP  - 5897-5912
+DO  - 10.5194/gmd-17-5897-2024
+ER  - 
+
+TY  - GEN
+TI  - Evaluation Challenges for Geospatial ML
+AU  - Esther Rolf
+PY  - 2023
+UR  - https://arxiv.org/abs/2303.18087
+ER  - 
+
+TY  - GEN
+N1  - Transport for London, "Central London Congestion Charging: Impacts Monitoring – Second Annual Report," London, 2004.
+ER  - 
+
+TY  - JOUR
+TI  - The Effect of Driving Restrictions on Air Quality in Mexico City
+AU  - Lucas W. Davis
+PY  - 2008
+T2  - Journal of Political Economy
+VL  - 116
+IS  - 1
+SP  - 38-81
+DO  - 10.1086/529398
+ER  - 
+
+TY  - JOUR
+TI  - A cost–benefit analysis of the Stockholm congestion charging system
+AU  - Jonas Eliasson
+PY  - 2009
+T2  - Transportation Research Part A: Policy and Practice
+VL  - 43
+IS  - 4
+SP  - 468-480
+DO  - 10.1016/j.tra.2008.11.014
+ER  - 
+
+TY  - JOUR
+TI  - Keep Your Clunker in the Suburb: Low‐Emission Zones and Adoption of Green Vehicles
+AU  - Hendrik Wolff
+PY  - 2014
+T2  - The Economic Journal
+VL  - 124
+IS  - 578
+SP  - F481-F512
+DO  - 10.1111/ecoj.12091
+ER  - 
+
+TY  - JOUR
+TI  - The effect of Beijing's driving restrictions on pollution and economic activity
+AU  - V. Brian Viard
+AU  - Shihe Fu
+PY  - 2015
+T2  - Journal of Public Economics
+VL  - 125
+SP  - 98-115
+DO  - 10.1016/j.jpubeco.2015.02.003
+ER  - 
+
+TY  - JOUR
+TI  - Did the London congestion charge reduce pollution?
+AU  - Colin P. Green
+AU  - John S. Heywood
+AU  - Maria Navarro Paniagua
+PY  - 2020
+T2  - Regional Science and Urban Economics
+VL  - 84
+SP  - 103573
+DO  - 10.1016/j.regsciurbeco.2020.103573
+ER  - 
+
+TY  - JOUR
+TI  - Congestion Pricing, Air Pollution, and Children’s Health
+AU  - Emilia Simeonova
+AU  - Janet Currie
+AU  - Peter Nilsson
+AU  - Reed Walker
+PY  - 2019
+T2  - Journal of Human Resources
+VL  - 56
+IS  - 4
+SP  - 971-996
+DO  - 10.3368/jhr.56.4.0218-9363r2
+ER  - 
+
+TY  - JOUR
+TI  - Has the ultra low emission zone in London improved air quality?
+AU  - Liang Ma
+AU  - Daniel J Graham
+AU  - Marc E J Stettler
+PY  - 2021
+T2  - Environmental Research Letters
+VL  - 16
+IS  - 12
+SP  - 124001
+DO  - 10.1088/1748-9326/ac30c1
+ER  - 
+
+TY  - JOUR
+TI  - Does rationing really backfire? A critical review of the literature on license-plate-based driving restrictions
+AU  - Erick Guerra
+AU  - Andrew Sandweiss
+AU  - Seunglee David Park
+PY  - 2021
+T2  - Transport Reviews
+VL  - 42
+IS  - 5
+SP  - 604-625
+DO  - 10.1080/01441647.2021.1998244
+ER  - 
+
+TY  - RPRT
+TI  - The Network-Wide Effects of Congestion Pricing: Evidence from New York City
+AU  - Cody Cook
+AU  - Aboudy Kreidieh
+AU  - Shoshana Vasserman
+AU  - Hunt Allcott
+AU  - Neha Arora
+AU  - Andrew Tomkins
+AU  - Eray Turkel
+AU  - Freek van Sambeek
+PY  - 2025
+DO  - 10.3386/w33584
+ER  - 
+
+TY  - CPAPER
+TI  - Dynamic Electronic Toll Collection via Multi-Agent Deep Reinforcement Learning with Edge-Based Graph Convolutional Networks
+AU  - Wei Qiu
+AU  - Haipeng Chen
+AU  - Bo An
+PY  - 2019
+T2  - Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence
+SP  - 4568-4574
+DO  - 10.24963/ijcai.2019/635
+ER  - 
+
+TY  - JOUR
+TI  - Deep reinforcement learning in World-Earth system models to discover sustainable management strategies
+AU  - Felix M. Strnad
+AU  - Wolfram Barfuss
+AU  - Jonathan F. Donges
+AU  - Jobst Heitzig
+PY  - 2019
+T2  - Chaos: An Interdisciplinary Journal of Nonlinear Science
+VL  - 29
+IS  - 12
+SP  - 123122
+DO  - 10.1063/1.5124673
+ER  - 
+
+TY  - JOUR
+TI  - Deep reinforcement learning algorithm for dynamic pricing of express lanes with multiple access locations
+AU  - Venktesh Pandey
+AU  - Evana Wang
+AU  - Stephen D. Boyles
+PY  - 2020
+T2  - Transportation Research Part C: Emerging Technologies
+VL  - 119
+SP  - 102715
+DO  - 10.1016/j.trc.2020.102715
+ER  - 
+
+TY  - JOUR
+TI  - Deep Reinforcement Learning for Intelligent Transportation Systems: A Survey
+AU  - Ammar Haydari
+AU  - Yasin Yilmaz
+PY  - 2022
+T2  - IEEE Transactions on Intelligent Transportation Systems
+VL  - 23
+IS  - 1
+SP  - 11-32
+DO  - 10.1109/tits.2020.3008612
+ER  - 
+
+TY  - JOUR
+TI  - The AI Economist: Taxation policy design via two-level deep multiagent reinforcement learning
+AU  - Stephan Zheng
+AU  - Alexander Trott
+AU  - Sunil Srinivasa
+AU  - David C. Parkes
+AU  - Richard Socher
+PY  - 2022
+T2  - Science Advances
+VL  - 8
+IS  - 18
+SP  - eabk2607
+DO  - 10.1126/sciadv.abk2607
+ER  - 
+
+TY  - JOUR
+TI  - Spatial planning of urban communities via deep reinforcement learning
+AU  - Yu Zheng
+AU  - Yuming Lin
+AU  - Liang Zhao
+AU  - Tinghai Wu
+AU  - Depeng Jin
+AU  - Yong Li
+PY  - 2023
+T2  - Nature Computational Science
+VL  - 3
+IS  - 9
+SP  - 748-762
+DO  - 10.1038/s43588-023-00503-5
+ER  - 
+
+TY  - JOUR
+TI  - MAGT-toll: A multi-agent reinforcement learning approach to dynamic traffic congestion pricing
+AU  - Jiaming Lu
+AU  - Chuanyang Hong
+AU  - Rui Wang
+PY  - 2024
+T2  - PLOS ONE
+VL  - 19
+IS  - 11
+SP  - e0313828
+DO  - 10.1371/journal.pone.0313828
+ER  - 
+
+TY  - JOUR
+TI  - EcoMRL: Deep reinforcement learning-based traffic signal control for urban air quality
+AU  - Jaeeun Jung
+AU  - Inhi Kim
+AU  - Jinwon Yoon
+PY  - 2024
+T2  - International Journal of Sustainable Transportation
+VL  - 19
+IS  - 8
+SP  - 720-729
+DO  - 10.1080/15568318.2024.2364728
+ER  - 
+
+TY  - JOUR
+TI  - AI-Driven urban planning optimization: A graph neural network and genetic algorithm framework for tackling peak-hour challenges
+AU  - Jianyi Li
+AU  - Yin Zhang
+AU  - Shuo Yu
+AU  - Haochen Qin
+AU  - Zhen Xu
+PY  - 2025
+T2  - Sustainable Cities and Society
+VL  - 126
+SP  - 106407
+DO  - 10.1016/j.scs.2025.106407
+ER  - 
+
+TY  - JOUR
+TI  - Mitigating metropolitan carbon emissions with dynamic eco-driving at scale
+AU  - Vindula Jayawardana
+AU  - Baptiste Freydt
+AU  - Ao Qu
+AU  - Cameron Hickert
+AU  - Edgar Sanchez
+AU  - Catherine Tang
+AU  - Mark Taylor
+AU  - Blaine Leonard
+AU  - Cathy Wu
+PY  - 2025
+T2  - Transportation Research Part C: Emerging Technologies
+VL  - 179
+SP  - 105146
+DO  - 10.1016/j.trc.2025.105146
+ER  - 
+
+TY  - JOUR
+TI  - Optimizing Urban Land-Use Through Deep Reinforcement Learning: A Case Study in Hangzhou for Reducing Carbon Emissions
+AU  - Jie Shen
+AU  - Fanghao Zheng
+AU  - Tianyi Chen
+AU  - Wu Deng
+AU  - Anthony Bellotti
+AU  - Fiseha Berhanu Tesema
+AU  - Elena Lucchi
+PY  - 2025
+T2  - Land
+VL  - 14
+IS  - 12
+SP  - 2368
+DO  - 10.3390/land14122368
+ER  - 
+
+TY  - JOUR
+TI  - Deep Reinforcement Learning for Urban Air Quality Management: Multi-Objective Optimization of Pollution Mitigation Booth Placement in Metropolitan Environments
+AU  - Kirtan Rajesh
+AU  - Suvidha Rupesh Kumar
+PY  - 2025
+T2  - IEEE Access
+VL  - 13
+SP  - 146503-146526
+DO  - 10.1109/access.2025.3599541
+ER  - 
+
+TY  - JOUR
+TI  - An equity-aware, data-driven congestion pricing: Application of constrained deep reinforcement learning
+AU  - Nasser Parishad
+AU  - Mehmet Yildirimoglu
+AU  - Mark Hickman
+PY  - 2026
+T2  - Transportation Research Part C: Emerging Technologies
+VL  - 189
+SP  - 105713
+DO  - 10.1016/j.trc.2026.105713
+ER  - 
+
+TY  - GEN
+TI  - Dynamic multi-agent deep reinforcement learning-based pricing and incentivization approach in multimodal transportation networks
+AU  - Khadidja Kadem
+AU  - Mostafa Ameli
+AU  - Carlos Lima Azevedo
+AU  - Mahdi Zargayouna
+AU  - Latifa Oukhellou
+PY  - 2026
+UR  - https://arxiv.org/abs/2606.23257
+ER  - 
+
+TY  - JOUR
+TI  - Max pressure control of a network of signalized intersections
+AU  - Pravin Varaiya
+PY  - 2013
+T2  - Transportation Research Part C: Emerging Technologies
+VL  - 36
+SP  - 177-195
+DO  - 10.1016/j.trc.2013.08.014
+ER  - 
+
+TY  - GEN
+TI  - Simple random search provides a competitive approach to reinforcement learning
+AU  - Horia Mania
+AU  - Aurelia Guy
+AU  - Benjamin Recht
+PY  - 2018
+UR  - https://arxiv.org/abs/1803.07055
+ER  - 
+
+TY  - JOUR
+TI  - Deep Reinforcement Learning That Matters
+AU  - Peter Henderson
+AU  - Riashat Islam
+AU  - Philip Bachman
+AU  - Joelle Pineau
+AU  - Doina Precup
+AU  - David Meger
+PY  - 2018
+T2  - Proceedings of the AAAI Conference on Artificial Intelligence
+VL  - 32
+IS  - 1
+DO  - 10.1609/aaai.v32i1.11694
+ER  - 
+
+TY  - GEN
+N1  - J. Ault and G. Sharon, "Reinforcement learning benchmarks for traffic signal control," in Proc. 35th Conf. Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track, 2021.
+ER  - 
+
+TY  - GEN
+TI  - Deep Reinforcement Learning at the Edge of the Statistical Precipice
+AU  - Rishabh Agarwal
+AU  - Max Schwarzer
+AU  - Pablo Samuel Castro
+AU  - Aaron Courville
+AU  - Marc G. Bellemare
+PY  - 2021
+UR  - https://arxiv.org/abs/2108.13264
+ER  - 
+
+TY  - JOUR
+TI  - A General, Analytic Method for Generating Robust Strategies and Narrative Scenarios
+AU  - Robert J. Lempert
+AU  - David G. Groves
+AU  - Steven W. Popper
+AU  - Steve C. Bankes
+PY  - 2006
+T2  - Management Science
+VL  - 52
+IS  - 4
+SP  - 514-528
+DO  - 10.1287/mnsc.1050.0472
+ER  - 
+
+TY  - GEN
+TI  - Risk-Sensitive and Robust Decision-Making: a CVaR Optimization Approach
+AU  - Yinlam Chow
+AU  - Aviv Tamar
+AU  - Shie Mannor
+AU  - Marco Pavone
+PY  - 2015
+UR  - https://arxiv.org/abs/1506.02188
+ER  - 
+
+TY  - JOUR
+TI  - The Exploratory Modeling Workbench: An open source toolkit for exploratory modeling, scenario discovery, and (multi-objective) robust decision making
+AU  - Jan H. Kwakkel
+PY  - 2017
+T2  - Environmental Modelling & Software
+VL  - 96
+SP  - 239-250
+DO  - 10.1016/j.envsoft.2017.06.054
+ER  - 
+
+TY  - BOOK
+TI  - Decision Making under Deep Uncertainty
+PY  - 2019
+DO  - 10.1007/978-3-030-05252-2
+ER  - 
+
+TY  - JOUR
+TI  - Deep Learning for Prediction of the Air Quality Response to Emission Changes
+AU  - Jia Xing
+AU  - Shuxin Zheng
+AU  - Dian Ding
+AU  - James T. Kelly
+AU  - Shuxiao Wang
+AU  - Siwei Li
+AU  - Tao Qin
+AU  - Mingyuan Ma
+AU  - Zhaoxin Dong
+AU  - Carey Jang
+AU  - Yun Zhu
+AU  - Haotian Zheng
+AU  - Lu Ren
+AU  - Tie-Yan Liu
+AU  - Jiming Hao
+PY  - 2020
+T2  - Environmental Science & Technology
+VL  - 54
+IS  - 14
+SP  - 8589-8600
+DO  - 10.1021/acs.est.0c02923
+ER  - 
+
+TY  - GEN
+TI  - Graph Neural Network Approach to Predict the Effects of Road Capacity Reduction Policies: A Case Study for Paris, France
+AU  - Elena Natterer
+AU  - Roman Engelhardt
+AU  - Sebastian Hörl
+AU  - Klaus Bogenberger
+PY  - 2024
+UR  - https://arxiv.org/abs/2408.06762
+ER  - 
+
+TY  - GEN
+TI  - Machine Learning Surrogates for Optimizing Transportation Policies with Agent-Based Models
+AU  - Elena Natterer
+AU  - Roman Engelhardt
+AU  - Sebastian Hörl
+AU  - Klaus Bogenberger
+PY  - 2025
+UR  - https://arxiv.org/abs/2501.11057
+ER  - 
+
+TY  - GEN
+TI  - A deep-learning model for predicting daily PM2.5 concentration in response to emission reduction
+AU  - Shigan Liu
+AU  - Guannan Geng
+AU  - Yanfei Xiang
+AU  - Hejun Hu
+AU  - Xiaodong Liu
+AU  - Xiaomeng Huang
+AU  - Qiang Zhang
+PY  - 2025
+UR  - https://arxiv.org/abs/2506.18018
+ER  - 
+
+TY  - GEN
+TI  - Optimal Low Emission Zones scheduling as an example of transport policy backcasting
+AU  - Asmae Alami
+AU  - Vinith Lakshmanan
+AU  - Antonio Sciarretta
+PY  - 2025
+UR  - https://arxiv.org/abs/2505.07451
+ER  - 
+
+TY  - JOUR
+TI  - Evaluating impacts of traffic regulations in complex mobility systems using scenario-based simulations
+AU  - Arianna Burzacchi
+AU  - Marco Pistore
+PY  - 2026
+T2  - Transport Policy
+VL  - 189
+SP  - 104381
+DO  - 10.1016/j.tranpol.2026.104381
+ER  - 
+
+TY  - JOUR
+TI  - Digital twin federation for urban mobility assessment: Definition, pillars, and a human-in-the-loop functional architecture
+AU  - Jingjun Li
+AU  - Jascha Grübel
+AU  - Ali Nadi
+AU  - Maaike Snelder
+AU  - Bart van Arem
+AU  - Jie Gao
+PY  - 2026
+T2  - Transportation Research Part A: Policy and Practice
+VL  - 211
+SP  - 105086
+DO  - 10.1016/j.tra.2026.105086
+ER  - 
+
+TY  - JOUR
+TI  - Investigating the influence of traffic emission reduction plans on Tehran air quality using WRF/CAMx modeling tools
+AU  - Hossein Shahbazi
+AU  - Rouhollah Ganjiazad
+AU  - Vahid Hosseini
+AU  - Masoud Hamedi
+PY  - 2017
+T2  - Transportation Research Part D: Transport and Environment
+VL  - 57
+SP  - 484-495
+DO  - 10.1016/j.trd.2017.08.001
+ER  - 
+
+TY  - JOUR
+TI  - Introducing the RZ model for definition and optimization of the boundary of low emission zones
+AU  - Shahab Kabiri
+AU  - Mansour Hajihosseinlou
+AU  - Shabnam Kabiri
+PY  - 2019
+T2  - International Journal of Low-Carbon Technologies
+VL  - 14
+IS  - 4
+SP  - 516-532
+DO  - 10.1093/ijlct/ctz043
+ER  - 
+
+TY  - JOUR
+TI  - Evaluation of Tehran clean air action plan using emission inventory approach
+AU  - Hossein Shahbazi
+AU  - Amin Hassani
+AU  - Vahid Hosseini
+PY  - 2019
+T2  - Urban Climate
+VL  - 27
+SP  - 446-456
+DO  - 10.1016/j.uclim.2019.01.002
+ER  - 
+
+TY  - JOUR
+TI  - Impact of suspending traffic management plan in Tehran on air quality and COVID-19 mortality and morbidity
+AU  - Masoumeh Rahmatinia
+AU  - Anooshiravan Mohseni Bandpey
+AU  - Abbas Shahsavani
+AU  - Mostafa Hadei
+AU  - Ahmad Jonidi Jafari
+AU  - Alireza Raeisi
+AU  - Vajeh Hasanzade
+AU  - Alireza Zali
+AU  - Maryam Yarahmadi
+AU  - Majid Kermani
+AU  - Mehdi Amouei Torkmahalleh
+AU  - Zahra Namvar
+AU  - Shahriyar Bazzazpour
+PY  - 2021
+T2  - Journal of Air Pollution and Health
+DO  - 10.18502/japh.v5i3.5388
+ER  - 
+
+TY  - JOUR
+TI  - Investigation of the spatiotemporal patterns of air quality over the metropolitan area of Tehran, using TROPOMI and OMI data
+AU  - Ayoub Moradi
+AU  - Dirk Zeuss
+PY  - 2023
+T2  - Air Quality, Atmosphere & Health
+VL  - 17
+IS  - 2
+SP  - 371-387
+DO  - 10.1007/s11869-023-01450-w
+ER  - 
+
+TY  - JOUR
+TI  - A Lightweight Spatiotemporal Graph Framework Leveraging Clustered Monitoring Networks and Copula-Based Pollutant Dependency for PM2.5 Forecasting
+AU  - Mohammad Taghi Abbasi
+AU  - Ali Asghar Alesheikh
+AU  - Fatemeh Rezaie
+PY  - 2025
+T2  - Land
+VL  - 14
+IS  - 8
+SP  - 1589
+DO  - 10.3390/land14081589
+ER  - 
+
+TY  - JOUR
+TI  - Assessing the Feasibility of Landsat-Driven NO 2 Prediction: A Spatial Cross-Validation Framework
+AU  - Amir Tahooni
+AU  - Ata Kakroodi
+AU  - Majid Kiavarz
+AU  - Hossein Mansourian
+PY  - 2026
+T2  - ISPRS Annals of the Photogrammetry, Remote Sensing and Spatial Information Sciences
+VL  - X-4/W8-2025
+SP  - 751-757
+DO  - 10.5194/isprs-annals-X-4-W8-2025-751-2026
+ER  - 
