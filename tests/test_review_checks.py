@@ -26,6 +26,8 @@ def test_review_experiments_resolve():
     assert len(c.resolve("paper2_rq2_mlp_lag_v1")) == 2
     assert len(c.resolve("paper2_slx_short_v1")) == 12
     assert len(c.resolve("paper2_slx_buffer_v2")) == 9
+    assert len(c.resolve("paper2_rq2_mlp_lag_short_v1")) == 6
+    assert len(c.resolve("paper2_rq2_mlp_lag_buffer_v1")) == 3
     depth = {cfg["model"]["backbone"]["layers"] for cfg in c.resolve("paper2_rq2_depth_v1")}
     assert depth == {1, 2, 4, 5}
     for cfg in c.resolve("paper2_rq2_mlp_lag_v1"):

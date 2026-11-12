@@ -32,3 +32,13 @@ fi
 
 echo "== done. Copy the outputs of the paper_* analysis runs (runs/<id>/*.csv, *.json, *.png, log.txt) to"
 echo "   docs/paper/results_review/ (one folder per analysis) and push, as for results_stageA."
+
+echo "== 5. follow-up (GPU, ~40 min): the same learner without a graph at every reach and under larger buffers"
+if [ "${WITH_FOLLOWUP:-0}" = "1" ]; then
+  python main.py train --exp paper2_rq2_mlp_lag_short_v1    # 6 runs, ~4 min each
+  python main.py train --exp paper2_rq2_mlp_lag_buffer_v1   # 3 runs, driver inputs, buffers 2/10/20 km
+  python main.py paper evaluate --hypothesis PR_graph_L1 PR_graph_L2 PR_graph_r23 PR_graph_L4 PR_graph_r38 \
+      PR_graph_buf02 PR_graph_buf10 PR_graph_buf20
+  python main.py paper reach --exp paper2_base_v1 paper2_slx_short_v1 paper2_slx_reach_v1 paper2_rq2_mlp_v1 \
+      paper2_rq2_mlp_lag_short_v1 paper2_rq2_mlp_lag_v1 paper2_rq2_sage_v1 paper2_rq2_depth_v1
+fi
