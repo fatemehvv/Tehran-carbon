@@ -463,8 +463,13 @@ single deterministic baselines therefore favours the network by about the size o
 
 ![Figure 6](../figures/fig6_seeds.png)
 
-**Fig. 6.** Seeds against ensemble, Spearman (a) and PR-AUC (b). Bar: range of the five single-seed GNNs (tick: their
-mean). Dot: the five-seed ensemble. Black diamond: SLX with equal or longer reach. Open diamond: SLX at 12.6 km.
+**Fig. 6.** Seeds against ensemble, Spearman (a) and PR-AUC (b). Each row has three lanes so that close values stay
+visible.
+
+- **Upper lane:** the GNN. The bar is the range of the five single-seed GNNs (tick: their mean); the dot is the
+  five-seed ensemble.
+- **Middle lane:** SLX with equal or longer reach (black diamond).
+- **Lower lane:** SLX at 12.6 km (open diamond).
 
 ### 4.5 How the evaluation decides the verdict
 

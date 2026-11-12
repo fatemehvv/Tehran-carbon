@@ -30,7 +30,8 @@ BAND = "#f0efec"                                    # neutral fill (equivalence 
 ROLE = {"SLX-OLS": SERIES[1], "SLX-GBM": SERIES[2], "SLX-RF": SERIES[3], "SAGE": SERIES[0], "MLP": MUTED}
 LABEL = {"SLX-OLS": "SLX-OLS", "SLX-GBM": "SLX-GBM", "SLX-RF": "SLX-RF",
          "SAGE": "GNN, 5-seed ensemble", "MLP": "No-graph network, 5-seed ensemble"}
-DODGE = {"SAGE": 0.9, "MLP": -0.9}                  # km; networks drawn beside the SLX point at the same reach
+DODGE = {"SAGE": -1.8, "MLP": -1.6}                 # km; networks drawn left of the SLX point at the same reach,
+                                                    # clear of it and of the dashed correlation-range line
 METRIC = {"spearman": "Spearman ρ", "pr_auc": "PR-AUC (top 10 %)"}
 LETTERS = "abcdefgh"
 
@@ -173,8 +174,8 @@ class PaperFigures:
         mid = np.array([np.mean([float(v) for v in c[4:-2].split("_")]) for c in cols])     # rho_0_2km -> 1 km
         fig, ax = plt.subplots(figsize=(WIDTH * 0.66, 2.7))
         ax.axvspan(0, 4.4, color=BAND, lw=0, zorder=0)                     # one TROPOMI pixel (3.5 x 5.5 km)
-        ax.text(2.2, 0.03, "TROPOMI\npixel", transform=ax.get_xaxis_transform(), ha="center", va="bottom",
-                fontsize=6.5, color=INK2)                                  # bottom left: the curve starts near 1
+        ax.text(4.9, 0.03, "grey band: one TROPOMI pixel", transform=ax.get_xaxis_transform(),
+                ha="left", va="bottom", fontsize=6.5, color=INK2)          # bottom left: the curve starts near 1
         ax.axhline(0, color=MUTED, lw=0.8, zorder=1)
         looks = [dict(color=INK2, ls="-", marker="o"), dict(color=MUTED, ls=(0, (4, 2)), marker="s")]
         for k, (_, r) in enumerate(t.iterrows()):
@@ -223,8 +224,9 @@ class PaperFigures:
             ax.set_xlabel("GNN minus reference")
             ax.grid(axis="y", visible=False)
         for g, y in heads.items():
-            axes[0].text(-0.0, y, GROUP[g], transform=axes[0].get_yaxis_transform(), ha="left", va="center",
-                         fontsize=7.5, fontweight="bold", color=INK2)
+            axes[0].text(0.01, y, GROUP[g], transform=axes[0].get_yaxis_transform(), ha="left", va="center",
+                         fontsize=7.5, fontweight="bold", color=INK2, zorder=5,
+                         bbox=dict(facecolor="white", edgecolor="none", pad=1.5))   # over the band and zero line
         labels = {ypos[(g, y)]: lab for g, _, y, lab in COMPARISONS}
         axes[0].set_yticks(list(labels), list(labels.values()))
         axes[0].set_ylim(8.2, -0.7)
@@ -243,27 +245,34 @@ class PaperFigures:
         plt = style()
         d = self.comparisons()
         years = [1402, 1403, 1404]
-        fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 2.5), sharey=True)
+        lane = {"gnn": -0.2, "longer": 0.08, "shorter": 0.3}     # three lanes per row: close values stay visible
+        fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 2.8), sharey=True)
         for k, (ax, m) in enumerate(zip(axes, METRIC)):
             for i, y in enumerate(years):
                 r = d[(d.group == "matched") & (d.metric == m) & (d.year == y)].iloc[0]
                 s = d[(d.group == "shorter") & (d.metric == m) & (d.year == y)].iloc[0]
-                ax.hlines(i, r["seed_min"], r["seed_max"], color=SERIES[0], lw=7, alpha=0.3, zorder=2)
-                ax.plot(r["seed_mean"], i, ls="none", marker="|", ms=11, mew=1.6, color=SERIES[0], zorder=3)
-                ax.plot(s["reference"], i, ls="none", marker="D", ms=5.5, mfc="white", mec=MUTED, mew=1.2, zorder=4)
-                ax.plot(r["reference"], i, ls="none", marker="D", ms=5.5, color=INK, mec="white", mew=0.8, zorder=4)
-                ax.plot(r["ensemble"], i, ls="none", marker="o", ms=6.5, color=SERIES[0], mec="white", mew=1,
+                g = i + lane["gnn"]
+                ax.hlines(g, r["seed_min"], r["seed_max"], color=SERIES[0], lw=7, alpha=0.3, zorder=2)
+                ax.plot(r["seed_mean"], g, ls="none", marker="|", ms=11, mew=1.6, color=SERIES[0], zorder=3)
+                ax.plot(r["ensemble"], g, ls="none", marker="o", ms=6.5, color=SERIES[0], mec="white", mew=1,
                         zorder=5)
+                ax.plot(r["reference"], i + lane["longer"], ls="none", marker="D", ms=5.5, color=INK, mec="white",
+                        mew=0.8, zorder=4)
+                ax.plot(s["reference"], i + lane["shorter"], ls="none", marker="D", ms=5.5, mfc="white", mec=MUTED,
+                        mew=1.2, zorder=4)
             ax.set_title(f"{LETTERS[k]}   {METRIC[m]}")
             ax.set_xlabel(METRIC[m])
             ax.grid(axis="y", visible=False)
         axes[0].set_yticks(range(len(years)), ["CV 1402", "CV 1403", "Held-out 1404"])
-        axes[0].set_ylim(len(years) - 0.4, -0.6)
+        axes[0].set_ylim(len(years) - 0.45, -0.55)
+        for ax in axes:                                          # faint separators between the years
+            for b in range(1, len(years)):
+                ax.axhline(b - 0.5, color=GRID, lw=0.8, zorder=0)
         h = [Line2D([], [], color=SERIES[0], lw=7, alpha=0.3, label="GNN, five single seeds (range)"),
              Line2D([], [], ls="none", marker="|", ms=11, mew=1.6, color=SERIES[0], label="GNN, mean of single seeds"),
              Line2D([], [], ls="none", marker="o", ms=6.5, color=SERIES[0], mec="white", label="GNN, 5-seed ensemble"),
              Line2D([], [], ls="none", marker="D", ms=5.5, color=INK, mec="white", label="SLX, equal or longer reach"),
              Line2D([], [], ls="none", marker="D", ms=5.5, mfc="white", mec=MUTED, mew=1.2, label="SLX, 12.6 km")]
         fig.legend(handles=h, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.0))
-        fig.tight_layout(rect=(0, 0.18, 1, 1), w_pad=1.5)
+        fig.tight_layout(rect=(0, 0.16, 1, 1), w_pad=1.5)
         return save(fig, self.out / "fig6_seeds")
