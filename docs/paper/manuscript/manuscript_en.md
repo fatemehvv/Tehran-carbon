@@ -365,7 +365,7 @@ network, run at 0, 22.7 and 37.8 km. Dashed line: zero crossing of the target co
 
 Table 4 compares the GNN at each depth with models of exactly the same reach. Against SLX models, the GNN's lead in
 Spearman shrinks as reach grows: about 0.04 at 7.6 km, 0.02 at 15.1 km, 0.011–0.016 at 22.7–30.3 km, and −0.004 and
-+0.010 at 37.8 km. None of these differences is significant after Holm adjustment, all jackknife intervals include
++0.009 at 37.8 km. None of these differences is significant after Holm adjustment, all jackknife intervals include
 zero, and for single seeds the leads are smaller still (0.028–0.033 at 7.6 km, 0.007–0.008 at 22.7 km, −0.008 and
 +0.005 at 37.8 km). Part of the GNN's lead over SLX at short reach therefore comes from its learner and ensemble, and the
 lead disappears where skill levels off. In PR-AUC the GNN ensemble leads the SLX references by 0.02–0.11 at
@@ -389,8 +389,8 @@ Section 3.5). None is significant after Holm adjustment within the exploratory f
 | 15.1 km | SLX | +0.022 [−0.041, +0.085] | 0.15 | +0.018 [−0.035, +0.072] | 0.17 | inconclusive |
 | 22.7 km | SLX | +0.011 [−0.034, +0.056] | 0.11 | +0.013 [−0.028, +0.053] | 0.056 | inconclusive |
 | 30.3 km | SLX | +0.011 [−0.023, +0.046] | 0.084 | +0.016 [−0.026, +0.059] | 0.042 | inconclusive |
-| 37.8 km | SLX | −0.004 [−0.035, +0.028] | 0.79 | +0.010 [−0.031, +0.050] | 0.14 | inconclusive |
-| 22.7 km | No-graph network, box means | −0.005 [−0.017, +0.007] | 0.93 | −0.008 [−0.016, −0.000] | 0.92 | equivalent |
+| 37.8 km | SLX | −0.004 [−0.035, +0.028] | 0.79 | +0.009 [−0.031, +0.050] | 0.14 | inconclusive |
+| 22.7 km | No-graph network, box means | −0.005 [−0.017, +0.007] | 0.93 | −0.008 [−0.016, −0.001] | 0.92 | equivalent |
 | 37.8 km | No-graph network, box means | −0.012 [−0.030, +0.005] | 0.995 | −0.010 [−0.017, −0.003] | 0.98 | inconclusive / equivalent |
 
 The comparison of the original study looked different because its references saw less. Against SLX-GBM at 12.6 km, the

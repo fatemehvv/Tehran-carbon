@@ -1,0 +1,1011 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}[hidden]{display:none!important}</style></head><body><title>شعاع، نه گراف</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: a working "map room". The 3D stage holds the scene of each step; the narrative panel on the reading side
+   carries the argument. One journey through the city of Tehran, its data and its models, step by step. */
+:root{
+  --bg:#e9edf1;          /* mineral grey-blue ground */
+  --panel:#fbfcfd;
+  --ink:#16202b;
+  --muted:#566373;
+  --line:#d3dae2;
+  --accent:#d2522a;      /* NO₂ plume: the colour of a TROPOMI hotspot */
+  --accent-soft:#f6d9cc;
+  --gnn:#2a74d6; --ols:#e8663d; --gbm:#1fae7a; --rf:#eba300; --mlp:#8a877f;
+  --good:#1f9d6a; --warn:#c98a0b;
+  --scene-low:#9fb3c8; --scene-mid:#d9c7a8; --scene-tile:#c3ccd6; --scene-line:#8693a3; --scene-faint:#dde3e9;
+  --label-bg:rgba(251,252,253,.92); --label-ink:#16202b;
+  --f-body:"Vazirmatn",Tahoma,"Segoe UI",sans-serif;
+  --f-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --s-1:.8125rem; --s0:1rem; --s1:1.125rem; --s2:1.4rem; --s3:1.9rem;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e141b; --panel:#141c26; --ink:#e5ebf1; --muted:#97a4b3; --line:#253141;
+  --accent:#ff7b4a; --accent-soft:#3d2219;
+  --gnn:#5a9bf0; --ols:#f07a52; --gbm:#33c48f; --rf:#f2b52a; --mlp:#a29f97;
+  --good:#3cc68a; --warn:#e3a52a;
+  --scene-low:#3d5470; --scene-mid:#8a7a5f; --scene-tile:#2a3644; --scene-line:#5d6b7c; --scene-faint:#1c2632;
+  --label-bg:rgba(20,28,38,.9); --label-ink:#e5ebf1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e141b; --panel:#141c26; --ink:#e5ebf1; --muted:#97a4b3; --line:#253141;
+  --accent:#ff7b4a; --accent-soft:#3d2219;
+  --gnn:#5a9bf0; --ols:#f07a52; --gbm:#33c48f; --rf:#f2b52a; --mlp:#a29f97;
+  --good:#3cc68a; --warn:#e3a52a;
+  --scene-low:#3d5470; --scene-mid:#8a7a5f; --scene-tile:#2a3644; --scene-line:#5d6b7c; --scene-faint:#1c2632;
+  --label-bg:rgba(20,28,38,.9); --label-ink:#e5ebf1; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--s0);line-height:1.75;direction:rtl;
+  display:flex;flex-direction:column;overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;align-items:center;gap:1rem;padding-block:.55rem;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+.brand{font-weight:800;font-size:var(--s1);letter-spacing:-.01em;white-space:nowrap}
+.brand small{font-weight:500;color:var(--muted);font-size:var(--s-1);margin-inline-start:.6rem}
+.part{margin-inline-start:auto;font-size:var(--s-1);color:var(--muted);white-space:nowrap}
+.part b{color:var(--accent);font-weight:700}
+
+.app{flex:1;min-height:0;display:grid;grid-template-columns:minmax(340px,440px) 1fr}
+.panel{background:var(--panel);border-inline-end:1px solid var(--line);overflow-y:auto;min-width:0;
+  padding-block:1.4rem 2rem;padding-inline:1.5rem}
+.eyebrow{font-size:var(--s-1);font-weight:700;color:var(--accent);letter-spacing:.02em}
+.panel h1{font-size:var(--s3);line-height:1.3;font-weight:800;margin:.2rem 0 1rem;text-wrap:balance}
+.panel h3{font-size:var(--s1);margin:1.3rem 0 .4rem;font-weight:700}
+.panel p{margin:.55rem 0}
+.panel ul,.panel ol{margin:.4rem 0;padding-inline-start:1.2rem}
+.panel li{margin:.3rem 0}
+.lead{font-size:var(--s1);color:var(--ink)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.quote{border-inline-start:3px solid var(--accent);padding:.6rem .9rem;background:var(--accent-soft);margin:1rem 0;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:1rem 0}
+.stat{border:1px solid var(--line);padding:.55rem .7rem}
+.stat b{display:block;font-size:var(--s2);font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat span{font-size:var(--s-1);color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:var(--s-1);margin:.6rem 0}
+.tw{overflow-x:auto}
+th,td{text-align:start;padding:.35rem .4rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:700}
+.chip{display:inline-block;font-size:.72rem;font-weight:700;padding:.05rem .45rem;border-radius:3px;white-space:nowrap}
+.c-no{background:color-mix(in srgb,var(--ols) 22%,transparent)}
+.c-part{background:color-mix(in srgb,var(--rf) 26%,transparent)}
+.c-nr{background:color-mix(in srgb,var(--mlp) 25%,transparent)}
+.c-yes{background:color-mix(in srgb,var(--gnn) 28%,transparent)}
+.ok{color:var(--good);font-weight:700}
+.wa{color:var(--warn);font-weight:700}
+.checks{list-style:none;padding:0!important}
+.checks li{display:grid;grid-template-columns:1.3rem 1fr;gap:.4rem;padding:.35rem 0;border-bottom:1px solid var(--line);margin:0}
+.checks li>i{font-style:normal;font-weight:800}
+code,.path{font-family:var(--f-mono);font-size:.8em;direction:ltr;unicode-bidi:isolate}
+.en{direction:ltr;unicode-bidi:isolate}
+
+.controls{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0 .3rem}
+.controls:empty{display:none}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.seg button{background:transparent;border:0;padding:.3rem .7rem;cursor:pointer;font-size:var(--s-1)}
+.seg button+button{border-inline-start:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.slider{display:flex;align-items:center;gap:.6rem;width:100%;font-size:var(--s-1)}
+.slider input{flex:1;accent-color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:.3rem .9rem;width:100%;font-size:var(--s-1)}
+.legend span{display:inline-flex;align-items:center;gap:.35rem}
+.legend i{width:.8rem;height:.8rem;border-radius:50%;display:inline-block}
+.readout{font-weight:800;font-size:var(--s2);font-variant-numeric:tabular-nums}
+
+.stage{position:relative;min-width:0;min-height:0;overflow:hidden}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#labels{position:absolute;inset:0;pointer-events:none}
+.lbl{position:absolute;left:0;top:0;transform:translate(-50%,-50%);background:var(--label-bg);color:var(--label-ink);
+  font-size:.74rem;line-height:1.35;padding:.12rem .45rem;border:1px solid var(--line);white-space:nowrap;
+  transition:opacity .35s;will-change:transform}
+.lbl.big{font-size:.9rem;font-weight:700;padding:.25rem .6rem}
+.lbl.plain{background:transparent;border:0;color:var(--muted);font-size:.72rem}
+.lbl.tick{background:transparent;border:0;color:var(--muted);font-size:.7rem;font-variant-numeric:tabular-nums}
+.lbl.hot{border-color:var(--accent);color:var(--accent);font-weight:700}
+.lbl .gm{display:flex;gap:3px;align-items:flex-end;height:26px;margin-top:3px;direction:ltr}
+.lbl .gm i{width:9px;display:block}
+.caption{position:absolute;bottom:.6rem;inset-inline:max(12px,env(safe-area-inset-left,0px));font-size:var(--s-1);
+  color:var(--muted);pointer-events:none;text-wrap:balance}
+.caption b{color:var(--ink);font-weight:700}
+.hint{position:absolute;top:.6rem;inset-inline-start:.8rem;font-size:.72rem;color:var(--muted);pointer-events:none}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;padding:2rem;text-align:center;color:var(--muted)}
+
+.bottom{display:flex;align-items:center;gap:.8rem;flex:none;background:var(--panel);border-top:1px solid var(--line);
+  padding-block:.5rem calc(.5rem + env(safe-area-inset-bottom,0px));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.nav{background:var(--ink);color:var(--panel);border:0;padding:.4rem 1rem;cursor:pointer;font-weight:700;white-space:nowrap}
+.nav:disabled{opacity:.3;cursor:default}
+.dots{flex:1;display:flex;gap:4px;justify-content:center;flex-wrap:wrap;min-width:0}
+.dot{width:22px;height:22px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:.66rem;
+  color:var(--muted);padding:0;font-variant-numeric:tabular-nums}
+.dot[aria-current="step"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.dot.sep{margin-inline-start:10px}
+
+@media (max-width:860px){
+  body{overflow:auto;height:auto}
+  .app{display:flex;flex-direction:column-reverse}
+  .stage{height:48vh;min-height:300px;flex:none}
+  .panel{border:0;overflow:visible;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+  .panel{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .bottom{position:sticky;bottom:0}
+  .dots{display:none}
+  .part{display:none}
+  .brand small{display:none}
+  .panel h1{font-size:var(--s2)}
+}
+@media (prefers-reduced-motion:reduce){.lbl{transition:none}}
+</style>
+
+<header class="top">
+  <div class="brand">شعاع، نه گراف<small>از پایان‌نامه تا مقاله · RQ1 و RQ2</small></div>
+  <div class="part" id="partLabel"></div>
+</header>
+
+<main class="app">
+  <section class="panel" id="panel" aria-live="polite">
+    <div class="eyebrow" id="eyebrow">مسیر کار</div>
+    <h1 id="title">شعاع، نه گراف</h1>
+    <div id="body"><p class="lead">این صفحه مسیر کار را از پایان‌نامه تا مقاله قدم به قدم نشان می‌دهد.</p></div>
+    <div class="controls" id="controls"></div>
+  </section>
+  <section class="stage" id="stage">
+    <canvas id="gl" aria-label="صحنهٔ سه‌بعدی مرحلهٔ جاری"></canvas>
+    <div id="labels"></div>
+    <div class="hint">کشیدن: چرخاندن · چرخ ماوس: بزرگ‌نمایی</div>
+    <div class="caption" id="caption"></div>
+  </section>
+</main>
+
+<footer class="bottom">
+  <button class="nav" id="prev" type="button">→ قبلی</button>
+  <div class="dots" id="dots" role="tablist" aria-label="قدم‌ها"></div>
+  <span class="num muted" id="counter"></span>
+  <button class="nav" id="next" type="button">بعدی ←</button>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+"use strict";
+/* ---------------------------------------------------------------- helpers */
+const FA = "۰۱۲۳۴۵۶۷۸۹";
+const fa = (x) => String(x).replace(/[0-9]/g, (d) => FA[d]).replace(/\./g, "٫").replace(/-/g, "−");
+const f3 = (v) => fa(v.toFixed(3));
+const sgn = (v, d = 3) => (v > 0 ? "+" : v < 0 ? "−" : "") + fa(Math.abs(v).toFixed(d));
+const ltrNums = (h) => h.replace(/([+−\-])([۰-۹][۰-۹٫]*)/g, '<bdi dir="ltr">$1$2</bdi>');
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const CELL_KM = 0.84;
+const W = 126, H = 72;                       // grid columns (east-west) and rows (north-south)
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+/* ---------------------------------------------------------------- real data (from the project's result files) */
+// docs/paper/results_review/reach/reach_curve.csv: [reach_km, spearman, pr_auc]
+const CURVE = {
+  1402: {
+    "SLX-OLS": [[0,.662,.504],[.8,.728,.544],[2.5,.757,.461],[7.6,.857,.513],[12.6,.922,.763],[15.1,.916,.681],[22.7,.938,.803],[30.3,.942,.735],[37.8,.935,.804]],
+    "SLX-GBM": [[0,.768,.52],[.8,.767,.612],[2.5,.78,.671],[7.6,.856,.657],[12.6,.924,.763],[15.1,.921,.766],[22.7,.938,.733],[30.3,.938,.764],[37.8,.95,.781]],
+    "SLX-RF":  [[0,.759,.52],[.8,.743,.639],[2.5,.767,.678],[7.6,.866,.691],[12.6,.917,.706],[15.1,.921,.704],[22.7,.934,.696],[30.3,.939,.71],[37.8,.943,.716]],
+    "GNN":     [[7.6,.902,.721],[15.1,.938,.736],[22.7,.949,.8],[30.3,.95,.802],[37.8,.946,.805]],
+    "MLP":     [[0,.685,.49],[22.7,.954,.787],[37.8,.958,.775]],
+  },
+  1403: {
+    "SLX-OLS": [[0,.668,.533],[.8,.729,.558],[2.5,.758,.473],[7.6,.868,.522],[12.6,.934,.753],[15.1,.924,.718],[22.7,.931,.737],[30.3,.929,.733],[37.8,.924,.749]],
+    "SLX-GBM": [[0,.745,.521],[.8,.757,.595],[2.5,.788,.663],[7.6,.861,.689],[12.6,.912,.791],[15.1,.913,.771],[22.7,.934,.769],[30.3,.933,.75],[37.8,.936,.788]],
+    "SLX-RF":  [[0,.743,.501],[.8,.737,.635],[2.5,.774,.662],[7.6,.867,.728],[12.6,.915,.798],[15.1,.916,.797],[22.7,.93,.797],[30.3,.932,.784],[37.8,.937,.792]],
+    "GNN":     [[7.6,.907,.713],[15.1,.942,.791],[22.7,.947,.841],[30.3,.949,.864],[37.8,.946,.871]],
+    "MLP":     [[0,.676,.449],[22.7,.955,.874],[37.8,.956,.881]],
+  },
+};
+const FAMS = [["SLX-OLS","--ols","SLX-OLS"],["SLX-GBM","--gbm","SLX-GBM"],["SLX-RF","--rf","SLX-RF"],
+              ["GNN","--gnn","GNN (۵ seed)"],["MLP","--mlp","همان شبکه بدون گراف"]];
+// docs/paper/results_review/evaluate_step5: GNN minus reference, Spearman, delta and 95 % jackknife interval
+const DIFF_SLX = [ // reach, [1402 d, lo, hi], [1403 d, lo, hi]
+  [7.6,[.036,-.024,.096],[.040,-.021,.100]],[15.1,[.022,-.041,.085],[.018,-.035,.072]],
+  [22.7,[.011,-.034,.056],[.013,-.028,.053]],[30.3,[.011,-.023,.046],[.016,-.026,.059]],
+  [37.8,[-.004,-.035,.028],[.009,-.031,.050]]];
+const DIFF_NOG = [[22.7,[-.005,-.017,.007],[-.008,-.016,-.001]],[37.8,[-.012,-.030,.005],[-.010,-.017,-.003]]];
+// docs/tables/t12_sector_bias_sigma.csv: correlation of road and building CO2 after smoothing, 1402
+const RB = [[0,.584],[1,.900],[2,.963],[3,.982],[4,.990],[6,.996],[8,.998],[10,.999],[12,.999],[15,.999]];
+
+/* ---------------------------------------------------------------- schematic city (not the real map) */
+const MASK = [], FIELD = new Float32Array(W * H);
+(function buildCity() {
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const x = (c - 63) / 46, y = (r - 42) / 19;
+    const wob = 0.13 * Math.sin(c * 0.19 + 1) + 0.1 * Math.cos(r * 0.31 + c * 0.07);
+    const g = (cx, cy, s, a) => a * Math.exp(-((c - cx) ** 2 + (r - cy) ** 2) / (2 * s * s));
+    FIELD[r * W + c] = g(63, 44, 15, 1) + g(48, 47, 10, .55) + g(80, 45, 11, .5) + g(62, 54, 8, .45) + (r - 20) / 60 * .45;
+    if (x * x + y * y < 1 + wob && r > 18) MASK.push([c, r]);
+  }
+})();
+const vals = MASK.map(([c, r]) => FIELD[r * W + c]);
+const vmin = Math.min(...vals), vmax = Math.max(...vals);
+const HOT = [...vals].sort((a, b) => b - a)[Math.floor(vals.length * 0.1)];
+
+/* ---------------------------------------------------------------- three.js scene */
+const canvas = document.getElementById("gl"), stage = document.getElementById("stage");
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+catch (e) { renderer = null; }
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 4000);
+let controls = null;
+if (renderer) {
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+  controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI * 0.495;
+  controls.autoRotateSpeed = 0.5;
+} else {
+  stage.insertAdjacentHTML("beforeend", '<div class="nogl">مرورگر این دستگاه WebGL ندارد؛ متن همهٔ قدم‌ها در ستون کناری کامل است.</div>');
+}
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(-60, 140, 90); scene.add(sun);
+
+const THEMED = new Map();   // cached materials, recoloured from CSS tokens on theme change
+function cached(kind, token, opts = {}) {
+  const key = kind + token + JSON.stringify(opts);
+  if (THEMED.has(key)) return THEMED.get(key)[0];
+  const M = kind === "basic" ? THREE.MeshBasicMaterial : kind === "line" ? THREE.LineBasicMaterial : THREE.MeshStandardMaterial;
+  const m = new M(kind === "std" ? Object.assign({ roughness: .7 }, opts) : opts);
+  const v = css(token); if (v) m.color.set(v);
+  THEMED.set(key, [m, token]); return m;
+}
+const basic = (t, o) => cached("basic", t, o), linem = (t, o) => cached("line", t, o), stdm = (t, o) => cached("std", t, o);
+
+const GROUPS = {};
+function group(name, x, y = 0, z = 0) { const g = new THREE.Group(); g.position.set(x, y, z); g.visible = false; scene.add(g); GROUPS[name] = g; g.userData.name = name; return g; }
+
+/* labels projected from 3D onto an HTML layer */
+const LABELS = [], labelLayer = document.getElementById("labels");
+function label(g, x, y, z, html, cls = "") {
+  const el = document.createElement("div"); el.className = "lbl " + cls; el.innerHTML = ltrNums(html); el.style.opacity = 0;
+  labelLayer.appendChild(el); const L = { g, p: new THREE.Vector3(x, y, z), el }; LABELS.push(L); return L;
+}
+function clearLabels(g) { for (let i = LABELS.length - 1; i >= 0; i--) if (LABELS[i].g === g) { LABELS[i].el.remove(); LABELS.splice(i, 1); } }
+function clearGroup(g) { clearLabels(g); while (g.children.length) { const o = g.children.pop(); o.geometry && o.geometry.dispose(); } }
+
+function line(g, pts, mat) { const geo = new THREE.BufferGeometry().setFromPoints(pts.map((p) => new THREE.Vector3(...p))); const l = new THREE.Line(geo, mat); g.add(l); return l; }
+function rod(g, a, b, r, mat) {
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), len = d.length();
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 10), mat);
+  m.position.copy(A).add(d.multiplyScalar(0.5)); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); g.add(m); return m;
+}
+function ball(g, p, r, mat) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 18, 14), mat); m.position.set(...p); g.add(m); return m; }
+function box(g, p, s, mat) { const m = new THREE.Mesh(new THREE.BoxGeometry(...s), mat); m.position.set(...p); g.add(m); return m; }
+function frame(g, cx, cz, half, y, mat) { // square outline on the ground
+  const h = half; return line(g, [[cx - h, y, cz - h], [cx + h, y, cz - h], [cx + h, y, cz + h], [cx - h, y, cz + h], [cx - h, y, cz - h]], mat);
+}
+
+/* -------- 1. city: schematic NO₂ pattern as columns */
+const gCity = group("city", 0, 0, 0);
+const cityMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.9, 1, 0.9).translate(0, 0.5, 0), new THREE.MeshStandardMaterial({ roughness: .8 }), MASK.length);
+(function () {
+  const m = new THREE.Matrix4();
+  MASK.forEach(([c, r], i) => { const t = (FIELD[r * W + c] - vmin) / (vmax - vmin); m.makeScale(1, 0.6 + 16 * t * t, 1); m.setPosition(c - 63, 0, r - 36); cityMesh.setMatrixAt(i, m); });
+  gCity.add(cityMesh);
+})();
+function paintCity() {
+  const lo = new THREE.Color(css("--scene-low")), mid = new THREE.Color(css("--scene-mid")), hot = new THREE.Color(css("--accent")), col = new THREE.Color();
+  MASK.forEach(([c, r], i) => {
+    const v = FIELD[r * W + c], t = (v - vmin) / (vmax - vmin);
+    if (v >= HOT) col.copy(hot); else col.copy(lo).lerp(mid, Math.min(1, t * 1.25));
+    cityMesh.setColorAt(i, col);
+  });
+  cityMesh.instanceColor.needsUpdate = true;
+}
+label(gCity, 0, 22, 8, "کانون‌ها (۱۰٪ بالا)", "hot");
+label(gCity, -50, 2, -24, "شمال: دامنهٔ البرز", "plain");
+label(gCity, 52, 2, 20, "جنوب", "plain");
+
+/* -------- 2. data layers above the city */
+function layerCanvas(kind) {
+  const cv = document.createElement("canvas"); cv.width = W * 2; cv.height = H * 2; const x = cv.getContext("2d");
+  const inside = new Uint8Array(W * H); MASK.forEach(([c, r]) => (inside[r * W + c] = 1));
+  const img = x.createImageData(cv.width, cv.height);
+  seed = { traffic: 11, energy: 23, pollution: 37, context: 51 }[kind];
+  const stations = Array.from({ length: 28 }, () => MASK[Math.floor(rnd() * MASK.length)]);
+  const sv = stations.map(([c, r]) => FIELD[r * W + c] * (0.7 + 0.6 * rnd()));
+  const roads = [[[25, 40], [105, 46]], [[63, 20], [60, 64]], [[30, 30], [95, 60]], [[40, 58], [90, 28]], [[20, 50], [110, 52]]];
+  const hue = { traffic: [232, 102, 61], energy: [31, 174, 122], pollution: [138, 135, 127], context: [42, 116, 214] }[kind];
+  for (let py = 0; py < cv.height; py++) for (let px = 0; px < cv.width; px++) {
+    const c = px >> 1, r = py >> 1, k = (py * cv.width + px) * 4;
+    if (!inside[r * W + c]) { img.data[k + 3] = 0; continue; }
+    let v = 0;
+    const env = Math.exp(-((c - 63) ** 2 / 1600 + (r - 44) ** 2 / 500));
+    if (kind === "traffic") { for (const [[a, b], [p, q]] of roads) { const t = Math.max(0, Math.min(1, ((c - a) * (p - a) + (r - b) * (q - b)) / ((p - a) ** 2 + (q - b) ** 2))); const d = Math.hypot(c - (a + t * (p - a)), r - (b + t * (q - b))); v = Math.max(v, Math.exp(-d * d / 1.4)); } v = v * (0.45 + 0.55 * env); }
+    else if (kind === "energy") v = env * (0.55 + 0.45 * Math.abs(Math.sin(c * 0.9) * Math.cos(r * 1.1)));
+    else if (kind === "pollution") { let s = 0, w = 0; stations.forEach(([sc, sr], i) => { const ww = 1 / (1 + (c - sc) ** 2 + (r - sr) ** 2); s += ww * sv[i]; w += ww; }); v = (s / w - vmin) / (vmax - vmin); const near = stations.some(([sc, sr]) => Math.abs(sc - c) + Math.abs(sr - r) < 1); if (near) v = 1.4; }
+    else v = env * (0.7 + 0.3 * Math.sin(c * 0.37 + r * 0.21));
+    v = Math.max(0, Math.min(1, v));
+    img.data[k] = hue[0]; img.data[k + 1] = hue[1]; img.data[k + 2] = hue[2]; img.data[k + 3] = 40 + 215 * v;
+  }
+  x.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(cv); tex.magFilter = THREE.NearestFilter; return tex;
+}
+const TEX = {}; ["traffic", "energy", "pollution", "context"].forEach((k) => (TEX[k] = layerCanvas(k)));
+const gLayers = group("layers", 0, 0, 0);
+const LAYER_DEF = [["context", "زمینه: جمعیت، حجم ساختمان، نور شب، هواشناسی"], ["pollution", "آلودگی: CO از ۲۸ ایستگاه (درون‌یابی)"],
+                   ["energy", "انرژی: CO₂ مسکونی، تجاری، صنعتی، نیروگاه"], ["traffic", "ترافیک: CO₂ جاده، طول راه، حجم ترافیک"]];
+LAYER_DEF.forEach(([k, txt], i) => {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshBasicMaterial({ map: TEX[k], transparent: true, side: THREE.DoubleSide, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2; m.position.y = 26 + i * 12; gLayers.add(m);
+  label(gLayers, -66, 26 + i * 12, 0, txt, "");
+});
+label(gLayers, -66, 6, 0, "هدف: الگوی ماهانهٔ NO₂ (TROPOMI)", "hot");
+
+/* -------- 3. the fusion network (gated) */
+const gFusion = group("fusion", 300, 0, 0);
+const IN = [["traffic", "ترافیک", "--ols"], ["energy", "انرژی", "--gbm"], ["pollution", "آلودگی", "--mlp"], ["context", "زمینه", "--gnn"]];
+const FY = [21, 7, -7, -21];
+const fusionPaths = [];
+IN.forEach(([k, name, tok], i) => {
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(18, 10.3), new THREE.MeshBasicMaterial({ map: TEX[k], transparent: true, side: THREE.DoubleSide }));
+  p.position.set(-64, FY[i], 0); gFusion.add(p);
+  box(gFusion, [-36, FY[i], 0], [9, 5, 5], stdm(tok));
+  label(gFusion, -64, FY[i] - 6.6, 0, name);
+  fusionPaths.push([[-55, FY[i], 0], [-40.5, FY[i], 0], [-31.5, FY[i], 0], [-6, FY[i] * 0.25, 0], [0, 0, 0]]);
+  line(gFusion, [[-55, FY[i], 0], [-40.5, FY[i], 0]], linem("--scene-line"));
+  line(gFusion, [[-31.5, FY[i], 0], [-6, FY[i] * 0.25, 0]], linem("--scene-line"));
+});
+label(gFusion, -36, 29, 0, "encoder برای هر حوزه", "plain");
+const gate = new THREE.Mesh(new THREE.TorusGeometry(6, 1.3, 14, 40), stdm("--accent")); gFusion.add(gate);
+const gateLbl = label(gFusion, 0, 12.5, 0, 'دروازه (softmax)<div class="gm"></div>', "big");
+ball(gFusion, [17, 0, 0], 2.4, stdm("--scene-line"));
+label(gFusion, 17, -5, 0, "جمع وزن‌دار", "plain");
+box(gFusion, [36, 0, 0], [12, 9, 9], stdm("--gnn", { transparent: true, opacity: .85 }));
+label(gFusion, 36, 8, 0, "GNN یا بدون گراف", "");
+const outPlane = new THREE.Mesh(new THREE.PlaneGeometry(22, 12.6), new THREE.MeshBasicMaterial({ map: (() => { const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const x = cv.getContext("2d"); const im = x.createImageData(W, H); MASK.forEach(([c, r]) => { const v = FIELD[r * W + c], k = (r * W + c) * 4, t = (v - vmin) / (vmax - vmin); if (v >= HOT) { im.data[k] = 220; im.data[k + 1] = 85; im.data[k + 2] = 45; } else { im.data[k] = 120 + 90 * t; im.data[k + 1] = 140 + 50 * t; im.data[k + 2] = 170 - 40 * t; } im.data[k + 3] = 255; }); x.putImageData(im, 0, 0); const t = new THREE.CanvasTexture(cv); t.magFilter = THREE.NearestFilter; return t; })(), transparent: true, side: THREE.DoubleSide }));
+outPlane.position.set(64, 0, 0); gFusion.add(outPlane);
+label(gFusion, 64, 9, 0, "NO₂ پیش‌بینی‌شده", "hot");
+line(gFusion, [[6, 0, 0], [14.6, 0, 0]], linem("--scene-line")); line(gFusion, [[19.4, 0, 0], [30, 0, 0]], linem("--scene-line")); line(gFusion, [[42, 0, 0], [53, 0, 0]], linem("--scene-line"));
+const PART_N = 64, parts = new THREE.InstancedMesh(new THREE.SphereGeometry(0.75, 10, 8), new THREE.MeshBasicMaterial(), PART_N);
+gFusion.add(parts);
+const partState = Array.from({ length: PART_N }, (_, i) => ({ src: i % 4, t: (i / PART_N) * 1.0 }));
+const PART_COL = IN.map(([, , tok]) => tok);
+let gateW = [0.25, 0.25, 0.25, 0.25];
+
+/* -------- 4. redundancy at the scale of the target (road vs buildings) */
+const gBlur = group("blur", 560, 0, 0);
+const RAW = { road: new Float32Array(W * H), bld: new Float32Array(W * H) };
+(function () {
+  seed = 99; const roads = [[[20, 38], [108, 46]], [[63, 18], [60, 66]], [[28, 28], [98, 62]], [[38, 60], [92, 26]], [[16, 52], [112, 54]], [[44, 20], [80, 66]]];
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const env = Math.exp(-((c - 63) ** 2 / 1300 + (r - 42) ** 2 / 420));
+    let v = 0; for (const [[a, b], [p, q]] of roads) { const t = Math.max(0, Math.min(1, ((c - a) * (p - a) + (r - b) * (q - b)) / ((p - a) ** 2 + (q - b) ** 2))); const d = Math.hypot(c - (a + t * (p - a)), r - (b + t * (q - b))); v = Math.max(v, Math.exp(-d * d / 0.9)); }
+    RAW.road[r * W + c] = v * env;
+    RAW.bld[r * W + c] = env * (0.25 + 0.75 * rnd() ** 2);
+  }
+})();
+function blur(a, s) {
+  if (s < 0.3) return a.slice();
+  const R = Math.ceil(3 * s), k = []; let ks = 0; for (let i = -R; i <= R; i++) { const w = Math.exp(-i * i / (2 * s * s)); k.push(w); ks += w; }
+  const tmp = new Float32Array(W * H), out = new Float32Array(W * H);
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) { let v = 0, w = 0; for (let i = -R; i <= R; i++) { const cc = c + i; if (cc < 0 || cc >= W) continue; v += a[r * W + cc] * k[i + R]; w += k[i + R]; } tmp[r * W + c] = v / w; }
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) { let v = 0, w = 0; for (let i = -R; i <= R; i++) { const rr = r + i; if (rr < 0 || rr >= H) continue; v += tmp[rr * W + c] * k[i + R]; w += k[i + R]; } out[r * W + c] = v / w; }
+  return out;
+}
+function surface(xoff, tok) {
+  const geo = new THREE.PlaneGeometry(W * 0.5, H * 0.5, W - 1, H - 1); geo.rotateX(-Math.PI / 2);
+  const m = new THREE.Mesh(geo, stdm(tok, { side: THREE.DoubleSide, flatShading: false, roughness: .6 })); m.position.x = xoff; gBlur.add(m); return m;
+}
+const surfRoad = surface(-36, "--ols"), surfBld = surface(36, "--gbm");
+label(gBlur, -36, 2, 22, "CO₂ جاده (ترافیک)", "");
+label(gBlur, 36, 2, 22, "CO₂ ساختمان (انرژی)", "");
+const rLbl = label(gBlur, 0, 24, 0, "", "big");
+function setBlur(idx) {
+  const [skm, rr] = RB[idx]; const s = skm / CELL_KM;
+  [[surfRoad, RAW.road], [surfBld, RAW.bld]].forEach(([mesh, a]) => {
+    const b = blur(a, s); let mx = 0; for (const v of b) mx = Math.max(mx, v);
+    const pos = mesh.geometry.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, (b[i] / mx) * 14);
+    pos.needsUpdate = true; mesh.geometry.computeVertexNormals();
+  });
+  rLbl.el.innerHTML = `هموارسازی σ = ${fa(skm)} km · همبستگی دو لایه: ${f3(rr)}`;
+  const ro = document.getElementById("rbRead"); if (ro) ro.textContent = f3(rr);
+  const so = document.getElementById("rbSig"); if (so) so.textContent = fa(skm) + " km";
+}
+
+/* -------- 5. reach: what each model can see from one cell */
+const gReach = group("reach", 820, 0, 0);
+const RN = 31; // half-size of the tile field
+(function () {
+  const tiles = new THREE.InstancedMesh(new THREE.BoxGeometry(0.88, 0.25, 0.88), stdm("--scene-tile"), (2 * RN + 1) ** 2);
+  const m = new THREE.Matrix4(); let i = 0;
+  for (let a = -RN; a <= RN; a++) for (let b = -RN; b <= RN; b++) { m.makeTranslation(a, 0, b); tiles.setMatrixAt(i++, m); }
+  gReach.add(tiles);
+  box(gReach, [0, 1.2, 0], [0.95, 2.4, 0.95], stdm("--accent"));
+})();
+const reachDyn = new THREE.Group(); gReach.add(reachDyn);
+const reachState = { L: 3, slx: 15 };
+function stencil(L) {
+  const S1 = [[0, 0]]; for (const d of [1, 3, 9]) for (const a of [-1, 0, 1]) for (const b of [-1, 0, 1]) if (a || b) S1.push([a * d, b * d]);
+  let S = new Set(["0,0"]);
+  for (let l = 0; l < L; l++) { const N = new Set(); for (const s of S) { const [x, y] = s.split(",").map(Number); for (const [a, b] of S1) N.add(x + a + "," + (y + b)); } S = N; }
+  return [...S].map((s) => s.split(",").map(Number));
+}
+function drawReach() {
+  clearLabels(gReach); while (reachDyn.children.length) reachDyn.children.pop();
+  const st = stencil(reachState.L);
+  const dots = new THREE.InstancedMesh(new THREE.BoxGeometry(0.62, 0.9, 0.62), stdm("--gnn"), st.length);
+  const m = new THREE.Matrix4(); st.forEach(([a, b], i) => { m.makeTranslation(a, 0.55, b); dots.setMatrixAt(i, m); }); reachDyn.add(dots);
+  const h = 9 * reachState.L + 0.5;
+  frame(reachDyn, 0, 0, h, 0.3, linem("--gnn"));
+  label(gReach, h, 1, -h, `GNN، ${fa(reachState.L)} لایه: ${fa((9 * reachState.L * CELL_KM).toFixed(1))} km`, "");
+  if (reachState.slx) {
+    const s = reachState.slx + 0.5;
+    const pl = new THREE.Mesh(new THREE.BoxGeometry(2 * s, 0.1, 2 * s), stdm("--ols", { transparent: true, opacity: .28, depthWrite: false }));
+    pl.position.y = 0.4; reachDyn.add(pl); frame(reachDyn, 0, 0, s, 0.45, linem("--ols"));
+    label(gReach, -s, 1, s, `پنجرهٔ SLX: ${fa((reachState.slx * CELL_KM).toFixed(1))} km`, "");
+  }
+  label(gReach, 0, 4.5, 0, "یک سلول", "hot");
+  const out = document.getElementById("stCount");
+  if (out) out.textContent = `${fa(st.length)} سلول از ${fa((2 * 9 * reachState.L + 1) ** 2)} سلول درون مربع`;
+}
+
+/* -------- 6. literature funnel */
+const gFunnel = group("funnel", 1080, 0, 0);
+(function () {
+  const RINGS = [["NO₂ ماهواره‌ای ردیاب احتراق در شهرهاست", 34], ["یادگیری عمیق انتشار و آلودگی شهری را نقشه می‌کند", 28],
+                 ["GNNها: برتری را به گراف نسبت می‌دهند", 22], ["ولی GNN دورتر را هم می‌بیند", 16], ["شکاف: شعاع دید کنترل نشده است", 10]];
+  RINGS.forEach(([t, r], i) => {
+    const y = 44 - i * 10;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.7, 10, 80), stdm(i === 4 ? "--accent" : "--scene-line"));
+    ring.rotation.x = Math.PI / 2; ring.position.y = y; gFunnel.add(ring);
+    label(gFunnel, -r - 2, y, 0, t, i === 4 ? "hot" : "");
+  });
+  const STUDIES = [["Wang 2020", "part"], ["Liang 2023", "part"], ["Klemmer 2023", "no"], ["Hettige 2024", "no"], ["Gueterbock 2025", "nr"],
+                   ["Du 2026", "part"], ["Zhao 2026", "nr"], ["Schmidt & Ong 2026", "part"], ["Mohseni 2026", "no"], ["Zhu 2026", "part"], ["Shao 2026", "no"]];
+  const tok = { no: "--ols", part: "--rf", nr: "--mlp" };
+  STUDIES.forEach(([n, s], i) => {
+    const a = (i / STUDIES.length) * Math.PI * 2, x = Math.cos(a) * 20, z = Math.sin(a) * 20;
+    box(gFunnel, [x, -4, z], [2.4, 2.4, 2.4], stdm(tok[s]));
+    label(gFunnel, x, -7.2, z, n, "tick");
+  });
+  const me = new THREE.Mesh(new THREE.OctahedronGeometry(3.4), stdm("--gnn")); me.position.y = -4; gFunnel.add(me); gFunnel.userData.gem = me;
+  label(gFunnel, 0, 1, 0, "این پژوهش: شعاع برابر", "big");
+})();
+
+/* -------- 7. validation: 12 spatial blocks and a held-out year */
+const gBlocks = group("blocks", 1340, 0, 0);
+const BS = 26; // 22 km blocks
+let BLOCK = [], blockIds = [];
+(function () {
+  let best = null;
+  for (let ox = 0; ox < BS; ox += 2) for (let oy = 0; oy < BS; oy += 2) {
+    const ids = MASK.map(([c, r]) => Math.floor((c + ox) / BS) + "_" + Math.floor((r + oy) / BS));
+    const cnt = {}; ids.forEach((d) => (cnt[d] = (cnt[d] || 0) + 1));
+    const big = Object.keys(cnt).filter((k) => cnt[k] > 25);
+    const score = Math.abs(big.length - 12) * 1000 + Object.keys(cnt).length;
+    if (!best || score < best.score) best = { score, ids, big };
+  }
+  const keys = best.big; blockIds = keys;
+  BLOCK = best.ids.map((d) => { const k = keys.indexOf(d); return k < 0 ? nearestBlock(d, keys) : k; });
+  function nearestBlock(d, ks) { const [a, b] = d.split("_").map(Number); let bi = 0, bd = 1e9; ks.forEach((k, i) => { const [p, q] = k.split("_").map(Number); const dd = (p - a) ** 2 + (q - b) ** 2; if (dd < bd) { bd = dd; bi = i; } }); return bi; }
+})();
+const blockMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.92, 0.6, 0.92), new THREE.MeshStandardMaterial({ roughness: .8 }), MASK.length);
+gBlocks.add(blockMesh);
+const BPAL = ["#8aa6c1", "#b7a27f", "#9cb59a", "#c0939a", "#a49ac2", "#86b8b7", "#c4ad78", "#9aa9b5", "#b89c86", "#8fb08a", "#a8a0b8", "#7fa3b0", "#b2a59a"];
+let heldOut = 0;
+const yearSlabs = [["۱۴۰۲ · توسعه", "--scene-line", 0], ["۱۴۰۳ · توسعه", "--scene-line", 1], ["۱۴۰۴ · سال کنار گذاشته", "--accent", 2]];
+yearSlabs.forEach(([t, tok, i]) => { box(gBlocks, [70, 1.5 + i * 7, -26], [12, 3, 12], stdm(tok, { transparent: true, opacity: i === 2 ? .9 : .55 })); label(gBlocks, 84, 1.5 + i * 7, -26, t, i === 2 ? "hot" : ""); });
+const heldLbl = label(gBlocks, 0, 12, 0, "بلوک آزمون", "hot");
+label(gBlocks, -40, 1, 26, "۱۲ بلوک ۲۲ کیلومتری · حاشیهٔ ۲ km حذف می‌شود", "plain");
+function paintBlocks() {
+  const m = new THREE.Matrix4(), col = new THREE.Color(), hot = new THREE.Color(css("--accent")), faint = new THREE.Color(css("--scene-faint"));
+  const inHeld = new Set(); MASK.forEach(([c, r], i) => { if (BLOCK[i] === heldOut) inHeld.add(c + "," + r); });
+  let cx = 0, cz = 0, n = 0;
+  MASK.forEach(([c, r], i) => {
+    const held = BLOCK[i] === heldOut;
+    let buf = false; if (!held) for (let a = -2; a <= 2 && !buf; a++) for (let b = -2; b <= 2; b++) if (inHeld.has(c + a + "," + (r + b))) { buf = true; break; }
+    m.makeTranslation(c - 63, held ? 5 : 0, r - 36);
+    if (buf) m.scale(new THREE.Vector3(0.35, 0.35, 0.35));
+    blockMesh.setMatrixAt(i, m);
+    col.set(held ? hot : buf ? faint : new THREE.Color(BPAL[BLOCK[i] % BPAL.length])); blockMesh.setColorAt(i, col);
+    if (held) { cx += c - 63; cz += r - 36; n++; }
+  });
+  blockMesh.instanceMatrix.needsUpdate = true; blockMesh.instanceColor.needsUpdate = true;
+  if (n) heldLbl.p.set(cx / n, 10, cz / n);
+}
+
+/* -------- 8. reach curve, real numbers */
+const gCurve = group("curve", 1600, 0, 0);
+const curveState = { year: 1402, metric: "spearman", view: "3d" };
+function drawCurve() {
+  clearGroup(gCurve);
+  const mi = curveState.metric === "spearman" ? 1 : 2;
+  const [y0, y1, step] = mi === 1 ? [0.65, 0.97, 0.05] : [0.40, 0.90, 0.1];
+  const X = (km) => km * 2, Y = (v) => ((v - y0) / (y1 - y0)) * 40, laneZ = (i) => i * 7;
+  const zMax = laneZ(FAMS.length - 1) + 3;
+  // floor and back wall grid
+  for (let v = Math.ceil(y0 / step) * step; v <= y1 + 1e-9; v += step) { line(gCurve, [[0, Y(v), -3], [80, Y(v), -3]], linem("--scene-line", { transparent: true, opacity: .45 })); label(gCurve, -5, Y(v), -3, fa(v.toFixed(2)), "tick"); }
+  for (const km of [0, 10, 20, 30, 40]) { line(gCurve, [[X(km), 0, -3], [X(km), 0, zMax]], linem("--scene-line", { transparent: true, opacity: .45 })); label(gCurve, X(km), -2.5, zMax + 2, fa(km), "tick"); }
+  label(gCurve, 40, -6, zMax + 4, "شعاع دید (کیلومتر)", "plain");
+  label(gCurve, -10, 42, -3, curveState.metric === "spearman" ? "Spearman" : "PR-AUC (۱۰٪ بالا)", "plain");
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(zMax + 3, 40), stdm("--accent", { transparent: true, opacity: .1, side: THREE.DoubleSide, depthWrite: false }));
+  wall.rotation.y = Math.PI / 2; wall.position.set(X(24), 20, zMax / 2 - 1.5); gCurve.add(wall);
+  label(gCurve, X(24), 42.5, zMax / 2, "طول همبستگی هدف: ۲۴ km", "hot");
+  FAMS.forEach(([fam, tok, name], i) => {
+    const pts = CURVE[curveState.year][fam].map((p) => [X(p[0]), Y(p[mi]), laneZ(i)]);
+    const mat = stdm(tok);
+    pts.forEach((p) => ball(gCurve, p, fam === "MLP" ? 1.25 : 0.95, mat));
+    if (fam !== "MLP") for (let k = 1; k < pts.length; k++) rod(gCurve, pts[k - 1], pts[k], 0.32, mat);
+    if (fam === "MLP") label(gCurve, pts[0][0] - 1, pts[0][1] - 3, pts[0][2], "بدون همسایگی", "tick");
+  });
+}
+
+/* -------- 9. equal-reach differences, real numbers */
+const gDiff = group("diff", 1860, 0, 0);
+(function () {
+  const S = 420, xs = [0, 11, 22, 33, 44], xs2 = [62, 73];
+  const band = new THREE.Mesh(new THREE.BoxGeometry(86, 0.02 * 2 * S, 13), stdm("--scene-line", { transparent: true, opacity: .16, depthWrite: false }));
+  band.position.set(36, 0, 3); gDiff.add(band);
+  label(gDiff, 84, 0.02 * S + 1.5, 3, "حاشیهٔ هم‌ارزی ±۰٫۰۲", "plain");
+  line(gDiff, [[-6, 0, -4], [80, 0, -4], [80, 0, 10], [-6, 0, 10], [-6, 0, -4]], linem("--scene-line"));
+  [-0.04, -0.02, 0, 0.02, 0.04, 0.06, 0.08, 0.1].forEach((v) => label(gDiff, -9, v * S, -4, (v > 0 ? "+" : "") + fa(v.toFixed(2)), "tick"));
+  function bars(list, xx, tok) {
+    list.forEach(([km, a, b], j) => {
+      [[a, 0], [b, 7]].forEach(([[d, lo, hi], z]) => {
+        const h = Math.max(Math.abs(d) * S, 0.25);
+        box(gDiff, [xx[j], (d >= 0 ? h : -h) / 2, z], [3.2, h, 3.2], stdm(tok, { transparent: z === 7, opacity: z === 7 ? .65 : 1 }));
+        rod(gDiff, [xx[j], lo * S, z], [xx[j], hi * S, z], 0.12, basic("--ink"));
+        rod(gDiff, [xx[j] - 1, lo * S, z], [xx[j] + 1, lo * S, z], 0.1, basic("--ink"));
+        rod(gDiff, [xx[j] - 1, hi * S, z], [xx[j] + 1, hi * S, z], 0.1, basic("--ink"));
+      });
+      label(gDiff, xx[j], -21, 12, fa(km) + " km", "tick");
+    });
+  }
+  bars(DIFF_SLX, xs, "--gnn"); bars(DIFF_NOG, xs2, "--mlp");
+  label(gDiff, 22, 48, 3, "GNN منهای SLX هم‌شعاع", "big");
+  label(gDiff, 67.5, 24, 3, "GNN منهای همان شبکه بدون گراف", "big");
+})();
+
+/* -------- 10. held-out year and seeds, real numbers */
+const gSeeds = group("seeds", 2120, 0, 0);
+(function () {
+  const S = 34;
+  const C = [ // reach, [name, token, spearman, prauc]
+    ["۳۰٫۳ km", [["--gnn", .931, .785], ["--gnn", .926, .758], ["--ols", .934, .699]]],
+    ["۳۷٫۸ km", [["--gnn", .933, .782], ["--gnn", .928, .741], ["--rf", .932, .733]]]];
+  C.forEach(([reach, bars], ci) => {
+    [["Spearman", 1], ["PR-AUC", 2]].forEach(([mname, mi], k) => {
+      const x0 = ci * 54 + k * 24;
+      bars.forEach((b, j) => {
+        const v = b[mi], x = x0 + j * 6.5, single = j === 1;
+        box(gSeeds, [x, (v * S) / 2, 0], [5, v * S, 5], stdm(b[0], { transparent: single, opacity: single ? .45 : 1 }));
+        label(gSeeds, x, v * S + 2.4, 0, f3(v), "tick");
+      });
+      label(gSeeds, x0 + 6.5, -3, 4, mname, "plain");
+    });
+    label(gSeeds, ci * 54 + 18.5, 42, 0, "سال ۱۴۰۴ · " + reach, "big");
+  });
+})();
+
+/* -------- 11. checks and limits as rings of cubes */
+function ring(name, x, items, tok, mark) {
+  const g = group(name, x, 0, 0);
+  items.forEach((t, i) => {
+    const a = (i / items.length) * Math.PI * 2 - Math.PI / 2, R = 30, px = Math.cos(a) * R, pz = Math.sin(a) * R;
+    const cube = box(g, [px, 2, pz], [4, 4, 4], stdm(tok)); cube.userData.spin = 0.4 + (i % 3) * 0.15;
+    label(g, px, 7.2, pz, mark + " " + t, "");
+  });
+  return g;
+}
+ring("checks", 2380, ["نشت ایستگاه‌ها", "تک‌تک seedها", "حساسیت طول همبستگی", "آستانه‌های ۲۰٪ و ۵٪", "ابرپیکسل ۵×۵", "درون‌یابی خود هدف",
+  "بافر ۱۰ و ۲۰ km", "کالیبراسیون آزمون", "شباهت سال‌ها", "هدف از دادهٔ روزانه", "ارتفاع", "عملگر فیزیکی", "ایستگاه‌های NO₂"], "--good", "✓");
+ring("limits", 2640, ["یک شهر", "گراف فقط فاصله", "بدون تنظیم ابرپارامتر", "۱۴۰۴ شبیه سال‌های قبل", "نقش گراف در بافر ۲۰ km",
+  "استانداردسازی روی کل دامنه", "حدود ۵ درجهٔ آزادی"], "--warn", "!");
+
+/* -------- 12. novelty: three contributions */
+const gNovel = group("novel", 2900, 0, 0);
+(function () {
+  box(gNovel, [0, -1, 0], [64, 2, 20], stdm("--scene-tile"));
+  const P = [["مقایسهٔ هم‌شعاع، با همان شبکه بدون گراف", "--gnn", 26, -20], ["پیوند شعاع لازم با طول همبستگی هدف", "--accent", 22, 0], ["نقش seed و استنباط با ۵ درجهٔ آزادی", "--gbm", 18, 20]];
+  P.forEach(([t, tok, h, x], i) => { box(gNovel, [x, h / 2, 0], [10, h, 10], stdm(tok)); label(gNovel, x, h + 3.5, 0, fa(i + 1) + ". " + t, ""); });
+  label(gNovel, 0, -6, 12, "پرسش: برتری GNN از گراف است یا از شعاع دید؟", "big");
+})();
+
+/* -------- 13. thesis tree and the paper branch */
+const gTree = group("tree", -300, 0, 0);
+const gPaper = new THREE.Group(); gTree.add(gPaper);
+(function () {
+  const N = (p, tok, r = 3) => ball(gTree, p, r, stdm(tok));
+  N([0, 36, 0], "--ink", 4.2);
+  label(gTree, 0, 44, 0, "پایان‌نامه: همجوشی داده‌های چندوجهی برای تحلیل پیش‌بینانهٔ کاهش ردپای کربن در تهران", "big");
+  [["RQ1 · همجوشی", -30, "--gbm"], ["RQ2 · GNN", 0, "--gnn"], ["RQ3 · یادگیری تقویتی", 30, "--scene-line"]].forEach(([t, x, tok]) => {
+    rod(gTree, [0, 36, 0], [x, 12, 0], 0.35, stdm("--scene-line")); N([x, 12, 0], tok); label(gTree, x, 6.5, 0, t, x === 30 ? "plain" : "");
+  });
+  const pm = stdm("--accent");
+  rod(gPaper, [-30, 12, 0], [-15, -16, 0], 0.45, pm); rod(gPaper, [0, 12, 0], [-15, -16, 0], 0.45, pm);
+  const gem = new THREE.Mesh(new THREE.OctahedronGeometry(4.5), pm); gem.position.set(-15, -16, 0); gPaper.add(gem);
+  gTree.userData.paperLbl = label(gTree, -15, -24, 0, "مقاله: Reach, not graphs (RQ1 و RQ2)", "hot");
+  gTree.userData.thesisLbl = label(gTree, 30, -4, 0, "در پایان‌نامه می‌ماند", "plain");
+})();
+
+/* ---------------------------------------------------------------- the steps */
+const T = (s) => s; // plain marker for long html strings
+const STEPS = [
+{ id: "intro", part: "مسیر کار", title: "شعاع، نه گراف", groups: ["city"], cam: [[0, 95, 120], [0, 4, 0]], spin: true,
+  caption: "<b>شماتیک</b>: الگوی ماهانهٔ NO₂ روی شبکهٔ شهر. ستون‌های نارنجی ۱۰٪ سلول‌های داغ‌اند.",
+  html: T(`<p class="lead">این صفحه مسیر کار را از پایان‌نامه تا مقاله قدم به قدم نشان می‌دهد: پرسش‌ها، مدل همجوشی، آنچه نتایج پایان‌نامه نشان داد، ایده‌ای که از دل آن بیرون آمد، آزمون‌هایی که برای سنجیدنش طراحی شد، نوآوری مقاله و همهٔ بررسی‌ها.</p>
+<div class="stats"><div class="stat"><b>۲٬۴۳۶</b><span>سلول یک‌کیلومتری در تهران، ری و شمیرانات</span></div>
+<div class="stat"><b>۳ سال</b><span>۱۴۰۲ و ۱۴۰۳ برای توسعه، ۱۴۰۴ کنار گذاشته</span></div>
+<div class="stat"><b>۱۲ بلوک</b><span>اعتبارسنجی مکانی ۲۲ کیلومتری</span></div>
+<div class="stat"><b>۵ seed</b><span>برای هر شبکهٔ عصبی</span></div></div>
+<p>همهٔ عددهای این صفحه از فایل‌های نتایج پروژه آمده‌اند. صحنه‌هایی که شماتیک‌اند، در پایین صحنه همین را می‌گویند.</p>
+<p class="muted">صحنه را می‌شود با ماوس چرخاند و بزرگ کرد. کلیدهای جهت، Space یا دکمه‌های پایین صفحه قدم بعدی و قبلی را نشان می‌دهند.</p>`) },
+
+{ id: "thesis", part: "پایان‌نامه", title: "نقطهٔ شروع: پایان‌نامه", groups: ["tree"], cam: [[-300, 12, 104], [-300, 12, 0]], paper: false,
+  caption: "ساختار پرسش‌های پایان‌نامه. این مقاله از RQ1 و RQ2 ساخته شده است.",
+  html: T(`<p class="lead">عنوان پایان‌نامه: <b>«همجوشی داده‌های چندوجهی برای تحلیل پیش‌بینانهٔ کاهش ردپای کربن در تهران»</b>.</p>
+<h3>سه پرسش پژوهش</h3>
+<ol><li><b>RQ1، همجوشی:</b> آیا ترکیب داده‌های ترافیک، انرژی و آلودگی، نقشهٔ کانون‌های احتراق شهری را بهتر از بهترین منبع تنها می‌کند؟ کدام معماری همجوشی (زودهنگام، دیرهنگام، دروازه‌ای) بهتر است؟</li>
+<li><b>RQ2، شبکهٔ عصبی گرافی:</b> آیا GNN کانون‌ها را بهتر از مدل‌های سنتی مکانی پیدا می‌کند؟</li>
+<li><b>RQ3، یادگیری تقویتی:</b> مداخلات تطبیقی برای کاهش انتشار.</li></ol>
+<p>این مقاله فقط <b>RQ1 و RQ2</b> را دربر می‌گیرد. RQ3 بخشی از پایان‌نامه می‌ماند.</p>
+<p>قواعد تصمیم هر فرضیه پیش از ارزیابی مدل‌ها نوشته و در git ثبت شد (پیش‌ثبت). یعنی معیار موفقیت پس از دیدن نتیجه عوض نشده است.</p>`) },
+
+{ id: "target", part: "داده و هدف", title: "چرا NO₂ ماهواره‌ای برای کربن؟", groups: ["city"], cam: [[-20, 70, 95], [0, 4, 4]],
+  caption: "<b>شماتیک</b>: هدف هموار است و کانون‌ها چند ناحیهٔ پیوسته‌اند.",
+  html: T(`<p class="lead">برای تهران نقشهٔ مستقل CO₂ با تفکیک یک کیلومتر وجود ندارد. اگر خود سیاههٔ CO₂ هدف باشد، مدل فقط تخصیص سیاهه را بازتولید می‌کند.</p>
+<ul><li><b>NO₂ همراه CO₂ از احتراق سوخت فسیلی گسیل می‌شود</b> و عمرش کوتاه است: حدود ۲٫۴ ساعت در ۱۰۰ شهر بزرگ <span class="en">(Beirle &amp; Wagner, 2024)</span>. پس نزدیک محل احتراق می‌ماند.</li>
+<li><b>TROPOMI</b> روی ماهوارهٔ Sentinel-5P آن را هر روز با پیکسل ۳٫۵ × ۵٫۵ km می‌سنجد.</li>
+<li><b>هدف:</b> میانگین ماهانهٔ ستون NO₂، لگاریتم‌گرفته و در هر ماه روی دامنه استاندارد شده (z). <b>کانون</b> = ۱۰٪ بالای سلول‌ها در آن ماه.</li>
+<li><b>دامنه:</b> ۲٬۴۳۶ سلولی که سیاهه به آن‌ها CO₂ داده است. کوه و بیابان بیرون می‌مانند تا مدل با جدا کردن شهر از غیرشهر امتیاز نگیرد.</li></ul>
+<h3>ویژگی کلیدی هدف: بسیار هموار است</h3>
+<div class="stats"><div class="stat"><b>۲۴ km</b><span>فاصله‌ای که همبستگی‌نگار هدف صفر می‌شود</span></div>
+<div class="stat"><b>۴٫۹</b><span>تعداد مؤثر واحدهای مستقل در کل شهر <span class="en">(Griffith, 2005)</span></span></div></div>
+<p>این دو عدد در ادامه کلید ماجرا هستند. الگو بین سال‌ها هم تقریباً ثابت است: همبستگی رتبه‌ای میانگین سالانه بین هر دو سال ۰٫۹۹۳ تا ۰٫۹۹۷.</p>`) },
+
+{ id: "data", part: "داده و هدف", title: "چهار حوزهٔ داده", groups: ["city", "layers"], quiet: ["city"], cam: [[-150, 80, 120], [0, 26, 0]],
+  caption: "<b>شماتیک</b>: چهار حوزهٔ ورودی بالای الگوی هدف. ایستگاه‌ها نقطه‌های پررنگ لایهٔ آلودگی‌اند.",
+  html: T(`<p class="lead">ورودی‌ها در چهار حوزه‌اند و همه روی همان شبکهٔ یک‌کیلومتری و برای هر ماه ساخته شده‌اند.</p>
+<div class="tw"><table><tr><th>حوزه</th><th>لایه‌ها</th></tr>
+<tr><td><b>ترافیک</b></td><td>CO₂ جاده از سیاههٔ پایین‌به‌بالا (IPCC Tier 1 با عدم‌قطعیت مونت‌کارلو)، طول راه به تفکیک رده، وسیله-کیلومتر ساعت اوج و نسبت حجم به ظرفیت</td></tr>
+<tr><td><b>انرژی</b></td><td>CO₂ مسکونی، تجاری، صنعتی و نیروگاهی از همان سیاهه، و درجه-روز گرمایش ماهانه</td></tr>
+<tr><td><b>آلودگی</b></td><td>CO از ۲۸ ایستگاه شبکهٔ پایش شهرداری، درون‌یابی با وزن عکس فاصله</td></tr>
+<tr><td><b>زمینه</b></td><td>جمعیت و حجم ساختمان (GHSL)، نور شب (VIIRS)، سهم زمین صنعتی، دما و سرعت باد ماهانه (ERA5)</td></tr></table></div>
+<p>لایه‌های ماهانهٔ هر بخش = تخصیص سالانه × سهم ماهانهٔ آن بخش. برای ۱۴۰۴ هنوز سیاهه‌ای نیست، پس برای همهٔ مدل‌ها سیاهه و ترافیک ۱۴۰۳ جایگزین شده است.</p>`) },
+
+{ id: "fusion", part: "RQ1 · همجوشی", title: "مدل همجوشی", groups: ["fusion"], cam: [[300, 20, 160], [300, 0, 0]],
+  caption: "<b>شماتیک</b> مدل همجوشی دروازه‌ای. اندازهٔ ذره‌ها وزن دروازه برای هر حوزه را نشان می‌دهد و از سلولی به سلول دیگر عوض می‌شود.",
+  html: T(`<p class="lead">سه روش همجوشی ساخته و مقایسه شد. هر سه روی یک هدف، با یک اعتبارسنجی و با ۵ seed.</p>
+<div class="tw"><table><tr><th>روش</th><th>چه می‌کند</th></tr>
+<tr><td><b>زودهنگام</b><br><span class="en muted">early</span></td><td>همهٔ ورودی‌ها پشت هم در یک بردار، و یک شبکه</td></tr>
+<tr><td><b>دیرهنگام</b><br><span class="en muted">late</span></td><td>برای هر حوزه یک شبکه و یک پیش‌بینی جدا؛ در پایان میانگین وزن‌دار با وزن آموخته‌شده برای هر حوزه</td></tr>
+<tr><td><b>دروازه‌ای</b><br><span class="en muted">gated</span></td><td>برای هر حوزه یک encoder؛ دروازهٔ softmax برای <b>هر سلول و هر ماه</b> وزن هر حوزه را تعیین می‌کند؛ جمع وزن‌دار به سر خطی یا به GNN می‌رود</td></tr></table></div>
+<h3>جزئیات</h3>
+<ul><li>هر encoder یک شبکهٔ دولایه است که ورودی یک حوزه را به ۳۲ عدد خلاصه می‌کند.</li>
+<li>وزن‌های دروازه مثبت‌اند و جمعشان ۱ است، پس نشان می‌دهند مدل در هر نقطه به کدام حوزه تکیه کرده است.</li>
+<li>آموزش: AdamW، نرخ یادگیری ۰٫۰۰۳، ۳۰۰ دوره، dropout ۰٫۱. پیش‌بینی نهایی میانگین ۵ seed است و هر seed هم جدا سنجیده شد.</li>
+<li>طرح حذف حوزه‌ها: ۷ ترکیب حوزه (۳ تکی، ۳ جفتی، ۱ سه‌تایی) × ۳ روش همجوشی = ۲۱ مدل.</li></ul>`) },
+
+{ id: "rq1", part: "RQ1 · همجوشی", title: "یافتهٔ RQ1: همجوشی کمک نکرد، و دلیلش", groups: ["blur"], cam: [[560, 84, 150], [560, 2, 0]], blur: true,
+  caption: "سطح‌ها <b>شماتیک</b>اند؛ عدد همبستگی <b>واقعی</b> است (<span class=\"path\">docs/tables/t12_sector_bias_sigma.csv</span>، ۱۴۰۲).",
+  html: T(`<p class="lead">در پایان‌نامه فرضیهٔ H1 پشتیبانی نشد. در اجرای دوبارهٔ بدون نشت و با ۵ seed هم همان شد: همجوشی هر سه حوزه از بهترین تک‌حوزه، یعنی انرژی، بهتر نبود.</p>
+<div class="tw"><table><tr><th></th><th>۱۴۰۲</th><th>۱۴۰۳</th></tr>
+<tr><td>PR-AUC، همجوشی منهای انرژی</td><td class="num">+۰٫۰۲۲</td><td class="num">+۰٫۰۴۰</td></tr>
+<tr><td>Spearman، همجوشی منهای انرژی</td><td class="num">−۰٫۰۲۱</td><td class="num">−۰٫۰۲۲</td></tr></table></div>
+<p>افزایش PR-AUC در حد نوسان seedهاست و کاهش Spearman در هر ۵ seed منفی است. روی ۱۴۰۴ دو مدل هم‌ارزند (Spearman −۰٫۰۰۷).</p>
+<h3>چرا؟ دو دلیل</h3>
+<ol><li><b>شکل شهر خودش رتبه را می‌دهد.</b> شبکه‌ای که فقط حوزهٔ زمینه (جمعیت، ساختمان، نور شب) را دارد به Spearman ۰٫۹۱ می‌رسد.</li>
+<li><b>منابع در مقیاس هدف یکی می‌شوند.</b> لایه‌های CO₂ جاده و ساختمان در یک سلول تنها فقط ۰٫۵۸ همبسته‌اند. هدف ماهواره‌ای در مقیاس ده‌ها کیلومتر تغییر می‌کند، و در این مقیاس دو لایه تقریباً یک نقشه‌اند. لغزنده را حرکت دهید.</li></ol>
+<p>نکتهٔ دیگر: با ورودی یکسان، فرق روش‌های همجوشی از فرق حوزه‌ها بزرگ‌تر است. با حوزهٔ انرژی تنها، PR-AUC روش‌های زودهنگام، دیرهنگام و دروازه‌ای در ۱۴۰۲: ۰٫۶۲۵، ۰٫۵۸۹ و ۰٫۷۶۶.</p>
+<div class="quote">در مقیاسی که هدف تغییر می‌کند، منابع مختلف اطلاعات یکسانی دارند. همین استدلال در ادامه برای گراف هم برقرار می‌شود.</div>`),
+  controls: () => `<div class="slider"><span>σ</span><input type="range" id="rbRange" min="0" max="${RB.length - 1}" step="1" value="0" aria-label="مقیاس هموارسازی"><span id="rbSig" class="num">۰ km</span></div>
+  <div><span class="muted">همبستگی جاده و ساختمان: </span><span class="readout" id="rbRead">۰٫۵۸۴</span></div>
+  <button class="nav" type="button" id="rbPlay">پخش از ۰ تا ۱۵ km</button>` },
+
+{ id: "rq2thesis", part: "RQ2 · GNN", title: "RQ2 در پایان‌نامه: GNN همیشه جلو بود", groups: ["reach"], cam: [[820, 70, 70], [820, 0, 0]], reach: { L: 3, slx: 15 },
+  caption: "از یک سلول (نارنجی)، آبی: سلول‌هایی که GNN سه‌لایه می‌بیند؛ مربع نارنجی: پنجرهٔ SLX مرجع پایان‌نامه.",
+  html: T(`<p class="lead">مدل: <b>GraphSAGE چندمقیاسی</b> روی شبکهٔ سلول‌ها. هر سلول به ۸ همسایه در فاصلهٔ ۱، ۳ و ۹ سلول وصل است و ۳ لایه پیام‌رسانی دارد.</p>
+<p>مدل‌های سنتی: رگرسیون خطی (OLS)، gradient boosting (GBM) و جنگل تصادفی (RF)، هر سه با میانگین ورودی‌ها در پنجره‌های همسایگی (مدل SLX). بزرگ‌ترین پنجره در پایان‌نامه ۱۲٫۶ km بود.</p>
+<h3>نتیجهٔ پیش‌ثبت‌شده (PR-AUC، GNN منهای بهترین مدل سنتی)</h3>
+<div class="tw"><table><tr><th>آزمون</th><th>اختلاف</th><th>حکم</th></tr>
+<tr><td>اعتبارسنجی ۱۴۰۲</td><td class="num">+۰٫۰۱۲</td><td>پشتیبانی نشد</td></tr>
+<tr><td>اعتبارسنجی ۱۴۰۳</td><td class="num">+۰٫۰۴۰</td><td>پشتیبانی نشد</td></tr>
+<tr><td>سال تأییدی ۱۴۰۴</td><td class="num">+۰٫۰۶۵ <span class="muted">[+۰٫۰۱۳، +۰٫۱۶۳]</span></td><td><b>پشتیبانی شد</b></td></tr></table></div>
+<p>GNN در هر سه آزمون جلوتر بود. شبکهٔ عصبی بدون هیچ اطلاعی از همسایه‌ها PR-AUC حدود ۰٫۴۵ تا ۰٫۴۹ داشت.</p>
+<div class="quote">پرسش بعدی طبیعی بود: این برتری از کجا می‌آید؟</div>`) },
+
+{ id: "spark", part: "ایدهٔ مقاله", title: "جرقهٔ مقاله: GNN دورتر می‌بیند", groups: ["reach"], cam: [[820, 95, 40], [820, 0, 0]], reach: { L: 3, slx: 15 },
+  caption: "شبکهٔ واقعی مدل: لبه‌ها در فاصلهٔ ۱، ۳ و ۹ سلول (هر سلول ۰٫۸۴ km). دکمه‌ها را امتحان کنید.",
+  html: T(`<p class="lead">هر لایهٔ GNN دیدش را ۹ سلول، یعنی حدود ۷٫۶ km، بیشتر می‌کند. سه لایه یعنی <b>۲۲٫۷ km</b>. مرجع SLX فقط تا <b>۱۲٫۶ km</b> را می‌دید و شبکهٔ بدون همسایگی فقط سلول خودش را.</p>
+<p>پس در مقایسهٔ پایان‌نامه دو چیز با هم فرق داشت:</p>
+<ol><li><b>نحوهٔ ترکیب همسایه‌ها:</b> پیام‌رسانی آموخته‌شده روی گراف، در برابر میانگین ثابت در پنجره.</li>
+<li><b>اندازهٔ همسایگی، یعنی شعاع دید.</b></li></ol>
+<p>به برتری مدل گرافی معمولاً اولی را نسبت می‌دهند. ولی هدف ما تا ده‌ها کیلومتر هموار است (طول همبستگی ۲۴ km). در چنین هدفی، دیدن دورتر به‌تنهایی می‌تواند مهارت بدهد.</p>
+<div class="quote">فرضیهٔ مقاله: بخش بزرگی از برتری GNN از شعاع دید است، نه از گراف. برای آزمودنش باید به مدل‌های ساده همان شعاع را داد.</div>
+<p class="muted">جزئیات: پنجرهٔ SLX همهٔ سلول‌های درون مربع را می‌بیند. گراف همان فاصله را با الگوی پراکنده‌ای از سلول‌ها می‌پوشاند. <span id="stCount"></span></p>`),
+  controls: () => `<span class="muted">لایه‌های GNN:</span><div class="seg" id="segL"><button type="button" data-v="1">۱</button><button type="button" data-v="2">۲</button><button type="button" data-v="3" aria-pressed="true">۳</button></div>
+  <span class="muted">پنجرهٔ SLX:</span><div class="seg" id="segS"><button type="button" data-v="0">بدون</button><button type="button" data-v="15" aria-pressed="true">۱۲٫۶ km</button><button type="button" data-v="27">۲۲٫۷ km</button></div>` },
+
+{ id: "literature", part: "ایدهٔ مقاله", title: "ادبیات: کسی شعاع را کنترل نکرده بود", groups: ["funnel"], cam: [[1080, 34, 132], [1080, 16, 0]], spin: true,
+  caption: "مکعب‌ها: ۱۱ مطالعهٔ نزدیک. نارنجی: شعاع برابر نیست · زرد: فقط برای بخشی از مرجع‌ها · خاکستری: گزارش نشده.",
+  html: T(`<p class="lead">متن کامل ۱۱ مطالعهٔ نزدیک خوانده شد. برای هر کدام ثبت شد که GNN و مرجع‌هایش تا کجا را می‌بینند (جدول ۱ مقاله).</p>
+<div class="tw"><table><tr><th>مطالعه</th><th>موضوع</th><th>شعاع برابر؟</th></tr>
+<tr><td>Wang 2020</td><td>PM2.5، ۱۸۴ شهر چین</td><td><span class="chip c-part">فقط مدل گرافی دیگر</span></td></tr>
+<tr><td>Liang 2023</td><td>دوچرخهٔ اشتراکی، نیویورک</td><td><span class="chip c-part">فقط SLX خطی</span></td></tr>
+<tr><td>Klemmer 2023</td><td>چهار دادهٔ رگرسیون جغرافیایی</td><td><span class="chip c-no">مرجع بیشتر می‌بیند</span></td></tr>
+<tr><td>Hettige 2024</td><td>PM2.5، پکن و شنژن</td><td><span class="chip c-no">نه</span></td></tr>
+<tr><td>Gueterbock 2025</td><td>NO₂ با TROPOMI، بریستول</td><td><span class="chip c-nr">گزارش نشده</span></td></tr>
+<tr><td>Du 2026</td><td>PM2.5، فرزنو</td><td><span class="chip c-part">جزئی</span></td></tr>
+<tr><td>Zhao 2026</td><td>سلامت، لندن</td><td><span class="chip c-nr">گزارش نشده</span></td></tr>
+<tr><td>Schmidt &amp; Ong 2026</td><td>NO₂ ساعتی، برلین</td><td><span class="chip c-part">تقریباً</span></td></tr>
+<tr><td>Mohseni 2026</td><td>دوچرخهٔ اشتراکی، تورنتو</td><td><span class="chip c-no">نه</span></td></tr>
+<tr><td>Zhu 2026</td><td>قیمت مسکن، بوستون</td><td><span class="chip c-part">فقط مرجع‌های خطی</span></td></tr>
+<tr><td>Shao 2026</td><td>CO₂ سالانه، ۳۲۹ شهر چین</td><td><span class="chip c-no">نه</span></td></tr>
+<tr><td><b>این پژوهش</b></td><td>کانون‌های NO₂، تهران</td><td><span class="chip c-yes">بله، و شعاع تغییر داده شد</span></td></tr></table></div>
+<p>دو مطالعه نزدیک شدند. در <span class="en">Schmidt &amp; Ong (2026)</span> جنگل تصادفی NO₂ ایستگاه‌های دیگر را با همان وزن‌های گراف گرفت و به GNN رسید. در <span class="en">Liang (2023)</span> فقط مرجع خطی همان همسایه‌ها را داشت. هیچ‌کدام شعاع را موضوع مقایسه نکرد، تغییرش نداد یا به مقیاس هدف ربطش نداد.</p>
+<p>جستجوی ساختاریافته در ScienceDirect (۵ پرس‌وجو، ۱۹۱ رکورد یکتا) و جستجوی معنایی گسترده‌تر هم چنین مطالعه‌ای پیدا نکرد. انتخاب همسایگی از روی دامنهٔ همبستگی سابقه دارد <span class="en">(Franklin 1996; Behrens 2019; Valavi 2019; Alon &amp; Yahav 2021; Freitas 2026)</span>، ولی برای هم‌شعاع کردن GNN و مرجع‌هایش به کار نرفته بود. در گراف‌های غیرمکانی ایدهٔ نزدیکی هست <span class="en">(SGC; Wu et al., 2019)</span>، اما بدون اعتبارسنجی مکانی و مرجع‌های SLX.</p>`) },
+
+{ id: "design", part: "کار مقاله", title: "طراحی یک مقایسهٔ منصفانه", groups: ["blocks"], cam: [[1350, 108, 132], [1352, 0, 0]], blocks: true,
+  caption: "<b>شماتیک</b>: هر بار یک بلوک (نارنجی) پنهان می‌شود و سلول‌های حاشیهٔ ۲ کیلومتری‌اش از آموزش حذف می‌شوند.",
+  html: T(`<p class="lead">همهٔ مدل‌ها همان هدف، همان ورودی‌ها و همان تقسیم‌بندی را دارند. فقط شعاع دید و نحوهٔ ترکیب همسایه‌ها عوض می‌شود.</p>
+<div class="tw"><table><tr><th>مدل</th><th>شعاع دید</th></tr>
+<tr><td>OLS، GBM و RF روی سلول خود</td><td class="num">۰</td></tr>
+<tr><td>SLX (همان سه مدل + میانگین همسایه‌ها)</td><td class="num">۰٫۸ تا ۳۷٫۸ km، ۹ اندازه</td></tr>
+<tr><td>GNN با ۱ تا ۵ لایه</td><td class="num">۷٫۶ تا ۳۷٫۸ km</td></tr>
+<tr><td><b>همان شبکه بدون گراف</b>، با میانگین‌های همسایگی</td><td class="num">۰، ۲۲٫۷ و ۳۷٫۸ km</td></tr></table></div>
+<p>شبکهٔ بدون گراف کنترل تعیین‌کننده است: encoder، آموزش، seedها و میانگین‌گیری‌اش عین GNN است و فقط به جای پیام‌رسانی روی گراف، میانگین ثابت همسایه‌ها را می‌گیرد.</p>
+<h3>ارزیابی</h3>
+<ul><li><b>۱۲ بلوک ۲۲ کیلومتری:</b> هر بلوک یک بار پنهان می‌شود و سلول‌های آموزشیِ کمتر از ۲ km از آن حذف می‌شوند.</li>
+<li><b>سال کنار گذاشته (۱۴۰۴):</b> آموزش روی ۱۴۰۲ و ۱۴۰۳، پیش‌بینی بلوک پنهان در ۱۴۰۴: مکان تازه در سال تازه.</li>
+<li><b>بدون نشت:</b> لایهٔ ایستگاه‌ها برای هر fold فقط از ایستگاه‌های بیرون از بلوک آزمون ساخته شد.</li>
+<li><b>معیارها:</b> Spearman برای رتبهٔ کل شهر (معیار اصلی) و PR-AUC برای کانون‌ها (توصیفی؛ شانسی = ۰٫۱۰).</li>
+<li><b>استنباط با ۱۲ بلوک:</b> آزمون جایگشت دقیق بلوکی (۴۰۹۶ حالت)، بازهٔ jackknife، حکم پنج‌حالته با حاشیهٔ ۰٫۰۲ (برتر، هم‌ارز، عدم‌فروتر، فروتر، نامعلوم) و تصحیح Holm.</li>
+<li><b>۵ seed:</b> هم میانگین ۵ مدل و هم تک‌تک seedها گزارش شد.</li></ul>`) },
+
+{ id: "curve", part: "نتایج", title: "نتیجهٔ ۱: مهارت با شعاع بالا می‌رود و صاف می‌شود", groups: ["curve"], cam: [[1650, 58, 150], [1642, 18, 14]], curve: true,
+  caption: "دادهٔ <b>واقعی</b>: <span class=\"path\">docs/paper/results_review/reach/reach_curve.csv</span> · اعتبارسنجی ۱۲ بلوکی · شبکه‌ها میانگین ۵ seed.",
+  html: T(`<p class="lead">همهٔ خانواده‌های مدل روی <b>یک منحنی</b> قرار می‌گیرند: با شعاع دید تند بالا می‌روند و بعد صاف می‌شوند.</p>
+<div class="tw"><table><tr><th>شعاع</th><th>بهترین SLX</th><th>GNN</th><th>بدون گراف</th></tr>
+<tr><td class="num">۰</td><td class="num">۰٫۷۷ / ۰٫۷۵</td><td>–</td><td class="num">۰٫۶۹ / ۰٫۶۸</td></tr>
+<tr><td class="num">۷٫۶ km</td><td class="num">۰٫۸۷ / ۰٫۸۷</td><td class="num">۰٫۹۰ / ۰٫۹۱</td><td>–</td></tr>
+<tr><td class="num">۱۲٫۶ km</td><td class="num">۰٫۹۲ / ۰٫۹۳</td><td>–</td><td>–</td></tr>
+<tr><td class="num">۲۲٫۷ km</td><td class="num">۰٫۹۴ / ۰٫۹۳</td><td class="num">۰٫۹۵ / ۰٫۹۵</td><td class="num"><b>۰٫۹۵ / ۰٫۹۶</b></td></tr>
+<tr><td class="num">۳۷٫۸ km</td><td class="num">۰٫۹۵ / ۰٫۹۴</td><td class="num">۰٫۹۵ / ۰٫۹۵</td><td class="num"><b>۰٫۹۶ / ۰٫۹۶</b></td></tr></table></div>
+<p class="muted">Spearman، ۱۴۰۲ / ۱۴۰۳.</p>
+<ul><li>SLX از نزدیک‌ترین سلول‌ها چیز زیادی نمی‌گیرد، تا ۱۲٫۶ km بالا می‌رود و بعد تقریباً ثابت است.</li>
+<li>GNN همین مسیر را می‌رود و بیشتر از ۳ لایه بهتر نمی‌شود.</li>
+<li>همان شبکه بدون گراف، وقتی میانگین همسایه‌ها را می‌گیرد، از ۰٫۶۹ به ۰٫۹۵۴ تا ۰٫۹۵۸ می‌رسد و کمی <b>بالاتر</b> از GNN می‌ایستد.</li>
+<li>نقطهٔ صاف شدن (۱۲ تا ۲۳ km) با طول همبستگی هدف پس از حذف روند بزرگ‌مقیاس (۱۴ تا ۲۴ km) هم‌خوان است.</li></ul>
+<p>PR-AUC هم همین الگو را دارد، با پراکندگی بیشتر بین مدل‌ها و سال‌ها. دکمه‌های زیر را امتحان کنید. نمای «روبه‌رو» همان شکل ۴ مقاله است.</p>`),
+  controls: () => `<div class="seg" id="segY"><button type="button" data-v="1402" aria-pressed="true">۱۴۰۲</button><button type="button" data-v="1403">۱۴۰۳</button></div>
+  <div class="seg" id="segM"><button type="button" data-v="spearman" aria-pressed="true">Spearman</button><button type="button" data-v="pr">PR-AUC</button></div>
+  <div class="legend">${FAMS.map(([, tok, name]) => `<span><i style="background:var(${tok})"></i>${name}</span>`).join("")}</div>
+  <div class="seg" id="segV"><button type="button" data-v="3d" aria-pressed="true">سه‌بعدی</button><button type="button" data-v="front">روبه‌رو</button></div>` },
+
+{ id: "equal", part: "نتایج", title: "نتیجهٔ ۲: در شعاع برابر، گراف چیزی اضافه نمی‌کند", groups: ["diff"], cam: [[1898, 38, 118], [1898, 12, 3]],
+  caption: "دادهٔ <b>واقعی</b> (جدول ۴ مقاله): میله = اختلاف Spearman (جلو ۱۴۰۲، پشت ۱۴۰۳) · خط = بازهٔ ۹۵٪ jackknife · نوار خاکستری = حاشیهٔ هم‌ارزی.",
+  html: T(`<p class="lead">GNN در هر عمق با مدل‌هایی مقایسه شد که <b>دقیقاً همان شعاع</b> را می‌بینند.</p>
+<h3>در برابر SLX هم‌شعاع</h3>
+<p>برتری GNN با بزرگ شدن شعاع کوچک می‌شود: حدود ۰٫۰۴ در ۷٫۶ km، ۰٫۰۲ در ۱۵٫۱ km، ۰٫۰۱ در ۲۲٫۷ و ۳۰٫۳ km، و تقریباً صفر در ۳۷٫۸ km (−۰٫۰۰۴ و +۰٫۰۰۹). همهٔ بازه‌ها صفر را دربر دارند و هیچ‌کدام پس از Holm معنی‌دار نیست.</p>
+<h3>در برابر همان شبکه بدون گراف</h3>
+<div class="tw"><table><tr><th>شعاع</th><th>۱۴۰۲</th><th>۱۴۰۳</th><th>حکم</th></tr>
+<tr><td class="num">۲۲٫۷ km</td><td class="num">−۰٫۰۰۵</td><td class="num">−۰٫۰۰۸</td><td><b>هم‌ارز در هر دو سال</b></td></tr>
+<tr><td class="num">۳۷٫۸ km</td><td class="num">−۰٫۰۱۲</td><td class="num">−۰٫۰۱۰</td><td>نامعلوم / هم‌ارز</td></tr></table></div>
+<p>یعنی وقتی همه‌چیز جز گراف یکسان است، جایگزین کردن پیام‌رسانی با میانگین ثابت همسایه‌ها هیچ هزینه‌ای ندارد. اختلاف حتی کمی به نفع شبکهٔ بدون گراف است.</p>
+<h3>PR-AUC</h3>
+<p>میانگین ۵ seed GNN در ۲۲٫۷ تا ۳۷٫۸ km حدود ۰٫۰۲ تا ۰٫۱۱ از SLX جلوتر است. ولی هیچ آزمون جایگشتی پس از Holm معنی‌دار نیست، برتری تک‌seedها حدود نصف است، و در برابر شبکهٔ بدون گراف علامت اختلاف بین دو سال عوض می‌شود.</p>`) },
+
+{ id: "holdout", part: "نتایج", title: "نتیجهٔ ۳: سال کنار گذاشته و نقش seedها", groups: ["seeds"], cam: [[2170, 34, 112], [2170, 16, 0]],
+  caption: "دادهٔ <b>واقعی</b> سال ۱۴۰۴. در هر گروه: آبی پررنگ GNN میانگین ۵ seed · آبی کم‌رنگ GNN تک seed · نارنجی و زرد SLX هم‌شعاع (OLS و RF).",
+  html: T(`<p class="lead">روی ۱۴۰۴، GNN و SLX هم‌شعاع در Spearman <b>هم‌ارزند</b>.</p>
+<div class="tw"><table><tr><th>شعاع</th><th>مدل</th><th>Spearman</th><th>PR-AUC</th></tr>
+<tr><td rowspan="2" class="num">۳۰٫۳ km</td><td>GNN، ۴ لایه</td><td class="num">۰٫۹۳۱</td><td class="num">۰٫۷۸۵</td></tr>
+<tr><td>SLX-OLS</td><td class="num">۰٫۹۳۴</td><td class="num">۰٫۶۹۹</td></tr>
+<tr><td rowspan="3" class="num">۳۷٫۸ km</td><td>GNN، ۵ لایه، میانگین ۵ seed</td><td class="num">۰٫۹۳۳</td><td class="num">۰٫۷۸۲</td></tr>
+<tr><td>GNN، ۵ لایه، تک seed (میانگین)</td><td class="num">۰٫۹۲۸</td><td class="num">۰٫۷۴۱</td></tr>
+<tr><td>SLX-RF</td><td class="num">۰٫۹۳۲</td><td class="num">۰٫۷۳۳</td></tr></table></div>
+<ul><li><b>میانگین‌گیری seedها:</b> برتری GNN در PR-AUC (۰٫۷۸۲ در برابر ۰٫۷۳۳) بیشتر از میانگین گرفتن ۵ مدل است. یک مدل تنها ۰٫۷۴۱ می‌گیرد. مدل‌های SLX یک بار اجرا شده بودند و از این میانگین‌گیری سودی نبردند.</li>
+<li><b>ناپایداری PR-AUC:</b> انحراف معیار بین seedها ۰٫۰۲۸ در ۱۴۰۲، ۰٫۰۳۸ در ۱۴۰۳ و ۰٫۰۷۵ در ۱۴۰۴. در Spearman حدود ۰٫۰۰۵.</li>
+<li><b>هزینه:</b> SLX خطی در ۲۲٫۷ km روی ۱۴۰۴ هم‌تراز GNN است (۰٫۹۲۹ و ۰٫۷۸۵). اعتبارسنجی کاملش ۸ ثانیه روی CPU طول کشید و GNN ۳۹ دقیقه روی GPU.</li></ul>
+<h3>استنباط، حکم را عوض می‌کند</h3>
+<p>آزمون تأییدی پایان‌نامه روی ۱۴۰۴ با bootstrap «پشتیبانی شد» (+۰٫۰۶۵). با همان پیش‌بینی‌ها و استنباط ساخته‌شده برای ۱۲ بلوک، حکم «عدم‌فروتر» است (p = ۰٫۱۰). با حدود ۵ واحد مستقل، روش‌های قابل‌دفاع با هم اختلاف دارند. برای همین مقاله حکم را با سخت‌گیرانه‌ترین روش گزارش می‌کند.</p>`) },
+
+{ id: "checks", part: "بررسی‌ها", title: "چه چیزهایی را بررسی کردیم", groups: ["checks"], cam: [[2380, 62, 78], [2380, 0, 0]], spin: true,
+  caption: "سیزده بررسی که روی نتیجه انجام شد. همه با کد و خروجی در مخزن پروژه.",
+  html: T(`<ul class="checks">
+<li><i class="ok">✓</i><span><b>نشت ایستگاه‌ها.</b> لایهٔ CO برای هر fold بدون ایستگاه‌های بلوک آزمون ساخته شد. مهارت پایین نیامد (PR-AUC ۰٫۷۱۵ و ۰٫۷۲۶ در برابر ۰٫۶۴۸ و ۰٫۶۹۱)، پس نشت نتایج پایان‌نامه را بزرگ نکرده بود.</span></li>
+<li><i class="ok">✓</i><span><b>تک‌تک seedها</b> ذخیره و کنار میانگین گزارش شدند.</span></li>
+<li><i class="ok">✓</i><span><b>حساسیت طول همبستگی.</b> ۲۴ km پس از حذف روند خطی ۱۹ km، پس از حذف روند درجه‌دو ۱۴ km، و در دامنهٔ بریده‌شده ۱۸ تا ۲۲ km می‌شود. نقطهٔ صاف شدن مهارت (۱۲ تا ۲۳ km) با همهٔ این‌ها سازگار است.</span></li>
+<li><i class="ok">✓</i><span><b>آستانهٔ کانون</b> ۲۰٪ و ۵٪ به جای ۱۰٪: تصویر کلی همان است.</span></li>
+<li><i class="ok">✓</i><span><b>ابرپیکسل ۵ × ۵ سلول</b>، هم‌اندازهٔ پیکسل TROPOMI: تصویر کلی همان است.</span></li>
+<li><i class="ok">✓</i><span><b>درون‌یابی خود هدف</b> بدون هیچ ورودی (فرایند گاوسی): Spearman ۰٫۸۶ و ۰٫۸۱. مدل‌ها ۰٫۰۸ تا ۰٫۱۴ به آن اضافه می‌کنند، و GNN و SLX هم‌شعاع به یک اندازه.</span></li>
+<li><i class="ok">✓</i><span><b>بافر ۱۰ و ۲۰ km</b> (برون‌یابی به مرکز شهر): GNN ۰٫۹۱ و ۰٫۷۹ ماند، SLX به ۰٫۸۵ و ۰٫۳۵ افتاد. درخت‌ها نمی‌توانند فراتر از دامنهٔ آموزش پیش‌بینی کنند.</span></li>
+<li><i class="ok">✓</i><span><b>کالیبراسیون آزمون</b> با مقایسهٔ seed با seed (بدون اختلاف واقعی): برای PR-AUC درست (۱ از ۲۰)، برای Spearman سهل‌گیر (۵ از ۲۰). آزمون سهل‌گیر «نبود اختلاف» را محکم‌تر می‌کند، نه سست‌تر.</span></li>
+<li><i class="ok">✓</i><span><b>شباهت سال‌ها:</b> ۰٫۹۹۳ تا ۰٫۹۹۷.</span></li>
+<li><i class="ok">✓</i><span><b>هدف از دادهٔ روزانهٔ کم‌ابر</b> (ابر کمتر از ۰٫۳): با هدف اصلی ۰٫۹۸ تا ۰٫۹۹ همبسته.</span></li>
+<li><i class="ok">✓</i><span><b>ارتفاع:</b> شمال حدود ۷۰۰ m بالاتر است. حذف اثر ارتفاع مهارت را کم عوض کرد (۰٫۹۴۹ → ۰٫۹۴۰).</span></li>
+<li><i class="ok">✓</i><span><b>عملگر فیزیکی</b> (هموارسازی گاوسی با یک ضریب برای هر بخش): Spearman ۰٫۸۵، پایین‌تر از هر SLX با شعاع ۱۲٫۶ km یا بیشتر.</span></li>
+<li><i class="ok">✓</i><span><b>ایستگاه‌های زمینی NO₂</b> با الگوی ماهواره همخوانی ضعیف دارند (۰٫۱۱ و ۰٫۳۰). هدف ستون NO₂ است، نه غلظت کنار خیابان، و مقاله همین را می‌گوید.</span></li></ul>`) },
+
+{ id: "limits", part: "بررسی‌ها", title: "محدودیت‌ها، صریح", groups: ["limits"], cam: [[2640, 58, 76], [2640, 0, 0]], spin: true,
+  caption: "محدودیت‌هایی که در بخش ۵٫۴ مقاله صریح نوشته شده‌اند.",
+  html: T(`<p class="lead">هر نتیجه مرزی دارد. مقاله این مرزها را خودش می‌گوید.</p>
+<ul class="checks">
+<li><i class="wa">!</i><span><b>یک شهر، یک هدف، گراف بر پایهٔ فاصله.</b> گراف‌هایی که لبه‌هایشان اطلاعات دیگری دارند (راه، سفرها، باد) آزموده نشدند و ممکن است رفتار دیگری داشته باشند.</span></li>
+<li><i class="wa">!</i><span><b>تنظیم ابرپارامتر</b> برای هیچ مدلی انجام نشد. مرجع‌های SLX پس از دیدن نتیجه از چند گونه انتخاب شدند و GNN اصلاً تنظیم نشد.</span></li>
+<li><i class="wa">!</i><span><b>سال ۱۴۰۴</b> شبیه سال‌های قبل است و ورودی‌هایش از ۱۴۰۳ است، پس اطلاعات تازهٔ کمی دارد.</span></li>
+<li><i class="wa">!</i><span><b>بافر ۲۰ km:</b> GNN خیلی بهتر از SLX ماند، ولی جدا نشد که این از گراف است یا از یادگیرندهٔ عصبی.</span></li>
+<li><i class="wa">!</i><span><b>استانداردسازی هدف</b> در هر ماه روی کل دامنه، از جمله بلوک آزمون، انجام می‌شود.</span></li>
+<li><i class="wa">!</i><span><b>حدود ۵ درجهٔ آزادی:</b> مقایسه‌های GNN و SLX «نامعلوم» ماندند. هم‌ارزی فقط در برابر شبکهٔ بدون گراف ثابت شد.</span></li>
+<li><i class="wa">!</i><span><b>NO₂ و صنعت:</b> کانون‌های NO₂ حدود یک‌سوم CO₂ جاده و ساختمان را دربر دارند، ولی فقط حدود ۱٪ CO₂ صنعتی را.</span></li></ul>`) },
+
+{ id: "novelty", part: "نوآوری", title: "نوآوری مقاله", groups: ["novel"], cam: [[2900, 34, 82], [2900, 10, 0]],
+  caption: "سه سهم مقاله، روی یک پرسش.",
+  html: T(`<div class="quote">اولین مقایسهٔ هم‌شعاع GNN با مدل‌های سنتی مکانی، و با همان شبکه بدون گراف، در نقشه‌سازی محیطی. نتیجه: برتری GNN در نقشهٔ کانون‌های NO₂ تهران از شعاع دید می‌آید، نه از گراف.</div>
+<h3>سه سهم</h3>
+<ol><li><b>ارزیابی هم‌شعاع.</b> مرجع‌های SLX و همان شبکه بدون گراف با شعاع برابر GNN، و تغییر شعاع برای همه، با اعتبارسنجی بلوکی و سال کنار گذاشته.</li>
+<li><b>پیوند شعاع لازم با مقیاس هدف.</b> مهارت در ۱۲ تا ۲۳ km صاف می‌شود، در دامنهٔ طول همبستگی هدف. قاعدهٔ عملی: شعاع را تغییر بده و نقطهٔ صاف شدن را پیدا کن؛ طول همبستگی حدس اول است، نه جواب قطعی.</li>
+<li><b>ارزیابی در هدفی با ۵ درجهٔ آزادی.</b> میانگین seed و روش استنباط حکم را عوض می‌کنند. همان استدلال مقیاس نتیجهٔ RQ1 را هم توضیح می‌دهد.</li></ol>
+<h3>پنج توصیه برای مطالعات GNN مکانی</h3>
+<ol><li>به مرجع‌ها شعاع مدل را بدهید (چند ثانیه هزینه دارد).</li><li>مهارت را بر حسب شعاع گزارش کنید و نقطهٔ صاف شدن را با طول همبستگی هدف بسنجید.</li><li>تک‌seedها را کنار میانگین گزارش کنید، یا مرجع‌ها را هم میانگین بگیرید.</li><li>استنباطی به کار ببرید که برای تعداد کم بلوک ساخته شده، و اندازهٔ نمونهٔ مؤثر را گزارش کنید.</li><li>متغیرهای درون‌یابی‌شده را درون اعتبارسنجی بسازید.</li></ol>
+<p>عنوان مقاله: <span class="en"><i>Reach, not graphs: neighbourhood reach explains the skill of distance-based graph neural networks in mapping intra-urban NO₂ hotspots from TROPOMI</i></span></p>
+<p class="muted">مطالعه‌های ۲۰۲۶ با یافته‌های هم‌جهت در مجلات معتبر چاپ شده‌اند <span class="en">(Shao et al., GIScience &amp; Remote Sensing; Schmidt &amp; Ong)</span>. مقالهٔ ما سازوکار را جدا می‌کند و قاعده‌ای عملی برای آن می‌دهد.</p>`) },
+
+{ id: "thesis-paper", part: "پایان‌نامه و مقاله", title: "پایان‌نامه و مقاله: دو خروجی از یک کار", groups: ["tree"], cam: [[-300, 6, 112], [-304, 8, 0]], paper: true,
+  caption: "مقاله از RQ1 و RQ2 پایان‌نامه بیرون آمده است. RQ3 در پایان‌نامه می‌ماند.",
+  html: T(`<p class="lead">عنوان پایان‌نامه دربارهٔ <b>ردپای کربن</b> است و همان می‌ماند. مقاله از همان RQ1 و RQ2 شروع کرد و در بررسی دقیق‌تر به یافته‌ای رسید که از پرسش اولیه کلی‌تر است.</p>
+<div class="tw"><table><tr><th></th><th>پایان‌نامه</th><th>مقاله</th></tr>
+<tr><td>محور</td><td>همجوشی داده برای تحلیل پیش‌بینانهٔ کاهش ردپای کربن</td><td>چرا GNN در نقشهٔ کانون‌ها جلو بود: شعاع یا گراف؟</td></tr>
+<tr><td>پرسش‌ها</td><td>RQ1، RQ2، RQ3</td><td>RQ1 و RQ2</td></tr>
+<tr><td>نتایج</td><td>طبق قواعد پیش‌ثبت‌شده، همان‌طور که گزارش شد</td><td>همان نتایج، با مرجع‌های هم‌شعاع و استنباط سخت‌گیرانه‌تر</td></tr>
+<tr><td>عنوان</td><td>کربن تهران</td><td><span class="en">Reach, not graphs</span></td></tr></table></div>
+<ul><li><b>پیوند با کربن:</b> NO₂ نشانگر احتراق سوخت فسیلی است و کانون‌های NO₂ کانون‌های احتراق شهری‌اند، یعنی جاده و ساختمان. برای همین هدف پایان‌نامه NO₂ ماهواره‌ای بود.</li>
+<li><b>نتایج پایان‌نامه دست نمی‌خورند.</b> مقاله پایان‌نامه را «مطالعهٔ اصلی» <span class="en">(Vafaeian, 2026)</span> معرفی و ارجاع می‌دهد و نتایجش را با مرجع‌های سخت‌گیرانه‌تر دوباره می‌سنجد.</li>
+<li><b>پایهٔ مشترک:</b> سیاههٔ CO₂ تهران، لایه‌های ترافیک و انرژی، شبکهٔ یک‌کیلومتری و کد پروژه پایهٔ هر دو کارند.</li>
+<li><b>چرا عنوان مقاله کربن نیست:</b> یافتهٔ اصلی مقاله دربارهٔ روش ارزیابی GNNهاست و برای هر نقشه‌سازی محیطی کاربرد دارد. عنوانی که همین یافته را بگوید، مقاله را برای داوران و خوانندگان روشن‌تر می‌کند.</li></ul>`) },
+
+{ id: "next", part: "گام بعد", title: "گام‌های بعد", groups: ["city", "layers"], quiet: ["city", "layers"], cam: [[120, 110, 150], [0, 22, 0]], spin: true,
+  caption: "<b>شماتیک</b>: شهر و چهار حوزهٔ داده.",
+  html: T(`<h3>مقاله</h3>
+<ul><li>متن کامل در <span class="path">docs/paper/manuscript/manuscript_en.md</span>، با ۶ جدول و ۶ شکل.</li>
+<li>برای ارسال: وابستگی سازمانی نویسندگان، عنوان دقیق پایان‌نامه در منابع، و جدول S2 (منبع هر لایهٔ داده).</li>
+<li>مجله‌های هدف: <span class="en">Environmental Modelling &amp; Software</span>، <span class="en">International Journal of Applied Earth Observation and Geoinformation</span> و <span class="en">Computers, Environment and Urban Systems</span>.</li></ul>
+<h3>ادامهٔ کار: مقالهٔ دوم دربارهٔ همجوشی</h3>
+<ul><li><b>همجوشی با شعاع جدا برای هر منبع:</b> هر منبع فاصلهٔ اثر خودش را یاد می‌گیرد. اثر اگزوز ماشین محلی است و دودکش نیروگاه دور می‌رود. فاصلهٔ آموخته‌شده خودش یک خروجی فیزیکی است.</li>
+<li><b>افزونگی بر حسب مقیاس:</b> پیش از آموزش، از روی همبستگی منابع در مقیاس هدف بگوییم همجوشی ارزش دارد یا نه.</li>
+<li><b>نقشهٔ وزن‌های دروازه:</b> مدل در کجای شهر به کدام حوزه تکیه می‌کند.</li></ul>
+<h3>بازتولیدپذیری</h3>
+<p>همهٔ کد، پیکربندی‌ها، پیش‌ثبت‌ها، سابقهٔ اجراها و جدول‌های نتایج در مخزن پروژه است و هر کدام با زمان‌مهر git ثبت شده است.</p>`) },
+];
+
+/* ---------------------------------------------------------------- navigation and transitions */
+const $ = (id) => document.getElementById(id);
+const dots = $("dots");
+let cur = -1;
+STEPS.forEach((s, i) => {
+  const b = document.createElement("button"); b.type = "button"; b.className = "dot" + (i && STEPS[i - 1].part !== s.part ? " sep" : "");
+  b.textContent = fa(i + 1); b.title = s.title; b.setAttribute("aria-label", fa(i + 1) + ". " + s.title); b.onclick = () => go(i); dots.appendChild(b);
+});
+const flight = { t: 1, from: null, to: null, ft: null, tt: null };
+function go(i) {
+  i = Math.max(0, Math.min(STEPS.length - 1, i)); if (i === cur) return;
+  const s = STEPS[i]; cur = i;
+  $("eyebrow").textContent = s.part; $("title").textContent = s.title; $("body").innerHTML = ltrNums(s.html);
+  $("controls").innerHTML = s.controls ? s.controls() : ""; $("caption").innerHTML = s.caption || "";
+  $("partLabel").innerHTML = "<b>" + s.part + "</b> · قدم " + fa(i + 1) + " از " + fa(STEPS.length);
+  $("counter").textContent = fa(i + 1) + " / " + fa(STEPS.length);
+  $("prev").disabled = i === 0; $("next").disabled = i === STEPS.length - 1;
+  [...dots.children].forEach((d, k) => { if (k === i) d.setAttribute("aria-current", "step"); else d.removeAttribute("aria-current"); });
+  $("panel").scrollTop = 0;
+  try { history.replaceState(null, "", "#" + s.id); } catch (e) {}
+  // scene state
+  for (const k in GROUPS) GROUPS[k].visible = s.groups.includes(k);
+  if (s.groups.includes("tree")) { gPaper.visible = !!s.paper; gTree.userData.paperLbl.el.hidden = !s.paper; }
+  if (s.reach) { reachState.L = s.reach.L; reachState.slx = s.reach.slx; drawReach(); }
+  if (s.blur) setBlur(0);
+  if (s.curve) { curveState.view = "3d"; drawCurve(); }
+  if (s.blocks) paintBlocks();
+  wireControls(s);
+  if (controls) {
+    controls.autoRotate = !!s.spin && !REDUCED;
+    flyTo(s.cam[0], s.cam[1]);
+  }
+}
+function flyTo(pos, target) {
+  flight.from = camera.position.clone(); flight.ft = controls.target.clone();
+  flight.to = new THREE.Vector3(...pos); flight.tt = new THREE.Vector3(...target);
+  flight.t = REDUCED || flight.from.lengthSq() === 0 ? 1 : 0;
+  if (flight.t === 1) { camera.position.copy(flight.to); controls.target.copy(flight.tt); }
+}
+function wireControls(s) {
+  const seg = (id, fn) => { const el = $(id); if (!el) return; el.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; [...el.children].forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false")); fn(b.dataset.v); }; };
+  seg("segL", (v) => { reachState.L = +v; drawReach(); });
+  seg("segS", (v) => { reachState.slx = +v; drawReach(); });
+  seg("segY", (v) => { curveState.year = +v; drawCurve(); });
+  seg("segM", (v) => { curveState.metric = v === "pr" ? "pr" : "spearman"; drawCurve(); });
+  seg("segV", (v) => { curveState.view = v; if (!controls) return; const g = GROUPS.curve.position.x; if (v === "front") flyTo([g + 44, 20, 150], [g + 44, 20, 0]); else flyTo(s.cam[0], s.cam[1]); });
+  const rr = $("rbRange"); if (rr) { rr.oninput = () => setBlur(+rr.value); }
+  const rp = $("rbPlay"); if (rp) rp.onclick = () => { let k = 0; rr.value = 0; setBlur(0); const t = setInterval(() => { k++; if (k >= RB.length || cur !== STEPS.findIndex((x) => x.id === "rq1")) { clearInterval(t); return; } rr.value = k; setBlur(k); }, REDUCED ? 50 : 650); };
+  if (s.reach) drawReach();
+}
+$("prev").onclick = () => go(cur - 1); $("next").onclick = () => go(cur + 1);
+addEventListener("keydown", (e) => {
+  if (e.target.closest && e.target.closest("input")) return;
+  if (e.key === " " && e.target.tagName === "BUTTON") return;
+  if (["ArrowLeft", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+  else if (["ArrowRight", "PageUp"].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  else if (e.key === "Home") go(0); else if (e.key === "End") go(STEPS.length - 1);
+});
+addEventListener("hashchange", () => { const k = STEPS.findIndex((s) => "#" + s.id === location.hash); if (k >= 0) go(k); });
+
+/* ---------------------------------------------------------------- theme */
+function applyTheme() {
+  THEMED.forEach(([m, t]) => { const v = css(t); if (v) m.color.set(v); });
+  const pc = new THREE.Color(); partState.forEach((p, i) => { pc.set(css(PART_COL[p.src])); parts.setColorAt(i, pc); }); parts.instanceColor.needsUpdate = true;
+  paintCity(); if (GROUPS.blocks.visible) paintBlocks();
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+/* ---------------------------------------------------------------- render loop */
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight; if (!renderer || !w || !h) return;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+const v3 = new THREE.Vector3(), mtx = new THREE.Matrix4(), ease = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+let last = performance.now(), blockClock = 0, gmClock = 0;
+function tick(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (flight.t < 1) {
+    flight.t = Math.min(1, flight.t + dt / 1.4); const e = ease(flight.t);
+    camera.position.lerpVectors(flight.from, flight.to, e); controls.target.lerpVectors(flight.ft, flight.tt, e);
+    const lift = Math.sin(Math.PI * e) * Math.min(120, flight.from.distanceTo(flight.to) * 0.25); camera.position.y += lift;
+  }
+  controls.update();
+  const s = STEPS[cur];
+  if (!REDUCED) {
+    if (GROUPS.fusion.visible) {
+      const t = now / 1000;
+      const raw = [Math.sin(t * .7) + 1.2, Math.sin(t * .9 + 2) + 1.4, Math.sin(t * .5 + 4) * .6 + .6, Math.sin(t * 1.1 + 1) + 1.3].map(Math.exp);
+      const z = raw.reduce((a, b) => a + b); gateW = raw.map((v) => v / z);
+      partState.forEach((p, i) => {
+        p.t += dt * 0.32; if (p.t > 1) p.t -= 1;
+        const path = fusionPaths[p.src], seg = p.t * (path.length - 1), k = Math.min(path.length - 2, Math.floor(seg)), f = seg - k;
+        const a = path[k], b = path[k + 1], after = p.t > 0.62;
+        const pos = after ? [(p.t - .62) / .38 * 53, 0, 0] : [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+        if (after) pos[0] = pos[0] + 2;
+        const sc = after ? 0.9 : 0.5 + gateW[p.src] * 2.6 * (p.t > 0.45 ? 1 : 0.6);
+        mtx.makeScale(sc, sc, sc); mtx.setPosition(pos[0], pos[1], pos[2]); parts.setMatrixAt(i, mtx);
+      });
+      parts.instanceMatrix.needsUpdate = true;
+      gate.rotation.y += dt * 0.8;
+      gmClock += dt;
+      if (gmClock > 0.15) { gmClock = 0; const gm = gateLbl.el.querySelector(".gm"); if (gm) gm.innerHTML = gateW.map((w, i) => `<i style="height:${Math.round(4 + w * 40)}px;background:var(${PART_COL[i]})"></i>`).join(""); }
+    }
+    if (GROUPS.blocks.visible) { blockClock += dt; if (blockClock > 1.8) { blockClock = 0; heldOut = (heldOut + 1) % blockIds.length; paintBlocks(); } }
+    if (GROUPS.funnel.visible) gFunnel.userData.gem.rotation.y += dt;
+    ["checks", "limits"].forEach((k) => { if (GROUPS[k].visible) GROUPS[k].children.forEach((c) => { if (c.userData.spin) c.rotation.y += dt * c.userData.spin; }); });
+  }
+  renderer.render(scene, camera);
+  // labels
+  const w = stage.clientWidth, h = stage.clientHeight, settled = flight.t >= 1;
+  for (const L of LABELS) {
+    const on = settled && L.g.visible && s.groups.includes(L.g.userData.name) && !(s.quiet || []).includes(L.g.userData.name) && !L.el.hidden;
+    if (!on) { L.el.style.opacity = 0; continue; }
+    v3.copy(L.p); L.g.localToWorld(v3); v3.project(camera);
+    if (v3.z > 1 || v3.x < -1.2 || v3.x > 1.2 || v3.y < -1.2 || v3.y > 1.2) { L.el.style.opacity = 0; continue; }
+    L.el.style.transform = `translate(${(v3.x * 0.5 + 0.5) * w}px, ${(-v3.y * 0.5 + 0.5) * h}px) translate(-50%,-50%)`;
+    L.el.style.opacity = 1;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---------------------------------------------------------------- start */
+applyTheme(); drawReach(); drawCurve(); paintBlocks();
+const start = Math.max(0, STEPS.findIndex((s) => "#" + s.id === location.hash));
+go(start);
+if (renderer) { resize(); camera.position.set(...STEPS[start].cam[0]); controls.target.set(...STEPS[start].cam[1]); flight.t = 1; requestAnimationFrame(tick); }
+</script>
+</body></html>
