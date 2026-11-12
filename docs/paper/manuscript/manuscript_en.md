@@ -16,7 +16,7 @@ Data and code availability). Items in [brackets] are to be completed before subm
 - Skill rises steeply until the model sees about 12 km and saturates within the target's 24-km correlation length.
 - At equal reach, a linear spatial-lag model matches a five-layer graph neural network on an unseen year.
 - Averaging training seeds and a block bootstrap overstated the graph model's advantage.
-- Reach-matched spatial baselines should become the standard test for spatial deep learning.
+- A correlation-length rule gives graph and baseline models the same reach.
 
 ---
 
@@ -27,7 +27,8 @@ usually attributed to learning on a graph. We test this attribution for intra-ur
 space. In Tehran, a megacity with some of the highest tropospheric NO₂ columns among large cities worldwide, we predict
 the monthly TROPOMI NO₂ pattern on a 1-km grid (2,436 cells) from bottom-up traffic and energy emission layers, ground
 monitoring and urban-form data. We compare a multi-scale GraphSAGE model with spatially lagged regression (SLX) models
-whose neighbourhood reach is varied systematically from 0 to 38 km. All models are validated with 22-km spatial blocks
+whose neighbourhood reach is varied systematically from 0 to 38 km and, for the main comparison, set for all models
+by one rule: the correlation length of the target. All models are validated with 22-km spatial blocks
 and on a held-out year, with leakage-free pre-processing, five training seeds and inference designed for few spatial
 blocks.
 
@@ -126,22 +127,58 @@ The question has begun to surface in GIScience and environmental modelling:
   - GNN residuals can remain spatially autocorrelated (Bao et al., 2024).
   - A GNN that generalised within a fixed graph struggled under leave-one-cluster-out validation (Flores et al., 2026).
 
-In none of these comparisons, however, is the neighbourhood that the baseline sees held equal to the receptive field of
-the graph model. We searched for such a study in two ways:
+Table 1 audits how far the GNN and its baselines see in comparable studies whose full text describes both.
+
+- **What the baselines see.** Their own location only, a neighbourhood of a different size, or one that is not
+  reported.
+- **The closest case** is Liang et al. (2023).
+  - Their linear SLX baseline averaged over the same nearest stations as their GNN.
+  - Their nonlinear baseline saw no neighbours.
+  - The GNN also drew on a second, non-geographic neighbourhood.
+- **No study in Table 1** gives a nonlinear spatial-lag baseline the GNN's reach, or varies the reach of both models.
+
+**Table 1.** How far the GNN and its baselines see in comparable studies (full texts read; "n.r.": not reported).
+
+| Study | Task and units | GNN and its reach | Baselines and what they see | Reach matched? |
+|---|---|---|---|---|
+| Wang et al. (2020) | PM2.5 forecasts; 184 cities, China | Cities linked if < 300 km apart with no ridge > 1,200 m between them; one graph step per 3-h step | MLP, LSTM, GRU: own city only. GC-LSTM: the same graph. nodesFC-GRU: all cities | Only for GC-LSTM, itself a graph model |
+| Liang et al. (2023) | Trip generation; about 1,000 bike-share stations, New York | One attention layer over the 5 nearest and the 5 most similar stations | Linear SLX: nearby stations (apparently the same 5). Linear regression, XGBoost: own-station features only | Only for the linear SLX |
+| Klemmer et al. (2023) | Four geographic regression datasets | GCN, GAT, GraphSAGE: 2 layers on a 5-nearest-neighbour graph | Exact Gaussian process: all training points | No: the baseline sees more |
+| Hettige et al. (2024) | PM2.5 forecasts; 35 and 11 stations, Beijing and Shenzhen | Distance- and wind-weighted station graph; reach n.r. | Historical average, ODE models: none. DCRNN, STGCN: 3-step graph diffusion. AirFormer: 50 and 200 km. GTS: learned 30-nearest graph | No |
+| Gueterbock et al. (2025) | Hourly NO₂ with TROPOMI; 8 sites, Bristol | GraphSAGE, 2 hops (3 and 5 sampled neighbours) | XGBoost, MLP, CNN: per-site inputs; neighbours n.r. | n.r. |
+| Du et al. (2026) | PM2.5 imputation; 41 sensors, Fresno | 5 layers on complete graphs (all sensors) | Inverse-distance weighting, mean fill: all sensors. Kriging, Gaussian process: n.r. Geo-LSTM: K nearest, K n.r. | Partly; simple interpolation beat the data-driven GNNs |
+| Zhao et al. (2026) | Health outcome; 4,835 areas of 1–4 km², London | GATv2, 2 layers on contiguity (2 steps) | Spatial lag model, GWR: weights and bandwidth n.r. RF, LightGBM: none | n.r.; 2- and 3-step graphs lowered skill |
+| **This study** | NO₂ hotspots; 2,436 cells of 1 km, Tehran | GraphSAGE, 3 layers × 9 cells: 22.7 km (5 layers, 37.8 km, on the held-out year) | SLX-OLS, SLX-GBM, SLX-RF: 0–37.8 km. No-graph network: own cell | **Yes**: reach set by one rule for all models, and varied |
+
+[Rows to be added once the full texts of Schmidt & Ong (2026), Mohseni et al. (2026), Zhu et al. (2026) and Shao et al.
+(2026) have been read.]
+
+We also searched for such a study in two ways:
 
 - a structured ScienceDirect search: five Boolean queries combining graph neural networks with spatial lag, receptive
   field, air pollution, satellite NO₂ and urban emissions, giving 191 unique records, most from 2025–2026;
 - a semantic search of the wider literature.
 
-Neither found a study that compares a GNN with a spatial-lag or buffer baseline constrained to the same reach, nor one
-that varies the reach of both. The search record is in the repository (`docs/paper/lit/`). To our knowledge, the reach
-of a GNN has therefore never been separated from its graph architecture, in urban emission and air-pollution mapping or
-elsewhere. Fig. 1 traces how the literature narrows to this gap. Here we close it for intra-urban combustion hotspots
-observed by TROPOMI in Tehran. Tehran is a megacity of about nine million people at the foot of the Alborz mountains, with the highest mean NO₂ column among large
-cities worldwide (Huber et al., 2026). Our contributions are:
+Neither found a study that compares a GNN with a nonlinear spatial-lag or buffer baseline constrained to the same reach,
+nor one that varies the reach of both. The search record is in the repository (`docs/paper/lit/`).
 
-1. **A reach-matched comparison.** We vary the reach of SLX models from 0 to 38 km and compare them with a multi-scale
-   GraphSAGE model at equal reach, under 22-km block cross-validation and on a held-out year.
+Choosing a neighbourhood from the range of spatial dependence is itself established practice:
+
+- window sizes for image texture (Franklin et al., 1996);
+- the scale range of contextual covariates in machine learning (Behrens et al., 2019);
+- the size of spatial cross-validation blocks (Valavi et al., 2019);
+- the depth of a GNN relative to the radius a task needs (Alon & Yahav, 2021);
+- the receptive field of a GNN for turbulent transport (Freitas et al., 2026).
+
+It has not been used to give a GNN and its baselines the same reach. To our knowledge, the reach of a GNN has therefore
+never been separated from its graph architecture, in urban emission and air-pollution mapping or elsewhere. Fig. 1
+traces how the literature narrows to this gap. Here we close it for intra-urban combustion hotspots observed by TROPOMI
+in Tehran. Tehran is a megacity of about nine million people at the foot of the Alborz mountains, with the highest mean
+NO₂ column among large cities worldwide (Huber et al., 2026). Our contributions are:
+
+1. **A reach-matched evaluation protocol.** One rule sets the reach of the GNN and of its spatial-lag baselines
+   before any model is fitted: the correlation length of the target. We also vary the reach of the SLX models from 0
+   to 38 km. Models are compared under 22-km block cross-validation and on a held-out year.
 2. **A physical interpretation of the needed reach.** We relate the reach at which skill saturates to the correlation
    length of the satellite target and to the transport scale of NOx.
 3. **A quantified account of evaluation pitfalls on a real case:** the target's effective sample size, the hidden
@@ -155,7 +192,7 @@ Decision rules for the main comparisons were registered before the corresponding
 
 **Fig. 1.** From the literature to the gap. Satellite NO₂ is used as a tracer of urban combustion; deep learning, and
 graph neural networks in particular, map urban emissions and air pollution; their gains are credited to the graph.
-A GNN, however, also sees further than its baselines, and no study has held this reach equal. This study does.
+A GNN, however, also sees further than its baselines, and no study has controlled this reach. This study does.
 
 ---
 
@@ -250,6 +287,20 @@ Cells are converted to kilometres with the mean cell size (0.84 km). Reaches com
 37.8 km for SLX, and 0 and 22.7 km for the development GNN (three layers). On the held-out year the GNN has 37.8 km
 (five layers, the depth fixed in the original confirmatory design).
 
+**A correlation-length rule for reach (R\*).** To fix reach without tuning, we set it to the correlation length of the
+target: the distance R\* at which the correlogram of the monthly target first crosses zero (Section 2.4; 24.0 km in
+both development years).
+
+- **The principle is borrowed.** We adapt a principle used for texture windows, contextual covariates, cross-validation
+  blocks and GNN depth (Section 1).
+- **The use is new.** We use it to give a GNN and its spatial-lag baselines the same reach, chosen before either is
+  fitted.
+- **On our grid.** R\* corresponds to SLX windows of up to 27 cells (22.7 km), which is also the reach of the
+  three-layer GNN.
+
+We call a comparison reach-matched when every model sees the same distance, here R\*. R\* was computed after the
+stage A runs (Section 3.6). Results at R\* are therefore consistent with the rule, not a blind test of it.
+
 ### 3.3 Validation designs
 
 - **Spatial cross-validation.** The domain is divided into 22-km square blocks (the autocorrelation range estimated
@@ -309,14 +360,14 @@ hash, data hash and code version.
 
 ### 4.1 Skill is governed by reach
 
-Table 2 and Fig. 4 show skill against reach. The pattern is the same for every model family and both development years.
+Table 3 and Fig. 4 show skill against reach. The pattern is the same for every model family and both development years.
 
 - **Own cell (reach 0).** Models reach a Spearman of 0.66–0.77 and a PR-AUC of 0.45–0.53.
 - **About 12 km.** Every SLX estimator reaches 0.91–0.93 in Spearman and 0.71–0.80 in PR-AUC.
 - **Beyond 12 km.** The curves flatten: SLX models at 22.7–37.8 km reach Spearman 0.924–0.950.
 - **Most of the gain arrives before the target's correlation length** (24 km). Seeing further than that adds little.
 
-**Table 2.** Cross-validated skill against reach (22-km blocks; 1402 / 1403). Ensemble = mean of five seeds; single =
+**Table 3.** Cross-validated skill against reach (22-km blocks; 1402 / 1403). Ensemble = mean of five seeds; single =
 mean score of the individual seeds.
 
 | Reach (km) | Model | Spearman | PR-AUC |
@@ -356,7 +407,7 @@ bar the range of the single seeds. Dashed line: zero crossing of the target corr
 - In PR-AUC, a single GNN is not better than the best SLX model at that reach (0.771 vs 0.803 in 1402; 0.804 vs 0.797 in
   1403).
 
-**Against the best SLX model at any reach** (Table 3, Fig. 5), the GNN ensemble differs by −0.001 and +0.010 in Spearman. The
+**Against the best SLX model at any reach** (Table 4, Fig. 5), the GNN ensemble differs by −0.001 and +0.010 in Spearman. The
 jackknife intervals ([−0.034, +0.032] and [−0.028, +0.048]) and the randomisation tests (p = 0.58 and 0.13) show no
 advantage. The PR-AUC differences (+0.019 and +0.053) are inconclusive, and they shrink to −0.010 and +0.016 for single
 seeds.
@@ -365,7 +416,7 @@ seeds.
 +0.025 and +0.035 in Spearman (randomisation p = 0.001 and 0.0007; Holm-adjusted p = 0.021 and 0.016), and +0.037 and
 +0.051 in PR-AUC. The comparison that made the GNN look better was a comparison of reaches.
 
-**Table 3.** GNN (ensemble) minus reference, cross-validation on 1402 / 1403. Intervals: delete-one-block jackknife,
+**Table 4.** GNN (ensemble) minus reference, cross-validation on 1402 / 1403. Intervals: delete-one-block jackknife,
 95 %. p: one-sided exact block sign-flip test.
 
 | Reference | Metric | Δ 1402 [95 % CI] | p | Δ 1403 [95 % CI] | p |
@@ -387,6 +438,10 @@ On 1404, new places in a new year, the five-layer GNN reaches Spearman 0.933 and
 - **Cost.** This linear model's cross-validation ran in 8 s on a CPU, against 39 min on a GPU for the GNN.
 - **Caveat.** The best reach-matched model was identified after the results among fifteen variants, which favours it.
   Its margin over the GNN is nonetheless nil, not large.
+- **At the rule's reach.** R\* is computed from the target alone, not from model skill, and selects the same 22.7-km
+  windows.
+  - Spearman: all three SLX estimators are within 0.02 of the GNN (OLS 0.929, RF 0.919, GBM 0.916, against 0.933).
+  - PR-AUC: only OLS matches it (0.785; RF 0.727, GBM 0.642, against 0.782).
 
 ![Figure 5](../figures/fig5_differences.png)
 
@@ -490,7 +545,8 @@ teleconnections (Chen et al., 2026) or flows on a transport network (Mohseni et 
 We recommend five practices:
 
 1. **Reach-matched baselines.** Report a spatial-lag (SLX or buffer-based) baseline whose reach equals the model's
-   receptive field. It costs seconds.
+   receptive field. It costs seconds. Where the task gives no reach, set it for all models from the correlation length
+   of the target.
 2. **A skill-against-reach curve.** Report the reach at which skill saturates, and relate it to the correlation length of
    the target.
 3. **Single seeds as well as ensembles.** Report single-seed results next to ensembles, or ensemble the baselines too.
@@ -603,8 +659,10 @@ four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 
 - Abémgnigni Njifon, M., & Schuhmacher, D. (2024). Graph convolutional networks for spatial interpolation of correlated data. *Spatial Statistics*, 60, 100822. https://doi.org/10.1016/j.spasta.2024.100822
 - Ahn, D., Goldberg, D., Liu, F., Anderson, D., Coombes, T., Loughner, C., et al. (2025). Satellite-based analysis of CO₂ emissions from global cities: regional, economic, and demographic attributes. *AGU Advances*, 6, e2025AV001747. https://doi.org/10.1029/2025AV001747
+- Alon, U., & Yahav, E. (2021). On the bottleneck of graph neural networks and its practical implications. *International Conference on Learning Representations (ICLR)*. arXiv:2006.05205. https://doi.org/10.48550/arXiv.2006.05205
 - Bai, K., Li, K., Qiu, S., Zheng, Z., Jiao, P., Sun, Y., et al. (2025). SCAGAT: a scene-aware ensemble graph attention network for global PM2.5 pollution mapping via land–atmosphere interactions. *ISPRS Journal of Photogrammetry and Remote Sensing*, 225, 19–35. https://doi.org/10.1016/j.isprsjprs.2025.04.019
 - Bao, L.-L., Zhang, C.-X., Zhang, J.-S., & Guo, R. (2024). A two-stage spatial prediction modeling approach based on graph neural networks and neural processes. *Expert Systems with Applications*, 258, 125173. https://doi.org/10.1016/j.eswa.2024.125173
+- Behrens, T., Viscarra Rossel, R. A., Kerry, R., MacMillan, R., Schmidt, K., Lee, J., Scholten, T., & Zhu, A.-X. (2019). The relevant range of scales for multi-scale contextual spatial modelling. *Scientific Reports*, 9, 14800. https://doi.org/10.1038/s41598-019-51395-3
 - Beirle, S., Boersma, K. F., Platt, U., Lawrence, M. G., & Wagner, T. (2011). Megacity emissions and lifetimes of nitrogen oxides probed from space. *Science*, 333, 1737–1739. https://doi.org/10.1126/science.1207824
 - Beirle, S., Borger, C., Dörner, S., Li, A., Hu, Z., Liu, F., Wang, Y., & Wagner, T. (2019). Pinpointing nitrogen oxide emissions from space. *Science Advances*, 5, eaax9800. https://doi.org/10.1126/sciadv.aax9800
 - Beirle, S., & Wagner, T. (2024). A new method for estimating megacity NOx emissions and lifetimes from satellite observations. *Atmospheric Measurement Techniques*, 17, 3439–3453. https://doi.org/10.5194/amt-17-3439-2024
@@ -614,6 +672,8 @@ four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 - Du, S., Wei, H., Lee, D., Hu, Z., & Pan, S. (2026). Graph-based physics-guided urban PM2.5 air quality imputation with constrained monitoring data. *ACM Transactions on Sensor Networks*, 22, 1–23. https://doi.org/10.1145/3734869
 - Fleischmann, M., & Arribas-Bel, D. (2024). Decoding (urban) form and function using spatially explicit deep learning. *Computers, Environment and Urban Systems*, 112, 102147. https://doi.org/10.1016/j.compenvurbsys.2024.102147
 - Flores, M., Soliz, M., & Mollineda, R. A. (2026). Graph neural networks for soil organic carbon estimation: data-efficient modeling of multimodal spatial dependencies. *Machine Learning with Applications*, 24, 100878. https://doi.org/10.1016/j.mlwa.2026.100878
+- Franklin, S. E., Wulder, M. A., & Lavigne, M. B. (1996). Automated derivation of geographic window sizes for use in remote sensing digital image texture analysis. *Computers & Geosciences*, 22, 665–673. https://doi.org/10.1016/0098-3004(96)00009-X
+- Freitas, A., de Wit, X. M., Gabbana, A., Woodward, M., Toschi, F., Lin, Y. T., & Livescu, D. (2026). Learning turbulent transport via Mori–Zwanzig graph neural networks. arXiv:2606.14918. https://doi.org/10.48550/arXiv.2606.14918
 - Gao, H., Yang, F., Yang, Y., Xu, Y., & Su, Y. (2025). Adaptive receptive field graph neural networks. *Neural Networks*, 190, 107658. https://doi.org/10.1016/j.neunet.2025.107658
 - Goldberg, D. L., Tao, M., Kerr, G. H., Ma, S., Tong, D. Q., Fiore, A. M., et al. (2024). Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO₂. *Remote Sensing of Environment*, 300, 113917. https://doi.org/10.1016/j.rse.2023.113917
 - Griffith, D. A. (2005). Effective geographic sample size in the presence of spatial autocorrelation. *Annals of the Association of American Geographers*, 95, 740–760. https://doi.org/10.1111/j.1467-8306.2005.00484.x
@@ -626,6 +686,7 @@ four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 - Huber, D., Kerr, G., Nawaz, M., Runkel, S., Anenberg, S., Goldberg, D., et al. (2026). Global NO₂ changes between 2019 and 2024 as observed by TROPOMI in urban areas and emerging hotspots. *Atmospheric Chemistry and Physics*, 26, 3783–3803. https://doi.org/10.5194/acp-26-3783-2026
 - Kafi, A., Hosseinipoor, M., & Shahne, M. (2026). Evaluating the suitability of Sentinel-5P satellite data for air quality monitoring in Tehran. *Science of the Total Environment*, 1049, 182069. https://doi.org/10.1016/j.scitotenv.2026.182069
 - Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. *Patterns*, 4, 100804. https://doi.org/10.1016/j.patter.2023.100804
+- Klemmer, K., Safir, N., & Neill, D. B. (2023). Positional encoder graph neural networks for geographic data. *Proceedings of the 26th International Conference on Artificial Intelligence and Statistics (AISTATS)*, PMLR 206. arXiv:2111.10144. https://doi.org/10.48550/arXiv.2111.10144
 - Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. *Social Psychological and Personality Science*, 8, 355–362. https://doi.org/10.1177/1948550617697177
 - Li, H., Qiu, J., Zhang, K., & Zheng, B. (2025). Monitoring fossil fuel CO₂ emissions from co-emitted NO₂ observed from space: progress, challenges, and future perspectives. *Frontiers of Environmental Science & Engineering*, 19, 2. https://doi.org/10.1007/s11783-025-1922-x
 - Liang, Y., Ding, F., Huang, G., & Zhao, Z. (2023). Deep trip generation with graph neural networks for bike sharing system expansion. *Transportation Research Part C: Emerging Technologies*, 154, 104241. https://doi.org/10.1016/j.trc.2023.104241
@@ -646,6 +707,7 @@ four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 - Schmidt, R., & Ong, L. L. S. (2026). From leaves to breezes: machine learning based prediction of nitrogen dioxide concentration from surrounding urban greenery and meteorological, spatial, and traffic characteristics in Berlin, Germany. *Ecological Informatics*, 93, 103568. https://doi.org/10.1016/j.ecoinf.2025.103568
 - Shao, W., Tu, Y., Yue, T., Zhao, N., Zhou, H., Zhang, L., et al. (2026). Mapping Chinese urban carbon emissions with a graph-based multi-branch deep learning framework. *GIScience & Remote Sensing*, 63, 2631837. https://doi.org/10.1080/15481603.2026.2631837
 - Teng, M., Liang, M., Wang, S., & Ding, Y. (2026). Seamless hourly PM2.5 mapping across China with a graph spatiotemporal deep neural network. *Environmental Modelling & Software*, 198, 106915. https://doi.org/10.1016/j.envsoft.2026.106915
+- Valavi, R., Elith, J., Lahoz-Monfort, J. J., & Guillera-Arroita, G. (2019). blockCV: an R package for generating spatially or environmentally separated folds for k-fold cross-validation of species distribution models. *Methods in Ecology and Evolution*, 10, 225–232. https://doi.org/10.1111/2041-210X.13107
 - Wadoux, A. M. J.-C., Heuvelink, G. B. M., de Bruin, S., & Brus, D. J. (2021). Spatial cross-validation is not the right way to evaluate map accuracy. *Ecological Modelling*, 457, 109692. https://doi.org/10.1016/j.ecolmodel.2021.109692
 - Wang, S., Li, Y., Zhang, J., Meng, Q., Meng, L., & Gao, F. (2020). PM2.5-GNN: a domain knowledge enhanced graph neural network for PM2.5 forecasting. *Proceedings of the 28th International Conference on Advances in Geographic Information Systems (SIGSPATIAL)*, 163–166. https://doi.org/10.1145/3397536.3422208
 - Wang, S., Zhang, Y., Lin, X., Piao, X., Hu, Y., & Yin, B. (2025). CMDNet: a cross-modality spatiotemporal graph network for enhanced air pollution prediction with high-resolution satellite data. *IEEE Transactions on Geoscience and Remote Sensing*, 63, 1–14. https://doi.org/10.1109/TGRS.2025.3569594
@@ -664,14 +726,16 @@ four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 
 ## Tables and figures
 
-**Table 1.** Data sources: the predictor table of Section 2.3 with sources and years (to be laid out from
+**Table 1.** Reach of GNNs and their baselines in comparable studies (Section 1).
+
+**Table 2.** Data sources: the predictor table of Section 2.3 with sources and years (to be laid out from
 `configs/config.yaml`, `data/raw/MANIFEST.csv`).
 
-**Table 2.** Cross-validated skill against reach (Section 4.1).
+**Table 3.** Cross-validated skill against reach (Section 4.1).
 
-**Table 3.** GNN minus reference (Section 4.2).
+**Table 4.** GNN minus reference (Section 4.2).
 
-**Table 4 (supplementary).** All comparisons with jackknife and bootstrap intervals, randomisation p-values and verdicts:
+**Table S1 (supplementary).** All comparisons with jackknife and bootstrap intervals, randomisation p-values and verdicts:
 `docs/paper/results_stageA/evaluate_paper2/` and `evaluate_thesis/`.
 
 **Figures.** All figures share one style: the same colours for the same models in every figure (GNN blue, SLX-OLS

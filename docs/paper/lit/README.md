@@ -56,3 +56,54 @@ al. (2026) and Zhao et al. (2026).
 ## 3. Reference checks
 
 All DOIs cited in the manuscript were checked against the Crossref API on 8 November 2026.
+
+## 4. Prior art for the reach rule (12 November 2026)
+
+**Question.** Has the neighbourhood of a model been set from the range of spatial dependence before? And is the name
+"reach-matched" taken?
+
+**Answer.** The principle exists; the name and the use do not.
+
+| Source | What it sets from the dependence range |
+|---|---|
+| Franklin, Wulder & Lavigne (1996), *Computers & Geosciences* 22:665 | Window size for image texture, from semivariograms |
+| Behrens et al. (2019), *Scientific Reports* 9:14800 | Range of scales of contextual covariates for machine learning, from the variogram |
+| Valavi et al. (2019), *Methods Ecol. Evol.* 10:225 (blockCV) | Size of spatial cross-validation blocks, from the autocorrelation range |
+| Alon & Yahav (2021), ICLR | GNN depth should match the "problem radius" of the task |
+| Freitas et al. (2026), arXiv:2606.14918 | Receptive field of a GNN for turbulent transport, set from the integral length scale; no non-graph baseline |
+
+- **Name.** Web searches for "reach-matched" and "range-matched" with GNN or spatial baselines return nothing.
+- **Use.** None of the sources uses the rule to give a GNN and its spatial-lag baselines the same reach.
+- **In the manuscript.** The rule is presented as an adaptation of this principle (Section 3.2), not as a new method.
+
+## 5. Reach audit of comparable studies (Table 1 of the manuscript)
+
+Full texts were read for seven studies that compare a GNN with baselines on spatial data.
+
+- **Sources:** arXiv versions or open proceedings. ScienceDirect and Taylor & Francis are not reachable from this
+  environment.
+- **For each study:** how far the GNN sees, and how far each baseline sees.
+- **Main finding:** no study gives a nonlinear spatial-lag baseline the GNN's reach, or varies the reach of both.
+- **Closest case:** Liang et al. (2023, *TR-C* 154:104241).
+  - Their linear SLX baseline used the same nearest stations as the GNN (5).
+  - Their XGBoost baseline saw no neighbours.
+  - The GNN also used 5 non-geographic neighbours.
+
+| Study | Source read | GNN reach | Baselines' reach |
+|---|---|---|---|
+| Wang et al. 2020 (PM2.5-GNN) | arXiv:2002.12898 | cities < 300 km, no ridge > 1,200 m; 1 step per 3 h | MLP/LSTM/GRU none; GC-LSTM same graph; nodesFC-GRU all |
+| Liang et al. 2023 | arXiv:2303.11977 | 1 attention layer, 5 nearest + 5 similar stations | linear SLX nearby (≈ same 5); LR, XGBoost none |
+| Klemmer et al. 2023 (PE-GNN) | arXiv:2111.10144 | 2 layers on 5-NN graph | exact GP all training points |
+| Hettige et al. 2024 (AirPhyNet) | arXiv:2402.03784 | distance/wind graph, reach not reported | none / 3-step diffusion / 50–200 km / 30-NN |
+| Gueterbock et al. 2025 | arXiv:2505.05479 | GraphSAGE 2 hops | not reported |
+| Du et al. 2026 (GraPhy) | arXiv:2506.06917 | 5 layers, complete graph | IDW and mean: all sensors; others not reported |
+| Zhao et al. 2026 (UST-GNN) | arXiv:2504.04739 | GATv2 2 layers, contiguity | SLM, GWR not reported; RF, LightGBM none |
+
+**Still to read** (the user can download the PDFs):
+
+- Schmidt & Ong 2026 (*Ecol. Inform.*)
+- Mohseni et al. 2026 (*TR-A*)
+- Zhu, Wang & Luo 2026 (*ISPRS J.*)
+- Shao et al. 2026 (*GIScience & RS*)
+- Ma et al. 2025 (*Spatial Statistics*)
+- Teng et al. 2026, Yuan et al. 2026, Bai et al. 2025

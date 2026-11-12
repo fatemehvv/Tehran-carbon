@@ -42,9 +42,9 @@
 
   <!-- 5: the gap -->
   <path d="M200,508 L800,508 L755,620 L245,620 Z" fill="#f0efec" stroke="#52514e" stroke-width="1.6" stroke-dasharray="7 5"/>
-  <text class="title" x="500" y="544">Gap: reach has never been held equal</text>
-  <text class="desc" x="500" y="572">191 records screened; no reach-matched comparison</text>
-  <text class="refs" x="500" y="598">ScienceDirect and semantic search, 2026</text>
+  <text class="title" x="500" y="544">Gap: reach is left uncontrolled</text>
+  <text class="desc" x="500" y="572">No study varies the reach of GNN and baselines alike</text>
+  <text class="refs" x="500" y="598">191 records screened; reach audit of 7 studies (Table 1)</text>
 
   <!-- this study -->
   <line x1="500" y1="626" x2="500" y2="656" stroke="#104281" stroke-width="3" marker-end="url(#arrow)"/>
