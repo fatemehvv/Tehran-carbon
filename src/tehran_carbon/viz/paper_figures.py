@@ -100,7 +100,9 @@ def reach_figure(table: pd.DataFrame, zc: float, stem: Path, metrics=("spearman"
                 c, lab = ROLE.get(fam, INK2), LABEL.get(fam, fam)
                 lo, hi = f"{m}_seed_min", f"{m}_seed_max"
                 if len(g) > 1:
-                    ax.plot(g.reach_km, g[m], color=c, marker="o", ms=4.5, mec="white", mew=0.8, label=lab, zorder=3)
+                    gappy = fam == "MLP"                          # run at a few reaches only: points, no line
+                    ax.plot(g.reach_km, g[m], color=c, marker="o", ms=5 if gappy else 4.5, mec="white", mew=0.8,
+                            ls="none" if gappy else "-", label=lab, zorder=3)
                     continue
                 x, v = float(g.reach_km.iloc[0]) + DODGE.get(fam, 0.0), float(g[m].iloc[0])
                 if lo in g and pd.notna(g[lo].iloc[0]):
@@ -194,7 +196,8 @@ class PaperFigures:
         return save(fig, self.out / "fig3_correlogram")
 
     def reach(self) -> list[Path]:
-        t = self.table("reach", "reach_curve.csv")
+        review = self.res.parent / "results_review" / "reach" / "reach_curve.csv"    # with GNN depths and short SLX
+        t = pd.read_csv(review, encoding="utf-8-sig") if review.exists() else self.table("reach", "reach_curve.csv")
         zc = float(self.table("reach", "reach_correlogram.csv").zero_crossing_km.mean())
         return reach_figure(t, zc, self.out / "fig4_reach")
 
