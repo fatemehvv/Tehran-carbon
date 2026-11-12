@@ -374,7 +374,9 @@ We call a comparison *reach-matched* when every model has the same reach in cell
 - **Buffer.** The 2-km buffer is short compared with the correlation length of the target, so neighbouring training
   cells remain strongly correlated with the test block, and cross-validation measures interpolation within the city
   more than extrapolation. Results with buffers of 10 and 20 km are reported in Section 4.8 [pending:
-  `paper2_slx_buffer_v1`, `paper2_rq2_buffer_v1`].
+  `paper2_slx_buffer_v2`, `paper2_rq2_buffer_v2`]. These runs use the driver inputs only (traffic, energy, context): with
+  a 20-km buffer no station is left in 4 of the 12 folds, so the station layer cannot be built, and the 2-km buffer is
+  re-run with the same inputs for comparison.
 
 ### 3.4 Metrics
 

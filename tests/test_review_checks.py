@@ -25,13 +25,14 @@ def test_review_experiments_resolve():
     assert len(c.resolve("paper2_rq2_depth_v1")) == 4
     assert len(c.resolve("paper2_rq2_mlp_lag_v1")) == 2
     assert len(c.resolve("paper2_slx_short_v1")) == 12
-    assert len(c.resolve("paper2_slx_buffer_v1")) == 6
+    assert len(c.resolve("paper2_slx_buffer_v2")) == 9
     depth = {cfg["model"]["backbone"]["layers"] for cfg in c.resolve("paper2_rq2_depth_v1")}
     assert depth == {1, 2, 4, 5}
     for cfg in c.resolve("paper2_rq2_mlp_lag_v1"):
         assert cfg["model"]["backbone"]["type"] == "none" and cfg["train"]["save_members"]
-    for cfg in c.resolve("paper2_slx_buffer_v1"):
-        assert cfg["split"]["buffer_km"] in (10.0, 20.0) and cfg["model"]["baseline"]["lags"] == [1, 3, 9, 15, 27]
+    for cfg in c.resolve("paper2_slx_buffer_v2"):
+        assert cfg["split"]["buffer_km"] in (2.0, 10.0, 20.0) and cfg["model"]["baseline"]["lags"] == [1, 3, 9, 15, 27]
+        assert cfg["model"]["modalities"] == ["traffic", "energy"]
 
 
 def test_review_hypotheses_name_existing_experiments():

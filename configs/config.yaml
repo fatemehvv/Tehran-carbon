@@ -712,20 +712,33 @@ experiments:
       model.baseline.name: [ols, gbm, rf]
       model.baseline.lags: [[1], [1, 3], [1, 3, 9], [1, 3, 9, 15, 18]]
   # (d) larger buffers between training and test cells (2 km in the paper; the target correlation range is ~24 km)
+  # v1 stopped: with a 20-km buffer no station is left in 4 of the 12 folds (the station layer cannot be built), and
+  # with 10 km one fold keeps a single station. Its three finished runs (10 km) are not used.
   paper2_slx_buffer_v1:
     rq: RQ2
-    description: review - reach-matched SLX (22.7 km) with buffers of 10 and 20 km, without station leakage
+    description: review - reach-matched SLX (22.7 km) with buffers of 10 and 20 km (STOPPED, see v2)
     inherits: rq2_base_ols_v1
     split: {fold_aware_stations: true}
     model: {baseline: {lags: [1, 3, 9, 15, 27]}}
     sweep:
       split.buffer_km: [10.0, 20.0]
       model.baseline.name: [ols, gbm, rf]
-  paper2_rq2_buffer_v1:
+  # v2: driver inputs only (traffic, energy, context; no station layer, as in stage B), at 2, 10 and 20 km, so that the
+  # effect of the buffer is read with the same inputs throughout
+  paper2_slx_buffer_v2:
     rq: RQ2
-    description: review - the primary GNN (3 layers) with buffers of 10 and 20 km, 5 seeds stored (optional, GPU)
+    description: review - reach-matched SLX (22.7 km), driver inputs, buffers of 2, 10 and 20 km
+    inherits: rq2_base_ols_v1
+    model: {modalities: [traffic, energy], baseline: {lags: [1, 3, 9, 15, 27]}}
+    sweep:
+      split.buffer_km: [2.0, 10.0, 20.0]
+      model.baseline.name: [ols, gbm, rf]
+  paper2_rq2_buffer_v2:
+    rq: RQ2
+    description: review - the primary GNN (3 layers), driver inputs, buffers of 2, 10 and 20 km, 5 seeds (optional, GPU)
     inherits: paper2_rq2_sage_v1
-    sweep: {split.buffer_km: [10.0, 20.0]}
+    model: {modalities: [traffic, energy]}
+    sweep: {split.buffer_km: [2.0, 10.0, 20.0]}
   # ---------------------------------------------------------------- paper v2, stage B (docs/paper/assessment_stageA_fa.md)
   # Driver inputs only (traffic, energy, context): the station layer is an outcome, not a cause, its leak-free removal
   # changed nothing in stage A, and 1405 has no station data. Rules: docs/paper/preregistration_paper_v2.md (final).
@@ -1154,18 +1167,24 @@ hypotheses:
     candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 5}}
     references:
       - {experiment: paper2_rq2_mlp_lag_v1, where: {data.spatial_lags: [1, 3, 9, 15, 27, 36, 45]}}
-  PR_buffer10:                    # optional: needs paper2_rq2_buffer_v1
+  PR_buffer02:                    # optional: needs paper2_rq2_buffer_v2 (driver inputs; 2 km = the paper's buffer)
     rq: RQ2
     metric: spearman
-    candidate: {experiment: paper2_rq2_buffer_v1, where: {split.buffer_km: 10.0}}
+    candidate: {experiment: paper2_rq2_buffer_v2, where: {split.buffer_km: 2.0}}
     references:
-      - {experiment: paper2_slx_buffer_v1, where: {split.buffer_km: 10.0}}
+      - {experiment: paper2_slx_buffer_v2, where: {split.buffer_km: 2.0}}
+  PR_buffer10:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_buffer_v2, where: {split.buffer_km: 10.0}}
+    references:
+      - {experiment: paper2_slx_buffer_v2, where: {split.buffer_km: 10.0}}
   PR_buffer20:
     rq: RQ2
     metric: spearman
-    candidate: {experiment: paper2_rq2_buffer_v1, where: {split.buffer_km: 20.0}}
+    candidate: {experiment: paper2_rq2_buffer_v2, where: {split.buffer_km: 20.0}}
     references:
-      - {experiment: paper2_slx_buffer_v1, where: {split.buffer_km: 20.0}}
+      - {experiment: paper2_slx_buffer_v2, where: {split.buffer_km: 20.0}}
 
   # ---------------------------------------------------------------- paper v2, stage B: descriptive reading on 1402-1403 of
   # the pair that is tested on 1405 (stage C): SAGE with 4 layers vs SLX-OLS with windows up to the same reach (36
