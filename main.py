@@ -19,6 +19,7 @@
     python main.py paper timing   --exp paper2_rq2_sage_v1      timing pilot: cost of one run and of a 50-trial search
     python main.py paper reach    --exp paper3_reach_slx_v1 ... skill against reach (the main figure of the paper)
     python main.py paper figures                                publication figures 3-6 from docs/paper/results_stageA
+    python main.py paper review                                 reviewer checks: years, detrended R*, interpolation, seeds
     python main.py tune           --exp paper3_tune_sage_v1     random search of hyper-parameters (kind: tune)
     python main.py figures                                      thesis figures and tables (docs/figures, docs/tables)
     python main.py dashboard                                    data of the offline dashboard (docs/dashboard/data.js)
@@ -200,6 +201,12 @@ def cmd_paper(args):
         cfg = analysis_config("paper_reach", "RQ2", "skill against reach", experiments=args.exp)
         with Run(cfg) as run:
             run.finish("done", ReachCurve(cfg, args.exp).run(run))
+    elif args.what == "review":
+        # checks asked for by the reviewers: years, detrended correlogram, interpolation baselines, seed calibration
+        from tehran_carbon.analysis.review_checks import ReviewChecks
+        cfg = analysis_config("paper_review", "RQ2", "checks asked for by the reviewers")
+        with Run(cfg) as run:
+            run.finish("done", ReviewChecks(cfg).run(run))
     elif args.what == "figures":
         # publication figures from the committed tables of docs/paper/results_stageA; nothing is trained or re-scored
         from tehran_carbon.viz.paper_figures import PaperFigures
@@ -301,7 +308,7 @@ def main():
     p = sub.add_parser("analyze"); p.add_argument("what", choices=["districts", "response"])
     p.add_argument("--exp", nargs="+", required=True); p.set_defaults(fn=cmd_analyze)
     p = sub.add_parser("paper", help="paper analyses (branch paper_TC)")
-    p.add_argument("what", choices=["evaluate", "power", "target", "timing", "reach", "figures"])
+    p.add_argument("what", choices=["evaluate", "power", "target", "timing", "reach", "figures", "review"])
     p.add_argument("--hypothesis", nargs="+", help="evaluate / power: hypotheses of configs/config.yaml")
     p.add_argument("--exp", nargs="+", help="target: runs to score against elevation; timing: experiments to time")
     p.add_argument("--variant", type=int, help="timing: sweep variant (0-based; default the first)")

@@ -686,6 +686,46 @@ experiments:
     split: {fold_aware_stations: true}
     sweep: *reach_sweep
 
+
+  # ---------------------------------------------------------------- paper v2, review round (docs/paper/review/review_triage_fa.md)
+  # Asked for by the reviewers; same inputs, folds, buffer and seeds as paper2_rq2_sage_v1 unless stated. Exploratory:
+  # evaluated as their own family (PR_* hypotheses), not part of the pre-registered tests.
+  # (a) the GNN's own reach curve: 1, 2, 4 and 5 layers (3 layers = paper2_rq2_sage_v1); 9 cells per layer
+  paper2_rq2_depth_v1:
+    rq: RQ2
+    description: review - SAGE with 1, 2, 4, 5 layers (reach 7.6-37.8 km), without station leakage, 5 seeds stored
+    inherits: paper2_rq2_sage_v1
+    sweep: {model.backbone.layers: [1, 2, 4, 5]}
+  # (b) the same gated network without a graph, given the SLX box means instead: same learner, same seeds and ensemble
+  paper2_rq2_mlp_lag_v1:
+    rq: RQ2
+    description: review - the no-graph network with box means up to 27 / 45 cells (22.7 / 37.8 km) as inputs, 5 seeds
+    inherits: paper2_rq2_mlp_v1
+    sweep: {data.spatial_lags: [[1, 3, 9, 15, 27], [1, 3, 9, 15, 27, 36, 45]]}
+  # (c) SLX points below 12.6 km and at the reach of the 2-layer GNN (18 cells = 15.1 km)
+  paper2_slx_short_v1:
+    rq: RQ2
+    description: review - SLX (OLS, GBM, RF) with windows up to 1, 3, 9 and 18 cells, without station leakage
+    inherits: rq2_base_ols_v1
+    split: {fold_aware_stations: true}
+    sweep:
+      model.baseline.name: [ols, gbm, rf]
+      model.baseline.lags: [[1], [1, 3], [1, 3, 9], [1, 3, 9, 15, 18]]
+  # (d) larger buffers between training and test cells (2 km in the paper; the target correlation range is ~24 km)
+  paper2_slx_buffer_v1:
+    rq: RQ2
+    description: review - reach-matched SLX (22.7 km) with buffers of 10 and 20 km, without station leakage
+    inherits: rq2_base_ols_v1
+    split: {fold_aware_stations: true}
+    model: {baseline: {lags: [1, 3, 9, 15, 27]}}
+    sweep:
+      split.buffer_km: [10.0, 20.0]
+      model.baseline.name: [ols, gbm, rf]
+  paper2_rq2_buffer_v1:
+    rq: RQ2
+    description: review - the primary GNN (3 layers) with buffers of 10 and 20 km, 5 seeds stored (optional, GPU)
+    inherits: paper2_rq2_sage_v1
+    sweep: {split.buffer_km: [10.0, 20.0]}
   # ---------------------------------------------------------------- paper v2, stage B (docs/paper/assessment_stageA_fa.md)
   # Driver inputs only (traffic, energy, context): the station layer is an outcome, not a cause, its leak-free removal
   # changed nothing in stage A, and 1405 has no station data. Rules: docs/paper/preregistration_paper_v2.md (final).
@@ -1055,6 +1095,77 @@ hypotheses:
     candidate: {experiment: paper2_c1404_sage4_v1}
     references:
       - {experiment: paper2_c1404_sage4_single_v1, where: {model.modalities: [energy]}}
+
+  # ---------------------------------------------------------------- paper v2, review round: exploratory family (PR_*)
+  # Every comparison at exactly equal reach (cells): GNN with L layers (9L cells) vs SLX with windows up to 9L cells.
+  PR_c1404_r30:                   # held-out year, 4-layer GNN (36 cells = 30.3 km) vs SLX with the same reach
+    rq: RQ2
+    metric: spearman
+    years: [1404]
+    candidate: {experiment: paper2_c1404_sage4_v1}
+    references:
+      - {experiment: paper2_c1404_slx_reach_v1, where: {model.baseline.lags: [1, 3, 9, 15, 27, 36]}}
+  PR_c1404_r38:                   # held-out year, 5-layer GNN (45 cells = 37.8 km) vs SLX with the same reach
+    rq: RQ2
+    metric: spearman
+    years: [1404]
+    candidate: {experiment: paper2_c1404_sage5_v1}
+    references:
+      - {experiment: paper2_c1404_slx_reach_v1, where: {model.baseline.lags: [1, 3, 9, 15, 27, 36, 45]}}
+  PR_depth_L1:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 1}}
+    references:
+      - {experiment: paper2_slx_short_v1, where: {model.baseline.lags: [1, 3, 9]}}
+  PR_depth_L2:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 2}}
+    references:
+      - {experiment: paper2_slx_short_v1, where: {model.baseline.lags: [1, 3, 9, 15, 18]}}
+  PR_depth_L3:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_sage_v1}
+    references:
+      - {experiment: paper2_slx_reach_v1, where: {model.baseline.lags: [1, 3, 9, 15, 27]}}
+  PR_depth_L4:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 4}}
+    references:
+      - {experiment: paper2_slx_reach_v1, where: {model.baseline.lags: [1, 3, 9, 15, 27, 36]}}
+  PR_depth_L5:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 5}}
+    references:
+      - {experiment: paper2_slx_reach_v1, where: {model.baseline.lags: [1, 3, 9, 15, 27, 36, 45]}}
+  PR_graph_r23:                   # graph vs the same learner fed box means, both 22.7 km
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_sage_v1}
+    references:
+      - {experiment: paper2_rq2_mlp_lag_v1, where: {data.spatial_lags: [1, 3, 9, 15, 27]}}
+  PR_graph_r38:                   # graph vs the same learner fed box means, both 37.8 km
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_depth_v1, where: {model.backbone.layers: 5}}
+    references:
+      - {experiment: paper2_rq2_mlp_lag_v1, where: {data.spatial_lags: [1, 3, 9, 15, 27, 36, 45]}}
+  PR_buffer10:                    # optional: needs paper2_rq2_buffer_v1
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_buffer_v1, where: {split.buffer_km: 10.0}}
+    references:
+      - {experiment: paper2_slx_buffer_v1, where: {split.buffer_km: 10.0}}
+  PR_buffer20:
+    rq: RQ2
+    metric: spearman
+    candidate: {experiment: paper2_rq2_buffer_v1, where: {split.buffer_km: 20.0}}
+    references:
+      - {experiment: paper2_slx_buffer_v1, where: {split.buffer_km: 20.0}}
 
   # ---------------------------------------------------------------- paper v2, stage B: descriptive reading on 1402-1403 of
   # the pair that is tested on 1405 (stage C): SAGE with 4 layers vs SLX-OLS with windows up to the same reach (36
