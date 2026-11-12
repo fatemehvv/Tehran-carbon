@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="830" viewBox="0 0 1000 830" role="img" aria-labelledby="t d">
+  <title id="t">From the literature to the research gap</title>
+  <desc id="d">Funnel of five layers narrowing from satellite NO2 as a tracer of urban combustion, through deep learning and graph neural networks, to the overlooked difference in reach and the gap that no study holds reach equal; below it, the contribution of this study: reach, not graphs.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#104281"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", "Helvetica Neue", Arial, "DejaVu Sans", sans-serif; text-anchor: middle; }
+    .title { font-size: 19px; font-weight: 700; fill: #0b0b0b; }
+    .desc  { font-size: 14.5px; fill: #0b0b0b; }
+    .refs  { font-size: 12.5px; fill: #3a3936; font-style: italic; }
+    .white { fill: #ffffff; }
+    .punch { font-size: 24px; font-weight: 700; fill: #ffffff; letter-spacing: 0.3px; }
+  </style>
+  <rect width="1000" height="830" fill="#ffffff"/>
+
+  <!-- 1 -->
+  <path d="M20,20 L980,20 L935,132 L65,132 Z" fill="#cde2fb"/>
+  <text class="title" x="500" y="56">Satellite NO₂ traces urban fossil combustion</text>
+  <text class="desc" x="500" y="84">TROPOMI maps NO₂ daily at a few km; used to locate CO₂ plumes and test inventories</text>
+  <text class="refs" x="500" y="110">Beirle et al. 2019 · Goldberg et al. 2024 · Ahn et al. 2025 · Rey-Pommier et al. 2025</text>
+
+  <!-- 2 -->
+  <path d="M65,142 L935,142 L890,254 L110,254 Z" fill="#b7d3f6"/>
+  <text class="title" x="500" y="178">Deep learning maps urban emissions and air pollution</text>
+  <text class="desc" x="500" y="206">From satellite images, road networks, buildings and points of interest</text>
+  <text class="refs" x="500" y="232">Zeng et al. 2024, 2025 · Yap et al. 2025 · Shao et al. 2026 · Teng et al. 2026</text>
+
+  <!-- 3 -->
+  <path d="M110,264 L890,264 L845,376 L155,376 Z" fill="#9ec5f4"/>
+  <text class="title" x="500" y="300">GNNs: the gains are credited to the graph</text>
+  <text class="desc" x="500" y="328">Learned message passing between neighbouring places</text>
+  <text class="refs" x="500" y="354">Wang et al. 2020, 2025 · Zhao et al. 2026 · Mohseni et al. 2026</text>
+
+  <!-- 4 -->
+  <path d="M155,386 L845,386 L800,498 L200,498 Z" fill="#86b6ef"/>
+  <text class="title" x="500" y="422">But a GNN also sees further</text>
+  <text class="desc" x="500" y="450">Its reach grows with every layer; baselines see far less</text>
+  <text class="refs" x="500" y="476">Luo et al. 2016 · Liang et al. 2023 · Schmidt &amp; Ong 2026</text>
+
+  <!-- 5: the gap -->
+  <path d="M200,508 L800,508 L755,620 L245,620 Z" fill="#f0efec" stroke="#52514e" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text class="title" x="500" y="544">Gap: reach has never been held equal</text>
+  <text class="desc" x="500" y="572">191 records screened; no reach-matched comparison</text>
+  <text class="refs" x="500" y="598">ScienceDirect and semantic search, 2026</text>
+
+  <!-- this study -->
+  <line x1="500" y1="626" x2="500" y2="656" stroke="#104281" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="215" y="664" width="570" height="146" rx="16" fill="#104281"/>
+  <text class="title white" x="500" y="700">This study · Tehran, TROPOMI NO₂</text>
+  <text class="desc white" x="500" y="728">GNN and spatial-lag models compared at the same reach</text>
+  <text class="punch" x="500" y="782">Reach, not graphs</text>
+</svg>

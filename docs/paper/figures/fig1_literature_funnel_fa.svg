@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="830" viewBox="0 0 1000 830" role="img" aria-labelledby="t d" direction="rtl">
+  <title id="t">از ادبیات تا شکاف پژوهشی</title>
+  <desc id="d">قیف پنج‌لایه: از NO₂ ماهواره‌ای به‌عنوان ردیاب احتراق شهری، از راه یادگیری عمیق و شبکه‌های عصبی گرافی، تا تفاوت نادیده‌گرفتهٔ شعاع دید و شکاف پژوهشی؛ و در پایین، نوآوری این پژوهش: شعاع دید، نه گراف.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#104281"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Vazirmatn, "Segoe UI", Tahoma, "DejaVu Sans", sans-serif; text-anchor: middle; direction: rtl; }
+    .title { font-size: 20px; font-weight: 700; fill: #0b0b0b; }
+    .desc  { font-size: 15px; fill: #0b0b0b; }
+    .refs  { font-size: 12.5px; fill: #3a3936; font-style: italic; direction: ltr; }
+    .note  { font-size: 13px; fill: #3a3936; }
+    .white { fill: #ffffff; }
+    .punch { font-size: 26px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1000" height="830" fill="#ffffff"/>
+
+  <!-- ۱ -->
+  <path d="M20,20 L980,20 L935,132 L65,132 Z" fill="#cde2fb"/>
+  <text class="title" x="500" y="56">NO₂ ماهواره‌ای ردیاب احتراق سوخت فسیلی در شهرهاست</text>
+  <text class="desc" x="500" y="84">TROPOMI هر روز NO₂ را با تفکیک چند کیلومتری نقشه می‌کند؛ برای یافتن پلوم‌های CO₂ و سنجش سیاهه‌ها</text>
+  <text class="refs" x="500" y="110">Beirle et al. 2019 · Goldberg et al. 2024 · Ahn et al. 2025 · Rey-Pommier et al. 2025</text>
+
+  <!-- ۲ -->
+  <path d="M65,142 L935,142 L890,254 L110,254 Z" fill="#b7d3f6"/>
+  <text class="title" x="500" y="178">یادگیری عمیق، انتشار و آلودگی هوای شهر را نقشه می‌کند</text>
+  <text class="desc" x="500" y="206">با تصاویر ماهواره‌ای، شبکهٔ راه‌ها، ساختمان‌ها و نقاط مورد علاقه</text>
+  <text class="refs" x="500" y="232">Zeng et al. 2024, 2025 · Yap et al. 2025 · Shao et al. 2026 · Teng et al. 2026</text>
+
+  <!-- ۳ -->
+  <path d="M110,264 L890,264 L845,376 L155,376 Z" fill="#9ec5f4"/>
+  <text class="title" x="500" y="300">شبکه‌های عصبی گرافی: برتری را به گراف نسبت می‌دهند</text>
+  <text class="desc" x="500" y="328">انتقال پیام یادگرفتنی میان مکان‌های همسایه</text>
+  <text class="refs" x="500" y="354">Wang et al. 2020, 2025 · Zhao et al. 2026 · Mohseni et al. 2026</text>
+
+  <!-- ۴ -->
+  <path d="M155,386 L845,386 L800,498 L200,498 Z" fill="#86b6ef"/>
+  <text class="title" x="500" y="422">ولی GNN دورتر را هم می‌بیند</text>
+  <text class="desc" x="500" y="450">شعاع دیدش با هر لایه بزرگ‌تر می‌شود؛ رقبا خیلی کمتر می‌بینند</text>
+  <text class="refs" x="500" y="476">Luo et al. 2016 · Liang et al. 2023 · Schmidt &amp; Ong 2026</text>
+
+  <!-- ۵: شکاف -->
+  <path d="M200,508 L800,508 L755,620 L245,620 Z" fill="#f0efec" stroke="#52514e" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text class="title" x="500" y="544">شکاف: شعاع دید هرگز برابر نگه داشته نشده است</text>
+  <text class="desc" x="500" y="572">۱۹۱ مقاله غربال شد؛ هیچ مقایسهٔ هم‌شعاعی پیدا نشد</text>
+  <text class="note" x="500" y="598">جستجوی ScienceDirect و جستجوی معنایی، ۲۰۲۶</text>
+
+  <!-- این پژوهش -->
+  <line x1="500" y1="626" x2="500" y2="656" stroke="#104281" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="215" y="664" width="570" height="146" rx="16" fill="#104281"/>
+  <text class="title white" x="500" y="700">این پژوهش · تهران، NO₂ از TROPOMI</text>
+  <text class="desc white" x="500" y="728">مقایسهٔ GNN و مدل‌های spatial-lag با شعاع دید برابر</text>
+  <text class="punch" x="500" y="782">شعاع دید، نه گراف</text>
+</svg>

@@ -5,7 +5,7 @@
 ¹ [Affiliation to be completed]  
 \* Corresponding author: [e-mail to be completed]
 
-*Draft manuscript, 8 November 2026. All numbers come from the runs on branch `paper_TC` of the project repository (see
+*Draft manuscript, 12 November 2026. All numbers come from the runs on branch `paper_TC` of the project repository (see
 Data and code availability). Items in [brackets] are to be completed before submission.*
 
 ---
@@ -136,8 +136,8 @@ the graph model. We searched for such a study in two ways:
 Neither found a study that compares a GNN with a spatial-lag or buffer baseline constrained to the same reach, nor one
 that varies the reach of both. The search record is in the repository (`docs/paper/lit/`). To our knowledge, the reach
 of a GNN has therefore never been separated from its graph architecture, in urban emission and air-pollution mapping or
-elsewhere. Here we do so for intra-urban combustion hotspots observed by TROPOMI in
-Tehran. Tehran is a megacity of about nine million people at the foot of the Alborz mountains, with the highest mean NO₂ column among large
+elsewhere. Fig. 1 traces how the literature narrows to this gap. Here we close it for intra-urban combustion hotspots
+observed by TROPOMI in Tehran. Tehran is a megacity of about nine million people at the foot of the Alborz mountains, with the highest mean NO₂ column among large
 cities worldwide (Huber et al., 2026). Our contributions are:
 
 1. **A reach-matched comparison.** We vary the reach of SLX models from 0 to 38 km and compare them with a multi-scale
@@ -151,6 +151,12 @@ cities worldwide (Huber et al., 2026). Our contributions are:
 
 Decision rules for the main comparisons were registered before the corresponding runs (Section 3.6).
 
+![Figure 1](../figures/fig1_literature_funnel_en.png)
+
+**Fig. 1.** From the literature to the gap. Satellite NO₂ is used as a tracer of urban combustion; deep learning, and
+graph neural networks in particular, map urban emissions and air pollution; their gains are credited to the graph.
+A GNN, however, also sees further than its baselines, and no study has held this reach equal. This study does.
+
 ---
 
 ## 2. Study area and data
@@ -160,6 +166,13 @@ Decision rules for the main comparisons were registered before the corresponding
 The analysis grid covers 50.85–51.90°E and 35.35–35.95°N with 72 × 126 cells of 1/120° (about 0.75 × 0.93 km). The
 label domain holds the 2,436 cells in the three central counties (Tehran, Rey, Shemiranat) to which the emission
 inventory assigns any CO₂. This excludes mountains and desert, so a model cannot score by separating city from non-city.
+Fig. 2 shows the domain, the observed target of the held-out year and its hotspots.
+
+![Figure 2](../../figures/fig06_maps_1404.png)
+
+**Fig. 2.** The label domain and the target on the held-out year 1404: observed NO₂ pattern (z, annual mean of the
+monthly maps), the out-of-fold prediction of the GNN, and the hotspots (top 10 %) found by both, by the observation only
+and by the prediction only.
 
 We use three Iranian (Solar Hijri) years: 1402 (21 March 2023 – 19 March 2024) and 1403 (20 March 2024 – 20 March 2025)
 for development, and 1404 (21 March 2025 – 20 March 2026) as a held-out year.
@@ -189,13 +202,19 @@ the 1403 inventory and traffic layers stand in for all models.
 
 | Check | Result |
 |---|---|
-| **Autocorrelation** | The monthly z pattern is extremely smooth. Its correlogram is 0.95 at 0–2 km and 0.76 at 8–10 km, and it crosses zero at **24 km** (Fig. 2). The effective number of independent cells (Griffith, 2005) is **4.9** in both development years, against 2,436 cells and about 88 TROPOMI nadir pixels (3.5 × 5.5 km). |
+| **Autocorrelation** | The monthly z pattern is extremely smooth. Its correlogram is 0.95 at 0–2 km and 0.76 at 8–10 km, and it crosses zero at **24 km** (Fig. 3). The effective number of independent cells (Griffith, 2005) is **4.9** in both development years, against 2,436 cells and about 88 TROPOMI nadir pixels (3.5 × 5.5 km). |
 | **Sensitivity to cloud screening** | A target built from daily scenes with cloud fraction < 0.3 agrees with the standard target: Spearman 0.98–0.99, overlap of hotspot sets (Jaccard) 0.73–0.76. |
 | **Terrain** | The north of the city is about 700 m higher than the south, and a TROPOMI emission inversion reported terrain artefacts near Mount Tochal (Rey-Pommier et al., 2025). Elevation correlates with z (\|ρ\| = 0.49), but partialling it out barely changes model skill (Spearman 0.949 → 0.940). |
 | **Ground stations** | The satellite pattern agrees only weakly with the ranking of the 16–17 monitoring stations (mean monthly Spearman 0.11 in 1402 and 0.30 in 1403). The target therefore describes column NO₂, not street-level concentrations (cf. Kafi et al., 2026). |
 
 In short, the target is a smooth column pattern with a correlation length of about 24 km and very few independent
 degrees of freedom.
+
+![Figure 3](../figures/fig3_correlogram.png)
+
+**Fig. 3.** Correlogram of the monthly target in 1402 and 1403 (2-km distance bins). The curve
+crosses zero at 24.0 km; the effective number of independent cells is 4.9 of 2,436. Grey band: one TROPOMI pixel
+(3.5 × 5.5 km).
 
 ---
 
@@ -290,7 +309,7 @@ hash, data hash and code version.
 
 ### 4.1 Skill is governed by reach
 
-Table 2 and Fig. 3 show skill against reach. The pattern is the same for every model family and both development years.
+Table 2 and Fig. 4 show skill against reach. The pattern is the same for every model family and both development years.
 
 - **Own cell (reach 0).** Models reach a Spearman of 0.66–0.77 and a PR-AUC of 0.45–0.53.
 - **About 12 km.** Every SLX estimator reaches 0.91–0.93 in Spearman and 0.71–0.80 in PR-AUC.
@@ -321,6 +340,13 @@ mean score of the individual seeds.
 | 37.8 | SLX-GBM | 0.950 / 0.936 | 0.781 / 0.788 |
 | 37.8 | SLX-RF | 0.943 / 0.937 | 0.716 / 0.792 |
 
+![Figure 4](../figures/fig4_reach.png)
+
+**Fig. 4.** Skill against reach under 22-km block cross-validation, Spearman (a, b) and PR-AUC (c, d), 1402 (left) and
+1403 (right). Lines: SLX models with windows of growing reach. Points: the networks, each run at one reach (no-graph
+network at 0 km, GNN at 22.7 km), drawn slightly to the side of that reach; the point is the five-seed ensemble and the
+bar the range of the single seeds. Dashed line: zero crossing of the target correlogram (24 km).
+
 ### 4.2 At equal reach, the graph adds little
 
 **At exactly the same reach (22.7 km):**
@@ -330,7 +356,7 @@ mean score of the individual seeds.
 - In PR-AUC, a single GNN is not better than the best SLX model at that reach (0.771 vs 0.803 in 1402; 0.804 vs 0.797 in
   1403).
 
-**Against the best SLX model at any reach** (Table 3), the GNN ensemble differs by −0.001 and +0.010 in Spearman. The
+**Against the best SLX model at any reach** (Table 3, Fig. 5), the GNN ensemble differs by −0.001 and +0.010 in Spearman. The
 jackknife intervals ([−0.034, +0.032] and [−0.028, +0.048]) and the randomisation tests (p = 0.58 and 0.13) show no
 advantage. The PR-AUC differences (+0.019 and +0.053) are inconclusive, and they shrink to −0.010 and +0.016 for single
 seeds.
@@ -355,12 +381,19 @@ On 1404, new places in a new year, the five-layer GNN reaches Spearman 0.933 and
 
 - **Against the pre-specified reference of the original design** (SLX-RF, reach 12.6 km), the GNN is ahead: +0.029 in
   Spearman, [+0.001, +0.056], p = 0.0095.
-- **Against SLX models with the GNN's reach, the advantage disappears.** The best of them is plain OLS with windows up
+- **Against SLX models with the GNN's reach, the advantage disappears** (Fig. 5). The best of them is plain OLS with windows up
   to 27 cells (22.7 km): Spearman 0.929, PR-AUC 0.785. The difference is +0.004 [−0.026, +0.035] in Spearman (p = 0.30)
   and −0.003 [−0.190, +0.183] in PR-AUC.
 - **Cost.** This linear model's cross-validation ran in 8 s on a CPU, against 39 min on a GPU for the GNN.
 - **Caveat.** The best reach-matched model was identified after the results among fifteen variants, which favours it.
   Its margin over the GNN is nonetheless nil, not large.
+
+![Figure 5](../figures/fig5_differences.png)
+
+**Fig. 5.** GNN (five-seed ensemble) minus reference in Spearman (a) and PR-AUC (b). Upper rows: references that see
+less (SLX, 12.6 km; the design of the original study). Lower rows: references that see as far or further (best SLX at
+any reach in cross-validation; SLX-OLS at the GNN's reach of 22.7 km on the held-out year). Thick and thin bars:
+90 % and 95 % delete-one-block jackknife intervals. Grey band: equivalence margin (±0.02).
 
 ### 4.4 Seed averaging hides instability
 
@@ -369,9 +402,14 @@ On 1404, new places in a new year, the five-layer GNN reaches Spearman 0.933 and
 | Spearman | ≈ 0.005 | ≈ 0.005 |
 | PR-AUC | 0.028 (1402), 0.038 (1403), 0.075 (1404) | 0.03–0.04 (e.g. 0.800 vs 0.771 in 1402) |
 
-The GNN's rank skill is stable across seeds; its hotspot precision is not. Single seeds in 1403 range from 0.756 to 0.858
+The GNN's rank skill is stable across seeds; its hotspot precision is not (Fig. 6). Single seeds in 1403 range from 0.756 to 0.858
 in PR-AUC. Deterministic SLX models get no such benefit from averaging. A comparison of a five-seed ensemble with
 single deterministic baselines therefore favours the network by about the size of the effects usually reported.
+
+![Figure 6](../figures/fig6_seeds.png)
+
+**Fig. 6.** Seeds against ensemble, Spearman (a) and PR-AUC (b). Bar: range of the five single-seed GNNs (tick: their
+mean). Dot: the five-seed ensemble. Black diamond: SLX with equal or longer reach. Open diamond: SLX at 12.6 km.
 
 ### 4.5 How the evaluation decides the verdict
 
@@ -503,81 +541,119 @@ urban environmental mapping.
 
 ## Data and code availability
 
-The code, configurations, run registry, pre-registrations and all result tables are in the project repository
-(https://github.com/fatemehvv/Tehran-carbon, branch `paper_TC`; [release DOI to be added]).
+*[Draft: confirm the bracketed items before submission.]*
 
-- TROPOMI, VIIRS, GHSL and ERA5 data are public; the Earth Engine scripts are in `gee/`.
-- The emission inventory and traffic assignment are derived from municipal and national statistics listed in the
-  repository; [data-sharing statement to be completed].
+- **Code and results.** The code, configurations, run registry, pre-registrations, every result table and the figure
+  scripts are openly available at https://github.com/fatemehvv/Tehran-carbon (branch `paper_TC`). A versioned copy
+  will be archived on Zenodo on acceptance [DOI to be added].
+- **Public data.** These are freely available. The Google Earth Engine scripts that export them on the study grid are
+  in `gee/`.
+  - TROPOMI NO₂ (Copernicus Sentinel-5P, offline level 3);
+  - ERA5 reanalysis;
+  - VIIRS night lights;
+  - GHSL population and building volume;
+  - SRTM elevation.
+- **Energy and traffic statistics.** The annual and monthly statistics behind the emission inventory and the traffic
+  layers come from public reports of Iranian agencies [names to be confirmed: Tehran Municipality Transportation and
+  Traffic Organization; Ministry of Energy; National Iranian Oil Products Distribution Company].
+  - They are listed with checksums in `data/raw/MANIFEST.csv`.
+  - The derived 1-km inventory and traffic layers are [included in the repository / available from the corresponding
+    author on request].
+- **Station data.** Data from the municipal air-quality monitoring network [Tehran Air Quality Control Company] are
+  [available from the data owner on request / redistributed with permission].
 
-## Author contributions
+## CRediT authorship contribution statement
 
-[To be completed.]
+*[Draft: to be confirmed by both authors.]*
+
+- **Fatemeh Vafaeian:** Conceptualization, Methodology, Software, Data curation, Formal analysis, Investigation,
+  Visualization, Writing – original draft.
+- **Vahid Khatibi:** Conceptualization, Methodology, Supervision, Validation, Writing – review & editing.
+
+## Funding
+
+[This research did not receive any specific grant from funding agencies in the public, commercial or not-for-profit
+sectors.] *(Replace if there was funding.)*
+
+## Acknowledgements
+
+This publication contains modified Copernicus Sentinel data (2023–2026) and modified Copernicus Climate Change Service
+information (2023–2026). Neither the European Commission nor ECMWF is responsible for any use that may be made of the
+Copernicus information or data it contains. [We thank the Tehran Air Quality Control Company for the monitoring data.]
+
+## Declaration of generative AI and AI-assisted technologies in the writing process
+
+*[Draft: adapt it so that it describes exactly how the tool was used.]*
+
+During the preparation of this work the authors used Claude (Anthropic) to help write and review analysis code and to
+draft and edit parts of the text. After using this tool, the authors reviewed and edited the content as needed and take
+full responsibility for the content of the published article.
 
 ## Declaration of competing interest
 
-The authors declare no competing interests.
+The authors declare that they have no known competing financial interests or personal relationships that could have
+appeared to influence the work reported in this paper.
 
 ---
 
 ## References
 
-References with a DOI were checked against Crossref on 8 November 2026. The remaining entries are standard references
-to be checked in the final proof.
+All DOIs were checked against Crossref (arXiv DOIs against arXiv) on 12 November 2026. Five entries have no DOI:
+four conference papers (NeurIPS, ICLR, MLSys) and Holm (1979).
 
 - Abémgnigni Njifon, M., & Schuhmacher, D. (2024). Graph convolutional networks for spatial interpolation of correlated data. *Spatial Statistics*, 60, 100822. https://doi.org/10.1016/j.spasta.2024.100822
 - Ahn, D., Goldberg, D., Liu, F., Anderson, D., Coombes, T., Loughner, C., et al. (2025). Satellite-based analysis of CO₂ emissions from global cities: regional, economic, and demographic attributes. *AGU Advances*, 6, e2025AV001747. https://doi.org/10.1029/2025AV001747
 - Bai, K., Li, K., Qiu, S., Zheng, Z., Jiao, P., Sun, Y., et al. (2025). SCAGAT: a scene-aware ensemble graph attention network for global PM2.5 pollution mapping via land–atmosphere interactions. *ISPRS Journal of Photogrammetry and Remote Sensing*, 225, 19–35. https://doi.org/10.1016/j.isprsjprs.2025.04.019
 - Bao, L.-L., Zhang, C.-X., Zhang, J.-S., & Guo, R. (2024). A two-stage spatial prediction modeling approach based on graph neural networks and neural processes. *Expert Systems with Applications*, 258, 125173. https://doi.org/10.1016/j.eswa.2024.125173
-- Beirle, S., Boersma, K. F., Platt, U., Lawrence, M. G., & Wagner, T. (2011). Megacity emissions and lifetimes of nitrogen oxides probed from space. *Science*, 333, 1737–1739.
-- Beirle, S., Borger, C., Dörner, S., Li, A., Hu, Z., Liu, F., Wang, Y., & Wagner, T. (2019). Pinpointing nitrogen oxide emissions from space. *Science Advances*, 5, eaax9800.
+- Beirle, S., Boersma, K. F., Platt, U., Lawrence, M. G., & Wagner, T. (2011). Megacity emissions and lifetimes of nitrogen oxides probed from space. *Science*, 333, 1737–1739. https://doi.org/10.1126/science.1207824
+- Beirle, S., Borger, C., Dörner, S., Li, A., Hu, Z., Liu, F., Wang, Y., & Wagner, T. (2019). Pinpointing nitrogen oxide emissions from space. *Science Advances*, 5, eaax9800. https://doi.org/10.1126/sciadv.aax9800
 - Beirle, S., & Wagner, T. (2024). A new method for estimating megacity NOx emissions and lifetimes from satellite observations. *Atmospheric Measurement Techniques*, 17, 3439–3453. https://doi.org/10.5194/amt-17-3439-2024
 - Bouthillier, X., et al. (2021). Accounting for variance in machine learning benchmarks. *Proceedings of Machine Learning and Systems*, 3.
-- Cameron, A. C., Gelbach, J. B., & Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. *Review of Economics and Statistics*, 90, 414–427.
+- Cameron, A. C., Gelbach, J. B., & Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. *Review of Economics and Statistics*, 90, 414–427. https://doi.org/10.1162/rest.90.3.414
 - Chen, D., Yang, Y., Hu, J., Kasoar, M., Arcucci, R., & Cheng, S. (2026). Explainable global wildfire prediction model using graph neural networks. *Geodata and AI*, 7, 100052. https://doi.org/10.1016/j.geoai.2026.100052
 - Du, S., Wei, H., Lee, D., Hu, Z., & Pan, S. (2026). Graph-based physics-guided urban PM2.5 air quality imputation with constrained monitoring data. *ACM Transactions on Sensor Networks*, 22, 1–23. https://doi.org/10.1145/3734869
 - Fleischmann, M., & Arribas-Bel, D. (2024). Decoding (urban) form and function using spatially explicit deep learning. *Computers, Environment and Urban Systems*, 112, 102147. https://doi.org/10.1016/j.compenvurbsys.2024.102147
 - Flores, M., Soliz, M., & Mollineda, R. A. (2026). Graph neural networks for soil organic carbon estimation: data-efficient modeling of multimodal spatial dependencies. *Machine Learning with Applications*, 24, 100878. https://doi.org/10.1016/j.mlwa.2026.100878
 - Gao, H., Yang, F., Yang, Y., Xu, Y., & Su, Y. (2025). Adaptive receptive field graph neural networks. *Neural Networks*, 190, 107658. https://doi.org/10.1016/j.neunet.2025.107658
 - Goldberg, D. L., Tao, M., Kerr, G. H., Ma, S., Tong, D. Q., Fiore, A. M., et al. (2024). Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO₂. *Remote Sensing of Environment*, 300, 113917. https://doi.org/10.1016/j.rse.2023.113917
-- Griffith, D. A. (2005). Effective geographic sample size in the presence of spatial autocorrelation. *Annals of the Association of American Geographers*, 95, 740–760.
-- Gueterbock, F., Santos-Rodriguez, R., & Clark, J. N. (2025). Improving local air quality predictions using transfer learning on satellite data and graph neural networks. arXiv:2505.05479.
-- Halleck Vega, S., & Elhorst, J. P. (2015). The SLX model. *Journal of Regional Science*, 55, 339–363.
+- Griffith, D. A. (2005). Effective geographic sample size in the presence of spatial autocorrelation. *Annals of the Association of American Geographers*, 95, 740–760. https://doi.org/10.1111/j.1467-8306.2005.00484.x
+- Gueterbock, F., Santos-Rodriguez, R., & Clark, J. N. (2025). Improving local air quality predictions using transfer learning on satellite data and graph neural networks. arXiv:2505.05479. https://doi.org/10.48550/arXiv.2505.05479
+- Halleck Vega, S., & Elhorst, J. P. (2015). The SLX model. *Journal of Regional Science*, 55, 339–363. https://doi.org/10.1111/jors.12188
 - Hamilton, W. L., Ying, R., & Leskovec, J. (2017). Inductive representation learning on large graphs. *Advances in Neural Information Processing Systems*, 30.
 - Hettige, K. H., et al. (2024). AirPhyNet: harnessing physics-guided neural networks for air quality prediction. *International Conference on Learning Representations (ICLR)*.
-- Hoek, G., Beelen, R., de Hoogh, K., Vienneau, D., Gulliver, J., Fischer, P., & Briggs, D. (2008). A review of land-use regression models to assess spatial variation of outdoor air pollution. *Atmospheric Environment*, 42, 7561–7578.
+- Hoek, G., Beelen, R., de Hoogh, K., Vienneau, D., Gulliver, J., Fischer, P., & Briggs, D. (2008). A review of land-use regression models to assess spatial variation of outdoor air pollution. *Atmospheric Environment*, 42, 7561–7578. https://doi.org/10.1016/j.atmosenv.2008.05.057
 - Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics*, 6, 65–70.
 - Huber, D., Kerr, G., Nawaz, M., Runkel, S., Anenberg, S., Goldberg, D., et al. (2026). Global NO₂ changes between 2019 and 2024 as observed by TROPOMI in urban areas and emerging hotspots. *Atmospheric Chemistry and Physics*, 26, 3783–3803. https://doi.org/10.5194/acp-26-3783-2026
 - Kafi, A., Hosseinipoor, M., & Shahne, M. (2026). Evaluating the suitability of Sentinel-5P satellite data for air quality monitoring in Tehran. *Science of the Total Environment*, 1049, 182069. https://doi.org/10.1016/j.scitotenv.2026.182069
-- Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. *Patterns*, 4, 100804.
-- Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. *Social Psychological and Personality Science*, 8, 355–362.
+- Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. *Patterns*, 4, 100804. https://doi.org/10.1016/j.patter.2023.100804
+- Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. *Social Psychological and Personality Science*, 8, 355–362. https://doi.org/10.1177/1948550617697177
 - Li, H., Qiu, J., Zhang, K., & Zheng, B. (2025). Monitoring fossil fuel CO₂ emissions from co-emitted NO₂ observed from space: progress, challenges, and future perspectives. *Frontiers of Environmental Science & Engineering*, 19, 2. https://doi.org/10.1007/s11783-025-1922-x
 - Liang, Y., Ding, F., Huang, G., & Zhao, Z. (2023). Deep trip generation with graph neural networks for bike sharing system expansion. *Transportation Research Part C: Emerging Technologies*, 154, 104241. https://doi.org/10.1016/j.trc.2023.104241
-- Linnenbrink, J., Nowosad, J., & Meyer, H. (2026). Moving beyond spatial and random cross-validation in environmental modelling: a call for prediction-domain adaptive evaluation. arXiv:2605.13689.
+- Linnenbrink, J., Nowosad, J., & Meyer, H. (2026). Moving beyond spatial and random cross-validation in environmental modelling: a call for prediction-domain adaptive evaluation. arXiv:2605.13689. https://doi.org/10.48550/arXiv.2605.13689
 - Liu, P., Chen, Y., Liang, X., Li, H., Biljecki, F., & Stouffs, R. (2025). A graph neural network for small-area estimation: integrating spatial regularisation, heterogeneous spatial units, and Bayesian inference. *International Journal of Geographical Information Science*, 40, 2358–2396. https://doi.org/10.1080/13658816.2025.2597971
 - Luo, W., Li, Y., Urtasun, R., & Zemel, R. (2016). Understanding the effective receptive field in deep convolutional neural networks. *Advances in Neural Information Processing Systems*, 29.
 - Ma, X., Zhang, Z., & Song, Y. (2025). Geographically informed graph neural networks. *Spatial Statistics*, 69, 100920. https://doi.org/10.1016/j.spasta.2025.100920
-- MacKinnon, J. G., Nielsen, M. Ø., & Webb, M. D. (2023). Cluster-robust inference: a guide to empirical practice. *Journal of Econometrics*, 232, 272–299.
-- Meyer, H., Reudenbach, C., Hengl, T., Katurji, M., & Nauss, T. (2018). Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation. *Environmental Modelling & Software*, 101, 1–9.
-- Meyer, H., & Pebesma, E. (2022). Machine learning-based global maps of ecological variables and the challenge of assessing them. *Nature Communications*, 13, 2208.
-- Milà, C., Mateu, J., Pebesma, E., & Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. *Methods in Ecology and Evolution*, 13, 1304–1316.
+- MacKinnon, J. G., Nielsen, M. Ø., & Webb, M. D. (2023). Cluster-robust inference: a guide to empirical practice. *Journal of Econometrics*, 232, 272–299. https://doi.org/10.1016/j.jeconom.2022.04.001
+- Meyer, H., Reudenbach, C., Hengl, T., Katurji, M., & Nauss, T. (2018). Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation. *Environmental Modelling & Software*, 101, 1–9. https://doi.org/10.1016/j.envsoft.2017.12.001
+- Meyer, H., & Pebesma, E. (2022). Machine learning-based global maps of ecological variables and the challenge of assessing them. *Nature Communications*, 13, 2208. https://doi.org/10.1038/s41467-022-29838-9
+- Milà, C., Mateu, J., Pebesma, E., & Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. *Methods in Ecology and Evolution*, 13, 1304–1316. https://doi.org/10.1111/2041-210X.13851
 - Mohseni, G., Nourinejad, M., & Park, P. Y. (2026). Bike-sharing ridership prediction for network expansion using graph neural networks. *Transportation Research Part A: Policy and Practice*, 203, 104701. https://doi.org/10.1016/j.tra.2025.104701
-- Ploton, P., et al. (2020). Spatial validation reveals poor predictive performance of large-scale ecological mapping models. *Nature Communications*, 11, 4540.
+- Ploton, P., Mortier, F., Réjou-Méchain, M., Barbier, N., Picard, N., Rossi, V., et al. (2020). Spatial validation reveals poor predictive performance of large-scale ecological mapping models. *Nature Communications*, 11, 4540. https://doi.org/10.1038/s41467-020-18321-y
 - Reuter, M., Buchwitz, M., Schneising, O., Krautwurst, S., O'Dell, C. W., Richter, A., et al. (2019). Towards monitoring localized CO₂ emissions from space: co-located regional CO₂ and NO₂ enhancements observed by the OCO-2 and S5P satellites. *Atmospheric Chemistry and Physics*, 19, 9371–9383. https://doi.org/10.5194/acp-19-9371-2019
 - Rey-Pommier, A., Héraud, A., Chevallier, F., Ciais, P., Christoudias, T., Kushta, J., & Sciare, J. (2025). Global gridded NOx emissions using TROPOMI observations. *Earth System Science Data*, 17, 3329–3351. https://doi.org/10.5194/essd-17-3329-2025
-- Roberts, D. R., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40, 913–929.
+- Roberts, D. R., Bahn, V., Ciuti, S., Boyce, M. S., Elith, J., Guillera-Arroita, G., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40, 913–929. https://doi.org/10.1111/ecog.02881
 - Schmidinger, J., Barkov, V., Vogel, S., Atzmueller, M., & Heuvelink, G. B. M. (2026). Kriging prior regression: a case for kriging-based spatial features with TabPFN in soil mapping. *Computers and Electronics in Agriculture*, 243, 111352. https://doi.org/10.1016/j.compag.2025.111352
 - Schmidt, R., & Ong, L. L. S. (2026). From leaves to breezes: machine learning based prediction of nitrogen dioxide concentration from surrounding urban greenery and meteorological, spatial, and traffic characteristics in Berlin, Germany. *Ecological Informatics*, 93, 103568. https://doi.org/10.1016/j.ecoinf.2025.103568
 - Shao, W., Tu, Y., Yue, T., Zhao, N., Zhou, H., Zhang, L., et al. (2026). Mapping Chinese urban carbon emissions with a graph-based multi-branch deep learning framework. *GIScience & Remote Sensing*, 63, 2631837. https://doi.org/10.1080/15481603.2026.2631837
 - Teng, M., Liang, M., Wang, S., & Ding, Y. (2026). Seamless hourly PM2.5 mapping across China with a graph spatiotemporal deep neural network. *Environmental Modelling & Software*, 198, 106915. https://doi.org/10.1016/j.envsoft.2026.106915
-- Wadoux, A. M. J.-C., Heuvelink, G. B. M., de Bruin, S., & Brus, D. J. (2021). Spatial cross-validation is not the right way to evaluate map accuracy. *Ecological Modelling*, 457, 109692.
-- Wang, S., et al. (2020). PM2.5-GNN: a domain knowledge enhanced graph neural network for PM2.5 forecasting. *Proceedings of the 28th International Conference on Advances in Geographic Information Systems (SIGSPATIAL)*.
+- Wadoux, A. M. J.-C., Heuvelink, G. B. M., de Bruin, S., & Brus, D. J. (2021). Spatial cross-validation is not the right way to evaluate map accuracy. *Ecological Modelling*, 457, 109692. https://doi.org/10.1016/j.ecolmodel.2021.109692
+- Wang, S., Li, Y., Zhang, J., Meng, Q., Meng, L., & Gao, F. (2020). PM2.5-GNN: a domain knowledge enhanced graph neural network for PM2.5 forecasting. *Proceedings of the 28th International Conference on Advances in Geographic Information Systems (SIGSPATIAL)*, 163–166. https://doi.org/10.1145/3397536.3422208
 - Wang, S., Zhang, Y., Lin, X., Piao, X., Hu, Y., & Yin, B. (2025). CMDNet: a cross-modality spatiotemporal graph network for enhanced air pollution prediction with high-resolution satellite data. *IEEE Transactions on Geoscience and Remote Sensing*, 63, 1–14. https://doi.org/10.1109/TGRS.2025.3569594
 - Xiao, S., Song, Y., & Wang, Z. (2023). Nonparametric spatial autoregressive model using deep neural networks. *Spatial Statistics*, 57, 100766. https://doi.org/10.1016/j.spasta.2023.100766
 - Yap, W., Wu, A. N., Miller, C., & Biljecki, F. (2025). Revealing building operating carbon dynamics for multiple cities. *Nature Sustainability*, 8, 1199–1210. https://doi.org/10.1038/s41893-025-01615-8
 - Yuan, D., Wang, Z., Huang, H., Fu, Z., Wu, Q., Jhang, S., & Pedrycz, W. (2026). Spatially directional dual-attention graph networks for fine-grained PM2.5 mapping. *Applied Soft Computing*, 203, 116231. https://doi.org/10.1016/j.asoc.2026.116231
 - Zeng, J., Liu, Y., Ding, J., Yuan, J., & Li, Y. (2024). Estimating on-road transportation carbon emissions from open data of road network and origin-destination flow data. *Proceedings of the AAAI Conference on Artificial Intelligence*, 38, 22493–22501. https://doi.org/10.1609/aaai.v38i20.30257
-- Zeng, J., Liu, Y., Zhang, G., Ding, J., Lin, Y., Yuan, J., & Li, Y. (2025). OpenCarbon: a contrastive learning-based cross-modality neural approach for high-resolution carbon emission prediction using open data. *Proceedings of IJCAI 2025*; arXiv:2506.03224.
+- Zeng, J., Liu, Y., Zhang, G., Ding, J., Lin, Y., Yuan, J., & Li, Y. (2025). OpenCarbon: a contrastive learning-based cross-modality neural approach for high-resolution carbon emission prediction using open data. *Proceedings of the 34th International Joint Conference on Artificial Intelligence (IJCAI)*, 9999–10007. https://doi.org/10.24963/ijcai.2025/1111
 - Zhan, W., & Datta, A. (2024). Neural networks for geospatial data. *Journal of the American Statistical Association*, 120, 535–547. https://doi.org/10.1080/01621459.2024.2356293
 - Zhang, R., Bao, Z., Bai, S., Sumiya, E., Dalantai, S., & Bao, Y. (2026). Advances and challenges of machine learning in satellite-based atmospheric NO₂ monitoring. *Atmospheric Pollution Research*, 17, 103066. https://doi.org/10.1016/j.apr.2026.103066
 - Zhao, M., Šćepanović, S., Law, S., Obadić, I., Wu, C., & Quercia, D. (2026). UST-GNN: a unified spatial–topological graph neural network framework for urban analytics demonstrated through a case study on urban health prediction. *Computers, Environment and Urban Systems*, 129, 102466. https://doi.org/10.1016/j.compenvurbsys.2026.102466
@@ -598,20 +674,19 @@ to be checked in the final proof.
 **Table 4 (supplementary).** All comparisons with jackknife and bootstrap intervals, randomisation p-values and verdicts:
 `docs/paper/results_stageA/evaluate_paper2/` and `evaluate_thesis/`.
 
-**Figure 1.** Study area and target. Observed and predicted NO₂ hotspots on the held-out year 1404. Existing panel:
-`docs/figures/fig06_maps_1404.png`.
+**Figures.** All figures share one style: the same colours for the same models in every figure (GNN blue, SLX-OLS
+orange, SLX-GBM aqua, SLX-RF yellow, no-graph network grey), grey text and recessive axes. Each is saved as PNG (300
+dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3–6 are drawn from the committed result tables by
+`python main.py paper figures`; nothing is re-run.
 
-**Figure 2.** Correlogram of the monthly target (1402, 1403), with its zero crossing at 24 km and the effective sample
-size. Source: `docs/paper/results_stageA/target/target_neff.csv`.
+| Figure | Content | File | Source |
+|---|---|---|---|
+| 1 | From the literature to the gap (funnel) | `fig1_literature_funnel_en.svg` / `.png` | drawn; Persian version `fig1_literature_funnel_fa` for the thesis |
+| 2 | Domain, observed and predicted target, hotspots of 1404 | `docs/figures/fig06_maps_1404.png` | thesis figures (`python main.py figures`) |
+| 3 | Correlogram of the target | `fig3_correlogram` | `results_stageA/target/target_neff.csv`, `reach/reach_correlogram.csv` |
+| 4 | Skill against reach | `fig4_reach` | `results_stageA/reach/reach_curve.csv` |
+| 5 | GNN minus reference, jackknife intervals, equivalence band | `fig5_differences` | `results_stageA/evaluate_paper2/` (primary rows) |
+| 6 | Single seeds, ensemble and SLX references | `fig6_seeds` | the same tables (`part = seeds` rows) |
 
-**Figure 3.** Skill against reach, PR-AUC (left) and Spearman (right), 1402 (solid / circles) and 1403 (dashed /
-squares). Lines: own-cell and SLX models (one colour per estimator). Points: the networks, which were run at one reach
-each (no-graph network at 0 km, GNN at 22.7 km); the point is the five-seed ensemble and the bar the range of single
-seeds. Dashed vertical line: zero crossing of the target correlogram (24.0 km). File:
-`docs/paper/results_stageA/reach/reach_curve.png` (data: `reach_curve.csv`).
-
-**Figure 4.** Differences GNN minus reference with jackknife intervals and the ±0.02 equivalence band, for the
-shorter-reach SLX, the reach-matched SLX and the held-out year. Source: `docs/paper/results_stageA/evaluate_paper2/`.
-
-**Figure 5.** Seed-to-seed spread of the GNN in Spearman and PR-AUC against the deterministic SLX models. Source:
-`part = seeds` rows of the same tables.
+The numbers behind Figures 5 and 6 are written to `docs/paper/figures/figure_data_comparisons.csv`. Fig. 1 can also
+serve as the graphical abstract.

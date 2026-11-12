@@ -112,42 +112,9 @@ class ReachCurve:
         return {"rows": len(table), "zero_crossing_km": round(float(cg.zero_crossing_km.mean()), 1)}
 
     def figure(self, table: pd.DataFrame, zc: float, run) -> None:
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-        # one colour per model family, one line style per year; single-reach families (e.g. one GNN depth) are drawn as
-        # points with the range over single seeds as an error bar, so the ensemble is not mistaken for one model
-        fams = sorted(table.family.unique())
-        colour = {f: plt.get_cmap("tab10")(i % 10) for i, f in enumerate(fams)}
-        years = sorted(table.year.unique())
-        style = {y: ["-", "--", ":", "-."][i % 4] for i, y in enumerate(years)}
-        fig, axes = plt.subplots(1, len(self.metrics), figsize=(5.2 * len(self.metrics), 4.2), squeeze=False)
-        for ax, m in zip(axes[0], self.metrics):
-            for (fam, y), g in table.groupby(["family", "year"]):
-                g = g.dropna(subset=["reach_km"]).sort_values("reach_km")
-                lo, hi = f"{m}_seed_min", f"{m}_seed_max"
-                seeds = lo in g and g[lo].notna().any()
-                if len(g) > 1:
-                    ax.plot(g.reach_km, g[m], color=colour[fam], ls=style[y], marker="o", ms=3.5, lw=1.4,
-                            label=f"{fam} {y}")
-                    if seeds:
-                        ax.fill_between(g.reach_km, g[lo], g[hi], color=colour[fam], alpha=0.15, lw=0)
-                else:
-                    # the seed range is drawn on its own: the ensemble can lie outside it (it can beat every seed)
-                    x = (g.reach_km + (0.4 if years.index(y) else -0.4)).to_numpy()
-                    if seeds:
-                        ax.vlines(x, g[lo], g[hi], color=colour[fam], lw=1.2)
-                        ax.scatter(np.r_[x, x], np.r_[g[lo], g[hi]], color=colour[fam], marker="_", s=40)
-                    ax.plot(x, g[m], color=colour[fam], ls="none", marker="s" if years.index(y) else "o", ms=5,
-                            label=f"{fam} {y}" + (" (ensemble; bar = single seeds)" if seeds else ""))
-            if np.isfinite(zc):
-                ax.axvline(zc, color="0.4", ls="--", lw=1)
-                ax.text(zc, ax.get_ylim()[1], "correlation range ", rotation=90, va="top", ha="right",   # top: clear of the legend
-                        fontsize=8, color="0.4")
-            ax.set_xlabel("reach (km)")
-            ax.set_ylabel(m)
-            ax.grid(alpha=0.3)
-        axes[0][-1].legend(fontsize=7, frameon=False, loc="lower right")
-        fig.tight_layout()
-        fig.savefig(run.path("reach_curve.png"), dpi=200)
-        plt.close(fig)
+        # the one style of all paper figures (viz/paper_figures.py): panels per metric and year, SLX families as lines,
+        # networks run at one reach as points with the range over single seeds as a bar (the ensemble can lie outside
+        # it); writes reach_curve.png and reach_curve.pdf
+        from ..viz.paper_figures import reach_figure
+        metrics = sorted(self.metrics, key=lambda m: m != "spearman")          # primary metric in the top row
+        reach_figure(table, zc, run.path("reach_curve.png").with_suffix(""), metrics=metrics)
