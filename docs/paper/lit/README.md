@@ -78,16 +78,24 @@ All DOIs cited in the manuscript were checked against the Crossref API on 8 Nove
 
 ## 5. Reach audit of comparable studies (Table 1 of the manuscript)
 
-Full texts were read for seven studies that compare a GNN with baselines on spatial data.
+Full texts were read for eleven studies that compare a GNN with baselines on spatial data.
 
-- **Sources:** arXiv versions or open proceedings. ScienceDirect and Taylor & Francis are not reachable from this
-  environment.
+- **Sources.**
+  - Seven: arXiv versions or open proceedings.
+  - Four (Schmidt & Ong; Mohseni et al.; Zhu, Wang & Luo; Shao et al.): PDFs supplied by the user on 12 November 2026.
+    Publisher sites block automated reading.
 - **For each study:** how far the GNN sees, and how far each baseline sees.
-- **Main finding:** no study gives a nonlinear spatial-lag baseline the GNN's reach, or varies the reach of both.
-- **Closest case:** Liang et al. (2023, *TR-C* 154:104241).
-  - Their linear SLX baseline used the same nearest stations as the GNN (5).
-  - Their XGBoost baseline saw no neighbours.
-  - The GNN also used 5 non-geographic neighbours.
+- **Main finding:** no study makes reach the object of the comparison. None varies the reach of both models or sets it
+  by one rule. Where neighbourhoods coincide, it is incidental.
+- **Closest cases.**
+  - Liang et al. (2023, *TR-C* 154:104241): the linear SLX used the same 5 nearest stations as the GNN, but XGBoost saw
+    no neighbours and the GNN also used 5 non-geographic neighbours.
+  - Schmidt & Ong (2026, *Ecol. Inform.* 93:103568): the random forest received a "weighted mean pollution" feature,
+    the NO₂ of all other stations weighted as in the graph. It was the forest's most important feature. RF R² 0.584
+    vs GNN 0.613, on three test stations. This supports our result.
+- **Also telling:** Shao et al. (2026). The graph model trained with city supervision only reached R² 0.65, against
+  linear regression 0.66, MLP 0.68 and XGBoost 0.64. Its final 0.78 came from added weak-supervision losses
+  (provincial totals, masking, smoothness).
 
 | Study | Source read | GNN reach | Baselines' reach |
 |---|---|---|---|
@@ -98,12 +106,12 @@ Full texts were read for seven studies that compare a GNN with baselines on spat
 | Gueterbock et al. 2025 | arXiv:2505.05479 | GraphSAGE 2 hops | not reported |
 | Du et al. 2026 (GraPhy) | arXiv:2506.06917 | 5 layers, complete graph | IDW and mean: all sensors; others not reported |
 | Zhao et al. 2026 (UST-GNN) | arXiv:2504.04739 | GATv2 2 layers, contiguity | SLM, GWR not reported; RF, LightGBM none |
+| Schmidt & Ong 2026 | PDF (user) | GCN + contrastive embedding + attention, all 16 stations, weights by similarity of distance to centre | RF: buffers 25–500 m + NO₂ of all other stations with the same weights |
+| Mohseni et al. 2026 | PDF (user) | GraphSAGE 6 layers (6 hops) | LR, XGBoost, ANN own station (POIs ≤ 2.5 km); spatial regression weights not reported |
+| Zhu, Wang & Luo 2026 | PDF (user) | 3 GCN modules on 20-NN graph | OLS none; SAR predefined adjacency; GWR 64 NN; in-sample only |
+| Shao et al. 2026 | PDF (user) | graph convolution over 329 cities, 1/distance weights; depth not reported | LR (night lights), MLP, XGBoost own city |
 
 **Still to read** (the user can download the PDFs):
 
-- Schmidt & Ong 2026 (*Ecol. Inform.*)
-- Mohseni et al. 2026 (*TR-A*)
-- Zhu, Wang & Luo 2026 (*ISPRS J.*)
-- Shao et al. 2026 (*GIScience & RS*)
 - Ma et al. 2025 (*Spatial Statistics*)
 - Teng et al. 2026, Yuan et al. 2026, Bai et al. 2025

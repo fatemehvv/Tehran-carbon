@@ -104,8 +104,8 @@ The question has begun to surface in GIScience and environmental modelling:
 - **GNNs against spatial regression.**
   - Graph convolutional networks have been compared with spatial and geographically weighted regression (Zhu et al.,
     2021; Liu et al., 2025).
-  - Graph-based deep spatial regression fitted house prices better than spatial-regression baselines (Zhu et al.,
-    2026).
+  - Graph-based deep spatial regression fitted house prices better than spatial-regression baselines, in sample (Zhu
+    et al., 2026).
   - GNNs have beaten spatial-lag, geographically weighted and gradient-boosting baselines for neighbourhood health
     outcomes under spatial cross-validation (Zhao et al., 2026).
   - They have also beaten linear, spatial-regression and XGBoost baselines for bike-share ridership (Mohseni et al.,
@@ -121,6 +121,8 @@ The question has begun to surface in GIScience and environmental modelling:
 - **Simple baselines remain strong.**
   - For urban NO₂ in Berlin, a random forest and a spatial GNN reached the same accuracy (R² ≈ 0.6; Schmidt & Ong,
     2026).
+  - For city-level CO₂ in China, a graph model trained on city data alone did not beat an MLP or XGBoost. Its gains
+    came from added provincial constraints (Shao et al., 2026).
   - In urban PM2.5 imputation, simple spatial interpolation outperformed standard data-driven GNNs unless physics was
     built in (Du et al., 2026).
 - **Graph models are sensitive to evaluation.**
@@ -129,13 +131,15 @@ The question has begun to surface in GIScience and environmental modelling:
 
 Table 1 audits how far the GNN and its baselines see in comparable studies whose full text describes both.
 
-- **What the baselines see.** Their own location only, a neighbourhood of a different size, or one that is not
-  reported.
-- **The closest case** is Liang et al. (2023).
-  - Their linear SLX baseline averaged over the same nearest stations as their GNN.
-  - Their nonlinear baseline saw no neighbours.
-  - The GNN also drew on a second, non-geographic neighbourhood.
-- **No study in Table 1** gives a nonlinear spatial-lag baseline the GNN's reach, or varies the reach of both models.
+- **What the baselines see.** In most studies, their own location only, a neighbourhood of a different size, or one
+  that is not reported.
+- **Two studies come close.**
+  - Liang et al. (2023): the linear SLX baseline averaged over the same nearest stations as the GNN, but the nonlinear
+    baseline saw no neighbours, and the GNN also drew on a second, non-geographic neighbourhood.
+  - Schmidt & Ong (2026): the random forest received the measured NO₂ of the other stations, weighted as in the graph.
+    It then matched the GNN (R² 0.58 against 0.61, on three test stations), as our results would predict.
+- **What no study does.** None makes reach the object of the comparison. Where neighbourhoods coincide, it is
+  incidental; no study varies the reach of both models or sets it by one rule.
 
 **Table 1.** How far the GNN and its baselines see in comparable studies (full texts read; "n.r.": not reported).
 
@@ -148,10 +152,14 @@ Table 1 audits how far the GNN and its baselines see in comparable studies whose
 | Gueterbock et al. (2025) | Hourly NO₂ with TROPOMI; 8 sites, Bristol | GraphSAGE, 2 hops (3 and 5 sampled neighbours) | XGBoost, MLP, CNN: per-site inputs; neighbours n.r. | n.r. |
 | Du et al. (2026) | PM2.5 imputation; 41 sensors, Fresno | 5 layers on complete graphs (all sensors) | Inverse-distance weighting, mean fill: all sensors. Kriging, Gaussian process: n.r. Geo-LSTM: K nearest, K n.r. | Partly; simple interpolation beat the data-driven GNNs |
 | Zhao et al. (2026) | Health outcome; 4,835 areas of 1–4 km², London | GATv2, 2 layers on contiguity (2 steps) | Spatial lag model, GWR: weights and bandwidth n.r. RF, LightGBM: none | n.r.; 2- and 3-step graphs lowered skill |
+| Schmidt & Ong (2026) | Hourly NO₂; 16 stations, Berlin (3 held out) | Graph convolution, contrastive embedding and attention over all stations; edges weighted by similarity of distance to the city centre | RF: buffers of 25–500 m, plus the NO₂ of all other stations with the same weights (its most important feature) | Roughly (same weights, lag of the measured NO₂); R² 0.58 vs 0.61 |
+| Mohseni et al. (2026) | Station-to-station ridership; bike share, Toronto | GraphSAGE, 6 layers (6 hops) | Linear regression, XGBoost, ANN: own-station features (points of interest within 2.5 km). Spatial regression: weights n.r. | No |
+| Zhu et al. (2026) | House prices; census block groups, Boston | 3 graph-convolution modules on a 20-nearest-neighbour graph (3 hops) | OLS: none. SAR: predefined adjacency (linear). GWR: 64 nearest neighbours | Linear baselines only; in-sample fit, no held-out test |
+| Shao et al. (2026) | Annual CO₂; 329 cities, China | Graph convolution over all cities, weights 1/distance; depth n.r. | Linear regression on night lights, MLP, XGBoost: own-city features only | No; the graph model without added constraints did not beat them |
 | **This study** | NO₂ hotspots; 2,436 cells of 1 km, Tehran | GraphSAGE, 3 layers × 9 cells: 22.7 km (5 layers, 37.8 km, on the held-out year) | SLX-OLS, SLX-GBM, SLX-RF: 0–37.8 km. No-graph network: own cell | **Yes**: reach set by one rule for all models, and varied |
 
-[Rows to be added once the full texts of Schmidt & Ong (2026), Mohseni et al. (2026), Zhu et al. (2026) and Shao et al.
-(2026) have been read.]
+[Rows to be added once the full texts of Ma et al. (2025), Teng et al. (2026), Yuan et al. (2026) and Bai et al. (2025)
+have been read.]
 
 We also searched for such a study in two ways:
 
@@ -159,8 +167,8 @@ We also searched for such a study in two ways:
   field, air pollution, satellite NO₂ and urban emissions, giving 191 unique records, most from 2025–2026;
 - a semantic search of the wider literature.
 
-Neither found a study that compares a GNN with a nonlinear spatial-lag or buffer baseline constrained to the same reach,
-nor one that varies the reach of both. The search record is in the repository (`docs/paper/lit/`).
+Neither found a study that designs the comparison around reach: none constrains a GNN and its spatial-lag or buffer
+baselines to the same reach by design, or varies the reach of both. The search record is in the repository (`docs/paper/lit/`).
 
 Choosing a neighbourhood from the range of spatial dependence is itself established practice:
 
@@ -538,7 +546,9 @@ the same reach as the proposed models. Our results suggest that part of the repo
 
 Our results agree with scattered evidence and make it sharper:
 
-- In Berlin, a random forest matched a spatial GNN for urban NO₂ (Schmidt & Ong, 2026).
+- In Berlin, a random forest matched a spatial GNN for urban NO₂ once it was given the NO₂ of the other stations,
+  weighted as in the graph (Schmidt & Ong, 2026).
+- For city-level CO₂, a graph model without added constraints did not beat an MLP or XGBoost (Shao et al., 2026).
 - GNNs can be written as generalised spatial regressions (Liang et al., 2023; Zhu et al., 2026).
 - Explicit spatial-lag inputs recover much of what spatial context offers (Xiao et al., 2023; Schmidinger et al., 2026).
 

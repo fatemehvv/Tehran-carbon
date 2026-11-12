@@ -45,7 +45,7 @@
   <path d="M200,508 L800,508 L755,620 L245,620 Z" fill="#f0efec" stroke="#52514e" stroke-width="1.6" stroke-dasharray="7 5"/>
   <text class="title" x="500" y="544">شکاف: شعاع دید کنترل نشده است</text>
   <text class="desc" x="500" y="572">هیچ مطالعه‌ای شعاع دید GNN و رقبایش را با هم تغییر نداده است</text>
-  <text class="note" x="500" y="598">۱۹۱ مقاله غربال شد؛ شعاع دید ۷ مطالعه بررسی شد (جدول ۱)</text>
+  <text class="note" x="500" y="598">۱۹۱ مقاله غربال شد؛ شعاع دید ۱۱ مطالعه بررسی شد (جدول ۱)</text>
 
   <!-- این پژوهش -->
   <line x1="500" y1="626" x2="500" y2="656" stroke="#104281" stroke-width="3" marker-end="url(#arrow)"/>
