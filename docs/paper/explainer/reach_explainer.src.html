@@ -1,0 +1,780 @@
+<title>Reach, not graphs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: a speaker's desk on the right (scene text + presenter note), a rotatable 3D model of the city on the left. */
+:root {
+  --bg: #e9edf0;
+  --surface: #f7f9fa;
+  --ink: #1c2631;
+  --muted: #586572;
+  --line: #d2d9df;
+  --tip: #e3ebf3;
+  --gnn: #2f6fbf;
+  --slx: #d8812c;
+  --hot: #c4455b;
+  --col-lo: #c6d0d8;
+  --col-hi: #4d6175;
+  --dim: #dde3e8;
+  --f-body: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+  --f-display: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131920; --surface: #1a222b; --ink: #e3e9ee; --muted: #98a6b3; --line: #2b3642; --tip: #1c2938;
+    --gnn: #5c9ce6; --slx: #eba155; --hot: #e06a7e; --col-lo: #2b3947; --col-hi: #9db2c5; --dim: #1f2933;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131920; --surface: #1a222b; --ink: #e3e9ee; --muted: #98a6b3; --line: #2b3642; --tip: #1c2938;
+  --gnn: #5c9ce6; --slx: #eba155; --hot: #e06a7e; --col-lo: #2b3947; --col-hi: #9db2c5; --dim: #1f2933;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.85 var(--f-body); }
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gnn); outline-offset: 2px; }
+.gnn-t { color: var(--gnn); font-weight: 700; }
+.slx-t { color: var(--slx); font-weight: 700; }
+.hot-t { color: var(--hot); font-weight: 700; }
+.num { font-variant-numeric: tabular-nums; }
+
+.app { height: 100%; display: grid; grid-template-columns: minmax(340px, 430px) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+.top {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--line); background: var(--surface);
+}
+.brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; min-width: 0; }
+.brand b { font: 800 18px/1.3 var(--f-display); letter-spacing: .01em; }
+.brand span { color: var(--muted); font-size: 13px; }
+.top .qa-open { margin-inline-start: auto; }
+.btn {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 6px 14px; cursor: pointer;
+  font-size: 14px; line-height: 1.6; transition: background .15s, border-color .15s;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--slx); border-color: var(--slx); color: #fff; font-weight: 700; }
+.btn.primary[aria-pressed="true"] { background: var(--gnn); border-color: var(--gnn); }
+
+.panel {
+  grid-column: 1; grid-row: 2; min-width: 0; overflow-y: auto; display: flex; flex-direction: column;
+  background: var(--surface); border-inline-end: 1px solid var(--line);
+}
+.panel-inner { flex: 1; padding-block: 22px 18px; padding-right: max(22px, env(safe-area-inset-right, 0px)); padding-left: 22px; display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 12px; letter-spacing: .04em; color: var(--muted); font-weight: 500; }
+.scene h1 { font: 800 25px/1.55 var(--f-display); margin: 0; text-wrap: balance; }
+.scene p { margin: 0; max-width: 62ch; }
+.scene { display: flex; flex-direction: column; gap: 14px; }
+.tip { background: var(--tip); border-radius: 10px; padding: 12px 14px; border: 1px dashed color-mix(in srgb, var(--gnn) 45%, transparent); }
+.tip-h { font-size: 12px; font-weight: 700; color: var(--gnn); letter-spacing: .03em; margin-bottom: 2px; }
+.note { font-size: 13px; color: var(--muted); line-height: 1.8; }
+.chip { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.stat { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.stat .v { font: 800 30px/1.2 var(--f-display); }
+.stat .k { color: var(--muted); font-size: 13px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fact { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fact .k { font-size: 12px; color: var(--muted); }
+.fact .v { font-weight: 700; font-size: 15px; }
+.box { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.box h2 { font: 700 15px/1.6 var(--f-display); margin: 0; }
+.box ul, .box ol { margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 4px; }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--slx); font-weight: 700; }
+.live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--slx); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+
+.ctrl { display: flex; flex-direction: column; gap: 6px; }
+.ctrl label { font-weight: 700; font-size: 14px; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--gnn); }
+.ticks { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; }
+td.n { font-variant-numeric: tabular-nums; text-align: center; }
+tr.row-unfair td, tr.row-fair td { transition: background .25s, opacity .25s; }
+.fair-off tr.row-fair td, .fair-on tr.row-unfair td { opacity: .45; }
+.fair-off tr.row-unfair td, .fair-on tr.row-fair td { background: color-mix(in srgb, var(--slx) 12%, transparent); }
+
+.nav {
+  position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); padding-left: 22px;
+  border-top: 1px solid var(--line); background: var(--surface);
+}
+.dots { display: flex; gap: 6px; }
+.dots button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-size: 12px; padding: 0; }
+.dots button[aria-current="step"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+.stage { grid-column: 2; grid-row: 2; position: relative; overflow: hidden; min-width: 0; touch-action: none; }
+.stage canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.lbl {
+  position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 12.5px; line-height: 1.6; padding: 2px 8px; border-radius: 6px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent); border: 1px solid var(--line); will-change: transform;
+}
+.lbl.gnn { border-color: var(--gnn); color: var(--gnn); font-weight: 700; }
+.lbl.slx { border-color: var(--slx); color: var(--slx); font-weight: 700; }
+.lbl.big { font: 800 17px/1.6 var(--f-display); padding: 4px 12px; border-color: var(--ink); }
+.lbl.tier { font-weight: 700; font-size: 13.5px; }
+.lbl.plain { background: transparent; border-color: transparent; color: var(--muted); }
+.legend {
+  position: absolute; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); left: calc(12px + env(safe-area-inset-left, 0px));
+  display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; padding: 6px 12px; border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent); border: 1px solid var(--line); max-width: calc(100% - 24px);
+}
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-inline-end: 6px; vertical-align: middle; }
+.demo-tag { position: absolute; top: 12px; left: calc(12px + env(safe-area-inset-left, 0px)); font-size: 12px; padding: 2px 10px; border-radius: 99px; background: color-mix(in srgb, var(--surface) 85%, transparent); border: 1px dashed var(--muted); color: var(--muted); }
+.hint { position: absolute; top: 12px; right: 12px; font-size: 12px; color: var(--muted); }
+.nogl { display: grid; place-items: center; padding: 24px; color: var(--muted); text-align: center; }
+
+.qa { position: fixed; inset: 0; z-index: 20; background: color-mix(in srgb, var(--ink) 40%, transparent); display: grid; place-items: center; padding: 16px; }
+.qa-card {
+  background: var(--surface); border-radius: 14px; border: 1px solid var(--line); width: min(760px, 100%); max-height: calc(100% - 16px);
+  overflow-y: auto; padding: 22px max(22px, env(safe-area-inset-right, 0px)) 22px max(22px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px;
+}
+.qa-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.qa-head h2 { margin: 0; font: 800 21px/1.5 var(--f-display); }
+.qa details { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.qa summary { cursor: pointer; font-weight: 700; }
+.qa details p, .qa details ul { margin: 8px 0 0; }
+.qa details ul { padding-inline-start: 20px; }
+
+@media (max-width: 860px) {
+  .app { height: auto; min-height: 100%; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 56vh auto; }
+  .stage { grid-column: 1; grid-row: 2; min-height: 300px; }
+  .panel { grid-column: 1; grid-row: 3; overflow: visible; border-inline-end: 0; }
+  .panel-inner, .nav { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .scene h1 { font-size: 21px; }
+  .hint { display: none; }
+}
+@media (max-width: 420px) { .facts { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+</style>
+<!--BODY-->
+<div class="app" dir="rtl" lang="fa">
+  <header class="top">
+    <div class="brand"><b dir="ltr">Reach, not graphs</b><span>شعاع دید، نه ساختار گراف · کانون‌های NO₂ تهران از TROPOMI</span></div>
+    <button class="btn qa-open" id="qaOpen" type="button">پرسش‌های احتمالی استاد</button>
+  </header>
+
+  <aside class="panel" aria-live="polite">
+    <div class="panel-inner">
+
+      <section class="scene" data-scene="1">
+        <div class="eyebrow">صحنهٔ ۱ از ۶ · شهر و ماهواره</div>
+        <h1>ماهواره NO₂ تهران را می‌بیند؛ «کانون» یعنی ۱۰٪ بالای سلول‌ها در هر ماه</h1>
+        <p>تهران روی شبکه‌ای از <b class="num">۲٬۴۳۶</b> سلول حدوداً یک‌کیلومتری تقسیم شده است. هدف مدل، الگوی ماهانهٔ NO₂ ستونی ماهوارهٔ TROPOMI است. ارتفاع هر ستون مقدار NO₂ را نشان می‌دهد و ستون‌های <span class="hot-t">قرمز</span> کانون‌ها هستند.</p>
+        <div class="facts">
+          <div class="fact"><span class="k">ورودی‌ها</span><span class="v" style="font-weight:500;font-size:13.5px">سیاههٔ انتشار ترافیک و انرژی، داده‌های ترافیک، ایستگاه‌های آلودگی، جمعیت، حجم ساختمان، نور شب</span></div>
+          <div class="fact"><span class="k">سال‌ها</span><span class="v" style="font-weight:500;font-size:13.5px">۱۴۰۲ و ۱۴۰۳ برای توسعه؛ ۱۴۰۴ سال کنارگذاشته برای آزمون</span></div>
+        </div>
+        <p class="note">شکل شهر و ارتفاع ستون‌ها نمایشی است (مرکز بالا، حاشیه پایین). تعداد سلول‌ها و قاعدهٔ ۱۰٪ واقعی است.</p>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>مسئله را ساده شروع کنید: «می‌خواهیم از روی داده‌های شهری حدس بزنیم ماهواره کجا را آلوده‌تر می‌بیند.» بعد بگویید سؤال مقاله این است که برتری GNN از کجا می‌آید، و قرار نیست مدل بهتری معرفی شود.</div>
+      </section>
+
+      <section class="scene" data-scene="2" hidden>
+        <div class="eyebrow">صحنهٔ ۲ از ۶ · مدل ساده با شعاع صفر</div>
+        <h1>مدلی که فقط خود سلول را می‌بیند، به Spearman حدود ۰٫۷ می‌رسد</h1>
+        <p>اگر مدل برای هر سلول فقط ورودی‌های همان سلول را ببیند (شعاع دید ۰)، ترتیب سلول‌ها را تا حدی درست درمی‌آورد. ولی NO₂ ستونی هموار است و هر سلول از انتشار اطرافش هم اثر می‌گیرد، پس این مدل بخشی از ماجرا را نمی‌بیند.</p>
+        <div class="stat"><span class="v num slx-t">۰٫۶۶ تا ۰٫۷۷</span><span class="k">Spearman با شعاع ۰ (۱۴۰۲ و ۱۴۰۳)</span></div>
+        <p class="note">Spearman همبستگی رتبه‌ای است: آیا مدل سلول‌ها را به همان ترتیبی مرتب می‌کند که ماهواره می‌بیند؟ ۱ یعنی ترتیب کاملاً یکسان.</p>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>«این نقطهٔ شروع منحنی ماست. از این‌جا به بعد هر بهبودی دیدیم، پرسیدیم از کجا آمده: از مدل پیچیده‌تر، یا از اینکه مدل اطراف بیشتری را دیده است؟»</div>
+      </section>
+
+      <section class="scene" data-scene="3" hidden>
+        <div class="eyebrow">صحنهٔ ۳ از ۶ · میدان دید GNN</div>
+        <h1>هر لایهٔ GNN دایرهٔ دید را حدود ۷٫۶ km بزرگ‌تر می‌کند</h1>
+        <p>هر لایهٔ <span class="gnn-t">GNN</span> اطلاعات همسایه‌ها را جمع می‌کند، پس با هر لایه سلول از جای دورتری خبر می‌گیرد. به این فاصله «میدان دید» یا شعاع دید می‌گوییم. GNN سه‌لایهٔ ما تا ۲۲٫۷ km را می‌بیند و GNN پنج‌لایه (روی ۱۴۰۴) تا ۳۷٫۸ km.</p>
+        <div class="ctrl">
+          <label for="layers">تعداد لایه‌ها: <span id="layersOut" class="gnn-t num">۳ لایه · ۲۲٫۷ km</span></label>
+          <input type="range" id="layers" min="1" max="5" step="1" value="3">
+          <div class="ticks num" aria-hidden="true"><span>۱</span><span>۲</span><span>۳</span><span>۴</span><span>۵</span></div>
+        </div>
+        <p class="note">لایه‌های ۱، ۲، ۳ و ۵: ۷٫۶، ۱۵٫۱، ۲۲٫۷ و ۳۷٫۸ km. لایهٔ ۴ (۳۰٫۲ km) محاسبه‌شده است: ۴ × ۷٫۵۶.</p>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>اسلایدر را جلوی استاد از ۱ تا ۳ ببرید و بگویید: «رقیبی که فقط خود سلول یا چند کیلومتر اطراف را می‌بیند، با اطلاعات کمتری مسابقه می‌دهد. پس مقایسهٔ رایج منصفانه نیست.»</div>
+      </section>
+
+      <section class="scene" data-scene="4" hidden>
+        <div class="eyebrow">صحنهٔ ۴ از ۶ · مقایسهٔ ناعادلانه و عادلانه</div>
+        <h1>به SLX همان شعاع GNN را دادیم؛ دو میله تقریباً هم‌قد شدند</h1>
+        <p><span class="slx-t">SLX</span> رگرسیونی است که برای هر سلول میانگین ورودی‌ها را در پنجره‌ای دور آن سلول می‌گیرد. در مقایسهٔ رایج پنجرهٔ SLX کوچک‌تر از میدان دید <span class="gnn-t">GNN</span> است. ما GNN را دست نزدیم و فقط پنجرهٔ SLX را هم‌اندازهٔ میدان دید آن کردیم.</p>
+        <button class="btn primary" id="fairBtn" type="button" aria-pressed="false">پنجرهٔ SLX را ۲۲٫۷ km کن (عادلانه)</button>
+        <div class="tbl-wrap fair-off" id="cmpTable">
+          <table>
+            <thead><tr><th>Spearman</th><th>شعاع</th><th>۱۴۰۲</th><th>۱۴۰۳</th></tr></thead>
+            <tbody>
+              <tr><td class="gnn-t">GNN، میانگین ۵ seed</td><td class="num">۲۲٫۷ km</td><td class="n">۰٫۹۴۹</td><td class="n">۰٫۹۴۷</td></tr>
+              <tr><td class="gnn-t" style="opacity:.75">GNN، تک seed</td><td class="num">۲۲٫۷ km</td><td class="n">۰٫۹۴۴</td><td class="n">۰٫۹۴۲</td></tr>
+              <tr class="row-unfair"><td class="slx-t">SLX (ناعادلانه)</td><td class="num">۱۲٫۶ km</td><td class="n">≈ ۰٫۹۲</td><td class="n">≈ ۰٫۹۳</td></tr>
+              <tr class="row-fair"><td class="slx-t">SLX (هم‌شعاع)</td><td class="num">۲۲٫۷ km</td><td class="n">≈ ۰٫۹۳۸</td><td class="n">≈ ۰٫۹۳۱</td></tr>
+              <tr class="row-unfair"><td>فاصله، ناعادلانه</td><td></td><td class="n">≈ ۰٫۰۲۹</td><td class="n">≈ ۰٫۰۱۷</td></tr>
+              <tr class="row-fair"><td>فاصله، هم‌شعاع</td><td></td><td class="n">≈ ۰٫۰۱۱</td><td class="n">≈ ۰٫۰۱۶</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">فاصله‌ها از عددهای جدول حساب شده‌اند (GNN میانگین ۵ seed منهای SLX). محور میله‌ها در مدل از ۰٫۶ شروع می‌شود تا تفاوت‌ها دیده شوند. در ۱۴۰۳ فاصله تقریباً عوض نمی‌شود، چون SLX با ۱۲٫۶ km هم نزدیک سقف بود (و عدد ۰٫۹۳ تقریبی است). در شعاع برابر، فاصله در هر دو سال حدود ۰٫۰۱ تا ۰٫۰۲ است و با حجم نمونهٔ مؤثر حدود ۵ قابل‌تشخیص نیست.</p>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>روی دکمه بزنید و بگویید: «فقط به رقیب همان دید را دادیم.» بعد خودتان پیش‌دستی کنید: «فاصله صفر نشد. ادعای ما این است که برتری قابل‌تشخیصی باقی نمی‌ماند؛ ادعای برابری نداریم.» این جمله جلوی ایراد آماری را می‌گیرد.</div>
+      </section>
+
+      <section class="scene" data-scene="5" hidden>
+        <div class="eyebrow">صحنهٔ ۵ از ۶ · منحنی شعاع دید</div>
+        <h1>مهارت تا حدود ۱۲ km تند بالا می‌رود و بعد صاف می‌شود</h1>
+        <p>منحنی، Spearman مدل <span class="slx-t">SLX</span> را بر حسب شعاع دید نشان می‌دهد (سال ۱۴۰۲). بیشتر بهبود در چند کیلومتر اول است. بعد از حدود ۱۲ km منحنی صاف می‌شود و نزدیک برد همبستگی هدف (حدود ۲۴ km، جایی که همبستگی صفر می‌شود) به سقف می‌رسد. نقطهٔ <span class="gnn-t">GNN</span> سه‌لایه روی همین سطح صاف می‌نشیند.</p>
+        <p class="note">نقطه‌ها عدد واقعی‌اند و خط بین آن‌ها نمایشی است. در شعاع ۰ و ۳۷٫۸ km بازه نشان داده شده است. در ۱۴۰۳ هم همین الگو دیده می‌شود (۰٫۹۳ در ۱۲٫۶ km و ۰٫۹۳۱ در ۲۲٫۷ km).</p>
+        <div class="box">
+          <h2>سال کنارگذاشتهٔ ۱۴۰۴ (شعاع ۳۷٫۸ km)</h2>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th></th><th>Spearman</th><th>PR-AUC</th></tr></thead>
+            <tbody>
+              <tr><td class="gnn-t">GNN پنج‌لایه</td><td class="n">۰٫۹۳۳</td><td class="n">۰٫۷۸۲</td></tr>
+              <tr><td class="slx-t">SLX</td><td class="n">≈ ۰٫۹۳</td><td class="n">—</td></tr>
+              <tr><td class="gnn-t">GNN، میانگین تک‌seedها</td><td class="n">—</td><td class="n">۰٫۷۴۱</td></tr>
+              <tr><td class="slx-t">SLX-OLS</td><td class="n">—</td><td class="n">۰٫۷۳۹</td></tr>
+            </tbody>
+          </table></div>
+          <p class="note">PR-AUC می‌سنجد مدل کانون‌ها (۱۰٪ بالا) را چقدر خوب جدا می‌کند. میانگین ۵ seed برتری GNN در PR-AUC را حدود ۰٫۰۳ تا ۰٫۰۴ بیشتر نشان می‌دهد؛ مقایسهٔ تک‌seed با SLX منصفانه‌تر است.</p>
+        </div>
+        <div class="facts">
+          <div class="fact"><span class="k">حجم نمونهٔ مؤثر کل شهر</span><span class="v num">حدود ۵</span><span class="note">هدف هموار است، پس کل شهر فقط چند تکهٔ مستقل دارد.</span></div>
+          <div class="fact"><span class="k">هزینه</span><span class="v num"><span class="slx-t">≈ ۸ ثانیه CPU</span> در برابر <span class="gnn-t">≈ ۳۹ دقیقه GPU</span></span></div>
+        </div>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>خط عمودی ۲۴ km را نشان دهید: «این عدد از خود داده می‌آید، نه از مدل. یعنی شعاع لازم را می‌شود قبل از مدل‌سازی تعیین کرد.» بعد ۱۴۰۴ را بگویید: روی سال کنارگذاشته هم همین تصویر تکرار شد.</div>
+      </section>
+
+      <section class="scene" data-scene="6" hidden>
+        <div class="eyebrow">صحنهٔ ۶ از ۶ · جمع‌بندی و نوآوری</div>
+        <h1>شعاع دید، نه گراف</h1>
+        <p>ادبیات از NO₂ ماهواره‌ای و یادگیری عمیق شروع می‌شود و برتری GNN را به یادگیری روی گراف نسبت می‌دهد. ولی GNN تقریباً همیشه دورتر از رقیبش دیده است. در <b class="num">۱۱</b> مطالعهٔ پیشینی که بررسی کردیم، هیچ‌کدام شعاع دید را موضوع مقایسه نکرده بود: نه شعاع هر دو مدل را تغییر داده بودند، نه برابرش کرده بودند.</p>
+        <div class="box">
+          <h2>نوآوری: پروتکل ارزیابی هم‌شعاع</h2>
+          <ol>
+            <li>شعاع دید هر مدل را گزارش کن.</li>
+            <li>به رقیب ساده (SLX) همان شعاع را بده.</li>
+            <li>مهارت را بر حسب شعاع (از ۰ تا ۳۸ km) رسم کن و آن را به برد همبستگی هدف گره بزن.</li>
+          </ol>
+        </div>
+        <div class="box">
+          <h2>محدودیت‌ها</h2>
+          <ul>
+            <li>یک شهر و یک سال آزمون (۱۴۰۴).</li>
+            <li>گراف ما فقط بر اساس فاصله است و هدف هموار است. جایی که گراف اطلاعات غیرمحلی دارد (مثلاً جریان ترافیک)، ممکن است گراف کمک کند.</li>
+            <li>هم‌ارزی از نظر آماری ثابت نشده؛ فقط برتری قابل‌تشخیصی دیده نمی‌شود.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h2>در حال انجام <span class="live">روی سرور در حال اجرا</span></h2>
+          <ul>
+            <li>GNN با ۱ تا ۵ لایه، برای اینکه منحنی شعاع برای خود GNN هم رسم شود.</li>
+            <li>شبکهٔ بدون گراف که میانگین همسایگی را می‌گیرد؛ همان دید، بدون گراف.</li>
+          </ul>
+        </div>
+        <div class="tip"><div class="tip-h">نکتهٔ ارائه</div>با قیف تمام کنید: از چیزی که همه قبول دارند شروع کنید و به شکافی برسید که کسی کنترلش نکرده بود. جملهٔ آخر: «شعاع دید، نه گراف.» بعد محدودیت‌ها را خودتان بگویید، قبل از اینکه پرسیده شود.</div>
+        <button class="btn" type="button" data-open-qa>پرسش‌های احتمالی استاد و جواب‌ها</button>
+      </section>
+
+    </div>
+    <nav class="nav" aria-label="صحنه‌ها">
+      <button class="btn" id="prev" type="button">→ قبلی</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn" id="next" type="button">بعدی ←</button>
+    </nav>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div id="labels"></div>
+    <div class="demo-tag" id="demoTag">نمایشی</div>
+    <div class="hint">برای چرخاندن بکشید · برای بزرگ‌نمایی اسکرول کنید</div>
+    <div class="legend" aria-label="راهنمای رنگ‌ها">
+      <span><i style="background:var(--gnn)"></i>GNN</span>
+      <span><i style="background:var(--slx)"></i>SLX</span>
+      <span><i style="background:var(--hot)"></i>کانون (۱۰٪ بالا)</span>
+      <span><i style="background:linear-gradient(90deg,var(--col-lo),var(--col-hi))"></i>NO₂ کم ← زیاد</span>
+    </div>
+  </main>
+</div>
+
+<div class="qa" id="qa" hidden role="dialog" aria-modal="true" aria-labelledby="qaTitle" dir="rtl" lang="fa">
+  <div class="qa-card">
+    <div class="qa-head"><h2 id="qaTitle">پرسش‌های احتمالی استاد</h2><button class="btn" id="qaClose" type="button">بستن</button></div>
+    <details open>
+      <summary>۱. نوآوری کار چیست؟</summary>
+      <p>اولین مقایسهٔ GNN با رقیب spatial-lag (SLX) که شعاع دیدش با GNN برابر است، و منحنی «مهارت بر حسب شعاع» که به برد همبستگی هدف (حدود ۲۴ km) گره خورده است. از این دو، یک «پروتکل ارزیابی هم‌شعاع» پیشنهاد می‌کنیم. در ۱۱ مطالعهٔ پیشین هیچ‌کدام شعاع دید را تغییر نداده یا برابر نکرده بودند.</p>
+    </details>
+    <details>
+      <summary>۲. چرا مدل جدید نساختید؟</summary>
+      <p>سؤال ما دربارهٔ اعتبار مقایسه است. مدل جدیدی که با رقیبی کم‌دیدتر مقایسه شود همین خطا را تکرار می‌کند. سهم ما ابزاری است که هر مدل بعدی را هم می‌شود با آن سنجید. نتیجه هم عملی است: SLX خطی در حدود ۸ ثانیه روی CPU به جایی می‌رسد که GNN در حدود ۳۹ دقیقه روی GPU می‌رسد.</p>
+    </details>
+    <details>
+      <summary>۳. آیا این بدیهی نیست؟</summary>
+      <p>بعد از گفتن بدیهی به نظر می‌رسد، ولی:</p>
+      <ul>
+        <li>در ۱۱ مطالعه کنترل نشده بود و برتری به گراف نسبت داده شده بود.</li>
+        <li>نتیجهٔ پایان‌نامهٔ خود ما هم همین خطا را داشت: GNN تا حدود ۳۰ km می‌دید و بزرگ‌ترین پنجرهٔ SLX فقط ۱۲ km بود.</li>
+        <li>ما اندازه‌اش را هم گرفتیم: منحنی تا حدود ۱۲ km تند بالا می‌رود، بعد صاف می‌شود، و شعاع لازم را می‌شود از برد همبستگی هدف پیش از مدل‌سازی تعیین کرد.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>۴. فرق شما با کارهای قبلی (Liang 2023 یا Schmidt & Ong 2026) چیست؟</summary>
+      <ul>
+        <li><b>Liang و همکاران (۲۰۲۳)</b>، تولید سفر دوچرخهٔ اشتراکی در نیویورک (حدود ۱٬۰۰۰ ایستگاه): خودشان GNN را «SLX تعمیم‌یافته» می‌نامند و SLX خطی‌شان همان ۵ همسایهٔ GNN را می‌دید. ولی رقیب غیرخطی‌شان (XGBoost) هیچ همسایه‌ای نمی‌دید و GNN یک همسایگی غیرجغرافیایی هم داشت. شعاع دید تغییر داده نشد.</li>
+        <li><b>Schmidt و Ong (۲۰۲۶)</b>، NO₂ ساعتی برلین (۱۶ ایستگاه، ۳ ایستگاه آزمون): جنگل تصادفی‌شان NO₂ ایستگاه‌های دیگر را با همان وزن‌های گراف می‌دید و تقریباً هم‌پای GNN شد (R² برابر ۰٫۵۸ در برابر ۰٫۶۱). این با یافتهٔ ما سازگار است، ولی شعاع دید موضوع طراحی‌شان نبود و تغییرش ندادند.</li>
+        <li><b>کار ما</b>: شعاع دید همهٔ مدل‌ها با یک قاعده تعیین شده، از ۰ تا ۳۷٫۸ km تغییر داده شده، و به برد همبستگی هدف وصل شده است.</li>
+      </ul>
+      <p class="note">منبع این بخش: <span dir="ltr">docs/paper/lit/reach_audit_fa.md</span></p>
+    </details>
+    <details>
+      <summary>۵. چرا فقط تهران؟</summary>
+      <p>سؤال روش‌شناختی است: برای نشان دادن اینکه یک عامل مخدوش‌کننده وجود دارد، یک مورد کامل کافی است. تهران دادهٔ کم‌یاب لازم را داشت: سیاههٔ انتشار، ترافیک و ایستگاه‌ها روی یک شبکهٔ یکسان. تعمیم به شهرهای دیگر را صریحاً محدودیت گفته‌ایم و تصمیم اضافه نکردن شهر دوم در پیش‌ثبت ثبت شده است. پروتکل به دادهٔ تهران وابسته نیست و در شهرهای دیگر قابل تکرار است.</p>
+    </details>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  document.documentElement.setAttribute("dir", "rtl");
+  document.documentElement.setAttribute("lang", "fa");
+  const FA = "۰۱۲۳۴۵۶۷۸۹";
+  const fa = (n, d) => (d == null ? String(n) : n.toFixed(d)).replace(/\d/g, c => FA[c]).replace(".", "٫");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = s => document.querySelector(s);
+  const sections = [...document.querySelectorAll(".scene")];
+  const NS = 6;
+  let cur = 1;
+
+  // ---------- navigation & panel (works even without WebGL) ----------
+  const dots = $("#dots");
+  for (let i = 1; i <= NS; i++) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = fa(i); b.setAttribute("aria-label", "صحنهٔ " + fa(i));
+    b.addEventListener("click", () => go(i));
+    dots.appendChild(b);
+  }
+  $("#prev").addEventListener("click", () => go(cur - 1));
+  $("#next").addEventListener("click", () => go(cur + 1));
+  const qa = $("#qa");
+  const openQA = () => { qa.hidden = false; $("#qaClose").focus(); };
+  const closeQA = () => { qa.hidden = true; };
+  $("#qaOpen").addEventListener("click", openQA);
+  document.querySelectorAll("[data-open-qa]").forEach(b => b.addEventListener("click", openQA));
+  $("#qaClose").addEventListener("click", closeQA);
+  qa.addEventListener("click", e => { if (e.target === qa) closeQA(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !qa.hidden) { closeQA(); return; }
+    if (!qa.hidden || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === "ArrowLeft" || e.key === "PageDown") go(cur + 1);
+    if (e.key === "ArrowRight" || e.key === "PageUp") go(cur - 1);
+  });
+
+  let onScene = () => {};
+  function go(n) {
+    n = Math.max(1, Math.min(NS, n));
+    cur = n;
+    sections.forEach(s => { s.hidden = +s.dataset.scene !== n; });
+    [...dots.children].forEach((b, i) => { if (i + 1 === n) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    $("#prev").disabled = n === 1; $("#next").disabled = n === NS;
+    const tags = { 1: "شکل شهر و ارتفاع‌ها نمایشی", 2: "شکل شهر نمایشی", 3: "شکل شهر نمایشی · شعاع‌ها واقعی", 4: "شکل شهر نمایشی · عددها واقعی", 5: "نقطه‌ها واقعی · خط بین آن‌ها نمایشی", 6: "" };
+    $("#demoTag").textContent = tags[n]; $("#demoTag").hidden = !tags[n];
+    if (location.hash !== "#s" + n) history.replaceState(null, "", "#s" + n);
+    document.querySelector(".panel").scrollTop = 0;
+    onScene(n);
+  }
+
+  // scene 3 + 4 controls
+  const RADII = [7.6, 15.1, 22.7, 30.2, 37.8];
+  let layers = 3, fair = false;
+  $("#layers").addEventListener("input", e => {
+    layers = +e.target.value;
+    $("#layersOut").textContent = fa(layers) + " لایه · " + fa(RADII[layers - 1]) + " km" + (layers === 4 ? " (محاسبه‌شده)" : "");
+    onLayers();
+  });
+  const fairBtn = $("#fairBtn");
+  fairBtn.addEventListener("click", () => {
+    fair = !fair;
+    fairBtn.setAttribute("aria-pressed", fair);
+    fairBtn.textContent = fair ? "برگرداندن به ۱۲٫۶ km (ناعادلانه)" : "پنجرهٔ SLX را ۲۲٫۷ km کن (عادلانه)";
+    $("#cmpTable").className = "tbl-wrap " + (fair ? "fair-on" : "fair-off");
+    onFair();
+  });
+  let onLayers = () => {}, onFair = () => {};
+
+  // ---------- 3D ----------
+  const stage = $("#stage");
+  let renderer;
+  try {
+    if (!window.THREE) throw new Error("no three");
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  } catch (err) {
+    const d = document.createElement("div");
+    d.className = "nogl"; d.style.position = "absolute"; d.style.inset = "0";
+    d.textContent = "نمای سه‌بعدی در این مرورگر بارگذاری نشد. متن صحنه‌ها در کنار صفحه کامل است.";
+    stage.appendChild(d);
+    const h = parseInt((location.hash.match(/^#s(\d)$/) || [])[1]);
+    go(h || 1);
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 800);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x7d8a96, 0.8));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.7); sun.position.set(-30, 60, 40); scene.add(sun);
+
+  const P = {};
+  const KEYS = ["gnn", "slx", "hot", "col-lo", "col-hi", "ink", "dim", "muted", "line", "surface"];
+  function readPalette() {
+    const cs = getComputedStyle(document.documentElement);
+    KEYS.forEach(k => { P[k] = new THREE.Color(cs.getPropertyValue("--" + k).trim() || "#888"); });
+  }
+  readPalette();
+  const painters = [];
+  const paint = (mat, fn) => { painters.push([mat, fn]); mat.color.copy(fn()); return mat; };
+
+  // ----- city grid (shape illustrative, 2,436 cells, ~1 unit = ~1 km) -----
+  const cand = [];
+  const GW = 74, GH = 46;
+  for (let i = 0; i < GW; i++) for (let j = 0; j < GH; j++) {
+    const x = i - GW / 2 + 0.5, z = j - GH / 2 + 0.5;
+    let r = Math.pow(Math.abs(x / 31), 2.3) + Math.pow(Math.abs(z / 17.5), 2.1);
+    r += 0.09 * Math.sin(x * 0.33) + 0.07 * Math.cos(z * 0.5 + x * 0.17) + (z < 0 ? 0.07 * Math.sin(x * 0.55) : 0);
+    cand.push({ x, z, r });
+  }
+  cand.sort((a, b) => a.r - b.r);
+  const cells = cand.slice(0, 2436);
+  const N = cells.length;
+  const g2 = (x, z, cx, cz, sx, sz) => Math.exp(-((x - cx) ** 2) / (2 * sx * sx) - ((z - cz) ** 2) / (2 * sz * sz));
+  cells.forEach(c => {
+    c.v = 0.8 * g2(c.x, c.z, 2, 2, 14, 9) + 0.28 * g2(c.x, c.z, -15, 5, 5, 5) + 0.22 * g2(c.x, c.z, 16, -4, 4.5, 4.5)
+      + 0.035 * Math.sin(c.x * 0.7) * Math.cos(c.z * 0.6) + 0.1;
+  });
+  let vmin = Infinity, vmax = -Infinity;
+  cells.forEach(c => { vmin = Math.min(vmin, c.v); vmax = Math.max(vmax, c.v); });
+  cells.forEach(c => { c.n = (c.v - vmin) / (vmax - vmin); c.h = 0.25 + c.n * 8.5; });
+  [...cells].sort((a, b) => b.v - a.v).slice(0, Math.round(N * 0.1)).forEach(c => { c.hot = true; });
+  // target cell near the centre
+  let tIdx = 0, best = Infinity;
+  cells.forEach((c, i) => { const d = (c.x - 3.5) ** 2 + (c.z - 0.5) ** 2; if (d < best) { best = d; tIdx = i; } });
+  const T = cells[tIdx];
+  cells.forEach(c => { c.d = Math.hypot(c.x - T.x, c.z - T.z); });
+  const MAXH = 8.75;
+
+  const cityGroup = new THREE.Group(); scene.add(cityGroup);
+  const boxGeo = new THREE.BoxGeometry(0.86, 1, 0.86); boxGeo.translate(0, 0.5, 0);
+  const cityMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  const city = new THREE.InstancedMesh(boxGeo, cityMat, N);
+  const m4 = new THREE.Matrix4(), q0 = new THREE.Quaternion(), v3 = new THREE.Vector3(), s3 = new THREE.Vector3();
+  cells.forEach((c, i) => { m4.compose(v3.set(c.x, 0, c.z), q0, s3.set(1, c.h, 1)); city.setMatrixAt(i, m4); city.setColorAt(i, P["col-lo"]); });
+  cityGroup.add(city);
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(48, 96), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.55 }), () => P.dim));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; cityGroup.add(ground);
+
+  // hotspot halos
+  const haloTex = (() => {
+    const cv = document.createElement("canvas"); cv.width = cv.height = 64;
+    const g = cv.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.35, "rgba(255,255,255,.55)"); gr.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(cv);
+  })();
+  const hp = [];
+  cells.forEach(c => { if (c.hot) hp.push(c.x, c.h + 0.35, c.z); });
+  const haloGeo = new THREE.BufferGeometry(); haloGeo.setAttribute("position", new THREE.Float32BufferAttribute(hp, 3));
+  const haloMat = paint(new THREE.PointsMaterial({ size: 2.2, map: haloTex, transparent: true, depthWrite: false, opacity: 0.8 }), () => P.hot);
+  const halos = new THREE.Points(haloGeo, haloMat); cityGroup.add(halos);
+
+  // target marker
+  const marker = new THREE.Mesh(new THREE.ConeGeometry(0.7, 1.6, 24), paint(new THREE.MeshLambertMaterial(), () => P.ink));
+  marker.rotation.x = Math.PI; cityGroup.add(marker);
+  const selfRing = new THREE.Mesh(new THREE.RingGeometry(0.75, 1.05, 48), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }), () => P.slx));
+  selfRing.rotation.x = -Math.PI / 2; selfRing.position.set(T.x, 0.05, T.z); cityGroup.add(selfRing);
+
+  // radius visual: ground disc + translucent wall + floating ring
+  function RadiusViz(key, lift, ringW) {
+    const g = new THREE.Group(); g.position.set(T.x, 0, T.z);
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(1, 96), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.14, depthWrite: false, side: THREE.DoubleSide }), () => P[key]));
+    disc.rotation.x = -Math.PI / 2; disc.position.y = 0.04;
+    const wall = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 96, 1, true), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.08, depthWrite: false, side: THREE.DoubleSide }), () => P[key]));
+    wall.scale.y = lift; wall.position.y = lift / 2;
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 8), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }), () => P[key]));
+    ring.rotation.x = -Math.PI / 2; ring.position.y = lift;
+    g.add(disc, wall, ring);
+    const o = { g, cur: -1, goal: 1, set(R) {
+      o.cur = R; disc.scale.set(R, R, 1); wall.scale.x = wall.scale.z = R;
+      ring.geometry.dispose(); ring.geometry = new THREE.RingGeometry(Math.max(0, R - ringW), R + ringW, 128);
+    }, step(k) { if (Math.abs(o.cur - o.goal) > 0.01) { o.set(o.cur < 0 ? o.goal : o.cur + (o.goal - o.cur) * k); return true; } return false; } };
+    return o;
+  }
+
+  // scene 3: layer rings + reach + pulse
+  const s3Group = new THREE.Group(); cityGroup.add(s3Group);
+  const reach = RadiusViz("gnn", MAXH + 1, 0.28); s3Group.add(reach.g); reach.goal = RADII[2];
+  const layerRings = RADII.map((R, i) => {
+    const m = new THREE.Mesh(new THREE.RingGeometry(R - 0.12, R + 0.12, 128), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.7 }), () => P.gnn));
+    m.rotation.x = -Math.PI / 2; m.position.set(T.x, 0.08, T.z); s3Group.add(m); return m;
+  });
+  const pulse = new THREE.Mesh(new THREE.RingGeometry(0.94, 1, 96), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, transparent: true, depthWrite: false }), () => P.gnn));
+  pulse.rotation.x = -Math.PI / 2; pulse.position.set(T.x, MAXH + 1, T.z); s3Group.add(pulse);
+
+  // scene 4: two radii + bars
+  const s4Group = new THREE.Group(); cityGroup.add(s4Group);
+  const gnnViz = RadiusViz("gnn", MAXH + 1.6, 0.3); gnnViz.goal = 22.7; s4Group.add(gnnViz.g);
+  const slxViz = RadiusViz("slx", MAXH + 0.8, 0.3); slxViz.goal = 12.6; s4Group.add(slxViz.g);
+  const H = v => (v - 0.6) / 0.4 * 14;
+  const BZ = -33;
+  const barGroup = new THREE.Group(); s4Group.add(barGroup);
+  const base = new THREE.Mesh(new THREE.BoxGeometry(28, 0.4, 6), paint(new THREE.MeshLambertMaterial(), () => P.dim));
+  base.position.set(0, -0.2, BZ); barGroup.add(base);
+  [0.7, 0.8, 0.9, 1.0].forEach(v => {
+    const l = new THREE.Mesh(new THREE.BoxGeometry(26, 0.06, 0.06), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.5 }), () => P.muted));
+    l.position.set(0, H(v), BZ - 2.6); barGroup.add(l);
+  });
+  const barGeo = new THREE.BoxGeometry(3.2, 1, 3.2); barGeo.translate(0, 0.5, 0);
+  const mkBar = (x, fn) => { const b = new THREE.Mesh(barGeo, paint(new THREE.MeshLambertMaterial(), fn)); b.position.set(x, 0, BZ); barGroup.add(b); return b; };
+  const barGnn5 = mkBar(9, () => P.gnn), barGnn1 = mkBar(0, () => P.gnn.clone().lerp(P["col-lo"], 0.45)), barSlx = mkBar(-9, () => P.slx);
+  barGnn5.scale.y = H(0.949); barGnn1.scale.y = H(0.944);
+  let slxVal = 0.92, slxGoal = 0.92; barSlx.scale.y = H(slxVal);
+
+  // scene 5: reach curve
+  const chart = new THREE.Group(); scene.add(chart);
+  const X = r => -20 + r / 38 * 40, Y = s => (s - 0.6) / 0.4 * 16;
+  const px = [0, 12.6, 22.7, 37.8], py = [0.715, 0.92, 0.938, 0.945];
+  const curveF = (() => { // monotone Hermite; knee kept sharp (illustrative shape only)
+    const n = px.length, d = [], m = [];
+    for (let i = 0; i < n - 1; i++) d[i] = (py[i + 1] - py[i]) / (px[i + 1] - px[i]);
+    m[0] = d[0] * 1.5; m[n - 1] = d[n - 2] * 0.5;
+    for (let i = 1; i < n - 1; i++) m[i] = 2 / (1 / d[i - 1] + 1 / d[i]);
+    return x => {
+      let i = 0; while (i < n - 2 && x > px[i + 1]) i++;
+      const h = px[i + 1] - px[i], t = (x - px[i]) / h, t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * py[i] + (t3 - 2 * t2 + t) * h * m[i] + (-2 * t3 + 3 * t2) * py[i + 1] + (t3 - t2) * h * m[i + 1];
+    };
+  })();
+  const ZW = 2.6, samples = [];
+  for (let r = 0; r <= 37.8 + 1e-6; r += 0.35) samples.push(Math.min(r, 37.8));
+  if (samples[samples.length - 1] < 37.8) samples.push(37.8);
+  const top = [], topIdx = [], wall = [], wallIdx = [];
+  samples.forEach((r, k) => {
+    const x = X(r), y = Y(curveF(r));
+    top.push(x, y, -ZW, x, y, ZW); wall.push(x, 0, ZW, x, y, ZW, x, 0, -ZW, x, y, -ZW);
+    if (k) {
+      const a = 2 * (k - 1), b = 2 * k; topIdx.push(a, b, a + 1, b, b + 1, a + 1);
+      const c = 4 * (k - 1), e = 4 * k; wallIdx.push(c, e, c + 1, e, e + 1, c + 1, c + 2, e + 2, c + 3, e + 2, e + 3, c + 3);
+    }
+  });
+  const mkGeo = (pos, idx) => { const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); return g; };
+  chart.add(new THREE.Mesh(mkGeo(top, topIdx), paint(new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.55 }), () => P.slx)));
+  chart.add(new THREE.Mesh(mkGeo(wall, wallIdx), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.12, depthWrite: false }), () => P.slx)));
+  const tubePts = samples.map(r => new THREE.Vector3(X(r), Y(curveF(r)) + 0.08, 0));
+  chart.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(tubePts), 240, 0.13, 8), paint(new THREE.MeshLambertMaterial(), () => P.slx)));
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(46, 10), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.6 }), () => P.dim));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -0.03; chart.add(floor);
+  [0.6, 0.7, 0.8, 0.9, 1.0].forEach(v => {
+    const l = new THREE.Mesh(new THREE.BoxGeometry(40, 0.05, 0.05), paint(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.45 }), () => P.muted));
+    l.position.set(0, Y(v), -ZW - 0.1); chart.add(l);
+  });
+  const sph = (x, y, rad, fn) => { const s = new THREE.Mesh(new THREE.SphereGeometry(rad, 24, 16), paint(new THREE.MeshLambertMaterial(), fn)); s.position.set(x, y, 0); chart.add(s); return s; };
+  const rangeBar = (r, a, b) => { const h = Y(b) - Y(a); const c = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, h, 12), paint(new THREE.MeshLambertMaterial(), () => P.slx)); c.position.set(X(r), Y(a) + h / 2, 0); chart.add(c); sph(X(r), Y(a), 0.4, () => P.slx); sph(X(r), Y(b), 0.4, () => P.slx); };
+  rangeBar(0, 0.66, 0.77); rangeBar(37.8, 0.94, 0.95);
+  sph(X(12.6), Y(0.92), 0.55, () => P.slx); sph(X(22.7), Y(0.938), 0.55, () => P.slx);
+  sph(X(22.7), Y(0.949), 0.75, () => P.gnn);
+  sph(X(22.7) + 1.4, Y(0.944), 0.5, () => P.gnn.clone().lerp(P["col-lo"], 0.45));
+  const corr = new THREE.Mesh(new THREE.PlaneGeometry(2 * ZW + 1, Y(1.0)), paint(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.12, depthWrite: false }), () => P.ink));
+  corr.rotation.y = Math.PI / 2; corr.position.set(X(24), Y(1.0) / 2, 0); chart.add(corr);
+  const corrEdge = new THREE.Mesh(new THREE.BoxGeometry(0.1, Y(1.0), 0.1), paint(new THREE.MeshBasicMaterial(), () => P.ink));
+  corrEdge.position.set(X(24), Y(1.0) / 2, ZW + 0.5); chart.add(corrEdge);
+
+  // scene 6: literature funnel
+  const funnel = new THREE.Group(); scene.add(funnel);
+  const TIERS = ["NO₂ ماهواره‌ای ردیاب احتراق است", "یادگیری عمیق از آن نقشه می‌سازد", "برتری به گراف نسبت داده می‌شود", "ولی GNN دورتر می‌بیند", "شکاف: شعاع دید کنترل نشده است"];
+  const tierY = i => 17 - i * 3.3, TH = 2.8;
+  const tierR = i => 12 - i * 2.1;
+  TIERS.forEach((t, i) => {
+    const fn = i === 3 ? () => P.gnn : i === 4 ? () => P.slx : () => P["col-lo"].clone().lerp(P["col-hi"], 0.2 + i * 0.25);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(tierR(i), tierR(i) - 1.9, TH, 72, 1, true), paint(new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.82 }), fn));
+    m.position.y = tierY(i) - TH / 2; funnel.add(m);
+    const edge = new THREE.Mesh(new THREE.TorusGeometry(tierR(i), 0.07, 6, 96), paint(new THREE.MeshBasicMaterial(), () => P.ink));
+    edge.rotation.x = Math.PI / 2; edge.position.y = tierY(i); funnel.add(edge);
+  });
+  const endY = tierY(4) - TH - 1.8;
+  const emblem = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.32, 16, 64), paint(new THREE.MeshLambertMaterial(), () => P.ink));
+  emblem.rotation.x = Math.PI / 2; emblem.position.y = endY; funnel.add(emblem);
+  const NP = 110, pPos = new Float32Array(NP * 3), pSeed = [];
+  for (let i = 0; i < NP; i++) pSeed.push({ a: Math.random() * Math.PI * 2, y: Math.random(), k: 0.3 + Math.random() * 0.6 });
+  const pGeo = new THREE.BufferGeometry(); pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+  const parts = new THREE.Points(pGeo, paint(new THREE.PointsMaterial({ size: 0.9, map: haloTex, transparent: true, depthWrite: false, opacity: 0.7 }), () => P.ink));
+  funnel.add(parts);
+  const funnelR = y => { // radius of funnel wall at height y
+    for (let i = 0; i < 5; i++) { const yt = tierY(i), yb = yt - TH; if (y <= yt && y >= yb) return tierR(i) + (tierR(i) - 1.9 - tierR(i)) * (yt - y) / TH; if (i < 4 && y < yb && y > tierY(i + 1)) return tierR(i) - 1.9; }
+    return 1.2;
+  };
+
+  // ---------- HTML labels ----------
+  const labelsEl = $("#labels"), labels = [], pv = new THREE.Vector3();
+  function label(scenes, pos, html, cls, show) {
+    const el = document.createElement("div"); el.className = "lbl " + (cls || ""); el.innerHTML = html; el.hidden = true;
+    labelsEl.appendChild(el); const L = { el, pos, scenes, show: show || (() => true) }; labels.push(L); return L;
+  }
+  label([2], new THREE.Vector3(T.x, T.h + 3.6, T.z), "فقط خود سلول · Spearman ≈ ۰٫۷", "slx");
+  RADII.forEach((R, i) => label([3], new THREE.Vector3(T.x + R * Math.SQRT1_2, 0.4, T.z + R * Math.SQRT1_2), "لایهٔ " + fa(i + 1) + " · " + fa(R) + " km" + (i === 3 ? " (محاسبه‌شده)" : ""), "gnn", () => i < layers));
+  label([3], new THREE.Vector3(T.x, T.h + 3.6, T.z), "سلول هدف", "");
+  label([4], new THREE.Vector3(T.x - 22.7 * 0.7, MAXH + 2.6, T.z + 22.7 * 0.7), "GNN · ۲۲٫۷ km", "gnn");
+  const slxRadLbl = label([4], new THREE.Vector3(T.x + 12.6 * 0.7, MAXH + 1.8, T.z + 12.6 * 0.7), "", "slx");
+  label([4], new THREE.Vector3(9, H(0.949) + 1.2, BZ), "GNN، ۵ seed<br>۰٫۹۴۹", "gnn");
+  label([4], new THREE.Vector3(0, H(0.944) + 1.2, BZ), "GNN، تک seed<br>۰٫۹۴۴", "gnn");
+  const slxBarLbl = label([4], new THREE.Vector3(-9, H(0.92) + 1.2, BZ), "", "slx");
+  const deltaLbl = label([4], new THREE.Vector3(0, H(1.0) + 9, BZ), "", "big");
+  label([4], new THREE.Vector3(-15, 0.1, BZ - 2.6), "محور از ۰٫۶", "plain");
+  label([4], new THREE.Vector3(-15, H(1.0), BZ - 2.6), "۱٫۰", "plain");
+  label([4], new THREE.Vector3(-15, H(0.9), BZ - 2.6), "۰٫۹", "plain");
+  [[0, "۰"], [12.6, "۱۲٫۶"], [22.7, "۲۲٫۷"], [37.8, "۳۷٫۸ km"]].forEach(([r, t]) => label([5], new THREE.Vector3(X(r), -0.6, ZW + 1.4), t, "plain"));
+  [0.6, 0.7, 0.8, 0.9, 1.0].forEach(v => label([5], new THREE.Vector3(-21.6, Y(v), -ZW), fa(v, 1), "plain"));
+  label([5], new THREE.Vector3(0, -2.4, ZW + 1.4), "شعاع دید (km)", "plain");
+  label([5], new THREE.Vector3(-21.6, Y(1.0) + 1.6, -ZW), "Spearman", "plain");
+  label([5], new THREE.Vector3(X(0), Y(0.77) + 1.4, 0), "شعاع ۰: ۰٫۶۶ تا ۰٫۷۷", "slx");
+  label([5], new THREE.Vector3(X(12.6), Y(0.92) - 1.6, 0), "SLX ۰٫۹۲", "slx");
+  label([5], new THREE.Vector3(X(22.7) - 1, Y(0.938) - 1.6, 0), "SLX ۰٫۹۳۸", "slx");
+  label([5], new THREE.Vector3(X(15), Y(1.0) + 2.4, 0), "GNN سه‌لایه: ۰٫۹۴۹ (۵ seed) · ۰٫۹۴۴ (تک seed)", "gnn");
+  label([5], new THREE.Vector3(X(37.8), Y(0.95) + 1.4, 0), "۰٫۹۴ تا ۰٫۹۵", "slx");
+  label([5], new THREE.Vector3(X(28), Y(1.0) + 5, ZW + 0.5), "برد همبستگی هدف ≈ ۲۴ km", "big");
+  label([5], new THREE.Vector3(X(5), Y(0.83) + 1, -ZW), "تند", "plain");
+  label([5], new THREE.Vector3(X(33), Y(0.945) - 2.2, -ZW), "صاف", "plain");
+  TIERS.forEach((t, i) => label([6], new THREE.Vector3(0, tierY(i) - TH / 2, 0), t, "tier" + (i === 3 ? " gnn" : i === 4 ? " slx" : "")));
+  label([6], new THREE.Vector3(0, endY - 1.6, 0), "شعاع دید، نه گراف", "big");
+  label([6], new THREE.Vector3(0, endY - 4.4, 0), "۱۱ مطالعه بررسی شد؛ هیچ‌کدام کنترل نکرده بود", "plain");
+
+  function setFairLabels() {
+    slxRadLbl.el.textContent = "SLX · " + (fair ? "۲۲٫۷" : "۱۲٫۶") + " km";
+    slxBarLbl.el.innerHTML = "SLX، " + (fair ? "۲۲٫۷" : "۱۲٫۶") + " km<br>≈ " + (fair ? "۰٫۹۳۸" : "۰٫۹۲");
+    deltaLbl.el.textContent = (fair ? "هم‌شعاع" : "ناعادلانه") + " · فاصله ≈ " + (fair ? "۰٫۰۱۱" : "۰٫۰۲۹");
+  }
+  setFairLabels();
+
+  // ---------- city colouring ----------
+  let mode = "city";
+  const tc = new THREE.Color();
+  function colorCity() {
+    for (let i = 0; i < N; i++) {
+      const c = cells[i];
+      if (mode === "city") { tc.copy(P["col-lo"]).lerp(P["col-hi"], c.n); if (c.hot) tc.copy(P.hot); }
+      else {
+        tc.copy(P["col-lo"]).lerp(P["col-hi"], c.n * 0.35);
+        if (mode === "reach" && c.d <= reach.cur) tc.lerp(P.gnn, 0.5);
+        if (i === tIdx) tc.copy(mode === "focus" ? P.slx : P.ink);
+      }
+      city.setColorAt(i, tc);
+    }
+    city.instanceColor.needsUpdate = true;
+  }
+
+  // ---------- camera (simple orbit) ----------
+  const VIEWS = {
+    1: { t: [0, 2, 0], r: 82, th: 0.35, ph: 0.92 },
+    2: { t: [T.x, 3, T.z], r: 40, th: 0.55, ph: 0.9 },
+    3: { t: [T.x, 2, T.z], r: 100, th: 0.4, ph: 0.72 },
+    4: { t: [0, 5, -12], r: 112, th: 0.18, ph: 0.95 },
+    5: { t: [0, 8, 0], r: 54, th: -0.12, ph: 1.28 },
+    6: { t: [0, 7, 0], r: 58, th: 0.0, ph: 1.32 }
+  };
+  const camCur = { t: new THREE.Vector3(0, 2, 0), r: 90, th: 0.3, ph: 0.9 };
+  const camGoal = { t: new THREE.Vector3(0, 2, 0), r: 90, th: 0.3, ph: 0.9 };
+  let aspectBoost = 1;
+  function setView(n) { const v = VIEWS[n]; camGoal.t.set(...v.t); camGoal.r = v.r; camGoal.th = v.th; camGoal.ph = v.ph; }
+  let dragging = false, lx = 0, ly = 0, lastInteract = 0;
+  const cv = renderer.domElement;
+  cv.addEventListener("pointerdown", e => { dragging = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); lastInteract = performance.now(); });
+  cv.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    camGoal.th -= (e.clientX - lx) * 0.006; camGoal.ph = Math.max(0.12, Math.min(1.5, camGoal.ph - (e.clientY - ly) * 0.005));
+    lx = e.clientX; ly = e.clientY; lastInteract = performance.now();
+  });
+  const endDrag = () => { dragging = false; };
+  cv.addEventListener("pointerup", endDrag); cv.addEventListener("pointercancel", endDrag);
+  cv.addEventListener("wheel", e => { e.preventDefault(); camGoal.r = Math.max(15, Math.min(220, camGoal.r * (1 + e.deltaY * 0.001))); lastInteract = performance.now(); }, { passive: false });
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    aspectBoost = Math.max(1, Math.min(1.9, 1.25 / camera.aspect));
+  }
+  new ResizeObserver(resize).observe(stage); resize();
+
+  // ---------- theme ----------
+  function retheme() { readPalette(); painters.forEach(([m, fn]) => m.color.copy(fn())); colorCity(); }
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
+  new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // ---------- scene switching ----------
+  onScene = n => {
+    cityGroup.visible = n <= 4; chart.visible = n === 5; funnel.visible = n === 6;
+    halos.visible = n === 1; marker.visible = n >= 2 && n <= 4; selfRing.visible = n === 2;
+    s3Group.visible = n === 3; s4Group.visible = n === 4;
+    mode = n === 1 ? "city" : n === 2 ? "focus" : n === 3 ? "reach" : "compare";
+    if (n === 3) { reach.cur = 0.01; reach.set(0.01); }
+    colorCity(); setView(n);
+  };
+  onLayers = () => { reach.goal = RADII[layers - 1]; layerRings.forEach((m, i) => { m.visible = i < layers; }); };
+  onFair = () => { slxViz.goal = fair ? 22.7 : 12.6; slxGoal = fair ? 0.938 : 0.92; setFairLabels(); };
+  onLayers();
+
+  const clock = new THREE.Clock();
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+    const k = reduce ? 1 : 1 - Math.pow(0.002, dt);
+    if (!reduce && !dragging && (cur === 1 || cur === 6) && performance.now() - lastInteract > 2500) camGoal.th += dt * 0.06;
+    camCur.t.lerp(camGoal.t, k); camCur.r += (camGoal.r - camCur.r) * k; camCur.th += (camGoal.th - camCur.th) * k; camCur.ph += (camGoal.ph - camCur.ph) * k;
+    const R = camCur.r * aspectBoost;
+    camera.position.set(camCur.t.x + R * Math.sin(camCur.ph) * Math.sin(camCur.th), camCur.t.y + R * Math.cos(camCur.ph), camCur.t.z + R * Math.sin(camCur.ph) * Math.cos(camCur.th));
+    camera.lookAt(camCur.t);
+
+    if (cur === 1) haloMat.opacity = reduce ? 0.8 : 0.6 + 0.3 * Math.sin(t * 2.2);
+    if (marker.visible) marker.position.set(T.x, T.h + 1.6 + (reduce ? 0 : 0.3 * Math.sin(t * 2.5)), T.z);
+    if (cur === 3) {
+      if (reach.step(Math.min(1, k * 0.8))) colorCity();
+      const s = reduce ? reach.cur : ((t * 9) % (reach.cur + 4));
+      pulse.visible = s <= reach.cur; pulse.scale.set(Math.max(0.01, s), Math.max(0.01, s), 1);
+      pulse.material.opacity = 0.9 * (1 - s / (reach.cur + 0.01));
+    }
+    if (cur === 4) {
+      gnnViz.step(k); slxViz.step(Math.min(1, k * 0.7));
+      if (Math.abs(slxVal - slxGoal) > 1e-4) { slxVal += (slxGoal - slxVal) * Math.min(1, k * 0.7); barSlx.scale.y = H(slxVal); slxBarLbl.pos.y = H(slxVal) + 1.2; }
+    }
+    if (cur === 6) {
+      for (let i = 0; i < NP; i++) {
+        const p = pSeed[i];
+        if (!reduce) { p.y -= dt * 0.06; p.a += dt * 0.6; if (p.y < 0) p.y += 1; }
+        const y = endY + p.y * (tierY(0) - endY), r = funnelR(y) * p.k;
+        pPos[i * 3] = r * Math.cos(p.a); pPos[i * 3 + 1] = y; pPos[i * 3 + 2] = r * Math.sin(p.a);
+      }
+      pGeo.attributes.position.needsUpdate = true;
+    }
+    renderer.render(scene, camera);
+
+    const w = stage.clientWidth, h = stage.clientHeight;
+    for (const L of labels) {
+      if (!L.scenes.includes(cur) || !L.show()) { L.el.hidden = true; continue; }
+      pv.copy(L.pos).project(camera);
+      if (pv.z > 1 || Math.abs(pv.x) > 1.1 || Math.abs(pv.y) > 1.1) { L.el.hidden = true; continue; }
+      L.el.hidden = false;
+      L.el.style.transform = "translate(" + ((pv.x * 0.5 + 0.5) * w).toFixed(1) + "px," + ((-pv.y * 0.5 + 0.5) * h).toFixed(1) + "px) translate(-50%,-100%)";
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const h0 = parseInt((location.hash.match(/^#s(\d)$/) || [])[1]);
+  go(h0 >= 1 && h0 <= NS ? h0 : 1);
+  if (location.hash === "#qa") openQA();
+  Object.assign(camCur, { r: camGoal.r, th: camGoal.th, ph: camGoal.ph }); camCur.t.copy(camGoal.t);
+  requestAnimationFrame(frame);
+})();
+</script>
