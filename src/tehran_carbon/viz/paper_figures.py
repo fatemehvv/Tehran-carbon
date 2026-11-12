@@ -42,7 +42,7 @@ COMPARISONS = [("shorter", "paper_PA_H2.csv", 1402, "CV 1402"),
                ("matched", "paper_PA_H2_reach.csv", 1402, "CV 1402"),
                ("matched", "paper_PA_H2_reach.csv", 1403, "CV 1403"),
                ("matched", "paper_PA_H2c_all.csv", 1404, "Held-out 1404")]
-GROUP = {"shorter": "Reference sees less (SLX, 12.6 km)", "matched": "Reference sees as far or further"}
+GROUP = {"shorter": "Pre-specified reference (SLX, 12.6 km)", "matched": "Reference with extended reach"}
 
 
 def style():
@@ -212,7 +212,8 @@ class PaperFigures:
             dm = d[d.metric == m]
             mg = float(dm.margin.iloc[0])
             lim = max(abs(dm.lo95.min()), abs(dm.hi95.max()), mg) * 1.12      # symmetric: the sign reads at a glance
-            ax.axvspan(-mg, mg, color=BAND, lw=0, zorder=0)
+            if m == "spearman":                                         # the registered margin is for Spearman only
+                ax.axvspan(-mg, mg, color=BAND, lw=0, zorder=0)
             ax.axvline(0, color=INK2, lw=0.8, zorder=1)
             for _, r in dm.iterrows():
                 y = ypos[(r["group"], int(r["year"]))]
@@ -233,7 +234,7 @@ class PaperFigures:
         h = [Line2D([], [], ls="none", marker="o", ms=6, color=SERIES[0], mec="white", label="difference"),
              Line2D([], [], color=SERIES[0], lw=3.4, label="90 % interval (jackknife)"),
              Line2D([], [], color=SERIES[0], lw=1.1, label="95 % interval (jackknife)"),
-             Patch(facecolor=BAND, label=f"equivalence margin (±{float(d.margin.iloc[0]):.2f})")]
+             Patch(facecolor=BAND, label=f"equivalence margin, Spearman (±{float(d.margin.iloc[0]):.2f})")]
         fig.legend(handles=h, loc="lower center", ncol=4, bbox_to_anchor=(0.5, 0.0))
         fig.tight_layout(rect=(0, 0.07, 1, 1), w_pad=1.5)
         return save(fig, self.out / "fig5_differences")
@@ -271,8 +272,8 @@ class PaperFigures:
         h = [Line2D([], [], color=SERIES[0], lw=7, alpha=0.3, label="GNN, five single seeds (range)"),
              Line2D([], [], ls="none", marker="|", ms=11, mew=1.6, color=SERIES[0], label="GNN, mean of single seeds"),
              Line2D([], [], ls="none", marker="o", ms=6.5, color=SERIES[0], mec="white", label="GNN, 5-seed ensemble"),
-             Line2D([], [], ls="none", marker="D", ms=5.5, color=INK, mec="white", label="SLX, equal or longer reach"),
-             Line2D([], [], ls="none", marker="D", ms=5.5, mfc="white", mec=MUTED, mew=1.2, label="SLX, 12.6 km")]
+             Line2D([], [], ls="none", marker="D", ms=5.5, color=INK, mec="white", label="SLX, extended reach (1404: 22.7 km)"),
+             Line2D([], [], ls="none", marker="D", ms=5.5, mfc="white", mec=MUTED, mew=1.2, label="SLX, 12.6 km (pre-specified)")]
         fig.legend(handles=h, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.0))
         fig.tight_layout(rect=(0, 0.16, 1, 1), w_pad=1.5)
         return save(fig, self.out / "fig6_seeds")
