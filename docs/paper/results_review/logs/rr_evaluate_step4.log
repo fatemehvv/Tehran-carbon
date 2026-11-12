@@ -1,0 +1,38 @@
+[18:21:38] dataset 176851710abc: from cache
+[18:21:38] PR_c1404_r30: candidate 20261107-205232_paper2_c1404_sage4_v1_108bbd vs best reference 20261107-211335_paper2_c1404_slx_reach_v1_671770
+/root/Tehran-carbon-paper/src/tehran_carbon/evaluation/bootstrap.py:21: RuntimeWarning: Mean of empty slice
+  return np.array([np.nanmean(monthly_scores(z, hot, pred, [metric], idx)[metric]) for idx in self.samples])
+[18:22:12] PR_c1404_r30: 20261107-205232_paper2_c1404_sage4_v1_108bbd vs 20261107-211335_paper2_c1404_slx_reach_v1_671770
+ year   metric   delta  jack_low95  jack_high95  p_signflip_pooled  blocks_valid      verdict
+ 1404   pr_auc  0.0860      -0.122       0.2940             0.1641           5.0 inconclusive
+ 1404 spearman -0.0026      -0.019       0.0138             0.6340          12.0   equivalent
+[18:22:12] dataset 176851710abc: from cache
+[18:22:12] PR_c1404_r38: candidate 20261107-202233_paper2_c1404_sage5_v1_50d17e vs best reference 20261107-212704_paper2_c1404_slx_reach_v1_440cf0
+/root/Tehran-carbon-paper/src/tehran_carbon/evaluation/bootstrap.py:21: RuntimeWarning: Mean of empty slice
+  return np.array([np.nanmean(monthly_scores(z, hot, pred, [metric], idx)[metric]) for idx in self.samples])
+[18:22:47] PR_c1404_r38: 20261107-202233_paper2_c1404_sage5_v1_50d17e vs 20261107-212704_paper2_c1404_slx_reach_v1_440cf0
+ year   metric  delta  jack_low95  jack_high95  p_signflip_pooled  blocks_valid      verdict
+ 1404   pr_auc 0.0491      0.0135       0.0847             0.1133           5.0     superior
+ 1404 spearman 0.0016     -0.0255       0.0287             0.4275          12.0 inconclusive
+[18:22:47] dataset 1e0281290a88: from cache
+[18:22:47] PR_depth_L3: candidate 20261107-202233_paper2_rq2_sage_v1_02683d vs best reference 20261107-205218_paper2_slx_reach_v1_4dc384
+/root/Tehran-carbon-paper/src/tehran_carbon/evaluation/bootstrap.py:21: RuntimeWarning: Mean of empty slice
+  return np.array([np.nanmean(monthly_scores(z, hot, pred, [metric], idx)[metric]) for idx in self.samples])
+[18:23:57] PR_depth_L3: 20261107-202233_paper2_rq2_sage_v1_02683d vs 20261107-205218_paper2_slx_reach_v1_4dc384
+ year   metric  delta  jack_low95  jack_high95  p_signflip_pooled  blocks_valid      verdict
+ 1402   pr_auc 0.0677      0.0163       0.1190             0.0312           5.0     superior
+ 1402 spearman 0.0110     -0.0342       0.0562             0.1084          12.0 inconclusive
+ 1403   pr_auc 0.0727      0.0154       0.1300             0.1133           5.0     superior
+ 1403 spearman 0.0126     -0.0280       0.0533             0.0557          12.0 inconclusive
+[18:23:57] Holm over the family:
+ year   metric   delta  p_signflip_pooled  p_holm      verdict                         verdict_holm
+ 1404   pr_auc  0.0860             0.1641  0.6504 inconclusive                         inconclusive
+ 1404 spearman -0.0026             0.6340  0.8550   equivalent                           equivalent
+ 1404   pr_auc  0.0491             0.1133  0.6504     superior superior, not significant after Holm
+ 1404 spearman  0.0016             0.4275  0.8550 inconclusive                         inconclusive
+ 1402   pr_auc  0.0677             0.0312  0.2500     superior superior, not significant after Holm
+ 1402 spearman  0.0110             0.1084  0.6504 inconclusive                         inconclusive
+ 1403   pr_auc  0.0727             0.1133  0.6504     superior superior, not significant after Holm
+ 1403 spearman  0.0126             0.0557  0.3896 inconclusive                         inconclusive
+
+[paper finished in 2.3 min]

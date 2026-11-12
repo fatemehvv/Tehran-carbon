@@ -1,0 +1,75 @@
+{
+  "run_id": "20261112-182358_paper_review_6b2e82",
+  "experiment": "paper_review",
+  "variant": {},
+  "variant_label": "",
+  "rq": "RQ2",
+  "kind": "analysis",
+  "version": null,
+  "overrides": {},
+  "config_hash": "6b2e8234d2cc",
+  "data_hash": "4e800dee03d6",
+  "git": {
+    "commit": "25c6175",
+    "branch": "paper_TC",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu132",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-12 18:23:58",
+  "status": "done",
+  "finished": "2026-11-12 18:34:01",
+  "duration_s": 603.4,
+  "summary": {
+    "years": [
+      {
+        "year_a": 1402,
+        "year_b": 1403,
+        "spearman_annual_mean": 0.995,
+        "spearman_same_month_mean": 0.963,
+        "spearman_same_month_min": 0.929
+      },
+      {
+        "year_a": 1402,
+        "year_b": 1404,
+        "spearman_annual_mean": 0.993,
+        "spearman_same_month_mean": 0.961,
+        "spearman_same_month_min": 0.903
+      },
+      {
+        "year_a": 1403,
+        "year_b": 1404,
+        "spearman_annual_mean": 0.997,
+        "spearman_same_month_mean": 0.955,
+        "spearman_same_month_min": 0.897
+      }
+    ],
+    "zero_crossing_km": {
+      "planar trend removed / crop 0.6": 13.8,
+      "planar trend removed / crop 0.8": 17.2,
+      "planar trend removed / crop 1.0": 19.3,
+      "quadratic trend removed / crop 0.6": 9.6,
+      "quadratic trend removed / crop 0.8": 12.9,
+      "quadratic trend removed / crop 1.0": 14.0,
+      "raw / crop 0.6": 18.2,
+      "raw / crop 0.8": 21.6,
+      "raw / crop 1.0": 24.0
+    },
+    "seed_calibration_below_005": {
+      "pr_auc": 0.05,
+      "spearman": 0.25
+    }
+  }
+}

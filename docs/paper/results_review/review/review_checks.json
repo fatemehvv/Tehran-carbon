@@ -1,0 +1,90 @@
+{
+  "years": [
+    {
+      "year_a": 1402,
+      "year_b": 1403,
+      "spearman_annual_mean": 0.995,
+      "spearman_same_month_mean": 0.963,
+      "spearman_same_month_min": 0.929
+    },
+    {
+      "year_a": 1402,
+      "year_b": 1404,
+      "spearman_annual_mean": 0.993,
+      "spearman_same_month_mean": 0.961,
+      "spearman_same_month_min": 0.903
+    },
+    {
+      "year_a": 1403,
+      "year_b": 1404,
+      "spearman_annual_mean": 0.997,
+      "spearman_same_month_mean": 0.955,
+      "spearman_same_month_min": 0.897
+    }
+  ],
+  "zero_crossing_km": {
+    "planar trend removed / crop 0.6": 13.8,
+    "planar trend removed / crop 0.8": 17.2,
+    "planar trend removed / crop 1.0": 19.3,
+    "quadratic trend removed / crop 0.6": 9.6,
+    "quadratic trend removed / crop 0.8": 12.9,
+    "quadratic trend removed / crop 1.0": 14.0,
+    "raw / crop 0.6": 18.2,
+    "raw / crop 0.8": 21.6,
+    "raw / crop 1.0": 24.0
+  },
+  "interpolation": [
+    {
+      "year": 1402,
+      "model": "IDW (target only)",
+      "pr_auc": 0.341,
+      "spearman": 0.678
+    },
+    {
+      "year": 1402,
+      "model": "GP on coordinates (target only)",
+      "pr_auc": 0.718,
+      "spearman": 0.861
+    },
+    {
+      "year": 1402,
+      "model": "GNN, 3 layers (ensemble)",
+      "pr_auc": 0.8,
+      "spearman": 0.949
+    },
+    {
+      "year": 1402,
+      "model": "SLX-OLS, 22.7 km",
+      "pr_auc": 0.803,
+      "spearman": 0.938
+    },
+    {
+      "year": 1403,
+      "model": "IDW (target only)",
+      "pr_auc": 0.374,
+      "spearman": 0.689
+    },
+    {
+      "year": 1403,
+      "model": "GP on coordinates (target only)",
+      "pr_auc": 0.61,
+      "spearman": 0.808
+    },
+    {
+      "year": 1403,
+      "model": "GNN, 3 layers (ensemble)",
+      "pr_auc": 0.841,
+      "spearman": 0.947
+    },
+    {
+      "year": 1403,
+      "model": "SLX-OLS, 22.7 km",
+      "pr_auc": 0.737,
+      "spearman": 0.931
+    }
+  ],
+  "seed_calibration_below_005": {
+    "pr_auc": 0.05,
+    "spearman": 0.25
+  }
+}

@@ -1,0 +1,13 @@
+﻿hypothesis,year,metric,delta,p_signflip_pooled,p_holm,verdict,verdict_holm
+PR_buffer02,1402,pr_auc,-0.0017542736384013047,0.609375,0.75439453125,inconclusive,inconclusive
+PR_buffer02,1402,spearman,0.003090305704118279,0.291259765625,0.75439453125,non-inferior,non-inferior
+PR_buffer02,1403,pr_auc,0.0897573769697122,0.125,0.625,superior,"superior, not significant after Holm"
+PR_buffer02,1403,spearman,0.009735244537407817,0.09814453125,0.5888671875,non-inferior,non-inferior
+PR_buffer10,1402,pr_auc,0.1953661250976268,0.12890625,0.625,inconclusive,inconclusive
+PR_buffer10,1402,spearman,0.05696149357663871,0.00341796875,0.03759765625,superior beyond margin,"superior, not significant after Holm"
+PR_buffer10,1403,pr_auc,0.1306534972092856,0.25146484375,0.75439453125,inconclusive,inconclusive
+PR_buffer10,1403,spearman,0.06647889594634038,0.010498046875,0.094482421875,non-inferior,non-inferior
+PR_buffer20,1402,pr_auc,0.107927614174821,0.02587890625,0.205078125,inconclusive,inconclusive
+PR_buffer20,1402,spearman,0.4438373855296331,0.00830078125,0.0830078125,inconclusive,inconclusive
+PR_buffer20,1403,pr_auc,0.11854868814714975,0.025634765625,0.205078125,superior beyond margin,"superior, not significant after Holm"
+PR_buffer20,1403,spearman,0.5868468842356394,0.001220703125,0.0146484375,inconclusive,inconclusive

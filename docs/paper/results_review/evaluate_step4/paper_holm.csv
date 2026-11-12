@@ -1,0 +1,9 @@
+﻿hypothesis,year,metric,delta,p_signflip_pooled,p_holm,verdict,verdict_holm
+PR_c1404_r30,1404,pr_auc,0.0860253901703476,0.1640625,0.650390625,inconclusive,inconclusive
+PR_c1404_r30,1404,spearman,-0.002574417905572446,0.634033203125,0.85498046875,equivalent,equivalent
+PR_c1404_r38,1404,pr_auc,0.049085601591685624,0.11328125,0.650390625,superior,"superior, not significant after Holm"
+PR_c1404_r38,1404,spearman,0.0015732143044102642,0.427490234375,0.85498046875,inconclusive,inconclusive
+PR_depth_L3,1402,pr_auc,0.06765748246730774,0.03125,0.25,superior,"superior, not significant after Holm"
+PR_depth_L3,1402,spearman,0.010956563025828148,0.1083984375,0.650390625,inconclusive,inconclusive
+PR_depth_L3,1403,pr_auc,0.07270271222691516,0.11328125,0.650390625,superior,"superior, not significant after Holm"
+PR_depth_L3,1403,spearman,0.012636613647857953,0.0556640625,0.3896484375,inconclusive,inconclusive

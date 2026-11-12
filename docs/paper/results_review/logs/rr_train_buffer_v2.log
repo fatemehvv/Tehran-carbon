@@ -1,0 +1,103 @@
+
+=== 1/3  paper2_rq2_buffer_v2 [buffer_km=2.0]
+[19:15:44] dataset 1e0281290a88: from cache
+[19:15:44] paper2_rq2_buffer_v2 [buffer_km=2.0]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+/venv/main/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+[19:16:14]   1402 fold 00: train 2428 cells, test 3
+[19:16:43]   1402 fold 01: train 2185 cells, test 178
+[19:17:12]   1402 fold 02: train 2011 cells, test 332
+[19:17:41]   1402 fold 03: train 2201 cells, test 189
+[19:18:10]   1402 fold 04: train 2430 cells, test 5
+[19:18:39]   1402 fold 05: train 2094 cells, test 243
+[19:19:08]   1402 fold 06: train 1671 cells, test 595
+[19:19:37]   1402 fold 07: train 2246 cells, test 140
+[19:20:06]   1402 fold 08: train 2374 cells, test 52
+[19:20:35]   1402 fold 09: train 2076 cells, test 319
+[19:21:04]   1402 fold 10: train 1996 cells, test 343
+[19:21:33]   1402 fold 11: train 2368 cells, test 37
+[19:21:33]   1402 CV: pr_auc=0.803, roc_auc=0.971, f1_top=0.732, spearman=0.943, r2=0.886, mae=0.257, rmse=0.336
+[19:22:02]   1403 fold 00: train 2428 cells, test 3
+[19:22:31]   1403 fold 01: train 2185 cells, test 178
+[19:23:01]   1403 fold 02: train 2011 cells, test 332
+[19:23:30]   1403 fold 03: train 2201 cells, test 189
+[19:23:59]   1403 fold 04: train 2430 cells, test 5
+[19:24:28]   1403 fold 05: train 2094 cells, test 243
+[19:24:57]   1403 fold 06: train 1671 cells, test 595
+[19:25:26]   1403 fold 07: train 2246 cells, test 140
+[19:25:55]   1403 fold 08: train 2374 cells, test 52
+[19:26:24]   1403 fold 09: train 2076 cells, test 319
+[19:26:53]   1403 fold 10: train 1996 cells, test 343
+[19:27:22]   1403 fold 11: train 2368 cells, test 37
+[19:27:22]   1403 CV: pr_auc=0.868, roc_auc=0.979, f1_top=0.782, spearman=0.945, r2=0.877, mae=0.259, rmse=0.346
+[19:27:51]   transfer 1402->1403: pr_auc=0.857, roc_auc=0.979, f1_top=0.769, spearman=0.961, r2=0.916, mae=0.208, rmse=0.277
+[19:28:20]   transfer 1403->1402: pr_auc=0.801, roc_auc=0.971, f1_top=0.717, spearman=0.945, r2=0.885, mae=0.239, rmse=0.317
+[19:29:17]   final model saved: models/final.pt
+
+=== 2/3  paper2_rq2_buffer_v2 [buffer_km=10.0]
+[19:29:18] dataset 1e0281290a88: from cache
+[19:29:18] paper2_rq2_buffer_v2 [buffer_km=10.0]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 10.0 km)
+[19:29:47]   1402 fold 00: train 2353 cells, test 3
+[19:30:16]   1402 fold 01: train 1820 cells, test 178
+[19:30:45]   1402 fold 02: train 1444 cells, test 332
+[19:31:14]   1402 fold 03: train 1904 cells, test 189
+[19:31:43]   1402 fold 04: train 2393 cells, test 5
+[19:32:12]   1402 fold 05: train 1516 cells, test 243
+[19:32:41]   1402 fold 06: train 845 cells, test 595
+[19:33:10]   1402 fold 07: train 1758 cells, test 140
+[19:33:39]   1402 fold 08: train 2311 cells, test 52
+[19:34:08]   1402 fold 09: train 1792 cells, test 319
+[19:34:37]   1402 fold 10: train 1598 cells, test 343
+[19:35:06]   1402 fold 11: train 2180 cells, test 37
+[19:35:06]   1402 CV: pr_auc=0.640, roc_auc=0.944, f1_top=0.558, spearman=0.913, r2=0.756, mae=0.381, rmse=0.493
+[19:35:35]   1403 fold 00: train 2353 cells, test 3
+[19:36:04]   1403 fold 01: train 1820 cells, test 178
+[19:36:33]   1403 fold 02: train 1444 cells, test 332
+[19:37:03]   1403 fold 03: train 1904 cells, test 189
+[19:37:32]   1403 fold 04: train 2393 cells, test 5
+[19:38:01]   1403 fold 05: train 1516 cells, test 243
+[19:38:30]   1403 fold 06: train 845 cells, test 595
+[19:38:59]   1403 fold 07: train 1758 cells, test 140
+[19:39:28]   1403 fold 08: train 2311 cells, test 52
+[19:39:57]   1403 fold 09: train 1792 cells, test 319
+[19:40:26]   1403 fold 10: train 1598 cells, test 343
+[19:40:55]   1403 fold 11: train 2180 cells, test 37
+[19:40:55]   1403 CV: pr_auc=0.606, roc_auc=0.939, f1_top=0.474, spearman=0.911, r2=0.784, mae=0.370, rmse=0.460
+[19:41:24]   transfer 1402->1403: pr_auc=0.857, roc_auc=0.979, f1_top=0.769, spearman=0.961, r2=0.916, mae=0.208, rmse=0.277
+[19:41:53]   transfer 1403->1402: pr_auc=0.801, roc_auc=0.971, f1_top=0.717, spearman=0.945, r2=0.884, mae=0.239, rmse=0.317
+[19:42:51]   final model saved: models/final.pt
+
+=== 3/3  paper2_rq2_buffer_v2 [buffer_km=20.0]
+[19:42:51] dataset 1e0281290a88: from cache
+[19:42:51] paper2_rq2_buffer_v2 [buffer_km=20.0]: 20 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 20.0 km)
+[19:43:20]   1402 fold 00: train 2134 cells, test 3
+[19:43:50]   1402 fold 01: train 1324 cells, test 178
+[19:44:19]   1402 fold 02: train 906 cells, test 332
+[19:44:48]   1402 fold 03: train 1461 cells, test 189
+[19:45:17]   1402 fold 04: train 2243 cells, test 5
+[19:45:46]   1402 fold 05: train 723 cells, test 243
+[19:46:15]   1402 fold 06: train 270 cells, test 595
+[19:46:44]   1402 fold 07: train 1020 cells, test 140
+[19:47:13]   1402 fold 08: train 2128 cells, test 52
+[19:47:42]   1402 fold 09: train 1218 cells, test 319
+[19:48:11]   1402 fold 10: train 1039 cells, test 343
+[19:48:40]   1402 fold 11: train 1657 cells, test 37
+[19:48:40]   1402 CV: pr_auc=0.519, roc_auc=0.880, f1_top=0.502, spearman=0.791, r2=0.177, mae=0.693, rmse=0.889
+[19:49:09]   1403 fold 00: train 2134 cells, test 3
+[19:49:38]   1403 fold 01: train 1324 cells, test 178
+[19:50:07]   1403 fold 02: train 906 cells, test 332
+[19:50:36]   1403 fold 03: train 1461 cells, test 189
+[19:51:05]   1403 fold 04: train 2243 cells, test 5
+[19:51:34]   1403 fold 05: train 723 cells, test 243
+[19:52:03]   1403 fold 06: train 270 cells, test 595
+[19:52:32]   1403 fold 07: train 1020 cells, test 140
+[19:53:01]   1403 fold 08: train 2128 cells, test 52
+[19:53:30]   1403 fold 09: train 1218 cells, test 319
+[19:53:59]   1403 fold 10: train 1039 cells, test 343
+[19:54:28]   1403 fold 11: train 1657 cells, test 37
+[19:54:28]   1403 CV: pr_auc=0.426, roc_auc=0.805, f1_top=0.436, spearman=0.774, r2=0.193, mae=0.730, rmse=0.895
+[19:54:57]   transfer 1402->1403: pr_auc=0.857, roc_auc=0.979, f1_top=0.769, spearman=0.961, r2=0.916, mae=0.208, rmse=0.277
+[19:55:26]   transfer 1403->1402: pr_auc=0.801, roc_auc=0.971, f1_top=0.716, spearman=0.945, r2=0.884, mae=0.239, rmse=0.317
+[19:56:24]   final model saved: models/final.pt
+
+[train finished in 40.7 min]

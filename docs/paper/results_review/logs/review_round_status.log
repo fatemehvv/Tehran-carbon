@@ -1,0 +1,22 @@
+[18:08:29] code 25c6175 Review round: buffer check with driver inputs only (v2); v1 stopped
+[18:08:29] START pytest
+[18:08:30] END pytest exit=0
+[18:08:30] START train_slx_buffer_v2
+[18:21:37] END train_slx_buffer_v2 exit=0
+[18:21:37] START evaluate_step4
+[18:23:57] END evaluate_step4 exit=0
+[18:23:57] START review
+[18:34:01] END review exit=0
+[19:06:30] GPU training done: logs/review3_train_depth.log
+[19:06:30] GPU training done: logs/review3_train_mlp_lag.log
+[19:06:30] START evaluate_step5
+[19:15:39] END evaluate_step5 exit=0
+[19:15:39] START reach
+[19:15:41] END reach exit=0
+[19:15:41] START figures
+[19:15:43] END figures exit=0
+[19:15:43] START train_buffer_v2
+[19:56:25] END train_buffer_v2 exit=0
+[19:56:25] START evaluate_buffer
+[19:59:53] END evaluate_buffer exit=0
+[19:59:53] ALL DONE

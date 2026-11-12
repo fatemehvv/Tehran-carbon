@@ -1,0 +1,74 @@
+
+=== 1/2  paper2_rq2_mlp_lag_v1 [spatial_lags=1+3+9+15+27]
+[18:07:41] dataset 3c962a577087: building
+[18:07:41]   1402: 12 steps, 12 with a target
+[18:07:41]   1403: 12 steps, 12 with a target
+[18:07:43] dataset 3c962a577087: 105 features, 2436 label cells (CORE 4484)
+[18:07:43] paper2_rq2_mlp_lag_v1 [spatial_lags=1+3+9+15+27]: 105 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[18:07:53]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[18:08:01]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[18:08:10]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[18:08:18]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[18:08:27]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[18:08:35]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[18:08:45]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[18:08:55]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[18:09:05]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[18:09:12]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[18:09:21]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[18:09:30]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[18:09:30]   1402 CV: pr_auc=0.787, roc_auc=0.970, f1_top=0.715, spearman=0.954, r2=0.905, mae=0.230, rmse=0.302
+[18:09:38]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[18:09:47]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[18:09:56]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[18:10:04]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[18:10:13]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[18:10:22]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[18:10:31]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[18:10:39]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[18:10:48]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[18:10:57]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[18:11:05]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[18:11:14]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[18:11:14]   1403 CV: pr_auc=0.874, roc_auc=0.982, f1_top=0.785, spearman=0.955, r2=0.901, mae=0.227, rmse=0.309
+[18:11:23]   transfer 1402->1403: pr_auc=0.844, roc_auc=0.978, f1_top=0.755, spearman=0.966, r2=0.928, mae=0.197, rmse=0.260
+[18:11:31]   transfer 1403->1402: pr_auc=0.835, roc_auc=0.978, f1_top=0.744, spearman=0.963, r2=0.930, mae=0.199, rmse=0.258
+[18:11:48]   final model saved: models/final.pt
+
+=== 2/2  paper2_rq2_mlp_lag_v1 [spatial_lags=1+3+9+15+27+36+45]
+[18:11:49] dataset 445818fa6a49: building
+[18:11:49]   1402: 12 steps, 12 with a target
+[18:11:49]   1403: 12 steps, 12 with a target
+[18:11:52] dataset 445818fa6a49: 139 features, 2436 label cells (CORE 4484)
+[18:11:52] paper2_rq2_mlp_lag_v1 [spatial_lags=1+3+9+15+27+36+45]: 139 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[18:12:01]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[18:12:09]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[18:12:18]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[18:12:27]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[18:12:36]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[18:12:44]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[18:12:53]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[18:13:02]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[18:13:10]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[18:13:19]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[18:13:28]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[18:13:36]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[18:13:36]   1402 CV: pr_auc=0.775, roc_auc=0.972, f1_top=0.724, spearman=0.958, r2=0.919, mae=0.214, rmse=0.279
+[18:13:45]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[18:13:54]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[18:14:03]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[18:14:13]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[18:14:22]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[18:14:31]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[18:14:39]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[18:14:48]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[18:14:57]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[18:15:06]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[18:15:14]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[18:15:23]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[18:15:23]   1403 CV: pr_auc=0.881, roc_auc=0.983, f1_top=0.793, spearman=0.956, r2=0.898, mae=0.228, rmse=0.315
+[18:15:32]   transfer 1402->1403: pr_auc=0.822, roc_auc=0.974, f1_top=0.735, spearman=0.965, r2=0.927, mae=0.197, rmse=0.262
+[18:15:41]   transfer 1403->1402: pr_auc=0.831, roc_auc=0.977, f1_top=0.734, spearman=0.964, r2=0.930, mae=0.200, rmse=0.257
+[18:15:56]   final model saved: models/final.pt
+
+[train finished in 8.3 min]

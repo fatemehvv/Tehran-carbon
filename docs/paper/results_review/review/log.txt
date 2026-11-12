@@ -1,0 +1,33 @@
+[18:23:58] dataset 1e0281290a88: from cache
+[18:23:58] dataset 176851710abc: from cache
+[18:23:58] target similarity between years:
+ year_a  year_b  spearman_annual_mean  spearman_same_month_mean  spearman_same_month_min
+   1402    1403                 0.995                     0.963                    0.929
+   1402    1404                 0.993                     0.961                    0.903
+   1403    1404                 0.997                     0.955                    0.897
+[18:23:59] correlogram zero crossing (km) by target and crop:
+crop                           0.6   0.8   1.0
+year target                                   
+1402 planar trend removed     13.9  17.2  19.4
+     quadratic trend removed   9.7  13.0  14.1
+     raw                      18.0  21.5  24.0
+1403 planar trend removed     13.8  17.1  19.3
+     quadratic trend removed   9.4  12.7  13.9
+     raw                      18.3  21.7  24.0
+[18:23:59]   1402: GP kernel 0.805**2 * RBF(length_scale=7.41) + WhiteKernel(noise_level=0.00144)
+[18:26:21]   1403: GP kernel 1.03**2 * RBF(length_scale=7.84) + WhiteKernel(noise_level=0.00143)
+[18:28:09] interpolation baselines vs models (same folds and buffer):
+ year                           model  pr_auc  spearman
+ 1402               IDW (target only)   0.341     0.678
+ 1402 GP on coordinates (target only)   0.718     0.861
+ 1402        GNN, 3 layers (ensemble)   0.800     0.949
+ 1402                SLX-OLS, 22.7 km   0.803     0.938
+ 1403               IDW (target only)   0.374     0.689
+ 1403 GP on coordinates (target only)   0.610     0.808
+ 1403        GNN, 3 layers (ensemble)   0.841     0.947
+ 1403                SLX-OLS, 22.7 km   0.737     0.931
+[18:34:01] seed-vs-seed calibration (true null): share of p below 0.05 / 0.025:
+          tests  below_005  below_0025  two_sided_below_005
+metric                                                     
+pr_auc       20       0.05        0.05                 0.05
+spearman     20       0.25        0.20                 0.20
