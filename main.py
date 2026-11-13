@@ -229,6 +229,15 @@ def cmd_paper(args):
         print(json.dumps(summarize(rows), indent=2))
 
 
+def cmd_fusion(args):
+    """Analyses of the fusion paper (branch paper_fusion; docs/paper/fusion_paper/preregistration_fusion_v1.md)."""
+    if args.what == "support":
+        from tehran_carbon.analysis.fusion_support import FusionSupport
+        cfg = analysis_config("fusion_support", "RQ1", "checks M1-M3 of the composite targets", experiments=args.exp or [])
+        with Run(cfg) as run:
+            run.finish("done", FusionSupport(cfg, args.exp).run(run))
+
+
 def cmd_tune(args):
     """Random search of hyper-parameters of an experiment of kind `tune` (experiments/tuning.py)."""
     from tehran_carbon.experiments.tuning import RandomSearch
@@ -314,6 +323,10 @@ def main():
     p.add_argument("--variant", type=int, help="timing: sweep variant (0-based; default the first)")
     p.add_argument("--epochs", type=int, default=20, help="timing: epochs of the pilot fit")
     p.set_defaults(fn=cmd_paper)
+    p = sub.add_parser("fusion", help="fusion paper analyses (branch paper_fusion)")
+    p.add_argument("what", choices=["support"])
+    p.add_argument("--exp", nargs="+", help="support: an experiment with data.inputs.satellite_composite")
+    p.set_defaults(fn=cmd_fusion)
     p = sub.add_parser("tune", help="random search of hyper-parameters (experiments of kind tune)")
     p.add_argument("--exp", required=True); p.add_argument("--set", nargs="*", default=[]); p.set_defaults(fn=cmd_tune)
     p = sub.add_parser("summarize"); p.add_argument("--exp", required=True); p.set_defaults(fn=cmd_summarize)

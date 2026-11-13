@@ -1007,6 +1007,84 @@ experiments:
       model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
       model.fusion.type: [gated]
 
+  # ---------------------------------------------------------------- fusion paper, stage 2: target support (F3, F4)
+  # Same registration. Before any of these runs: python main.py fusion support --exp fus1_all_v1 (checks M1-M3).
+  # (a) seasonal composites of the daily TROPOMI files by overpass wind (data/sources/composite.py), placed on the
+  #     middle month of each season; the other months have no target
+  fus1_all_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - target = seasonal composite of all clear days (pipeline check)
+    inherits: paper2_rq1_ablation_v1
+    data: &composite_data
+      inputs:
+        satellite_composite:
+          file: "satellite/daily/Tehran_NO2_daily_{year}.tif"
+          nodata: -9999
+          wind_file: "weather/Tehran_wind10UTC_{year}.csv"
+          wind_columns: {date: date, u: u_component_of_wind_10m, v: v_component_of_wind_10m}
+          period: season
+          fraction: 0.3333
+          min_clear_fraction: 0.5
+          min_days: 3
+      target: {layer: no2_all, min_valid_fraction: 0.5}
+    split: {transfer: false}
+    train: {save_final: false}
+    sweep:
+      model.modalities: [[energy], [traffic, energy, pollution]]
+      model.fusion.type: [gated]
+  fus1_calm_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - target = calm-day composite (calmest third of the clear days of each season)
+    inherits: fus1_all_v1
+    data: {target: {layer: no2_calm}}
+    sweep:
+      model.modalities: [[traffic], [energy], [pollution], [traffic, energy], [traffic, energy, pollution]]
+      model.fusion.type: [early, late, gated]
+  fus1_windy_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - target = windy-day composite (windiest third of the clear days of each season)
+    inherits: fus1_all_v1
+    data: {target: {layer: no2_windy}}
+    sweep:
+      model.modalities: [[traffic], [energy], [pollution], [traffic, energy], [traffic, energy, pollution]]
+      model.fusion.type: [early, late, gated]
+  fus1_context_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - context only (one branch) on the three composite targets
+    inherits: fus1_all_v1
+    model: {modalities: [], fusion: {type: early}}
+    sweep:
+      data.target.layer: [no2_all, no2_calm, no2_windy]
+  # (b) the monthly target smoothed with a Gaussian of sigma km; training labels smoothed over each fold's training
+  #     cells only (data/target_support.py), the test truth over all domain cells
+  fus1_coarse_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - target smoothed (sigma km), fold-aware training labels
+    inherits: paper2_rq1_ablation_v1
+    split: {transfer: false, fold_aware_target: true}
+    train: {save_final: false}
+    sweep:
+      data.target.smooth_km: [2.0, 4.0, 8.0, 12.0]
+      model.modalities: [[energy], [traffic, energy], [traffic, energy, pollution]]
+      model.fusion.type: [early, gated]
+  fus1_coarse_context_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - context only on the smoothed targets
+    inherits: fus1_coarse_v1
+    model: {modalities: [], fusion: {type: early}}
+    sweep:
+      data.target.smooth_km: [2.0, 4.0, 8.0, 12.0]
+  # (c) held-out year 1404 on the smoothed target (the native target on 1404 is fus2_c1404_real_v1)
+  fus1_c1404_coarse_v1:
+    rq: RQ1
+    description: fusion paper stage 2 - held-out year 1404, graph-free network, target smoothed with sigma 8 km
+    inherits: fus2_c1404_real_v1
+    data: {target: {smooth_km: 8.0}}
+    split: {fold_aware_target: true}
+    sweep:
+      model.modalities: [[], [energy], [traffic, energy, pollution]]
+      model.fusion.type: [gated]
+
 # =====================================================================================================================
 # Pre-registered decision rules (fixed before any model is trained; docs/preregistration_rq1.md).
 # Selector = experiment + optional `where` on the resolved config (a value, or {in: [...]}).

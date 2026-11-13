@@ -31,9 +31,11 @@ from .sources import SOURCES
 class CellMonthDataset:
     CACHE_VERSION = 1            # bump when a loader changes so old interim caches are not reused
 
-    def __init__(self, years, X, z, hot, label_domain, in_core, features, modality_of, base_of, lag_of, hash=""):
+    def __init__(self, years, X, z, hot, label_domain, in_core, features, modality_of, base_of, lag_of, hash="",
+                 z_native=None):
         self.years = [int(y) for y in years]
         self.X, self.z, self.hot = X, z, hot
+        self.z_native = z_native            # with data.target.smooth_km: the unsmoothed z (training labels); else None
         self.label_domain, self.in_core = label_domain, in_core
         self.features, self.modality_of, self.base_of, self.lag_of = features, modality_of, base_of, lag_of
         self.hash = hash
@@ -58,6 +60,8 @@ class CellMonthDataset:
         arrays = {"label_domain": self.label_domain, "in_core": self.in_core}
         for y in self.years:
             arrays.update({f"X_{y}": self.X[y], f"z_{y}": self.z[y], f"hot_{y}": self.hot[y]})
+            if self.z_native is not None:
+                arrays[f"zn_{y}"] = self.z_native[y]
         np.savez_compressed(path, **arrays)
         meta = dict(years=self.years, features=self.features, modality_of=self.modality_of, base_of=self.base_of,
                     lag_of=self.lag_of, hash=self.hash, n_label_cells=int(self.label_domain.sum()),
@@ -71,7 +75,8 @@ class CellMonthDataset:
         ys = meta["years"]
         return cls(ys, {y: a[f"X_{y}"] for y in ys}, {y: a[f"z_{y}"] for y in ys}, {y: a[f"hot_{y}"] for y in ys},
                    a["label_domain"], a["in_core"], meta["features"], meta["modality_of"], meta["base_of"],
-                   meta["lag_of"], meta["hash"])
+                   meta["lag_of"], meta["hash"],
+                   {y: a[f"zn_{y}"] for y in ys} if f"zn_{ys[0]}" in a.files else None)
 
     # ------------------------------------------------------------------ build
     @classmethod
@@ -144,7 +149,7 @@ class CellMonthDataset:
                     base_of.append(n)
                     lag_of.append(k)
 
-        X, Z, HOT = {}, {}, {}
+        X, Z, HOT, ZN = {}, {}, {}, {}
         t = d["target"]
         daily = d.get("temporal", "monthly") == "daily"         # absent = monthly (keeps the monthly configs unchanged)
         min_valid = float(t.get("min_valid_fraction", 0.0))
@@ -185,9 +190,19 @@ class CellMonthDataset:
             if min_valid == 0 and not np.isfinite(z[:, domain]).all():
                 raise ValueError(f"target of {y} has missing values inside the label domain")
             Z[y], HOT[y] = z.astype(np.float32), hot
+            if t.get("smooth_km"):                               # fusion paper, T-sigma: smoothed truth
+                from .target_support import smooth_steps
+                ZN[y] = Z[y]
+                zs = smooth_steps(Z[y], domain, float(t["smooth_km"]), grid).astype(np.float32)
+                hs = np.zeros(zs.shape, bool)
+                for m in range(zs.shape[0]):
+                    v = domain & np.isfinite(zs[m])
+                    if v.sum() >= 2:
+                        hs[m] = v & (zs[m] >= np.quantile(zs[m][v], float(t["hotspot_quantile"])))
+                Z[y], HOT[y] = zs, hs
             log(f"  {y}: {T} steps, {int(np.isfinite(z[:, domain]).any(1).sum())} with a target")
 
-        data = cls(years, X, Z, HOT, domain, in_core, features, modality_of, base_of, lag_of, h)
+        data = cls(years, X, Z, HOT, domain, in_core, features, modality_of, base_of, lag_of, h, ZN or None)
         data.save(out)
         log(f"dataset {h}: {len(features)} features, {int(domain.sum())} label cells (CORE {int(in_core.sum())})")
         return data

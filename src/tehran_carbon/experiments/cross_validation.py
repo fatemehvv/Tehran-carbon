@@ -16,6 +16,10 @@ Paper options (branch paper_TC; absent in the thesis configs, so their hashes do
   split.fold_aware_stations  rebuild the station (pollution) layers of every fold without the stations within the buffer
                              of the test block (data/sources/pollution.py: StationHoldout)
   train.save_members         also store the prediction of every seed -> preds/cv_<year>_members.npz (S, T, n_domain)
+Fusion paper option (branch paper_fusion):
+  split.fold_aware_target    with data.target.smooth_km: the training labels of every fold are the target smoothed
+                             over that fold's training cells only (data/target_support.py), so no value of the test
+                             block or its buffer enters a training label; the test truth is the smoothed target
 """
 from __future__ import annotations
 
@@ -59,6 +63,10 @@ class CrossValidation:
         self.holdout = (StationHoldout(cfg, self.grid, self.data)
                         if cfg["split"].get("fold_aware_stations") and "pollution" in self.branches else None)
         self.members = self.neural and bool(cfg["train"].get("save_members"))
+        sk = cfg["data"]["target"].get("smooth_km")
+        if sk and not cfg["split"].get("fold_aware_target"):
+            raise ValueError("data.target.smooth_km needs split.fold_aware_target (training labels would leak)")
+        self.target_smooth = float(sk) if sk else None
 
     def predictor(self):
         if self.neural:
@@ -93,7 +101,13 @@ class CrossValidation:
                     Xs_k = [self.holdout.patch(Xt, t, keep) for Xt, t in zip(Xs, dev if test else [y])]
                     X_k = self.holdout.patch(X, y, keep) if test else Xs_k[0]
                     note = f", stations kept {len(keep)} of {len(self.holdout.names)}"
-                p = self.predictor().fit(Xs_k, zs, [tr & ~va if va is not None else tr] * len(Xs_k),
+                zs_k = zs
+                if self.target_smooth is not None:          # labels smoothed over this fold's training cells only
+                    from ..data.target_support import smooth_steps
+                    zs_k = [smooth_steps(data.z_native[t], tr, self.target_smooth, self.grid).astype(np.float32)
+                            for t in (dev if test else [y])]
+                    note += f", labels smoothed over the training cells (sigma {self.target_smooth:g} km)"
+                p = self.predictor().fit(Xs_k, zs_k, [tr & ~va if va is not None else tr] * len(Xs_k),
                                          [va] * len(Xs_k) if va is not None else None)
                 pred, w = p.predict(X_k, te, return_weights=True)
                 te_cells = np.flatnonzero(te.ravel())
