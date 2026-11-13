@@ -236,6 +236,11 @@ def cmd_fusion(args):
         cfg = analysis_config("fusion_support", "RQ1", "checks M1-M3 of the composite targets", experiments=args.exp or [])
         with Run(cfg) as run:
             run.finish("done", FusionSupport(cfg, args.exp).run(run))
+    elif args.what == "evaluate":
+        from tehran_carbon.analysis.fusion_eval import FusionEvaluation
+        cfg = analysis_config("fusion_evaluate", "RQ1", "confirmatory tests F1-F4, C1-C2 of the fusion paper")
+        with Run(cfg) as run:
+            run.finish("done", FusionEvaluation(cfg).run(run))
 
 
 def cmd_tune(args):
@@ -324,7 +329,7 @@ def main():
     p.add_argument("--epochs", type=int, default=20, help="timing: epochs of the pilot fit")
     p.set_defaults(fn=cmd_paper)
     p = sub.add_parser("fusion", help="fusion paper analyses (branch paper_fusion)")
-    p.add_argument("what", choices=["support"])
+    p.add_argument("what", choices=["support", "evaluate"])
     p.add_argument("--exp", nargs="+", help="support: an experiment with data.inputs.satellite_composite")
     p.set_defaults(fn=cmd_fusion)
     p = sub.add_parser("tune", help="random search of hyper-parameters (experiments of kind tune)")
