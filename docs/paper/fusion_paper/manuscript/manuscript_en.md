@@ -6,18 +6,18 @@
 \* Corresponding author: [e-mail to be completed]
 
 *Draft manuscript, 13 November 2026. All numbers come from the runs on branch `paper_fusion` of the project repository
-(`docs/paper/fusion_paper/results_stage1`, `results_stage2`, `results_tests`). Items in [brackets] are to be completed
-before submission. Two registered checks are still to be computed (placebo quality, M4; lineage audit): see Section 3.6.*
+(`docs/paper/fusion_paper/results_stage1`, `results_stage2`, `results_tests`, `results_check`, `results_v2`). Items in
+[brackets] are to be completed before submission.*
 
 ---
 
 ## Highlights
 
 - Ablations that add or remove a data source also add or remove a model branch.
-- A placebo branch, made of the same layers at a random location, separates the two.
+- Placebo branches, the same layers at a random location, separate the two.
 - An information-free branch changed skill as much as real urban data sources did.
 - Of traffic, energy and station data, only energy beat its placebo, by a small margin.
-- Fusion did not help at any resolution of the satellite target; calm days did not sharpen it.
+- Two different placebo constructions agreed; neither kept the texture of a one-city map within tolerance.
 
 ---
 
@@ -26,18 +26,30 @@ before submission. Two registered checks are still to be computed (placebo quali
 Fusing heterogeneous urban data is a common route to better maps of emissions and air pollution. Its benefit is usually
 judged by ablation: a data source is added to or removed from a multi-branch network, and the change in skill is taken
 as the value of the source. Adding a source, however, also adds a branch, and with it capacity and a new way of
-combining inputs. We separate the two with **placebo branches**: surrogate maps that keep the values, the spatial
-texture and the internal correlation of a source's layers but put them at a random location. We apply this control to
-the fusion of traffic, energy-inventory and station data with urban-form context for mapping the intra-urban pattern of
-monthly TROPOMI NO₂ in Tehran (2,436 cells of 1 km), with 22-km spatial blocks, a held-out year, five seeds and five
-placebo realisations, under a pre-registered protocol. We also vary the resolution of the target, by compositing calm
-and windy days and by smoothing it with Gaussian kernels of 2–12 km. Energy layers beat their placebo consistently but
-modestly (Spearman +0.025, +0.038 and +0.025 in three years; 13 of 15 seeds positive; not significant after Holm
-adjustment). Traffic and station layers did not beat their placebos (−0.012 to −0.018; all 15 seeds negative). A single
-information-free branch changed skill as much as the real sources did: it lowered the Spearman correlation of the map
-by 0.021–0.027 and raised hotspot PR-AUC by up to 0.11. Fusion did not improve the map at any target resolution;
-its small loss in ranking skill vanished as the target was smoothed. Calm-day composites were not sharper than windy-day
-composites. Gains of data fusion of this size cannot be attributed to the data without a placebo control.
+combining inputs.
+
+We separate the two with **placebo branches**: the layers of a source moved to a random location, keeping their values
+and, as far as possible, their spatial texture and internal correlation. Two constructions were used, IAAFT surrogates
+and rotation with a cyclic shift. We apply this control to the fusion of traffic, energy-inventory and station data
+with urban-form context for mapping the intra-urban pattern of monthly TROPOMI NO₂ in Tehran (2,436 cells of 1 km). The
+protocol was pre-registered and used 22-km spatial blocks, a held-out year, five seeds and five placebo realisations. We
+also vary the resolution of the target, by compositing calm and windy days and by smoothing it with Gaussian kernels of
+2–12 km.
+
+- **Energy.** Energy layers beat their placebos consistently but modestly: Spearman +0.018 to +0.038 over three years
+  and two constructions, 26 of 30 single seeds positive.
+- **Traffic and stations.** Traffic and station layers did not beat their placebos: −0.012 to −0.021, all 30 seeds
+  negative.
+- **Architecture.** A single information-free branch changed skill as much as the real sources did: it lowered the
+  Spearman correlation of the map by 0.013–0.027 and raised hotspot PR-AUC by up to 0.11.
+- **Lineage.** Block-cross-validated, the urban-form layers predicted the residential, industrial and commercial
+  emission layers with R² = 0.98, 0.95 and 0.89.
+- **Target resolution.** Fusion did not improve the map at any target resolution, and calm-day composites were not
+  sharper than windy-day composites.
+
+Neither placebo construction met the registered texture tolerance: moving the single urban core of a bounded map either
+reshapes it or splits it. Gains of data fusion of the size studied here cannot be attributed to the data without such a
+control.
 
 **Keywords:** data fusion; multimodal learning; ablation; placebo control; surrogate data; TROPOMI; NO₂; urban
 emissions; spatial cross-validation; Tehran
@@ -149,29 +161,30 @@ Every model is the fusion network of the companion study, without a graph:
 
 ### 3.2 Placebo branches
 
-A placebo of a source keeps everything a branch can exploit without information on where the city is.
+A placebo of a source keeps what a branch can exploit without information on where the city is: the values, the
+spatial texture and the correlation between the layers of the source. It loses the location. We used two
+constructions.
 
-- **Kept:**
-  - the exact values of every layer (marginal distribution);
-  - the spatial power spectrum;
-  - the correlation between the layers of the source.
-- **Lost:** the location.
-
-**Construction.**
+**Placebo A (registered first): IAAFT surrogates.**
 - Each layer's annual map is mirror-padded to twice its size, so the field is periodic without edge jumps.
 - Multivariate IAAFT surrogates are generated (Schreiber & Schmitz, 1996):
   - the same random phase field is added to the Fourier phases of every layer of a source, which keeps their
     cross-spectra;
   - 100 iterations alternate between restoring the amplitude spectrum and restoring the exact values by rank.
 - The original window is cut out, and its values are set by rank to the real values.
-- **Monthly layers** are the surrogate times the city-wide monthly factor of the real layer, so the seasonal cycle is
-  kept exactly. City-wide layers (degree-days) are copied unchanged, so a placebo branch has as many inputs as the real
-  one.
-- The surrogate depends on the realisation, not on the year: a placebo stays in place across years, as real static
-  layers do.
+- Monthly layers are the surrogate times the city-wide monthly factor of the real layer.
 
-We use five realisations. Every placebo comparison averages scores over the five, also inside the jackknife and inside
-the randomisation test.
+**Placebo B (the registered fallback): rotation and cyclic shift.**
+- Every layer of a source is rotated by 180° and shifted cyclically, month by month, by the same random offset: between
+  one quarter and three quarters of the grid in each direction.
+- It keeps the values, the monthly cycle and the correlation between the layers of the source exactly, and the texture
+  everywhere except at the wrap-around seams.
+
+**For both constructions:**
+- City-wide layers (degree-days) are copied unchanged, so a placebo branch has as many inputs as the real one.
+- A placebo depends on the realisation, not on the year: it stays in place across years, as real static layers do.
+- We use five realisations. Every placebo comparison averages scores over the five, also inside the jackknife and inside
+  the randomisation test.
 
 ### 3.3 Target versions
 
@@ -224,7 +237,7 @@ A difference between two models is computed on identical out-of-fold predictions
 
 The protocol was registered before any run (`docs/paper/fusion_paper/preregistration_fusion_v1.md`, commit `9e28ddc`).
 
-**Family F** (1402, 1403; Holm over five tests after check M2):
+**Family F** (1402, 1403; Holm):
 - **F1:** context + energy vs context + placebo energy.
 - **F2:** context + energy + traffic + stations vs context + energy + placebo traffic + placebo stations.
 - **F3:** the fusion gain on calm minus windy composites.
@@ -234,16 +247,21 @@ The protocol was registered before any run (`docs/paper/fusion_paper/preregistra
 
 **Family C** (1404): C1 and C2 repeat F1 and F2 on the held-out year.
 
-**Checks registered before the stage-2 models:**
-- **M1:** composite of all days vs the monthly target, Spearman ≥ 0.95.
-- **M2:** calm composites sharper than windy ones: zero crossing of the correlogram ≥ 2 km shorter **and** correlation
-  at 8–10 km ≥ 0.05 lower, in both years.
-- **M3:** split-half reliability ≥ 0.90.
-- If M2 failed, F3 was to be reported as uninformative and removed from its family.
-
-**Not yet computed** [to be completed before submission]: the registered placebo check M4 (correlogram and location
-of the surrogates) and the descriptive lineage audit (block-CV R² of each energy and traffic layer from the context
-layers).
+**Checks:**
+- **Before the stage-2 models:**
+  - **M1:** the all-day composite matches the monthly target (Spearman ≥ 0.95).
+  - **M2:** calm composites are sharper than windy ones: zero crossing of the correlogram ≥ 2 km shorter **and**
+    correlation at 8–10 km ≥ 0.05 lower, in both years.
+  - **M3:** split-half reliability ≥ 0.90.
+  - If M2 failed, F3 was to be reported as uninformative and removed from its family.
+- **Before the placebo verdicts are read — M4:**
+  - Over the five realisations, on the full grid, the median |Spearman| between placebo and real layer must be < 0.10
+    (location removed).
+  - The correlogram must stay within ±0.05 of the real one at 0–20 km (texture kept).
+  - If more than two realisations failed, the placebo verdicts were to be labelled "placebo check failed" and placebo B
+    run as a new version.
+- **Lineage audit** (descriptive): block-CV R² of each energy, traffic and station layer from the context layers, with
+  OLS and gradient boosting.
 
 **Expected directions, written before the runs:**
 - F1: equivalent or inconclusive.
@@ -251,61 +269,76 @@ layers).
 - F3: positive but probably inconclusive.
 - F4: positive.
 
+**Deviation.** M4 failed for placebo A; as registered, placebo B was run, and it also failed M4 (Section 4.4). Both
+sets of placebo verdicts are reported, with that label.
+
 ## 4. Results
 
 ### 4.1 Information beyond the placebo
 
-**Table 1.** Real source minus placebo branch (gated fusion; Spearman; five-seed ensembles, placebo averaged over five
-realisations). Intervals are delete-one-block jackknife 95 % intervals; p is the one-sided sign-flip p-value after Holm
-adjustment within the family.
+**Table 1.** Real source minus placebo branch (gated fusion; Spearman; five-seed ensembles, placebos averaged over five
+realisations), for placebo A (IAAFT) and placebo B (rotation and shift). Intervals are delete-one-block jackknife 95 %
+intervals. p is the one-sided block sign-flip p-value after Holm adjustment within the family. Both constructions
+failed check M4 (Section 4.4).
 
-| Test | Comparison | Year | Δ | 95 % interval | Seeds > 0 | Verdict | p (Holm) |
-|---|---|---|---|---|---|---|---|
-| F1 | energy vs placebo energy | 1402 | +0.025 | −0.010, +0.061 | 4 / 5 | non-inferior | 0.10 |
-| F1 | | 1403 | +0.038 | +0.002, +0.075 | 5 / 5 | superior, not significant after Holm | 0.056 |
-| C1 | | 1404 | +0.025 | −0.004, +0.055 | 4 / 5 | non-inferior | 0.082 |
-| F2 | traffic + stations vs their placebos, energy present | 1402 | −0.014 | −0.078, +0.049 | 0 / 5 | inconclusive | 1.0 |
-| F2 | | 1403 | −0.012 | −0.072, +0.047 | 0 / 5 | inconclusive | 1.0 |
-| C2 | | 1404 | −0.018 | −0.111, +0.075 | 0 / 5 | inconclusive | 0.68 |
+| Test | Comparison | Year | Placebo | Δ | 95 % interval | Seeds > 0 | Verdict | p (Holm) |
+|---|---|---|---|---|---|---|---|---|
+| F1 | energy vs placebo energy | 1402 | A | +0.025 | −0.010, +0.061 | 4 / 5 | non-inferior | 0.10 |
+| | | | B | +0.018 | −0.011, +0.047 | 4 / 5 | non-inferior | 0.20 |
+| F1 | | 1403 | A | +0.038 | +0.002, +0.075 | 5 / 5 | superior, not significant after Holm | 0.056 |
+| | | | B | +0.026 | −0.011, +0.063 | 5 / 5 | non-inferior | 0.037 |
+| C1 | | 1404 | A | +0.025 | −0.004, +0.055 | 4 / 5 | non-inferior | 0.082 |
+| | | | B | +0.024 | −0.009, +0.056 | 4 / 5 | non-inferior | 0.030 |
+| F2 | traffic + stations vs their placebos, energy present | 1402 | A | −0.014 | −0.078, +0.049 | 0 / 5 | inconclusive | 1.0 |
+| | | | B | −0.015 | −0.086, +0.057 | 0 / 5 | inconclusive | 1.0 |
+| F2 | | 1403 | A | −0.012 | −0.072, +0.047 | 0 / 5 | inconclusive | 1.0 |
+| | | | B | −0.013 | −0.080, +0.054 | 0 / 5 | inconclusive | 1.0 |
+| C2 | | 1404 | A | −0.018 | −0.111, +0.075 | 0 / 5 | inconclusive | 0.68 |
+| | | | B | −0.021 | −0.125, +0.084 | 0 / 5 | inconclusive | 0.71 |
 
-**Energy.** Energy beat its placebo in all three years, in 13 of 15 single seeds and by 0.025–0.038, an effect just
-above the margin. None of the three comparisons was significant after Holm adjustment. The evidence that the energy
-layers carry information beyond their texture is consistent but weak.
+**Energy.** Energy beat its placebo in every year and with both constructions, in 26 of 30 single seeds, by
+0.018–0.038.
+- The jackknife intervals include zero in five of the six comparisons, so the four-way verdicts are non-inferior.
+- With placebo B, the randomisation tests of 1403 and 1404 remain below 0.05 after Holm adjustment.
+- The evidence that the energy layers carry information beyond their values and texture is consistent but modest.
 
-**Traffic and stations.** Given energy, the real traffic and station layers scored below their placebos in all three
-years and in every one of the 15 seeds. The differences were small and their intervals wide, so the comparisons are
-inconclusive. Yet no year and no seed points to information that a mislocated copy of the same layers does not also
-provide.
+**Traffic and stations.** Given energy, the real traffic and station layers scored below their placebos in every
+year, with both constructions and in all 30 seeds. The intervals are wide and the comparisons inconclusive. Still, no
+year, construction or seed points to information that a relocated copy of the same layers does not also provide.
 
 **PR-AUC** (descriptive). The real sources scored higher than their placebos:
-- energy +0.086 / +0.081 / +0.013;
-- traffic and stations +0.078 / +0.025 / +0.082.
+- energy +0.08 to +0.09 in 1402–1403 and +0.01 to +0.02 in 1404;
+- traffic and stations +0.03 to +0.10.
 
-These numbers are dwarfed by the spread over placebo realisations: the PR-AUC of the placebo-energy model ranged from
-0.52 to 0.85 across realisations in 1403.
+These numbers are smaller than the spread over placebo realisations: the placebo-energy PR-AUC ranged from 0.52 to
+0.85 (A) and 0.61 to 0.74 (B) in 1403.
 
 ### 4.2 The effect of the branch itself
 
-**Table 2.** Placebo branch minus the context-only model (secondary estimates, no verdict; 95 % jackknife intervals).
+**Table 2.** Placebo branch minus the context-only model (secondary estimates, no verdict), for placebo A and B.
+Spearman with 95 % jackknife intervals; PR-AUC point estimates.
 
-| Fusion | Metric | 1402 | 1403 | 1404 |
-|---|---|---|---|---|
-| gated | Spearman | −0.021 (−0.049, +0.007) | −0.025 (−0.048, −0.002) | −0.027 (−0.053, −0.001) |
-| early | Spearman | −0.019 (−0.045, +0.006) | −0.023 (−0.062, +0.016) | – |
-| gated | PR-AUC | +0.108 | +0.084 | +0.007 |
-| early | PR-AUC | +0.049 | +0.089 | – |
+| Fusion | Metric | Placebo | 1402 | 1403 | 1404 |
+|---|---|---|---|---|---|
+| gated | Spearman | A | −0.021 (−0.049, +0.007) | −0.025 (−0.048, −0.002) | −0.027 (−0.053, −0.001) |
+| | | B | −0.014 (−0.035, +0.008) | −0.013 (−0.035, +0.009) | −0.025 (−0.051, +0.001) |
+| early | Spearman | A | −0.019 (−0.045, +0.006) | −0.023 (−0.062, +0.016) | – |
+| | | B | −0.012 (−0.038, +0.014) | −0.015 (−0.045, +0.015) | – |
+| gated | PR-AUC | A | +0.108 | +0.084 | +0.007 |
+| | | B | +0.112 | +0.074 | +0.005 |
+| early | PR-AUC | A | +0.049 | +0.089 | – |
+| | | B | +0.096 | +0.094 | – |
 
 Adding one branch without information changed the model as much as adding a real source:
-- **Ranking:** it lowered the Spearman correlation of the map by 0.019–0.027, with intervals below zero in 1403 and
-  1404.
-- **Hotspots:** it raised hotspot PR-AUC by up to 0.11, with wide intervals.
+- **Ranking:** it lowered the Spearman correlation of the map by 0.012–0.027.
+- **Hotspots:** it raised hotspot PR-AUC in the development years by 0.05–0.11 with both constructions.
 
 For comparison, the real energy source changed the same metrics, relative to context only, by:
 - Spearman +0.004 / +0.013 / −0.001;
 - PR-AUC +0.19 / +0.17 / +0.02.
 
-With early fusion, real and placebo energy reached the same PR-AUC (difference −0.004 and −0.005), while real energy
-kept a Spearman advantage of +0.028 and +0.037.
+With early fusion, real energy did not beat placebo energy in PR-AUC (A: −0.004 and −0.005; B: −0.052 and −0.010),
+while it kept a Spearman advantage of +0.021 to +0.037.
 
 ### 4.3 Target support
 
@@ -340,6 +373,43 @@ kept a Spearman advantage of +0.028 and +0.037.
 - **Technical note.** In the per-block contrast of F4, a few edge blocks of 3–5 cells had a reference Spearman of 1, so
   their relative gain was undefined and they left the block-level sign-flip test. The jackknife is not affected.
 
+### 4.4 Placebo check and lineage audit
+
+**Check M4.** Both constructions removed the location, and neither kept the texture within the registered tolerance.
+
+| Construction | Median \|Spearman\| with the real layer | Median of the largest correlogram difference, 0–20 km | Realisations passing |
+|---|---|---|---|
+| A (IAAFT) | 0.05–0.09 | 0.21–0.36 | 0 of 5 |
+| B (rotation and shift) | 0.04–0.10 | 0.10–0.20 | 0 of 5 |
+
+- With placebo B, the texture differs only at the wrap-around seams. The single urban core of Tehran, which fills much
+  of the grid, is cut by them (Fig. 1).
+- In a bounded grid with one urban core, a relocation that removes the location either reshapes the core (A) or splits
+  it (B).
+- By the registered rule, all placebo verdicts carry the label "placebo check failed".
+
+**Lineage audit.**
+
+**Table 4.** Block-cross-validated R² (12 blocks of 22 km, 2-km buffer) of the annual map of each layer predicted from
+the context layers (population, building volume, night lights, industrial share, with their box means), 1402;
+1403 within ±0.02 except where stated.
+
+| Source | Layer | Gradient boosting | OLS |
+|---|---|---|---|
+| energy | residential CO₂ | 0.98 | 0.89 |
+| energy | industrial CO₂ | 0.95 | 0.60 |
+| energy | commercial CO₂ | 0.89 | 0.77 |
+| energy | power-plant CO₂ | < 0 | 0.00 |
+| traffic | peak vehicle-kilometres | 0.71 | 0.69 |
+| traffic | road CO₂ | 0.47 | 0.50 |
+| traffic | volume-to-capacity ratio | 0.36 | 0.26 |
+| traffic | road length by class | < 0.03 | 0.06–0.15 |
+| stations | CO, interpolated | < 0 (−0.77 / −0.05) | < 0 (−0.43 / −0.68) |
+
+Three of the four energy layers are almost fully predictable from the urban-form layers that the model already
+receives. The power-plant layer, the road network and the station layer are not, but they did not beat their
+placebos either.
+
 ## 5. Discussion
 
 ### 5.1 Why a placebo control is needed
@@ -348,21 +418,29 @@ The placebo branch answers a question that ablation cannot: is the change in ski
 Here the answer differed between metrics.
 - **Ranking:** an extra branch, with any data, cost ranking skill. The real energy layers more than recovered this
   cost; traffic and station layers did not.
-- **Hotspots:** an extra branch raised hotspot PR-AUC on its own. A large part of the PR-AUC gain of adding a real
-  source is therefore what any branch would have given.
+- **Hotspots:** an extra branch raised hotspot PR-AUC on its own, by 0.05–0.11 in the development years. A large part
+  of the PR-AUC gain of adding a real source is therefore what any branch would have given.
 
 A reader of a standard ablation table would have credited the energy inventory with about +0.19 in PR-AUC over context
-in gated fusion. The placebo shows that a mislocated copy of the same layers gives +0.08 to +0.11. With a single target
-and a few independent units, such architecture effects are of the same size as the effects usually reported for data
-sources. This agrees with machine-learning evidence that fusion architectures overfit and that modalities compete
-(Wang et al., 2020; Huang et al., 2022), and with the ecological finding that meaningless predictors can look skilful
-(Fourcade et al., 2018). The placebo turns that warning into a control that can be run with any multi-branch model.
+in gated fusion. The placebo shows that a relocated copy of the same layers gives +0.07 to +0.11.
+
+With a single target and few independent units, such architecture effects are of the same size as the effects usually
+reported for data sources. This agrees with machine-learning evidence that fusion architectures overfit and that
+modalities compete (Wang et al., 2020; Huang et al., 2022), and with the ecological finding that meaningless predictors
+can look skilful (Fourcade et al., 2018).
+
+**A perfect placebo is hard to build.** Neither construction met the registered texture tolerance, because the
+non-stationary map of a single city cannot be moved inside a bounded grid without being reshaped or cut. The two
+constructions err in different ways — A reshapes the texture, B keeps it but adds seams. They nevertheless gave the same
+signs and similar sizes for every comparison, so the conclusions do not rest on one construction. A placebo drawn from
+the same layers of another city (a donor-city placebo) would keep a whole urban core and is the natural next step.
 
 ### 5.2 Why the urban sources add little
 
 Two reasons are visible in the data.
 - **The sources share their lineage.** The energy inventory is allocated by the same building volumes that the context
-  source holds. The traffic model distributes trips by the same population. The station layer is a smooth
+  source holds: the context layers predict the residential, industrial and commercial emission layers with R² of
+  0.98, 0.95 and 0.89 (Table 4). The traffic model distributes trips by the same population. The station layer is a smooth
   interpolation of a few points. What remains in the energy layers beyond context — the power plants, the split
   between residential and total volume, the county totals — is small, and so is the information measured against the
   placebo.
@@ -382,38 +460,42 @@ for intra-urban fusion would need another instrument or oversampling, not wind s
 
 ### 5.4 Recommendations
 
-1. **Report a placebo branch next to every ablation of a data source.** Use several realisations, and run it with every
-   fusion type compared.
+1. **Report a placebo branch next to every ablation of a data source.**
+   - Use several realisations and, if possible, more than one construction.
+   - Run it with every fusion type compared.
+   - Check that the placebo keeps the texture: a single-city map is the hard case, and a donor-city placebo may be needed.
 2. **Use a rank metric over the whole map as the primary metric.** Treat top-decile metrics as descriptive when the
    target has few independent units.
-3. **Report the lineage of every source.** Measure how much of it can be predicted from the others before training.
+3. **Report the lineage of every source.** Measure how much of it the other sources predict before training.
 4. **Report single seeds and placebo realisations, not only ensembles.**
 
 ### 5.5 Limitations
 
 - **Scope:** one city, one target product and one family of fusion networks without a graph.
-- **Placebo:** the placebo keeps the spectrum and the values of each layer but not every higher-order spatial feature
-  and not the correlation between sources. A smooth surrogate can itself act as a spatial basis (Behrens & Viscarra
+- **Placebo:** both placebo constructions failed the registered texture check. Their agreement is the basis of the
+  placebo results, not a passed check. A smooth surrogate can itself act as a spatial basis (Behrens & Viscarra
   Rossel, 2020).
 - **Low power:** the effective sample size of the target is about five per month, so most comparisons have low power.
   The randomisation test was liberal for Spearman in a null calibration of the companion study.
 - **Target support:** the calm–windy contrast rests on four composites per year, and wind at 10 m is a proxy for the
-  transport wind. The smoothed targets were evaluated with the neighbourhood inputs fixed at about 7.6 km.
+  transport wind. The smoothed targets were evaluated with the neighbourhood inputs fixed at about 7.6 km, and skill
+  fell for every model as the target was smoothed.
 - **Held-out year:** 1404 used the 1403 inventory and traffic layers.
-- **Pending checks:** the registered placebo check M4 and the lineage audit are still to be computed [to be completed].
 
 ## 6. Conclusions
 
 Ablations of data sources in multi-branch fusion networks confound the information in a source with the effect of its
-branch. A placebo branch — the same layers at a random location — separates the two at the cost of a few extra runs. In
-mapping the intra-urban NO₂ pattern of Tehran from TROPOMI:
-- energy-inventory layers beat their placebo consistently but modestly;
+branch. Placebo branches — the same layers at a random location — separate the two at the cost of a few extra runs.
+
+In mapping the intra-urban NO₂ pattern of Tehran from TROPOMI:
+- energy-inventory layers beat their placebos consistently but modestly, with both constructions;
 - traffic and station layers did not;
 - one information-free branch changed skill as much as the real sources did;
+- the energy layers were largely predictable from the urban-form context;
 - fusion did not help at any target resolution, and calm-day composites did not sharpen the target.
 
-We recommend placebo branches as a standard control whenever the value of a data source is inferred from a
-multi-branch model.
+Placebo construction for a single non-stationary urban map is itself difficult and should be checked. We recommend
+placebo branches as a standard control whenever the value of a data source is inferred from a multi-branch model.
 
 ---
 
@@ -427,6 +509,8 @@ multi-branch model.
   - Composites: `src/tehran_carbon/data/sources/composite.py`.
   - Smoothed targets: `src/tehran_carbon/data/target_support.py`.
   - Tests: `src/tehran_carbon/analysis/fusion_eval.py`.
+  - Checks and lineage audit: `src/tehran_carbon/analysis/fusion_checks.py`.
+  - Figures: `src/tehran_carbon/viz/fusion_figures.py`.
   - A versioned copy will be archived on Zenodo on acceptance [DOI to be added].
 - **Data.** Public data (TROPOMI, ERA5, VIIRS, GHSL) and the Earth Engine export scripts are listed as in the companion
   study. The energy, traffic and station data are [as in the companion study].
@@ -504,10 +588,22 @@ appeared to influence the work reported in this paper.
 
 ---
 
-## Figures to be made [from the committed tables; nothing is re-run]
+## Figures
 
-1. **Design:** a real source, its placebo realisations (maps), and the network with one branch per source.
-2. **Information vs architecture:** for each source and year, the real-minus-placebo difference (F1, F2, C1, C2) next to
-   the placebo-minus-context difference, Spearman and PR-AUC, with jackknife intervals, single seeds and realisations.
-3. **Target support:** the correlograms of the calm, windy and all-day composites and of the native target; the fusion
-   gain against the smoothing scale (Table 3).
+![Figure 1](../figures/fig1_placebo_maps.png)
+
+**Fig. 1.** The residential CO₂ layer of the inventory (log scale, annual mean) and two realisations of each placebo
+construction: A, IAAFT surrogates; B, rotation by 180° and cyclic shift. Blue outline: label domain.
+
+![Figure 2](../figures/fig2_information_architecture.png)
+
+**Fig. 2.** Information and architecture. Real source minus placebo (energy; traffic + stations given energy) and
+placebo branch minus context only, in Spearman (a, primary) and PR-AUC (b, descriptive), for 1402, 1403 and the held-out
+year 1404. Open markers: placebo A; filled markers: placebo B. Lines: jackknife 95 % intervals; band: equivalence margin
+±0.02.
+
+![Figure 3](../figures/fig3_target_support.png)
+
+**Fig. 3.** Target support. (a) Correlogram of the monthly target and of the seasonal composites of all, the calmest and
+the windiest clear days, 1402. (b) Fusion gain (all three sources minus energy, Spearman) against the smoothing scale of
+the target, with jackknife 95 % intervals.

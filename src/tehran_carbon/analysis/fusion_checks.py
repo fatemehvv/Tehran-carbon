@@ -11,7 +11,7 @@ M4 placebo quality (preregistration_fusion_v1.md). For every realisation of fus2
 Lineage audit (descriptive). How much of each energy, traffic and station layer the context layers predict: block-CV
    R2 (the 12 blocks of 22 km, 2-km buffer) of the annual map of the layer (lag 0, log1p as in the dataset) from the
    context layers and their box means, with OLS and gradient boosting, per year.
-Figure 1 of the paper: a real layer and three of its placebo realisations.
+The maps of figure 1 (a real layer and its placebo realisations) -> figures/fig1_maps_<experiment>.npz.
 Outputs (run folder): fusion_placebo_check.csv, fusion_lineage.csv, fusion_checks.json; figure in
 docs/paper/fusion_paper/figures/.
 """
@@ -87,27 +87,12 @@ class FusionChecks:
         return dict(verdict=verdict, failed=failed, per_realisation=per.to_dict("records"))
 
     def figure_maps(self, maps, grid, cfg):
-        from ..viz.paper_figures import save, style
-        from ..viz.figures import INK2, WIDTH
+        """Store the maps of figure 1 (the figure itself: python main.py fusion figures)."""
         if "real" not in maps:
             return
-        plt = style()
         data = CellMonthDataset.build(self.base)
-        dom = data.label_domain
-        keys = ["real"] + [k for k in ("plc0", "plc1", "plc2") if k in maps]
-        fig, axes = plt.subplots(1, len(keys), figsize=(WIDTH, WIDTH / len(keys) * 0.62))
-        vmin, vmax = np.percentile(maps["real"], [1, 99.5])
-        for ax, k in zip(axes, keys):
-            ax.imshow(maps[k], cmap="Greys", vmin=vmin, vmax=vmax, interpolation="nearest")
-            ax.contour(dom.astype(float), levels=[0.5], colors=INK2, linewidths=0.5)
-            ax.set_xticks([]), ax.set_yticks([]), ax.grid(False)
-            for s in ax.spines.values():
-                s.set_visible(False)
-            ax.set_title("a  Real layer" if k == "real" else f"{'bcd'[int(k[-1])]}  Placebo, realisation {k[-1]}",
-                         fontsize=8)
-        fig.text(0.5, -0.02, "Residential CO₂ of the inventory (log scale, annual mean); outline: label domain",
-                 ha="center", color=INK2, fontsize=7.5)
-        save(fig, FIGURES / f"fig1_placebo_maps_{self.experiment}")
+        FIGURES.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(FIGURES / f"fig1_maps_{self.experiment}.npz", domain=data.label_domain, **maps)
 
     # ------------------------------------------------------------------ lineage
     def lineage(self, run):
