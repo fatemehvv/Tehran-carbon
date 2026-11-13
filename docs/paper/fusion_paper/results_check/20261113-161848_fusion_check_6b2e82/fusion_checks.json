@@ -1,0 +1,376 @@
+{
+  "M4": {
+    "verdict": "placebo check failed",
+    "failed": 5,
+    "per_realisation": [
+      {
+        "realisation": 0,
+        "median_abs_spearman": 0.06231409837874488,
+        "median_correlogram_diff": 0.2063168681499545,
+        "passed": false
+      },
+      {
+        "realisation": 1,
+        "median_abs_spearman": 0.05426473030381349,
+        "median_correlogram_diff": 0.22117666788405482,
+        "passed": false
+      },
+      {
+        "realisation": 2,
+        "median_abs_spearman": 0.08939547184624486,
+        "median_correlogram_diff": 0.3563579822250301,
+        "passed": false
+      },
+      {
+        "realisation": 3,
+        "median_abs_spearman": 0.06384003375294289,
+        "median_correlogram_diff": 0.2085128840497824,
+        "passed": false
+      },
+      {
+        "realisation": 4,
+        "median_abs_spearman": 0.06599784921197477,
+        "median_correlogram_diff": 0.24702993830093867,
+        "passed": false
+      }
+    ]
+  },
+  "lineage": [
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_residential",
+      "model": "OLS",
+      "r2_from_context": 0.8886995269373914
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_residential",
+      "model": "GBM",
+      "r2_from_context": 0.9801272705413262
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_commercial",
+      "model": "OLS",
+      "r2_from_context": 0.7686172220807392
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_commercial",
+      "model": "GBM",
+      "r2_from_context": 0.8929793045870694
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_industry",
+      "model": "OLS",
+      "r2_from_context": 0.6015484995546861
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_industry",
+      "model": "GBM",
+      "r2_from_context": 0.9544231165843841
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_power",
+      "model": "OLS",
+      "r2_from_context": -0.007692821928195093
+    },
+    {
+      "year": 1402,
+      "domain": "energy",
+      "layer": "inv_power",
+      "model": "GBM",
+      "r2_from_context": -0.5245873610100786
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "inv_road",
+      "model": "OLS",
+      "r2_from_context": 0.5016424679628055
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "inv_road",
+      "model": "GBM",
+      "r2_from_context": 0.4667612696958149
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_motorway_trunk",
+      "model": "OLS",
+      "r2_from_context": 0.05664119336636719
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_motorway_trunk",
+      "model": "GBM",
+      "r2_from_context": -0.06866554453212981
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_primary",
+      "model": "OLS",
+      "r2_from_context": 0.10265800611732523
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_primary",
+      "model": "GBM",
+      "r2_from_context": -0.042206474041924125
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_secondary",
+      "model": "OLS",
+      "r2_from_context": 0.15099130675588202
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_secondary",
+      "model": "GBM",
+      "r2_from_context": 0.005553498851379901
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_tertiary",
+      "model": "OLS",
+      "r2_from_context": 0.0631942819513015
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "road_km_tertiary",
+      "model": "GBM",
+      "r2_from_context": -0.07413047586938948
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "vkt_peak",
+      "model": "OLS",
+      "r2_from_context": 0.68600719134668
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "vkt_peak",
+      "model": "GBM",
+      "r2_from_context": 0.7131777018491317
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "vc_mean",
+      "model": "OLS",
+      "r2_from_context": 0.2579718595698356
+    },
+    {
+      "year": 1402,
+      "domain": "traffic",
+      "layer": "vc_mean",
+      "model": "GBM",
+      "r2_from_context": 0.35868954525857066
+    },
+    {
+      "year": 1402,
+      "domain": "pollution",
+      "layer": "aq_co",
+      "model": "OLS",
+      "r2_from_context": -0.43319518864343287
+    },
+    {
+      "year": 1402,
+      "domain": "pollution",
+      "layer": "aq_co",
+      "model": "GBM",
+      "r2_from_context": -0.7697130593718926
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_residential",
+      "model": "OLS",
+      "r2_from_context": 0.8876075076368719
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_residential",
+      "model": "GBM",
+      "r2_from_context": 0.980531910186002
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_commercial",
+      "model": "OLS",
+      "r2_from_context": 0.7736184127565078
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_commercial",
+      "model": "GBM",
+      "r2_from_context": 0.8941099793465699
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_industry",
+      "model": "OLS",
+      "r2_from_context": 0.6007567762916544
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_industry",
+      "model": "GBM",
+      "r2_from_context": 0.953946138564706
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_power",
+      "model": "OLS",
+      "r2_from_context": -0.006847094794839359
+    },
+    {
+      "year": 1403,
+      "domain": "energy",
+      "layer": "inv_power",
+      "model": "GBM",
+      "r2_from_context": -0.48541707659259825
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "inv_road",
+      "model": "OLS",
+      "r2_from_context": 0.4933312844687011
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "inv_road",
+      "model": "GBM",
+      "r2_from_context": 0.46374242677710076
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_motorway_trunk",
+      "model": "OLS",
+      "r2_from_context": 0.05817367996120992
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_motorway_trunk",
+      "model": "GBM",
+      "r2_from_context": -0.0846759234175587
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_primary",
+      "model": "OLS",
+      "r2_from_context": 0.09648973210321854
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_primary",
+      "model": "GBM",
+      "r2_from_context": -0.05669828491475859
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_secondary",
+      "model": "OLS",
+      "r2_from_context": 0.14896905794906945
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_secondary",
+      "model": "GBM",
+      "r2_from_context": 0.023059502143876198
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_tertiary",
+      "model": "OLS",
+      "r2_from_context": 0.06322648126701713
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "road_km_tertiary",
+      "model": "GBM",
+      "r2_from_context": -0.05920127286692045
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "vkt_peak",
+      "model": "OLS",
+      "r2_from_context": 0.6796061782490461
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "vkt_peak",
+      "model": "GBM",
+      "r2_from_context": 0.7041576524620355
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "vc_mean",
+      "model": "OLS",
+      "r2_from_context": 0.24875736894574707
+    },
+    {
+      "year": 1403,
+      "domain": "traffic",
+      "layer": "vc_mean",
+      "model": "GBM",
+      "r2_from_context": 0.33359972230343415
+    },
+    {
+      "year": 1403,
+      "domain": "pollution",
+      "layer": "aq_co",
+      "model": "OLS",
+      "r2_from_context": -0.6799659395838367
+    },
+    {
+      "year": 1403,
+      "domain": "pollution",
+      "layer": "aq_co",
+      "model": "GBM",
+      "r2_from_context": -0.05053621138347819
+    }
+  ]
+}
