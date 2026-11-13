@@ -1,6 +1,6 @@
 # Reach, not graphs: neighbourhood reach explains the skill of distance-based graph neural networks in mapping intra-urban NO₂ hotspots from TROPOMI
 
-**Fatemeh Vafaeian¹, Vahid Khatibi¹\***
+**Fatemeh Vafaeian¹, Vahid Khatibi¹**\*
 
 ¹ [Affiliation to be completed]  
 \* Corresponding author: [e-mail to be completed]
@@ -33,7 +33,7 @@ best SLX models rise from a Spearman correlation of about 0.75 for the cell alon
 most 0.03 beyond. The GNN's lead over SLX at equal reach shrinks from about 0.04 at 7.6 km to −0.004 and +0.009 at
 37.8 km, all comparisons inconclusive, and the network fed box means is statistically equivalent to the GNN at 22.7 km
 (Spearman differences −0.005 and −0.008). On the held-out year the GNN and SLX are equivalent in Spearman at 30.3 km and
-differ by 0.002 at 37.8 km. The GNN's PR-AUC leads shrink for single seeds. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
+differ by 0.002 at 37.8 km. The GNN's PR-AUC leads shrink for individual fits. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
 nearly identical at the scale over which the target varies. With about five effective degrees of
 freedom, the choice of inference changed several verdicts. For this smooth target and distance-based
 graph, reach explains most of the GNN's skill; graph models need reach-matched baselines.
@@ -45,7 +45,7 @@ cross-validation; Tehran
 
 ## 1. Introduction
 
-Policies to cut urban fossil CO₂ emissions need to know *where* in a city combustion is concentrated. Satellite NO₂ has
+Policies to cut urban fossil CO₂ emissions depend on knowing *where* in a city combustion is concentrated. Satellite NO₂ has
 become a practical tracer of urban fossil combustion: it is co-emitted with CO₂, it is short-lived, and since 2018 the
 TROPOMI instrument on Sentinel-5P has mapped it daily at a resolution of a few kilometres (Beirle et al., 2019; Li et
 al., 2025). It has been used to locate urban CO₂ plumes and estimate city emissions (Reuter et al., 2019; Ahn et al.,
@@ -76,7 +76,7 @@ air-quality science (Hoek et al., 2008). Both can be given any reach at negligib
 information of this kind improves neural networks (Xiao et al., 2023), convolutional classifiers of urban form
 (Fleischmann & Arribas-Bel, 2024) and tabular learners (Schmidinger et al., 2026).
 
-General graph learning has met a version of this question. On citation and social graphs, linear models applied to
+Research on graph learning has addressed a related question. On citation and social graphs, linear models applied to
 features averaged over the same number of hops matched graph convolutional networks (Wu et al., 2019; Frasca et al.,
 2020); the receptive field can be set apart from the number of layers (Gasteiger et al., 2019; Zeng et al., 2021); and
 simple, fairly tuned baselines often match GNNs, with evaluation choices changing the ranking of models (Shchur et al.,
@@ -101,9 +101,7 @@ cross-validation overstates skill for autocorrelated targets (Roberts et al., 20
 unequal clusters (Cameron et al., 2008; MacKinnon et al., 2023), deep models vary from seed to seed (Bouthillier et al.,
 2021), and pre-processing that sees the test area inflates skill (Kapoor & Narayanan, 2023).
 
-Table 1 audits how far the GNN and its baselines see in eleven comparable studies whose full text describes both. In
-most of them the baselines see only their own location, a neighbourhood of a different size, or one that is not
-reported. Two studies come close. In Liang et al. (2023) a linear SLX baseline averaged over the same nearest stations
+Table 1 compares the reach of GNNs and their baselines in eleven studies whose full texts describe both. In most of them, the baselines use only their own location, a neighbourhood of a different size, or one whose size is not reported. Two studies come close. In Liang et al. (2023) a linear SLX baseline averaged over the same nearest stations
 as the GNN, but the nonlinear baseline saw no neighbours. In Schmidt & Ong (2026) the random forest received the
 measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. Neither study made reach the
 object of the comparison, varied it, or tied it to the scale of the target. A structured ScienceDirect search (five
@@ -159,10 +157,7 @@ baselines together under spatial validation.
 
 ### 2.1 Grid, years and label domain
 
-The analysis grid covers 50.85–51.90°E and 35.35–35.95°N with 72 × 126 cells of 1/120° (about 0.75 × 0.93 km). The
-label domain holds the 2,436 cells of the three central counties (Tehran, Rey, Shemiranat) to which the emission
-inventory assigns any CO₂, which excludes mountains and desert so that a model cannot score by separating city from
-non-city. We use three Iranian (Solar Hijri) years: 1402 (21 March 2023 – 19 March 2024) and 1403 (20 March 2024 – 20
+The analysis grid covers 50.85–51.90°E and 35.35–35.95°N with 72 × 126 cells of 1/120° (about 0.75 × 0.93 km). The label domain includes the 2,436 cells of the three central counties (Tehran, Rey, Shemiranat) to which the emission inventory assigns any CO₂. This excludes mountains and desert, so that a model cannot gain skill simply by separating urban from non-urban cells. We use three Iranian (Solar Hijri) years: 1402 (21 March 2023 – 19 March 2024) and 1403 (20 March 2024 – 20
 March 2025) for development, and 1404 (21 March 2025 – 20 March 2026) as a held-out year. Fig. 2 shows the domain, the
 observed target of the held-out year and its hotspots.
 
@@ -181,11 +176,8 @@ the threshold use all domain cells of the month and thus define the target as a 
 metrics of Section 3.4 unchanged but also set the scale of the training targets in every fold. The target is
 deliberately not the inventory: using a modelled CO₂ map would let a model reproduce the inventory's own allocation.
 
-The target is an extremely smooth field. Its monthly correlogram is 0.95 at 0–2 km and 0.76 at 8–10 km, and it crosses
-zero at 24 km (Fig. 3). The effective number of independent cells (Griffith, 2005) is 4.9 in both development years,
-against 2,436 cells and about 88 TROPOMI nadir pixels (3.5 × 5.5 km). The pattern is also stable between years: the
-annual mean maps correlate at Spearman 0.993–0.997 between any two of the three years, and the same months at
-0.955–0.963 on average. A target built from daily scenes with cloud fraction below 0.3 agrees with the standard one
+The target is an extremely smooth field. The monthly correlogram is 0.95 at 0–2 km and 0.76 at 8–10 km and crosses zero at 24 km (Fig. 3). The effective number of independent cells (Griffith, 2005) is 4.9 in both development years,
+against 2,436 cells and about 88 TROPOMI nadir pixels (3.5 × 5.5 km). The pattern is also stable between years: the Spearman correlation is 0.993–0.997 between the annual mean maps of any two years and 0.955–0.963 on average between the same months. A target built from daily scenes with cloud fraction below 0.3 agrees with the standard one
 (Spearman 0.98–0.99; overlap of hotspot sets 0.73–0.76). The north of the city lies about 700 m higher than the south,
 and a TROPOMI emission inversion reported terrain artefacts near Mount Tochal (Rey-Pommier et al., 2025); elevation
 correlates with z (|ρ| = 0.49), but partialling it out barely changes model skill (Spearman 0.949 → 0.940). The
@@ -210,8 +202,7 @@ from `configs/config.yaml` and `data/raw/MANIFEST.csv`.]
 | **Pollution** | CO from the 28 stations of the municipal monitoring network, interpolated by inverse distance |
 | **Context** | GHSL population and building volume, VIIRS night lights, industrial land share, monthly ERA5 temperature and wind speed |
 
-Monthly sector layers are the annual allocation multiplied by monthly sector shares. For 1404 no inventory exists yet,
-so the 1403 inventory and traffic layers stand in for all models.
+Monthly sector layers are the annual allocation multiplied by monthly sector shares. No inventory is yet available for 1404, so all models use the 1403 inventory and traffic layers.
 
 ---
 
@@ -230,20 +221,18 @@ All models use the same target and, unless stated, the same predictors (Table 2)
 | **Physical operator** | Gaussian-smoothed inventory layers with one non-negative NO₂ yield per sector, width and yields fitted on the training cells |
 
 The edges of the GNN join cells at fixed grid distances and carry no information beyond distance, so the network is
-close to a dilated convolution with learned, non-linear aggregation. The comparison therefore tests learned against
+close to a dilated convolution with learned, nonlinear aggregation. The comparison therefore tests learned against
 fixed aggregation up to the same distance; it does not test graphs whose edges carry other information, such as road
 links, observed travel flows or wind. The no-graph network fed box means is the decisive control: it shares the GNN's encoder, training, seeds and
 ensembling, and supplies spatial context as fixed box means instead of learned message passing. The two also differ in
 which cells contribute (all cells of a square against the sparse graph stencils), in how they are weighted, and in
-whether aggregation comes before or after the non-linear encoder, so the comparison tests two ways of supplying the
+whether aggregation comes before or after the nonlinear encoder, so the comparison tests two ways of supplying the
 same maximum reach rather than one component of the GNN in isolation.
 
 Message passing and SLX windows both use the predictors of every grid cell, including those of the held-out block; only
 the target of held-out cells is unseen. This is the mapping task, in which predictors are known everywhere. All
 hyper-parameters were fixed before the runs of the original study and none was tuned here. The neural models use hidden
-size 32, two encoder layers, dropout 0.1, AdamW, a learning rate of 3 × 10⁻³ and 300 epochs without early stopping. Every
-neural model is trained with five seeds; as in the original study its prediction is the mean of the five (the
-ensemble), and every seed is also scored on its own. OLS is deterministic, and GBM and RF are run with one seed. The
+size 32, two encoder layers, dropout 0.1, AdamW, a learning rate of 3 × 10⁻³ and 300 epochs without early stopping. Every neural model is trained with five seeds. As in the original study, the five predictions are averaged to form the five-seed ensemble, and each individual fit is also scored on its own. OLS is deterministic, and GBM and RF are run with one seed. The
 fusion networks of RQ1 (Section 4.6) are no-graph networks with box means at half-widths of 3 and 9 cells (reach
 7.6 km).
 
@@ -254,8 +243,7 @@ largest window half-width for SLX models and the no-graph network, 9L cells for 
 own-cell models. Reach is counted in cells on the same grid for every model, and both box windows and graph stencils
 are square, so reach is a Chebyshev distance. A box window covers every cell within its reach; the graph reaches the
 same distance through sparse stencils composed over layers, so it does not draw on every cell inside the square.
-Kilometre values use the mean cell size (0.84 km) and are nominal, and reach is the largest distance a model can use;
-its effective receptive field may be shorter (Luo et al., 2016). We call a comparison reach-matched when the models
+Distances in kilometres are nominal and use the mean cell size (0.84 km). Reach is the largest distance a model can use; its effective receptive field may be shorter (Luo et al., 2016). We call a comparison reach-matched when the models
 have the same reach in cells. The GNN was run with one to five layers (7.6–37.8 km) in cross-validation and with four
 and five layers on the held-out year; SLX models were run at 0–37.8 km, and the no-graph network at 0, 22.7 and
 37.8 km.
@@ -270,31 +258,26 @@ computed after the first runs, so results near it are consistent with the heuris
 ### 3.3 Validation
 
 The domain is divided into 22-km square blocks (the autocorrelation range estimated for the original design), giving
-12 blocks. Each block is held out once, and training cells within 2 km of it are removed. For the held-out year, each
-fold trains on the training blocks of 1402 and 1403 and predicts the held-out block in 1404: new places in a new year
-(Meyer et al., 2018). Because the target barely changes between years (Section 2.2), the held-out year tests stability
+12 blocks. Each block is held out once, and training cells within 2 km of it are removed. For the held-out year, each fold trains on the training blocks of 1402 and 1403 and predicts the held-out block in 1404, which tests prediction at new locations in a new year (Meyer et al., 2018). Because the target barely changes between years (Section 2.2), the held-out year tests stability
 more than new information.
 
 The station layer was originally interpolated once from all stations, including those inside the test block. Here it is
 rebuilt for every fold from the stations farther than 2 km from the test block; in one fold this removes 19 of the 28
 stations. The 2-km buffer is short compared with the correlation length, so cross-validation measures interpolation
 within the city more than extrapolation. We therefore also ran the reach-matched comparison with buffers of 10 and 20 km.
-With a 20-km buffer no station is left in 4 of the 12 folds, so these runs use the driver inputs only (traffic, energy
-and context), and the 2-km buffer was re-run with the same inputs for comparison.
+With a 20-km buffer, no station remains in 4 of the 12 folds. These runs therefore use only the driver inputs (traffic, energy and context), and the 2-km runs were repeated with the same inputs for comparison.
 
 ### 3.4 Metrics
 
 The primary metric is the Spearman correlation between predicted and observed z over the domain cells, averaged over
-months. PR-AUC, the area under the precision–recall curve of the hotspot label (chance level 0.10), is reported as a
-descriptive measure: the hotspots of a month form a few contiguous areas, so PR-AUC rests on very few independent
-units. Sensitivity analyses use hotspot labels at the top 20 % and top 5 % and the same metrics on superpixels of 5 × 5
+months. PR-AUC, the area under the precision–recall curve of the hotspot label (chance level 0.10), is reported as a descriptive measure, because the hotspots of a month form a few contiguous areas and PR-AUC therefore rests on very few independent units. Sensitivity analyses use hotspot labels at the top 20 % and top 5 % and the same metrics on superpixels of 5 × 5
 cells, about one TROPOMI pixel. To measure how much of the skill is due to the smoothness of the target alone, we also
 interpolate the target of the training cells of the same month, with the same folds and buffer, by inverse-distance
 weighting and by a Gaussian process on the coordinates.
 
 ### 3.5 Inference with few spatial blocks
 
-Differences between two models are computed on identical out-of-fold predictions. The main test is a block sign-flip
+Differences between two models are computed from their out-of-fold predictions for the same cells and months. The main test is a block sign-flip
 randomisation test that enumerates all 2¹² = 4,096 assignments: after rank-normalising the predictions within each month,
 the predictions of the two models are swapped block by block, with the same swap in every month, and the city-wide
 difference of the metric is recomputed. Enumeration makes the test exhaustive, but its validity rests on the blocks
@@ -317,7 +300,7 @@ unadjusted and adjusted p-values and family. The block bootstrap of the original
 
 The correlation length (24 km) exceeds the block size, so neighbouring blocks are dependent and the nominal level of
 the randomisation test is only approximate. As a diagnostic, we applied the test to 20 comparisons between pairs of
-single seeds of the same GNN (five seeds, two years), which have no true difference in expectation; the pairs share
+individual fits of the same GNN (five seeds, two years), which have no true difference in expectation; the pairs share
 data and seeds, so this checks calibration only roughly. For PR-AUC, 1 of the 20 comparisons fell below p = 0.05, as
 expected; for Spearman, 5 of 20 did. The test is therefore liberal for Spearman, and we read significant Spearman
 p-values with caution. A liberal test does not make non-significant results more precise; the precision of each
@@ -378,7 +361,7 @@ network, run at 0, 22.7 and 37.8 km. Dashed line: zero crossing of the target co
 Table 4 compares the GNN at each depth with models of exactly the same reach. Against SLX models, the GNN's lead in
 Spearman shrinks as reach grows: about 0.04 at 7.6 km, 0.02 at 15.1 km, 0.011–0.016 at 22.7–30.3 km, and −0.004 and
 +0.009 at 37.8 km. None of these differences is significant after Holm adjustment, all jackknife intervals include
-zero, and for single seeds the leads are smaller still (0.028–0.033 at 7.6 km, 0.007–0.008 at 22.7 km, −0.008 and
+zero, and for individual fits the leads are smaller still (0.028–0.033 at 7.6 km, 0.007–0.008 at 22.7 km, −0.008 and
 +0.005 at 37.8 km). Part of the GNN's lead over SLX at short reach therefore comes from its learner and ensemble, and the
 lead disappears where skill levels off. In PR-AUC the GNN ensemble leads the SLX references by 0.02–0.11 at
 22.7–37.8 km, and several jackknife intervals exclude zero, but no randomisation test is significant after Holm
@@ -388,13 +371,12 @@ The no-graph network fed box means shares the GNN's encoder, training, seeds and
 context is supplied (Section 3.1). At 22.7 km it is statistically equivalent to the GNN in both years,
 and slightly better (Spearman −0.005 and −0.008 for GNN minus no-graph network, 90 % intervals inside ±0.02); at 37.8 km
 it is again slightly better (−0.012 and −0.010), equivalent in 1403 and inconclusive in 1402. In 1403 the 95 %
-intervals exclude zero at both reaches, so the box-mean network is detectably, though not materially, better. In PR-AUC the two differ in
-sign between years (+0.014 and −0.032 at 22.7 km; +0.030 and −0.010 at 37.8 km). For the ranking, replacing message passing by
+intervals exclude zero at both reaches, so the box-mean network is detectably, though not materially, better. In PR-AUC the difference changes sign between years at both reaches (+0.014 and −0.032 at 22.7 km; +0.030 and −0.010 at 37.8 km). For the ranking, replacing message passing by
 fixed neighbourhood means thus cost nothing at these reaches; for the hotspots the evidence does not favour either.
 
 **Table 4.** GNN (five-seed ensemble) minus a reference of equal reach, Spearman, cross-validation, 1402 / 1403.
 SLX: at each reach, the estimator with the best mean Spearman over 1402 and 1403 (RF at 7.6 km, OLS at 15.1 km, GBM at
-22.7–37.8 km), so the differences can differ from those implied by the per-year best in Table 3. Intervals: delete-one-block jackknife, 95 %. p: one-sided exact block sign-flip test, unadjusted (liberal for Spearman;
+22.7–37.8 km), so the differences can differ from those implied by the per-year best in Table 3. Intervals: delete-one-block jackknife, 95 %. p: one-sided block sign-flip test over all 4,096 assignments, unadjusted (liberal for Spearman;
 Section 3.5). None is significant after Holm adjustment within the exploratory family.
 
 | Reach | Reference | Δ 1402 [95 % CI] | p | Δ 1403 [95 % CI] | p | Verdict |
@@ -407,7 +389,7 @@ Section 3.5). None is significant after Holm adjustment within the exploratory f
 | 22.7 km | No-graph network, box means | −0.005 [−0.017, +0.007] | 0.93 | −0.008 [−0.016, −0.001] | 0.92 | equivalent |
 | 37.8 km | No-graph network, box means | −0.012 [−0.030, +0.005] | 0.995 | −0.010 [−0.017, −0.003] | 0.98 | inconclusive / equivalent |
 
-The comparison of the original study looked different because its references saw less. Against SLX-GBM at 12.6 km, the
+The comparison of the original study differed because its reference models had a shorter reach. Against SLX-GBM at 12.6 km, the
 pre-specified reference, the three-layer GNN led by +0.025 and +0.035 in Spearman (randomisation p = 0.001 and 0.0007;
 Holm-adjusted 0.021 and 0.016) and by +0.037 and +0.051 in PR-AUC. These leads are partly a comparison of reaches, and
 given the liberal behaviour of the Spearman test, even the remaining part is uncertain: the jackknife intervals include
@@ -424,11 +406,10 @@ GNN's 37.8 km; the comparisons at exactly equal reach are in Table 5). Grey band
 
 ### 4.3 On the held-out year, GNN and SLX at equal reach rank alike
 
-On 1404 the five-layer GNN (37.8 km) reaches Spearman 0.933 and PR-AUC 0.782, and the four-layer GNN (30.3 km) 0.931 and
-0.785 (Table 5). At 30.3 km the best SLX model (OLS, 0.934) is statistically equivalent to the GNN (−0.003, 95 % interval
+In 1404, the five-layer GNN (37.8 km) scores 0.933 in Spearman correlation and 0.782 in PR-AUC, and the four-layer GNN (30.3 km) scores 0.931 and 0.785 (Table 5). At 30.3 km the best SLX model (OLS, 0.934) is statistically equivalent to the GNN (−0.003, 95 % interval
 −0.019 to +0.014); at 37.8 km the best SLX model (RF, 0.932) differs by +0.002 (95 % interval −0.026 to +0.029; inconclusive). The SLX
 reference is the estimator with the best Spearman at that reach. In PR-AUC the five-seed ensembles lead it by
-0.049–0.086 (by 0.043–0.058 against the SLX estimator with the best PR-AUC), but single seeds lead by less: the mean
+0.049–0.086 (by 0.043–0.058 against the SLX estimator with the best PR-AUC), but individual fits lead by less: the mean
 single seed scores 0.758 at 30.3 km and 0.741 at 37.8 km, against 0.699 and 0.733 for the references. A linear SLX model with a shorter reach of 22.7 km (OLS) does as well
 as either GNN (0.929 and 0.785), although it was chosen among fifteen variants after the results, which favours it. Its
 full cross-validation took 8 s on one CPU, against 39 min on one RTX 4080 GPU for the GNN with all folds and five
@@ -439,32 +420,31 @@ Against the pre-specified reference of the original study (SLX-RF at 12.6 km), t
 family (p = 0.19).
 
 **Table 5.** Held-out year 1404: GNN and SLX at equal reach, and a shorter-reach SLX model. GNN: five-seed ensemble, and
-the mean of its single seeds. Differences in the text are computed from unrounded values.
+the mean of its individual fits. Differences in the text are computed from unrounded values.
 
 | Reach | Model | Spearman | PR-AUC |
 |---|---|---|---|
 | 30.3 km | GNN, 4 layers | 0.931 | 0.785 |
-| | GNN, 4 layers, mean single seed | 0.926 | 0.758 |
+| | GNN, 4 layers, mean of individual fits | 0.926 | 0.758 |
 | | SLX-OLS / SLX-RF / SLX-GBM | 0.934 / 0.923 / 0.914 | 0.699 / 0.727 / 0.641 |
 | 37.8 km | GNN, 5 layers | 0.933 | 0.782 |
-| | GNN, 5 layers, mean single seed | 0.928 | 0.741 |
+| | GNN, 5 layers, mean of individual fits | 0.928 | 0.741 |
 | | SLX-OLS / SLX-RF / SLX-GBM | 0.930 / 0.932 / 0.927 | 0.739 / 0.733 / 0.664 |
 | 22.7 km | SLX-OLS | 0.929 | 0.785 |
 
 ### 4.4 Seed averaging hides instability
 
-The GNN's ranking is stable across seeds (standard deviation about 0.005 in Spearman), but its PR-AUC is not (0.028 in
-1402, 0.038 in 1403 and 0.075 in 1404); single seeds in 1403 range from 0.756 to 0.858 in PR-AUC (Fig. 6). Averaging five
+Across seeds, the standard deviation of the GNN's Spearman correlation is about 0.005, but that of its PR-AUC is 0.028 in 1402, 0.038 in 1403 and 0.075 in 1404; in 1403 the individual fits range from 0.756 to 0.858 in PR-AUC (Fig. 6). Averaging five
 seeds raises PR-AUC by 0.03–0.04 (for example 0.800 against 0.771 in 1402) and Spearman by about 0.005. The SLX models
 were run once, so they get no such benefit, and a comparison of a five-seed ensemble with single baselines favours the
 network by about the size of the PR-AUC leads in Table 4. This is why the GNN's PR-AUC leads at equal reach
-(Sections 4.2–4.3) are smaller and more variable for single seeds. Whether ensembling the stochastic SLX baselines would
+(Sections 4.2–4.3) are smaller and more variable for individual fits. Whether ensembling the stochastic SLX baselines would
 close the gap was not tested.
 
 ![Figure 6](../figures/fig6_seeds.png)
 
 **Fig. 6.** Seeds against ensemble, Spearman (a) and PR-AUC (b), with three lanes per row so that close values stay
-visible. Upper lane: the GNN (bar: range of the five single seeds; tick: their mean; dot: five-seed ensemble). Middle
+visible. Upper lane: the GNN (bar: range of the five individual fits; tick: their mean; dot: five-seed ensemble). Middle
 lane: SLX with extended reach (best SLX model by Spearman at any reach in cross-validation; SLX-OLS at 22.7 km on 1404).
 Lower lane: the pre-specified SLX reference at 12.6 km.
 
@@ -531,8 +511,7 @@ rest on very few independent units, and single-seed values are not available for
 Larger buffers, which force the models to extrapolate from the periphery towards the centre, change the picture
 (driver inputs, reach 22.7 km). With the paper's 2-km buffer the GNN and the best SLX model are level (Spearman 0.943
 and 0.945 against 0.940 and 0.935). With a 10-km buffer the GNN keeps 0.913 and 0.911 while the best SLX model falls to
-0.856 and 0.845; with a 20-km buffer the GNN keeps 0.791 and 0.774 while SLX models fail (best 0.35 and 0.24). With a
-20-km buffer the central fold trains on only 270 peripheral cells. Tree ensembles cannot predict beyond the range of
+0.856 and 0.845; with a 20-km buffer the GNN keeps 0.791 and 0.774 while SLX models fail (best 0.35 and 0.24). With a 20-km buffer, the model in the central fold trains on only 270 peripheral cells. Tree ensembles cannot predict beyond the range of
 their training targets and OLS extrapolates wildly, so the failure is one of the conventional learners. Whether the
 GNN's robustness comes from the graph or from the neural learner was not tested, because the no-graph network was not
 run with larger buffers.
@@ -552,18 +531,15 @@ scales are consistent with the value of a cell depending mainly on emissions and
 order, which would explain why models that see this neighbourhood predict it well; our experiments show the reach at
 which skill levels off, not the physical source area. How the neighbourhood is combined matters little for the ranking
 when the field is this smooth: box means with a linear or tree model, the same box means fed to a neural network, and
-learned message passing reach similar skill once they see 12–23 km. For the top decile the estimators differ more, no
-SLX estimator is best in every year, and the GNN ensemble keeps an edge that its single seeds largely lose.
+learned message passing reach similar skill once they see 12–23 km. For the top decile, scores vary more across estimators, and no SLX estimator is best in every year. The GNN ensemble keeps an edge that largely disappears in its individual fits.
 
-The 24-km zero crossing that we first used as a heuristic for the needed reach is not a physical constant: it shrinks to
-14–19 km when the large-scale gradient is removed, and with the domain. The reach beyond which skill gains little
+We first used the 24-km zero crossing as a heuristic for the needed reach, but it is not a physical constant: it falls to 14–19 km after detrending and to 18–22 km on smaller domains. The reach beyond which skill gains little
 (12–23 km) overlaps the detrended correlation length more than the raw one. The practical rule is therefore to vary
 reach and look where skill levels off, using the correlation length as a first guess rather than as a fixed answer.
 
 ### 5.2 Implications for spatial deep learning
 
-The graph-learning literature on urban emissions and air quality has grown rapidly, but its baselines are rarely given
-the reach of the proposed models, and our results suggest that part of the reported gains are gains of reach. They
+Graph-learning research on urban emissions and air quality has grown rapidly, but its baselines are rarely given the reach of the proposed models. Our results suggest that part of the reported gains are gains of reach. They
 agree with scattered evidence: a random forest matched a spatial GNN for urban NO₂ in Berlin once it received the NO₂ of
 the other stations weighted as in the graph (Schmidt & Ong, 2026), a graph model of city CO₂ did not beat an MLP or
 XGBoost without extra constraints (Shao et al., 2026), GNNs can be written as generalised spatial regressions (Liang et
@@ -580,7 +556,7 @@ climate teleconnections (Chen et al., 2026), flows on a transport network (Mohse
 transport, or irregular units for which box windows are hard to define; and our results with larger buffers suggest
 that neural models extrapolate more gracefully than tree ensembles, whatever the role of the graph. We recommend five
 practices for spatial GNN studies: give baselines the model's reach, which costs seconds; report skill against reach
-and relate the level-off point to the correlation length of the target; report single seeds next to ensembles, or
+and relate the level-off point to the correlation length of the target; report individual fits next to ensembles, or
 ensemble the baselines too; use inference built for few spatial blocks and report the effective sample size of the
 target; and build interpolated covariates inside the cross-validation.
 
@@ -588,8 +564,7 @@ target; and build interpolated covariates inside the cross-validation.
 
 For screening the NO₂ hotspots of a city from satellite data, a linear regression on neighbourhood means of emission and
 urban-form layers over about 10–25 km was an adequate model here. It is fast; whether it transfers to other cities is a
-question for evaluation. Its coefficients are hard to read, because neighbourhood means at different
-scales are highly collinear, but its residual map can be compared directly with the inventory. For RQ1, the station
+question for evaluation. Its coefficients are hard to interpret because neighbourhood means at different scales are highly collinear, but its residual map can still be compared directly with the inventory. For RQ1, the station
 layer and the separate emission sectors added little to a map that urban form and one emission source already rank
 well; the effort of data fusion is better spent where sources differ at the scale of the target. We found no evidence
 that the graph adds predictive value for this task in Tehran; a neural network fed neighbourhood means ranked as well
@@ -788,8 +763,7 @@ and block-level), Holm-adjusted p-values of the registered family of 22 tests, a
 **Table S2 (supplementary).** Sources, years and processing of every predictor layer [to be laid out from
 `configs/config.yaml` and `data/raw/MANIFEST.csv`].
 
-**Figures.** All figures share one style: the same colours for the same models in every figure (GNN blue, SLX-OLS
-orange, SLX-GBM aqua, SLX-RF yellow, no-graph network grey), grey text and recessive axes. Each is saved as PNG (300
+**Figures.** All figures use the same model colours (GNN blue, SLX-OLS orange, SLX-GBM aqua, SLX-RF yellow, no-graph network grey), grey text and unobtrusive axes. Each is saved as PNG (300
 dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3–6 are drawn from the committed result tables by
 `python main.py paper figures`; nothing is re-run.
 
