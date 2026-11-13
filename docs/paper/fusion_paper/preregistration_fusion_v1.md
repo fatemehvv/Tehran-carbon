@@ -199,4 +199,21 @@ Candidate and reference are fixed now. Δ = Spearman(candidate) − Spearman(ref
 
 ## Deviations
 
-None yet.
+1. **Check M4 failed (2026-11-13), and the registered fallback was run.**
+   - **Result of M4** (`python main.py fusion check`, `docs/paper/fusion_paper/results_check/`):
+     - Every IAAFT realisation lost the location as intended: median |Spearman| with the real layer 0.05–0.09.
+     - But they did not keep the texture within the registered tolerance: the median, over the layers, of the largest
+       correlogram difference at 0–20 km was 0.21–0.36 against ≤ 0.05.
+     - The operational form of the rule (medians over the layers of a realisation) was fixed in the code before the
+       check was first run.
+   - **Rule.** More than two realisations failed, so by the registered rule:
+     - the IAAFT placebo verdicts (F1, F2, C1, C2 and the architecture estimates of stage 1) are labelled
+       "placebo check failed";
+     - the rotation-plus-shift placebo is run as a new config version: `fus2_placebo_v2`, `fus2_placebo_early_v2`,
+       `fus2_c1404_placebo_v2`.
+   - **Rotation-plus-shift placebo.** Every layer of a domain is rotated by 180° and shifted cyclically by the same
+     random offset, between one quarter and three quarters of the grid in each direction.
+     - It keeps the values, the monthly cycle and the within-domain correlation exactly.
+     - It keeps the texture except at the wrap-around seams.
+   - **M4 is applied to it in the same way, and its verdicts are the placebo verdicts of the paper.** The stage 1
+     results are reported as well, with their label.

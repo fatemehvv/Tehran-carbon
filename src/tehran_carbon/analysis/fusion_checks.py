@@ -38,9 +38,9 @@ def annual(a: np.ndarray) -> np.ndarray:
 
 
 class FusionChecks:
-    def __init__(self, cfg: dict, year: int = 1402):
-        self.cfg, self.year = cfg, int(year)
-        cfgs = Config().resolve("fus2_placebo_v1")
+    def __init__(self, cfg: dict, experiment: str = "fus2_placebo_v1", year: int = 1402):
+        self.cfg, self.year, self.experiment = cfg, int(year), experiment
+        cfgs = Config().resolve(experiment)
         self.plc = {}
         for c in cfgs:                                        # one config per realisation (the layers do not depend
             r = int(c["data"]["inputs"]["placebo"]["realization"])   # on the branches of the model)
@@ -82,7 +82,7 @@ class FusionChecks:
         verdict = "passed" if failed <= 2 else "placebo check failed"
         run.save_table("fusion_placebo_check.csv", t)
         run.save_table("fusion_placebo_check_summary.csv", per)
-        run.log("M4 per realisation:\n" + per.round(3).to_string(index=False) + f"\nM4: {verdict} ({failed} failed)")
+        run.log(f"M4 ({self.experiment}) per realisation:\n" + per.round(3).to_string(index=False) + f"\nM4: {verdict} ({failed} failed)")
         self.figure_maps(maps, grid, c0)
         return dict(verdict=verdict, failed=failed, per_realisation=per.to_dict("records"))
 
@@ -107,7 +107,7 @@ class FusionChecks:
                          fontsize=8)
         fig.text(0.5, -0.02, "Residential CO₂ of the inventory (log scale, annual mean); outline: label domain",
                  ha="center", color=INK2, fontsize=7.5)
-        save(fig, FIGURES / "fig1_placebo_maps")
+        save(fig, FIGURES / f"fig1_placebo_maps_{self.experiment}")
 
     # ------------------------------------------------------------------ lineage
     def lineage(self, run):

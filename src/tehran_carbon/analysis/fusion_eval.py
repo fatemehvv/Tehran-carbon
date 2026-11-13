@@ -157,9 +157,21 @@ def pooled_signflip(z, hot, pcs, prs, blocks, metric, sf):
     return float(np.mean(st >= obs - 1e-12)), float(np.mean(np.abs(st) >= abs(obs) - 1e-12))
 
 
+def with_placebo(pairs, version: str):
+    """The comparisons with the placebo experiments of another version (fus2_*placebo*_v1 -> _<version>)."""
+    def ren(spec):
+        if isinstance(spec, list):
+            return [ren(x) for x in spec]
+        e = spec["experiment"]
+        return dict(spec, experiment=e[:-3] + "_" + version) if "placebo" in e and e.endswith("_v1") else spec
+    return [(n, f, y, ren(c), ren(r)) for n, f, y, c, r in pairs]
+
+
 class FusionEvaluation:
-    def __init__(self, cfg: dict):
+    def __init__(self, cfg: dict, placebo: str = "v1"):
         self.cfg = cfg
+        self.pairs = PAIRS if placebo == "v1" else with_placebo(PAIRS, placebo)
+        self.placebo = placebo
         self.pc = cfg["analysis"]["paper"]
         self.margin = float(self.pc["margin"])
         s = self.pc["signflip"]
@@ -277,7 +289,8 @@ class FusionEvaluation:
     # ---------------------------------------------------------------------------------- all
     def run(self, run) -> dict:
         rows = []
-        for name, fam, years, cs, rs in PAIRS:
+        run.log(f"placebo version: {self.placebo}")
+        for name, fam, years, cs, rs in self.pairs:
             run.log(f"{name} ...")
             rows += self.compare(name, fam, years, cs, rs, run)
         g = {n: (yrs, c, r) for n, yrs, c, r in GAINS}

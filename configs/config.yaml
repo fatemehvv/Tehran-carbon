@@ -1007,6 +1007,35 @@ experiments:
       model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
       model.fusion.type: [gated]
 
+  # placebo v2: the registered fallback after check M4 failed for every IAAFT realisation (python main.py fusion check):
+  # the same layers rotated by 180 degrees and shifted cyclically (data/sources/placebo.py, method rotate_shift)
+  fus2_placebo_v2:
+    rq: RQ1
+    description: fusion paper - placebo branches by rotation and cyclic shift (fallback after check M4)
+    inherits: fus2_placebo_v1
+    data: {inputs: {placebo: {method: rotate_shift}}}
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
+      model.fusion.type: [gated]
+  fus2_placebo_early_v2:
+    rq: RQ1
+    description: fusion paper - rotation-and-shift placebo energy branch with early fusion
+    inherits: fus2_placebo_v2
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc]]
+      model.fusion.type: [early]
+  fus2_c1404_placebo_v2:
+    rq: RQ1
+    description: fusion paper - held-out year 1404, rotation-and-shift placebo branches
+    inherits: fus2_c1404_placebo_v1
+    data: {inputs: {placebo: {method: rotate_shift}}}
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
+      model.fusion.type: [gated]
+
   # ---------------------------------------------------------------- fusion paper, stage 2: target support (F3, F4)
   # Same registration. Before any of these runs: python main.py fusion support --exp fus1_all_v1 (checks M1-M3).
   # (a) seasonal composites of the daily TROPOMI files by overpass wind (data/sources/composite.py), placed on the

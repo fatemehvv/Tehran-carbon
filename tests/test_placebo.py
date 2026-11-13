@@ -90,3 +90,16 @@ def test_placebo_location_is_the_same_in_every_year_and_differs_by_realisation()
     assert np.corrcoef(m_a, m_b)[0, 1] > 0.99                                # same random location across years
     c = placebo(1).load(1402)
     assert np.corrcoef(m_a, c["plc_layer_m"].mean(0).ravel())[0, 1] < 0.95
+
+
+def test_rotate_shift_keeps_values_cycle_and_moves_the_city():
+    src = placebo(0)
+    src.p = dict(src.p, method="rotate_shift")
+    out = src.load(1402)
+    real = SOURCES.get("fake_domain").load(None, 1402)
+    m, r = out["plc_layer_m"], real["layer_m"]
+    assert np.array_equal(np.sort(m.ravel()), np.sort(r.ravel()))            # same values
+    assert np.allclose(m.reshape(12, -1).mean(1), r.reshape(12, -1).mean(1))  # same monthly cycle
+    assert abs(lag1(m[0]) - lag1(r[0])) < 0.15                               # same texture (up to the seams)
+    assert np.corrcoef(m.mean(0).ravel(), r.mean(0).ravel())[0, 1] < 0.9     # the city has moved
+    assert np.array_equal(out["plc_cw"], real["cw"])

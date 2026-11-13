@@ -18,6 +18,11 @@ Construction (settings: cfg["data"]["inputs"]["placebo"]):
     many inputs as its real counterpart.
 The random phases depend on the configured seed and `realization` only, never on the year: every year of a run has
 its placebo at the same random location, as the real static layers stay in place.
+
+`method: rotate_shift` (the registered fallback after check M4 failed for the IAAFT placebo): every layer of a domain
+is rotated by 180 degrees and shifted cyclically by the same random offset (rows and columns each between a quarter and
+three quarters of the grid), month by month. The texture, the values, the monthly cycle and the correlation between
+the layers of the domain are kept exactly; only the wrap-around seams are new.
 """
 from __future__ import annotations
 
@@ -79,6 +84,17 @@ class PlaceboSource(Source):
                 raise KeyError(f"placebo: layers {missing} are not produced by source '{domain}'")
             rng = np.random.default_rng([int(self.cfg["seed"]), int(p["realization"]), i])   # not the year
             arrays = [np.asarray(real[n], dtype=np.float64) for n in layers]
+            if p.get("method", "iaaft") == "rotate_shift":
+                H, W = arrays[0].shape[-2:]
+                dy = int(rng.integers(H // 4, 3 * H // 4 + 1))
+                dx = int(rng.integers(W // 4, 3 * W // 4 + 1))
+                for n, a in zip(layers, arrays):
+                    out[prefix + n] = np.roll(a[..., ::-1, ::-1], (dy, dx), axis=(-2, -1))
+                for n in (p.get("copy") or {}).get(domain, []):
+                    out[prefix + n] = np.asarray(real[n], dtype=np.float64).copy()
+                continue
+            if p.get("method", "iaaft") != "iaaft":
+                raise ValueError(f"placebo method {p.get('method')!r}: use iaaft or rotate_shift")
             maps = [a.mean(0) if a.ndim == 3 else a for a in arrays]
             surrogates = iaaft_multi(maps, rng, int(p.get("iterations", 100)))
             for n, a, mp, s in zip(layers, arrays, maps, surrogates):
