@@ -937,6 +937,76 @@ experiments:
     sweep:
       rl.reward.lambda_mobility: [0.25, 0.5, 2.0, 4.0]
 
+  # ---------------------------------------------------------------- fusion paper (branch paper_fusion), stage 1: placebo
+  # docs/paper/fusion_paper/preregistration_fusion_v1.md (registered before these runs). Graph-free RQ1 network
+  # (paper2_rq1_ablation_v1: lags [3, 9], fold-aware stations, 5 seeds stored). A placebo branch holds the layers of a
+  # real domain at a random location (data/sources/placebo.py: multivariate IAAFT surrogates, realisations 0-4).
+  # The real-branch references on 1402 / 1403 are the existing paper2_rq1_ablation_v1 and paper2_rq1_context_only_v1.
+  fus2_placebo_v1:
+    rq: RQ1
+    description: fusion paper - placebo branches (same values, texture and within-domain correlation; random location)
+    inherits: paper2_rq1_ablation_v1
+    data: &placebo_data
+      inputs:
+        placebo:
+          realization: 0
+          iterations: 100
+          prefix: plc_
+          domains:
+            traffic: [inv_road, road_km_motorway_trunk, road_km_primary, road_km_secondary, road_km_tertiary, vkt_peak, vc_mean]
+            energy: [inv_residential, inv_commercial, inv_industry, inv_power]
+            pollution: [aq_co]
+          copy: {energy: [hdd]}                    # city-wide: copied, so the placebo branch has as many inputs
+      modalities:
+        traffic_plc: [plc_inv_road, plc_road_km_motorway_trunk, plc_road_km_primary, plc_road_km_secondary,
+                      plc_road_km_tertiary, plc_vkt_peak, plc_vc_mean]
+        energy_plc: [plc_inv_residential, plc_inv_commercial, plc_inv_industry, plc_inv_power, plc_hdd]
+        pollution_plc: [plc_aq_co]
+      log1p: [inv_road, inv_residential, inv_commercial, inv_industry, inv_power, pop, vol_total, vol_nonres, viirs,
+              vkt_peak, plc_inv_road, plc_inv_residential, plc_inv_commercial, plc_inv_industry, plc_inv_power,
+              plc_vkt_peak]
+      no_lag: [hdd, t2m, wind, plc_hdd]
+    split: {transfer: false}
+    train: {save_final: false}
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
+      model.fusion.type: [gated]
+  fus2_placebo_early_v1:
+    rq: RQ1
+    description: fusion paper - placebo energy branch with early fusion (architecture effect without a gate)
+    inherits: fus2_placebo_v1
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc]]
+      model.fusion.type: [early]
+  # held-out year 1404 without a graph: train on the training blocks of 1402 + 1403, predict the held-out block of 1404
+  fus2_c1404_real_v1:
+    rq: RQ1
+    description: fusion paper - held-out year 1404, graph-free network, real branches (references of C1 and C2)
+    inherits: paper2_rq1_ablation_v1
+    years: [1402, 1403, 1404]
+    data: *data1404
+    split: *split1404
+    train: {save_final: false}
+    sweep:
+      model.modalities: [[energy], [traffic, energy, pollution]]
+      model.fusion.type: [gated]
+  fus2_c1404_context_v1:
+    rq: RQ1
+    description: fusion paper - held-out year 1404, graph-free network, context only (one branch)
+    inherits: fus2_c1404_real_v1
+    model: {modalities: [], fusion: {type: early}}
+  fus2_c1404_placebo_v1:
+    rq: RQ1
+    description: fusion paper - held-out year 1404, graph-free network, placebo branches
+    inherits: fus2_c1404_real_v1
+    data: *placebo_data
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
+      model.fusion.type: [gated]
+
 # =====================================================================================================================
 # Pre-registered decision rules (fixed before any model is trained; docs/preregistration_rq1.md).
 # Selector = experiment + optional `where` on the resolved config (a value, or {in: [...]}).
