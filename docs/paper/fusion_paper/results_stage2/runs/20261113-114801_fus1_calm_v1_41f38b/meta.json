@@ -1,0 +1,44 @@
+{
+  "run_id": "20261113-114801_fus1_calm_v1_41f38b",
+  "experiment": "fus1_calm_v1",
+  "variant": {
+    "model.modalities": [
+      "pollution"
+    ],
+    "model.fusion.type": "early"
+  },
+  "variant_label": "modalities=pollution|fusion=early",
+  "rq": "RQ1",
+  "kind": "train",
+  "version": 1,
+  "overrides": {},
+  "config_hash": "41f38b9f626b",
+  "data_hash": "ce6c8fc6f5a4",
+  "git": {
+    "commit": "1b9b990",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 11:48:01",
+  "status": "done",
+  "finished": "2026-11-13 11:49:24",
+  "duration_s": 83.2,
+  "summary": {
+    "pr_auc_1402": 0.598,
+    "pr_auc_1403": 0.5893
+  }
+}

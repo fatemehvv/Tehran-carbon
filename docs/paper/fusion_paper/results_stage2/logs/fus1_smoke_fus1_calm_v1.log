@@ -1,0 +1,13 @@
+
+=== 1/1  fus1_calm_v1 [modalities=traffic|fusion=early]
+[11:36:02] dataset ce6c8fc6f5a4: building
+[11:36:02]   source 'satellite_composite' 1402
+[11:36:02]   source 'satellite_composite' 1403
+[11:36:03]   1402: 12 steps, 4 with a target
+[11:36:03]   1403: 12 steps, 4 with a target
+[11:36:04] dataset ce6c8fc6f5a4: 54 features, 2436 label cells (CORE 4484)
+[11:36:04] fus1_calm_v1 [modalities=traffic|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:36:06]   1402 fold 00: train 2428 cells, test 3
+[11:36:06] smoke run: one fold only, no scoring
+
+[train finished in 0.1 min]

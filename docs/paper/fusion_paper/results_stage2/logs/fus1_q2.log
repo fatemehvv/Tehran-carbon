@@ -1,0 +1,521 @@
+
+=== 1/15  fus1_windy_v1 [modalities=traffic|fusion=early]
+[11:36:32] dataset 51ed2be73d06: building
+[11:36:32]   1402: 12 steps, 4 with a target
+[11:36:32]   1403: 12 steps, 4 with a target
+[11:36:33] dataset 51ed2be73d06: 54 features, 2436 label cells (CORE 4484)
+[11:36:33] fus1_windy_v1 [modalities=traffic|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:36:38]   1402 fold 00: train 2428 cells, test 3
+[11:36:42]   1402 fold 01: train 2185 cells, test 178
+[11:36:46]   1402 fold 02: train 2011 cells, test 332
+[11:36:48]   1402 fold 03: train 2201 cells, test 189
+[11:36:51]   1402 fold 04: train 2430 cells, test 5
+[11:36:54]   1402 fold 05: train 2094 cells, test 243
+[11:36:57]   1402 fold 06: train 1671 cells, test 595
+[11:36:59]   1402 fold 07: train 2246 cells, test 140
+[11:37:02]   1402 fold 08: train 2374 cells, test 52
+[11:37:06]   1402 fold 09: train 2076 cells, test 319
+[11:37:09]   1402 fold 10: train 1996 cells, test 343
+[11:37:13]   1402 fold 11: train 2368 cells, test 37
+[11:37:13]   1402 CV: pr_auc=0.686, roc_auc=0.955, f1_top=0.620, spearman=0.870, r2=0.713, mae=0.397, rmse=0.535
+[11:37:16]   1403 fold 00: train 2428 cells, test 3
+[11:37:20]   1403 fold 01: train 2185 cells, test 178
+[11:37:23]   1403 fold 02: train 2011 cells, test 332
+[11:37:25]   1403 fold 03: train 2201 cells, test 189
+[11:37:28]   1403 fold 04: train 2430 cells, test 5
+[11:37:31]   1403 fold 05: train 2094 cells, test 243
+[11:37:34]   1403 fold 06: train 1671 cells, test 595
+[11:37:38]   1403 fold 07: train 2246 cells, test 140
+[11:37:40]   1403 fold 08: train 2374 cells, test 52
+[11:37:43]   1403 fold 09: train 2076 cells, test 319
+[11:37:47]   1403 fold 10: train 1996 cells, test 343
+[11:37:50]   1403 fold 11: train 2368 cells, test 37
+[11:37:50]   1403 CV: pr_auc=0.711, roc_auc=0.965, f1_top=0.681, spearman=0.895, r2=0.761, mae=0.355, rmse=0.488
+
+=== 2/15  fus1_windy_v1 [modalities=traffic|fusion=late]
+[11:37:51] dataset 51ed2be73d06: from cache
+[11:37:51] fus1_windy_v1 [modalities=traffic|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:37:57]   1402 fold 00: train 2428 cells, test 3
+[11:38:00]   1402 fold 01: train 2185 cells, test 178
+[11:38:04]   1402 fold 02: train 2011 cells, test 332
+[11:38:08]   1402 fold 03: train 2201 cells, test 189
+[11:38:14]   1402 fold 04: train 2430 cells, test 5
+[11:38:19]   1402 fold 05: train 2094 cells, test 243
+[11:38:23]   1402 fold 06: train 1671 cells, test 595
+[11:38:27]   1402 fold 07: train 2246 cells, test 140
+[11:38:30]   1402 fold 08: train 2374 cells, test 52
+[11:38:34]   1402 fold 09: train 2076 cells, test 319
+[11:38:37]   1402 fold 10: train 1996 cells, test 343
+[11:38:43]   1402 fold 11: train 2368 cells, test 37
+[11:38:43]   1402 CV: pr_auc=0.649, roc_auc=0.948, f1_top=0.611, spearman=0.891, r2=0.762, mae=0.363, rmse=0.487
+[11:38:49]   1403 fold 00: train 2428 cells, test 3
+[11:38:54]   1403 fold 01: train 2185 cells, test 178
+[11:39:00]   1403 fold 02: train 2011 cells, test 332
+[11:39:05]   1403 fold 03: train 2201 cells, test 189
+[11:39:11]   1403 fold 04: train 2430 cells, test 5
+[11:39:16]   1403 fold 05: train 2094 cells, test 243
+[11:39:22]   1403 fold 06: train 1671 cells, test 595
+[11:39:27]   1403 fold 07: train 2246 cells, test 140
+[11:39:33]   1403 fold 08: train 2374 cells, test 52
+[11:39:37]   1403 fold 09: train 2076 cells, test 319
+[11:39:43]   1403 fold 10: train 1996 cells, test 343
+[11:39:49]   1403 fold 11: train 2368 cells, test 37
+[11:39:49]   1403 CV: pr_auc=0.645, roc_auc=0.957, f1_top=0.667, spearman=0.907, r2=0.802, mae=0.326, rmse=0.445
+
+=== 3/15  fus1_windy_v1 [modalities=traffic|fusion=gated]
+[11:39:49] dataset 51ed2be73d06: from cache
+[11:39:50] fus1_windy_v1 [modalities=traffic|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:39:55]   1402 fold 00: train 2428 cells, test 3
+[11:40:01]   1402 fold 01: train 2185 cells, test 178
+[11:40:07]   1402 fold 02: train 2011 cells, test 332
+[11:40:12]   1402 fold 03: train 2201 cells, test 189
+[11:40:18]   1402 fold 04: train 2430 cells, test 5
+[11:40:24]   1402 fold 05: train 2094 cells, test 243
+[11:40:30]   1402 fold 06: train 1671 cells, test 595
+[11:40:36]   1402 fold 07: train 2246 cells, test 140
+[11:40:42]   1402 fold 08: train 2374 cells, test 52
+[11:40:46]   1402 fold 09: train 2076 cells, test 319
+[11:40:50]   1402 fold 10: train 1996 cells, test 343
+[11:40:53]   1402 fold 11: train 2368 cells, test 37
+[11:40:53]   1402 CV: pr_auc=0.668, roc_auc=0.949, f1_top=0.596, spearman=0.864, r2=0.702, mae=0.402, rmse=0.546
+[11:40:57]   1403 fold 00: train 2428 cells, test 3
+[11:41:02]   1403 fold 01: train 2185 cells, test 178
+[11:41:07]   1403 fold 02: train 2011 cells, test 332
+[11:41:12]   1403 fold 03: train 2201 cells, test 189
+[11:41:16]   1403 fold 04: train 2430 cells, test 5
+[11:41:22]   1403 fold 05: train 2094 cells, test 243
+[11:41:26]   1403 fold 06: train 1671 cells, test 595
+[11:41:32]   1403 fold 07: train 2246 cells, test 140
+[11:41:38]   1403 fold 08: train 2374 cells, test 52
+[11:41:44]   1403 fold 09: train 2076 cells, test 319
+[11:41:50]   1403 fold 10: train 1996 cells, test 343
+[11:41:56]   1403 fold 11: train 2368 cells, test 37
+[11:41:56]   1403 CV: pr_auc=0.632, roc_auc=0.958, f1_top=0.633, spearman=0.883, r2=0.750, mae=0.362, rmse=0.500
+
+=== 4/15  fus1_windy_v1 [modalities=energy|fusion=early]
+[11:41:56] dataset 51ed2be73d06: from cache
+[11:41:56] fus1_windy_v1 [modalities=energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:42:00]   1402 fold 00: train 2428 cells, test 3
+[11:42:04]   1402 fold 01: train 2185 cells, test 178
+[11:42:07]   1402 fold 02: train 2011 cells, test 332
+[11:42:11]   1402 fold 03: train 2201 cells, test 189
+[11:42:15]   1402 fold 04: train 2430 cells, test 5
+[11:42:18]   1402 fold 05: train 2094 cells, test 243
+[11:42:20]   1402 fold 06: train 1671 cells, test 595
+[11:42:23]   1402 fold 07: train 2246 cells, test 140
+[11:42:25]   1402 fold 08: train 2374 cells, test 52
+[11:42:27]   1402 fold 09: train 2076 cells, test 319
+[11:42:29]   1402 fold 10: train 1996 cells, test 343
+[11:42:33]   1402 fold 11: train 2368 cells, test 37
+[11:42:33]   1402 CV: pr_auc=0.598, roc_auc=0.949, f1_top=0.603, spearman=0.905, r2=0.788, mae=0.345, rmse=0.460
+[11:42:36]   1403 fold 00: train 2428 cells, test 3
+[11:42:40]   1403 fold 01: train 2185 cells, test 178
+[11:42:43]   1403 fold 02: train 2011 cells, test 332
+[11:42:46]   1403 fold 03: train 2201 cells, test 189
+[11:42:49]   1403 fold 04: train 2430 cells, test 5
+[11:42:52]   1403 fold 05: train 2094 cells, test 243
+[11:42:56]   1403 fold 06: train 1671 cells, test 595
+[11:42:59]   1403 fold 07: train 2246 cells, test 140
+[11:43:02]   1403 fold 08: train 2374 cells, test 52
+[11:43:04]   1403 fold 09: train 2076 cells, test 319
+[11:43:06]   1403 fold 10: train 1996 cells, test 343
+[11:43:08]   1403 fold 11: train 2368 cells, test 37
+[11:43:08]   1403 CV: pr_auc=0.697, roc_auc=0.966, f1_top=0.701, spearman=0.928, r2=0.832, mae=0.301, rmse=0.410
+
+=== 5/15  fus1_windy_v1 [modalities=energy|fusion=late]
+[11:43:09] dataset 51ed2be73d06: from cache
+[11:43:09] fus1_windy_v1 [modalities=energy|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:43:14]   1402 fold 00: train 2428 cells, test 3
+[11:43:19]   1402 fold 01: train 2185 cells, test 178
+[11:43:25]   1402 fold 02: train 2011 cells, test 332
+[11:43:30]   1402 fold 03: train 2201 cells, test 189
+[11:43:36]   1402 fold 04: train 2430 cells, test 5
+[11:43:42]   1402 fold 05: train 2094 cells, test 243
+[11:43:48]   1402 fold 06: train 1671 cells, test 595
+[11:43:53]   1402 fold 07: train 2246 cells, test 140
+[11:43:59]   1402 fold 08: train 2374 cells, test 52
+[11:44:04]   1402 fold 09: train 2076 cells, test 319
+[11:44:10]   1402 fold 10: train 1996 cells, test 343
+[11:44:16]   1402 fold 11: train 2368 cells, test 37
+[11:44:16]   1402 CV: pr_auc=0.526, roc_auc=0.937, f1_top=0.544, spearman=0.896, r2=0.759, mae=0.372, rmse=0.490
+[11:44:21]   1403 fold 00: train 2428 cells, test 3
+[11:44:27]   1403 fold 01: train 2185 cells, test 178
+[11:44:31]   1403 fold 02: train 2011 cells, test 332
+[11:44:34]   1403 fold 03: train 2201 cells, test 189
+[11:44:38]   1403 fold 04: train 2430 cells, test 5
+[11:44:41]   1403 fold 05: train 2094 cells, test 243
+[11:44:44]   1403 fold 06: train 1671 cells, test 595
+[11:44:49]   1403 fold 07: train 2246 cells, test 140
+[11:44:54]   1403 fold 08: train 2374 cells, test 52
+[11:44:59]   1403 fold 09: train 2076 cells, test 319
+[11:45:04]   1403 fold 10: train 1996 cells, test 343
+[11:45:10]   1403 fold 11: train 2368 cells, test 37
+[11:45:10]   1403 CV: pr_auc=0.601, roc_auc=0.956, f1_top=0.626, spearman=0.920, r2=0.814, mae=0.320, rmse=0.430
+
+=== 6/15  fus1_windy_v1 [modalities=energy|fusion=gated]
+[11:45:10] dataset 51ed2be73d06: from cache
+[11:45:10] fus1_windy_v1 [modalities=energy|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:45:16]   1402 fold 00: train 2428 cells, test 3
+[11:45:22]   1402 fold 01: train 2185 cells, test 178
+[11:45:25]   1402 fold 02: train 2011 cells, test 332
+[11:45:28]   1402 fold 03: train 2201 cells, test 189
+[11:45:32]   1402 fold 04: train 2430 cells, test 5
+[11:45:35]   1402 fold 05: train 2094 cells, test 243
+[11:45:39]   1402 fold 06: train 1671 cells, test 595
+[11:45:42]   1402 fold 07: train 2246 cells, test 140
+[11:45:46]   1402 fold 08: train 2374 cells, test 52
+[11:45:51]   1402 fold 09: train 2076 cells, test 319
+[11:45:54]   1402 fold 10: train 1996 cells, test 343
+[11:45:59]   1402 fold 11: train 2368 cells, test 37
+[11:45:59]   1402 CV: pr_auc=0.677, roc_auc=0.951, f1_top=0.606, spearman=0.894, r2=0.755, mae=0.374, rmse=0.495
+[11:46:05]   1403 fold 00: train 2428 cells, test 3
+[11:46:11]   1403 fold 01: train 2185 cells, test 178
+[11:46:16]   1403 fold 02: train 2011 cells, test 332
+[11:46:21]   1403 fold 03: train 2201 cells, test 189
+[11:46:27]   1403 fold 04: train 2430 cells, test 5
+[11:46:33]   1403 fold 05: train 2094 cells, test 243
+[11:46:39]   1403 fold 06: train 1671 cells, test 595
+[11:46:44]   1403 fold 07: train 2246 cells, test 140
+[11:46:50]   1403 fold 08: train 2374 cells, test 52
+[11:46:56]   1403 fold 09: train 2076 cells, test 319
+[11:47:02]   1403 fold 10: train 1996 cells, test 343
+[11:47:08]   1403 fold 11: train 2368 cells, test 37
+[11:47:08]   1403 CV: pr_auc=0.766, roc_auc=0.969, f1_top=0.707, spearman=0.921, r2=0.812, mae=0.322, rmse=0.433
+
+=== 7/15  fus1_windy_v1 [modalities=pollution|fusion=early]
+[11:47:08] dataset 51ed2be73d06: from cache
+[11:47:09] fus1_windy_v1 [modalities=pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:47:11]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:47:15]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:47:17]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:47:21]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:47:25]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:47:29]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:47:31]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:47:35]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:47:37]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:47:41]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:47:44]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:47:48]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:47:48]   1402 CV: pr_auc=0.592, roc_auc=0.952, f1_top=0.585, spearman=0.908, r2=0.772, mae=0.360, rmse=0.477
+[11:47:51]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:47:55]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:47:59]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:48:03]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:48:06]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:48:10]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:48:14]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:48:17]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:48:21]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:48:24]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:48:28]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:48:32]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:48:32]   1403 CV: pr_auc=0.621, roc_auc=0.961, f1_top=0.649, spearman=0.916, r2=0.799, mae=0.338, rmse=0.448
+
+=== 8/15  fus1_windy_v1 [modalities=pollution|fusion=late]
+[11:48:32] dataset 51ed2be73d06: from cache
+[11:48:32] fus1_windy_v1 [modalities=pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:48:36]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:48:43]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:48:46]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:48:52]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:48:57]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:49:03]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:49:09]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:49:14]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:49:20]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:49:25]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:49:31]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:49:37]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:49:37]   1402 CV: pr_auc=0.590, roc_auc=0.947, f1_top=0.592, spearman=0.899, r2=0.759, mae=0.373, rmse=0.491
+[11:49:43]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:49:48]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:49:52]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:49:58]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:50:03]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:50:09]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:50:15]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:50:19]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:50:24]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:50:30]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:50:36]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:50:41]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:50:41]   1403 CV: pr_auc=0.615, roc_auc=0.960, f1_top=0.636, spearman=0.920, r2=0.812, mae=0.328, rmse=0.433
+
+=== 9/15  fus1_windy_v1 [modalities=pollution|fusion=gated]
+[11:50:42] dataset 51ed2be73d06: from cache
+[11:50:42] fus1_windy_v1 [modalities=pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:50:48]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:50:53]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:51:00]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:51:06]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:51:12]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:51:19]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:51:26]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:51:32]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:51:38]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:51:44]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:51:50]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:51:56]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:51:56]   1402 CV: pr_auc=0.641, roc_auc=0.954, f1_top=0.627, spearman=0.903, r2=0.770, mae=0.363, rmse=0.478
+[11:52:01]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:52:06]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:52:10]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:52:15]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:52:21]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:52:26]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:52:32]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:52:38]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:52:44]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:52:50]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:52:56]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:53:02]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:53:02]   1403 CV: pr_auc=0.661, roc_auc=0.956, f1_top=0.599, spearman=0.918, r2=0.814, mae=0.329, rmse=0.431
+
+=== 10/15  fus1_windy_v1 [modalities=traffic+energy|fusion=early]
+[11:53:02] dataset 51ed2be73d06: from cache
+[11:53:02] fus1_windy_v1 [modalities=traffic+energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:53:06]   1402 fold 00: train 2428 cells, test 3
+[11:53:09]   1402 fold 01: train 2185 cells, test 178
+[11:53:11]   1402 fold 02: train 2011 cells, test 332
+[11:53:14]   1402 fold 03: train 2201 cells, test 189
+[11:53:16]   1402 fold 04: train 2430 cells, test 5
+[11:53:19]   1402 fold 05: train 2094 cells, test 243
+[11:53:22]   1402 fold 06: train 1671 cells, test 595
+[11:53:26]   1402 fold 07: train 2246 cells, test 140
+[11:53:28]   1402 fold 08: train 2374 cells, test 52
+[11:53:31]   1402 fold 09: train 2076 cells, test 319
+[11:53:34]   1402 fold 10: train 1996 cells, test 343
+[11:53:38]   1402 fold 11: train 2368 cells, test 37
+[11:53:38]   1402 CV: pr_auc=0.606, roc_auc=0.954, f1_top=0.627, spearman=0.882, r2=0.746, mae=0.376, rmse=0.502
+[11:53:42]   1403 fold 00: train 2428 cells, test 3
+[11:53:45]   1403 fold 01: train 2185 cells, test 178
+[11:53:49]   1403 fold 02: train 2011 cells, test 332
+[11:53:53]   1403 fold 03: train 2201 cells, test 189
+[11:53:56]   1403 fold 04: train 2430 cells, test 5
+[11:53:58]   1403 fold 05: train 2094 cells, test 243
+[11:54:01]   1403 fold 06: train 1671 cells, test 595
+[11:54:03]   1403 fold 07: train 2246 cells, test 140
+[11:54:05]   1403 fold 08: train 2374 cells, test 52
+[11:54:09]   1403 fold 09: train 2076 cells, test 319
+[11:54:13]   1403 fold 10: train 1996 cells, test 343
+[11:54:16]   1403 fold 11: train 2368 cells, test 37
+[11:54:16]   1403 CV: pr_auc=0.722, roc_auc=0.971, f1_top=0.720, spearman=0.911, r2=0.800, mae=0.327, rmse=0.446
+
+=== 11/15  fus1_windy_v1 [modalities=traffic+energy|fusion=late]
+[11:54:16] dataset 51ed2be73d06: from cache
+[11:54:16] fus1_windy_v1 [modalities=traffic+energy|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:54:23]   1402 fold 00: train 2428 cells, test 3
+[11:54:31]   1402 fold 01: train 2185 cells, test 178
+[11:54:38]   1402 fold 02: train 2011 cells, test 332
+[11:54:46]   1402 fold 03: train 2201 cells, test 189
+[11:54:53]   1402 fold 04: train 2430 cells, test 5
+[11:55:00]   1402 fold 05: train 2094 cells, test 243
+[11:55:07]   1402 fold 06: train 1671 cells, test 595
+[11:55:15]   1402 fold 07: train 2246 cells, test 140
+[11:55:22]   1402 fold 08: train 2374 cells, test 52
+[11:55:29]   1402 fold 09: train 2076 cells, test 319
+[11:55:36]   1402 fold 10: train 1996 cells, test 343
+[11:55:40]   1402 fold 11: train 2368 cells, test 37
+[11:55:40]   1402 CV: pr_auc=0.620, roc_auc=0.946, f1_top=0.594, spearman=0.888, r2=0.751, mae=0.380, rmse=0.499
+[11:55:47]   1403 fold 00: train 2428 cells, test 3
+[11:55:54]   1403 fold 01: train 2185 cells, test 178
+[11:55:58]   1403 fold 02: train 2011 cells, test 332
+[11:56:04]   1403 fold 03: train 2201 cells, test 189
+[11:56:11]   1403 fold 04: train 2430 cells, test 5
+[11:56:18]   1403 fold 05: train 2094 cells, test 243
+[11:56:26]   1403 fold 06: train 1671 cells, test 595
+[11:56:34]   1403 fold 07: train 2246 cells, test 140
+[11:56:41]   1403 fold 08: train 2374 cells, test 52
+[11:56:48]   1403 fold 09: train 2076 cells, test 319
+[11:56:55]   1403 fold 10: train 1996 cells, test 343
+[11:57:01]   1403 fold 11: train 2368 cells, test 37
+[11:57:01]   1403 CV: pr_auc=0.701, roc_auc=0.964, f1_top=0.677, spearman=0.908, r2=0.791, mae=0.345, rmse=0.457
+
+=== 12/15  fus1_windy_v1 [modalities=traffic+energy|fusion=gated]
+[11:57:01] dataset 51ed2be73d06: from cache
+[11:57:01] fus1_windy_v1 [modalities=traffic+energy|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:57:08]   1402 fold 00: train 2428 cells, test 3
+[11:57:15]   1402 fold 01: train 2185 cells, test 178
+[11:57:21]   1402 fold 02: train 2011 cells, test 332
+[11:57:28]   1402 fold 03: train 2201 cells, test 189
+[11:57:36]   1402 fold 04: train 2430 cells, test 5
+[11:57:40]   1402 fold 05: train 2094 cells, test 243
+[11:57:44]   1402 fold 06: train 1671 cells, test 595
+[11:57:50]   1402 fold 07: train 2246 cells, test 140
+[11:57:58]   1402 fold 08: train 2374 cells, test 52
+[11:58:05]   1402 fold 09: train 2076 cells, test 319
+[11:58:12]   1402 fold 10: train 1996 cells, test 343
+[11:58:19]   1402 fold 11: train 2368 cells, test 37
+[11:58:19]   1402 CV: pr_auc=0.695, roc_auc=0.956, f1_top=0.637, spearman=0.867, r2=0.706, mae=0.405, rmse=0.541
+[11:58:26]   1403 fold 00: train 2428 cells, test 3
+[11:58:34]   1403 fold 01: train 2185 cells, test 178
+[11:58:41]   1403 fold 02: train 2011 cells, test 332
+[11:58:48]   1403 fold 03: train 2201 cells, test 189
+[11:58:56]   1403 fold 04: train 2430 cells, test 5
+[11:59:03]   1403 fold 05: train 2094 cells, test 243
+[11:59:10]   1403 fold 06: train 1671 cells, test 595
+[11:59:17]   1403 fold 07: train 2246 cells, test 140
+[11:59:24]   1403 fold 08: train 2374 cells, test 52
+[11:59:31]   1403 fold 09: train 2076 cells, test 319
+[11:59:39]   1403 fold 10: train 1996 cells, test 343
+[11:59:46]   1403 fold 11: train 2368 cells, test 37
+[11:59:46]   1403 CV: pr_auc=0.797, roc_auc=0.971, f1_top=0.723, spearman=0.892, r2=0.753, mae=0.361, rmse=0.497
+
+=== 13/15  fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=early]
+[11:59:46] dataset 51ed2be73d06: from cache
+[11:59:47] fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:59:50]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:59:52]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:59:56]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:59:59]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:00:02]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:00:05]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:00:09]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:00:14]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:00:16]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:00:18]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:00:21]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:00:25]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:00:25]   1402 CV: pr_auc=0.566, roc_auc=0.951, f1_top=0.620, spearman=0.903, r2=0.790, mae=0.341, rmse=0.456
+[12:00:29]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:00:32]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:00:36]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:00:40]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:00:43]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:00:46]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:00:50]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:00:53]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:00:56]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:01:00]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:01:03]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:01:06]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:01:06]   1403 CV: pr_auc=0.743, roc_auc=0.972, f1_top=0.726, spearman=0.916, r2=0.806, mae=0.321, rmse=0.440
+
+=== 14/15  fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=late]
+[12:01:06] dataset 51ed2be73d06: from cache
+[12:01:06] fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[12:01:14]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:01:23]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:01:31]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:01:40]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:01:49]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:01:57]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:02:06]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:02:15]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:02:24]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:02:33]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:02:42]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:02:51]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:02:51]   1402 CV: pr_auc=0.612, roc_auc=0.942, f1_top=0.581, spearman=0.886, r2=0.748, mae=0.382, rmse=0.501
+[12:02:56]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:03:05]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:03:11]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:03:20]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:03:29]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:03:38]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:03:47]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:03:54]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:03:59]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:04:07]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:04:16]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:04:22]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:04:22]   1403 CV: pr_auc=0.705, roc_auc=0.964, f1_top=0.677, spearman=0.907, r2=0.791, mae=0.343, rmse=0.457
+
+=== 15/15  fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=gated]
+[12:04:22] dataset 51ed2be73d06: from cache
+[12:04:22] fus1_windy_v1 [modalities=traffic+energy+pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[12:04:32]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:04:40]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:04:50]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:04:59]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:05:07]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:05:16]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:05:25]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:05:33]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:05:42]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:05:51]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:06:00]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:06:09]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:06:09]   1402 CV: pr_auc=0.701, roc_auc=0.960, f1_top=0.635, spearman=0.885, r2=0.742, mae=0.376, rmse=0.506
+[12:06:14]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:06:22]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:06:31]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:06:40]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:06:49]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:06:55]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:07:03]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:07:12]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:07:20]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:07:29]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:07:38]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:07:47]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:07:47]   1403 CV: pr_auc=0.775, roc_auc=0.971, f1_top=0.705, spearman=0.899, r2=0.772, mae=0.344, rmse=0.477
+
+[train finished in 31.3 min]
+
+=== 1/2  fus1_all_v1 [modalities=energy|fusion=gated]
+[12:07:51] dataset 3901f3d64ee5: building
+[12:07:52]   1402: 12 steps, 4 with a target
+[12:07:52]   1403: 12 steps, 4 with a target
+[12:07:53] dataset 3901f3d64ee5: 54 features, 2436 label cells (CORE 4484)
+[12:07:53] fus1_all_v1 [modalities=energy|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[12:08:00]   1402 fold 00: train 2428 cells, test 3
+[12:08:07]   1402 fold 01: train 2185 cells, test 178
+[12:08:13]   1402 fold 02: train 2011 cells, test 332
+[12:08:19]   1402 fold 03: train 2201 cells, test 189
+[12:08:24]   1402 fold 04: train 2430 cells, test 5
+[12:08:30]   1402 fold 05: train 2094 cells, test 243
+[12:08:35]   1402 fold 06: train 1671 cells, test 595
+[12:08:41]   1402 fold 07: train 2246 cells, test 140
+[12:08:47]   1402 fold 08: train 2374 cells, test 52
+[12:08:53]   1402 fold 09: train 2076 cells, test 319
+[12:08:59]   1402 fold 10: train 1996 cells, test 343
+[12:09:04]   1402 fold 11: train 2368 cells, test 37
+[12:09:04]   1402 CV: pr_auc=0.824, roc_auc=0.976, f1_top=0.725, spearman=0.933, r2=0.833, mae=0.308, rmse=0.409
+[12:09:08]   1403 fold 00: train 2428 cells, test 3
+[12:09:12]   1403 fold 01: train 2185 cells, test 178
+[12:09:15]   1403 fold 02: train 2011 cells, test 332
+[12:09:19]   1403 fold 03: train 2201 cells, test 189
+[12:09:23]   1403 fold 04: train 2430 cells, test 5
+[12:09:26]   1403 fold 05: train 2094 cells, test 243
+[12:09:31]   1403 fold 06: train 1671 cells, test 595
+[12:09:35]   1403 fold 07: train 2246 cells, test 140
+[12:09:40]   1403 fold 08: train 2374 cells, test 52
+[12:09:46]   1403 fold 09: train 2076 cells, test 319
+[12:09:50]   1403 fold 10: train 1996 cells, test 343
+[12:09:55]   1403 fold 11: train 2368 cells, test 37
+[12:09:55]   1403 CV: pr_auc=0.825, roc_auc=0.980, f1_top=0.748, spearman=0.941, r2=0.859, mae=0.278, rmse=0.374
+
+=== 2/2  fus1_all_v1 [modalities=traffic+energy+pollution|fusion=gated]
+[12:09:56] dataset 3901f3d64ee5: from cache
+[12:09:56] fus1_all_v1 [modalities=traffic+energy+pollution|fusion=gated]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[12:10:05]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:10:14]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:10:21]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:10:30]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:10:39]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:10:48]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:10:56]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:11:05]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:11:14]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:11:23]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:11:31]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:11:40]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:11:40]   1402 CV: pr_auc=0.867, roc_auc=0.980, f1_top=0.766, spearman=0.915, r2=0.802, mae=0.325, rmse=0.445
+[12:11:49]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[12:11:56]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[12:12:05]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[12:12:14]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[12:12:20]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[12:12:25]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[12:12:33]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[12:12:42]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[12:12:51]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[12:13:00]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[12:13:08]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[12:13:16]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[12:13:16]   1403 CV: pr_auc=0.893, roc_auc=0.986, f1_top=0.795, spearman=0.925, r2=0.816, mae=0.309, rmse=0.426
+
+[train finished in 5.5 min]
+QUEUE_EXIT=0

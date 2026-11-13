@@ -1,0 +1,50 @@
+{
+  "run_id": "20261113-113602_fus1_calm_v1_9628e0",
+  "experiment": "fus1_calm_v1",
+  "variant": {
+    "model.modalities": [
+      "traffic"
+    ],
+    "model.fusion.type": "early"
+  },
+  "variant_label": "modalities=traffic|fusion=early",
+  "rq": "RQ1",
+  "kind": "train",
+  "version": 1,
+  "overrides": {
+    "train.epochs": 3,
+    "train.seeds": [
+      0
+    ],
+    "split.transfer": false,
+    "train.save_final": false
+  },
+  "config_hash": "9628e07aa317",
+  "data_hash": "ce6c8fc6f5a4",
+  "git": {
+    "commit": "1b9b990",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 11:36:02",
+  "status": "done",
+  "finished": "2026-11-13 11:36:06",
+  "duration_s": 3.7,
+  "summary": {
+    "smoke": true
+  }
+}

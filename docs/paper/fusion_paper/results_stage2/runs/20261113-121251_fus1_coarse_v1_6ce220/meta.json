@@ -1,0 +1,45 @@
+{
+  "run_id": "20261113-121251_fus1_coarse_v1_6ce220",
+  "experiment": "fus1_coarse_v1",
+  "variant": {
+    "data.target.smooth_km": 12.0,
+    "model.modalities": [
+      "energy"
+    ],
+    "model.fusion.type": "early"
+  },
+  "variant_label": "target.smooth_km=12.0|modalities=energy|fusion=early",
+  "rq": "RQ1",
+  "kind": "train",
+  "version": 1,
+  "overrides": {},
+  "config_hash": "6ce220edcde7",
+  "data_hash": "fbcb71251c99",
+  "git": {
+    "commit": "1b9b990",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 12:12:51",
+  "status": "done",
+  "finished": "2026-11-13 12:13:55",
+  "duration_s": 63.3,
+  "summary": {
+    "pr_auc_1402": 0.4718,
+    "pr_auc_1403": 0.4904
+  }
+}

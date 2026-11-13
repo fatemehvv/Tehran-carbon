@@ -1,0 +1,31 @@
+[12:12:51] dataset fbcb71251c99: building
+[12:12:51]   1402: 12 steps, 12 with a target
+[12:12:52]   1403: 12 steps, 12 with a target
+[12:12:53] dataset fbcb71251c99: 54 features, 2436 label cells (CORE 4484)
+[12:12:53] fus1_coarse_v1 [target.smooth_km=12.0|modalities=energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[12:12:57]   1402 fold 00: train 2428 cells, test 3, labels smoothed over the training cells (sigma 12 km)
+[12:13:00]   1402 fold 01: train 2185 cells, test 178, labels smoothed over the training cells (sigma 12 km)
+[12:13:04]   1402 fold 02: train 2011 cells, test 332, labels smoothed over the training cells (sigma 12 km)
+[12:13:07]   1402 fold 03: train 2201 cells, test 189, labels smoothed over the training cells (sigma 12 km)
+[12:13:10]   1402 fold 04: train 2430 cells, test 5, labels smoothed over the training cells (sigma 12 km)
+[12:13:14]   1402 fold 05: train 2094 cells, test 243, labels smoothed over the training cells (sigma 12 km)
+[12:13:17]   1402 fold 06: train 1671 cells, test 595, labels smoothed over the training cells (sigma 12 km)
+[12:13:19]   1402 fold 07: train 2246 cells, test 140, labels smoothed over the training cells (sigma 12 km)
+[12:13:21]   1402 fold 08: train 2374 cells, test 52, labels smoothed over the training cells (sigma 12 km)
+[12:13:23]   1402 fold 09: train 2076 cells, test 319, labels smoothed over the training cells (sigma 12 km)
+[12:13:25]   1402 fold 10: train 1996 cells, test 343, labels smoothed over the training cells (sigma 12 km)
+[12:13:27]   1402 fold 11: train 2368 cells, test 37, labels smoothed over the training cells (sigma 12 km)
+[12:13:27]   1402 CV: pr_auc=0.472, roc_auc=0.903, f1_top=0.550, spearman=0.867, r2=0.746, mae=0.362, rmse=0.504
+[12:13:28]   1403 fold 00: train 2428 cells, test 3, labels smoothed over the training cells (sigma 12 km)
+[12:13:31]   1403 fold 01: train 2185 cells, test 178, labels smoothed over the training cells (sigma 12 km)
+[12:13:35]   1403 fold 02: train 2011 cells, test 332, labels smoothed over the training cells (sigma 12 km)
+[12:13:37]   1403 fold 03: train 2201 cells, test 189, labels smoothed over the training cells (sigma 12 km)
+[12:13:39]   1403 fold 04: train 2430 cells, test 5, labels smoothed over the training cells (sigma 12 km)
+[12:13:41]   1403 fold 05: train 2094 cells, test 243, labels smoothed over the training cells (sigma 12 km)
+[12:13:44]   1403 fold 06: train 1671 cells, test 595, labels smoothed over the training cells (sigma 12 km)
+[12:13:46]   1403 fold 07: train 2246 cells, test 140, labels smoothed over the training cells (sigma 12 km)
+[12:13:49]   1403 fold 08: train 2374 cells, test 52, labels smoothed over the training cells (sigma 12 km)
+[12:13:50]   1403 fold 09: train 2076 cells, test 319, labels smoothed over the training cells (sigma 12 km)
+[12:13:52]   1403 fold 10: train 1996 cells, test 343, labels smoothed over the training cells (sigma 12 km)
+[12:13:54]   1403 fold 11: train 2368 cells, test 37, labels smoothed over the training cells (sigma 12 km)
+[12:13:54]   1403 CV: pr_auc=0.490, roc_auc=0.907, f1_top=0.556, spearman=0.858, r2=0.749, mae=0.367, rmse=0.501

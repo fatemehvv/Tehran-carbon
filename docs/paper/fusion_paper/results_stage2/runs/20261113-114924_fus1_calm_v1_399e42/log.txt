@@ -1,0 +1,28 @@
+[11:49:24] dataset ce6c8fc6f5a4: from cache
+[11:49:24] fus1_calm_v1 [modalities=pollution|fusion=late]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:49:30]   1402 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:49:36]   1402 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:49:42]   1402 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:49:48]   1402 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:49:54]   1402 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:50:00]   1402 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:50:05]   1402 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:50:11]   1402 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:50:17]   1402 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:50:23]   1402 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:50:28]   1402 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:50:34]   1402 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:50:34]   1402 CV: pr_auc=0.650, roc_auc=0.953, f1_top=0.661, spearman=0.917, r2=0.806, mae=0.338, rmse=0.438
+[11:50:39]   1403 fold 00: train 2428 cells, test 3, stations kept 28 of 28
+[11:50:46]   1403 fold 01: train 2185 cells, test 178, stations kept 26 of 28
+[11:50:52]   1403 fold 02: train 2011 cells, test 332, stations kept 21 of 28
+[11:50:58]   1403 fold 03: train 2201 cells, test 189, stations kept 28 of 28
+[11:51:04]   1403 fold 04: train 2430 cells, test 5, stations kept 28 of 28
+[11:51:11]   1403 fold 05: train 2094 cells, test 243, stations kept 20 of 28
+[11:51:17]   1403 fold 06: train 1671 cells, test 595, stations kept 9 of 28
+[11:51:23]   1403 fold 07: train 2246 cells, test 140, stations kept 28 of 28
+[11:51:30]   1403 fold 08: train 2374 cells, test 52, stations kept 28 of 28
+[11:51:36]   1403 fold 09: train 2076 cells, test 319, stations kept 28 of 28
+[11:51:41]   1403 fold 10: train 1996 cells, test 343, stations kept 28 of 28
+[11:51:46]   1403 fold 11: train 2368 cells, test 37, stations kept 28 of 28
+[11:51:46]   1403 CV: pr_auc=0.603, roc_auc=0.954, f1_top=0.645, spearman=0.917, r2=0.809, mae=0.330, rmse=0.434

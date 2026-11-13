@@ -1,0 +1,46 @@
+{
+  "run_id": "20261113-120106_fus1_windy_v1_b4b3b7",
+  "experiment": "fus1_windy_v1",
+  "variant": {
+    "model.modalities": [
+      "traffic",
+      "energy",
+      "pollution"
+    ],
+    "model.fusion.type": "late"
+  },
+  "variant_label": "modalities=traffic+energy+pollution|fusion=late",
+  "rq": "RQ1",
+  "kind": "train",
+  "version": 1,
+  "overrides": {},
+  "config_hash": "b4b3b7b1c782",
+  "data_hash": "51ed2be73d06",
+  "git": {
+    "commit": "1b9b990",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 12:01:06",
+  "status": "done",
+  "finished": "2026-11-13 12:04:22",
+  "duration_s": 196.3,
+  "summary": {
+    "pr_auc_1402": 0.6116,
+    "pr_auc_1403": 0.7054
+  }
+}

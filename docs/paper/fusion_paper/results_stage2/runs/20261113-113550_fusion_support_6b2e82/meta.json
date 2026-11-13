@@ -1,0 +1,40 @@
+{
+  "run_id": "20261113-113550_fusion_support_6b2e82",
+  "experiment": "fusion_support",
+  "variant": {},
+  "variant_label": "",
+  "rq": "RQ1",
+  "kind": "analysis",
+  "version": null,
+  "overrides": {},
+  "config_hash": "6b2e8234d2cc",
+  "data_hash": "4e800dee03d6",
+  "git": {
+    "commit": "1b9b990",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 11:35:50",
+  "status": "done",
+  "finished": "2026-11-13 11:35:52",
+  "duration_s": 1.2,
+  "summary": {
+    "M1": true,
+    "M2": false,
+    "M3": true
+  }
+}

@@ -1,0 +1,11 @@
+
+=== 1/1  fus1_coarse_v1 [target.smooth_km=2.0|modalities=energy|fusion=early]
+[11:36:08] dataset 43c4f91e9626: building
+[11:36:09]   1402: 12 steps, 12 with a target
+[11:36:09]   1403: 12 steps, 12 with a target
+[11:36:10] dataset 43c4f91e9626: 54 features, 2436 label cells (CORE 4484)
+[11:36:10] fus1_coarse_v1 [target.smooth_km=2.0|modalities=energy|fusion=early]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:36:12]   1402 fold 00: train 2428 cells, test 3, labels smoothed over the training cells (sigma 2 km)
+[11:36:12] smoke run: one fold only, no scoring
+
+[train finished in 0.1 min]
