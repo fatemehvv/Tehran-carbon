@@ -1,0 +1,33 @@
+[17:05:09] M4: realisation 0
+[17:05:10] M4: realisation 1
+[17:05:10] M4: realisation 2
+[17:05:11] M4: realisation 3
+[17:05:11] M4: realisation 4
+[17:05:12] M4 (fus2_placebo_v2) per realisation:
+ realisation  median_abs_spearman  median_correlogram_diff  passed
+           0                0.080                    0.199   False
+           1                0.100                    0.096   False
+           2                0.037                    0.169   False
+           3                0.099                    0.131   False
+           4                0.098                    0.162   False
+M4: placebo check failed (5 failed)
+dataset 4e800dee03d6: from cache
+[17:05:13] dataset 4e800dee03d6: from cache
+[17:07:37] lineage audit (block-CV R2 of each layer from the context layers):
+model                               GBM           OLS       
+year                               1402   1403   1402   1403
+domain    layer                                             
+energy    inv_commercial          0.893  0.894  0.769  0.774
+          inv_industry            0.954  0.954  0.602  0.601
+          inv_power              -0.525 -0.485 -0.008 -0.007
+          inv_residential         0.980  0.981  0.889  0.888
+pollution aq_co                  -0.770 -0.051 -0.433 -0.680
+traffic   inv_road                0.467  0.464  0.502  0.493
+          road_km_motorway_trunk -0.069 -0.085  0.057  0.058
+          road_km_primary        -0.042 -0.057  0.103  0.096
+          road_km_secondary       0.006  0.023  0.151  0.149
+          road_km_tertiary       -0.074 -0.059  0.063  0.063
+          vc_mean                 0.359  0.334  0.258  0.249
+          vkt_peak                0.713  0.704  0.686  0.680
+
+[fusion finished in 2.5 min]

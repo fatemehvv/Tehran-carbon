@@ -1,0 +1,22 @@
+[17:18:37] dataset 1da19db21725: building
+[17:18:37]   source 'placebo' 1402
+[17:18:38]   source 'placebo' 1403
+[17:18:38]   source 'placebo' 1404
+[17:18:38]   1402: 12 steps, 12 with a target
+[17:18:39]   1403: 12 steps, 12 with a target
+[17:18:39]   1404: 12 steps, 12 with a target
+[17:18:42] dataset 1da19db21725: 91 features, 2436 label cells (CORE 4484)
+[17:18:42] fus2_c1404_placebo_v2 [inputs.placebo.realization=2|modalities=energy_plc|fusion=gated]: 91 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[17:18:50]   1404 fold 00: train 2428 cells, test 3
+[17:19:01]   1404 fold 01: train 2185 cells, test 178
+[17:19:12]   1404 fold 02: train 2011 cells, test 332
+[17:19:23]   1404 fold 03: train 2201 cells, test 189
+[17:19:34]   1404 fold 04: train 2430 cells, test 5
+[17:19:45]   1404 fold 05: train 2094 cells, test 243
+[17:19:56]   1404 fold 06: train 1671 cells, test 595
+[17:20:07]   1404 fold 07: train 2246 cells, test 140
+[17:20:18]   1404 fold 08: train 2374 cells, test 52
+[17:20:28]   1404 fold 09: train 2076 cells, test 319
+[17:20:39]   1404 fold 10: train 1996 cells, test 343
+[17:20:50]   1404 fold 11: train 2368 cells, test 37
+[17:20:50]   1404 CV: pr_auc=0.679, roc_auc=0.948, f1_top=0.587, spearman=0.892, r2=0.763, mae=0.367, rmse=0.486

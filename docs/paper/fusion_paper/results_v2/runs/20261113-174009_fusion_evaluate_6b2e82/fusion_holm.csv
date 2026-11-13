@@ -1,0 +1,8 @@
+﻿family,test,year,metric,delta,p_signflip,p_holm,verdict,verdict_holm
+F,F1,1402,spearman,0.01793653408482787,0.05029296875,0.201171875,non-inferior,non-inferior
+F,F1,1403,spearman,0.025976161900170602,0.00732421875,0.03662109375,non-inferior,non-inferior
+F,F2,1402,spearman,-0.014790259562367458,0.78564453125,1.0,inconclusive,inconclusive
+F,F2,1403,spearman,-0.01287789895100322,0.72900390625,1.0,inconclusive,inconclusive
+F,F4,pooled,spearman_rel,-0.18026450003198477,0.11572265625,0.34716796875,inconclusive,inconclusive
+C,C1,1404,spearman,0.023889212592332454,0.014892578125,0.02978515625,non-inferior,non-inferior
+C,C2,1404,spearman,-0.020906658011865642,0.712646484375,0.712646484375,inconclusive,inconclusive

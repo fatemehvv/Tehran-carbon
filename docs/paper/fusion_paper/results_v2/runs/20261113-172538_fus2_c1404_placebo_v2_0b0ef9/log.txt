@@ -1,0 +1,15 @@
+[17:25:38] dataset a4383f21dd76: from cache
+[17:25:38] fus2_c1404_placebo_v2 [inputs.placebo.realization=3|modalities=energy+traffic_plc+pollution_plc|fusion=gated]: 91 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[17:25:52]   1404 fold 00: train 2428 cells, test 3
+[17:26:09]   1404 fold 01: train 2185 cells, test 178
+[17:26:25]   1404 fold 02: train 2011 cells, test 332
+[17:26:41]   1404 fold 03: train 2201 cells, test 189
+[17:26:57]   1404 fold 04: train 2430 cells, test 5
+[17:27:12]   1404 fold 05: train 2094 cells, test 243
+[17:27:28]   1404 fold 06: train 1671 cells, test 595
+[17:27:45]   1404 fold 07: train 2246 cells, test 140
+[17:28:01]   1404 fold 08: train 2374 cells, test 52
+[17:28:17]   1404 fold 09: train 2076 cells, test 319
+[17:28:33]   1404 fold 10: train 1996 cells, test 343
+[17:28:49]   1404 fold 11: train 2368 cells, test 37
+[17:28:49]   1404 CV: pr_auc=0.689, roc_auc=0.957, f1_top=0.651, spearman=0.907, r2=0.791, mae=0.329, rmse=0.453

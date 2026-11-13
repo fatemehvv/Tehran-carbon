@@ -1,0 +1,13 @@
+
+=== 1/1  fus2_placebo_v2 [inputs.placebo.realization=0|modalities=energy_plc|fusion=gated]
+[17:07:40] dataset 7f927167d809: building
+[17:07:40]   source 'placebo' 1402
+[17:07:40]   source 'placebo' 1403
+[17:07:41]   1402: 12 steps, 12 with a target
+[17:07:41]   1403: 12 steps, 12 with a target
+[17:07:43] dataset 7f927167d809: 91 features, 2436 label cells (CORE 4484)
+[17:07:43] fus2_placebo_v2 [inputs.placebo.realization=0|modalities=energy_plc|fusion=gated]: 91 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[17:07:45]   1402 fold 00: train 2428 cells, test 3
+[17:07:45] smoke run: one fold only, no scoring
+
+[train finished in 0.1 min]
