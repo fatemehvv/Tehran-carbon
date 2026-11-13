@@ -22,24 +22,21 @@ Data and code availability). Items in [brackets] are to be completed before subm
 
 ## Abstract
 
-Graph neural networks (GNNs) are increasingly used to map urban emissions and air pollution, and their gains are
-usually credited to learning on a graph. A GNN, however, also sees further than the baselines it is compared with. We
-separate the two in mapping intra-urban NO₂ hotspots in Tehran from the monthly TROPOMI NO₂ pattern on a 1-km grid
-(2,436 cells), and ask two questions: does fusing traffic, energy and station data improve the maps (RQ1), and does a
-GNN improve on conventional spatial models (RQ2)? A multi-scale GraphSAGE model on a distance-based graph is compared
+The gains of graph neural networks (GNNs) in mapping urban emissions and air pollution are usually credited to
+learning on a graph, yet a GNN also sees further than its baselines. We separate the two in mapping intra-urban NO₂ hotspots in Tehran from the monthly TROPOMI NO₂ pattern on a 1-km grid
+(2,436 cells), asking whether fusing traffic, energy and station data improves the maps (RQ1) and whether a GNN
+improves on conventional spatial models (RQ2). A multi-scale GraphSAGE model on a distance-based graph is compared
 with spatial-lag-of-X (SLX) models, and with the same network fed box means of its neighbourhood instead of a graph, at
-matched maximum reach from 0 to 38 km. Validation uses 22-km spatial blocks, a held-out year, fold-specific
-interpolation of station data, five training seeds and block randomisation tests. Skill depends mainly on reach: the
+matched maximum reach from 0 to 38 km. Validation uses 22-km spatial blocks, a held-out year,
+fold-specific station interpolation, five seeds and block randomisation tests. Skill depends mainly on reach: the
 best SLX models rise from a Spearman correlation of about 0.75 for the cell alone to 0.91–0.93 at 12.6 km and gain at
 most 0.03 beyond. The GNN's lead over SLX at equal reach shrinks from about 0.04 at 7.6 km to −0.004 and +0.009 at
 37.8 km, all comparisons inconclusive, and the network fed box means is statistically equivalent to the GNN at 22.7 km
 (Spearman differences −0.005 and −0.008). On the held-out year the GNN and SLX are equivalent in Spearman at 30.3 km and
-differ by 0.002 at 37.8 km. The GNN's PR-AUC leads are smaller and more variable for single seeds than for the
-five-seed ensemble. Fusion raised PR-AUC within seed noise and lowered Spearman, consistent with the main emission
-layers becoming nearly identical at the scale over which the target varies. With about five effective degrees of
-freedom in the target, the choice of inference changed several verdicts. For this smooth satellite target and
-distance-based graph, most of the GNN's skill is explained by neighbourhood reach; graph models should be compared with
-reach-matched baselines.
+differ by 0.002 at 37.8 km. The GNN's PR-AUC leads shrink for single seeds. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
+nearly identical at the scale over which the target varies. With about five effective degrees of
+freedom, the choice of inference changed several verdicts. For this smooth target and distance-based
+graph, reach explains most of the GNN's skill; graph models need reach-matched baselines.
 
 **Keywords:** graph neural networks; receptive field; spatial lag of X; TROPOMI; NO₂; data fusion; spatial
 cross-validation; Tehran
