@@ -578,7 +578,11 @@ will differ between cities and targets, and graphs whose edges carry other infor
 hyper-parameters were tuned; the SLX references were chosen from several variants after the results, while the GNN was
 not tuned at all, and a tuned GNN might gain a little. The held-out year adds little new information, because the
 target barely changes between years and its inventory and traffic inputs are those of the previous year; a second
-held-out year (1405) was registered but not run. The 2-km buffer makes cross-validation mostly an interpolation test,
+held-out year (1405) was registered but not run. The traffic and energy layers are the inventory's spatial allocation
+of sector totals, not measured emissions, so the redundancy of road and building CO₂ at the scale of the target
+(Section 4.6) may partly reflect how the inventory allocates them; whether measured emission maps would be equally
+redundant was not tested. The reach-matched comparisons do not depend on this, because all models receive the same
+inputs. The 2-km buffer makes cross-validation mostly an interpolation test,
 and in the larger-buffer runs, where the GNN outperformed SLX, the role of the graph was not separated from that of the
 learner. The target is standardised over all domain cells of each month, including the held-out block. It describes
 column NO₂, which agrees only weakly with the station network, and NO₂ hotspots mark dense urban combustion: in Tehran
