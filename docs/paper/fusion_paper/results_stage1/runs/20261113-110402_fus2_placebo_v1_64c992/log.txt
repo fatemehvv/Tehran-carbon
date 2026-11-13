@@ -1,0 +1,28 @@
+[11:04:02] dataset 8d61a1b1abf2: from cache
+[11:04:03] fus2_placebo_v1 [inputs.placebo.realization=1|modalities=energy_plc|fusion=gated]: 91 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:04:09]   1402 fold 00: train 2428 cells, test 3
+[11:04:15]   1402 fold 01: train 2185 cells, test 178
+[11:04:21]   1402 fold 02: train 2011 cells, test 332
+[11:04:28]   1402 fold 03: train 2201 cells, test 189
+[11:04:32]   1402 fold 04: train 2430 cells, test 5
+[11:04:39]   1402 fold 05: train 2094 cells, test 243
+[11:04:45]   1402 fold 06: train 1671 cells, test 595
+[11:04:52]   1402 fold 07: train 2246 cells, test 140
+[11:04:58]   1402 fold 08: train 2374 cells, test 52
+[11:05:02]   1402 fold 09: train 2076 cells, test 319
+[11:05:07]   1402 fold 10: train 1996 cells, test 343
+[11:05:13]   1402 fold 11: train 2368 cells, test 37
+[11:05:13]   1402 CV: pr_auc=0.691, roc_auc=0.966, f1_top=0.700, spearman=0.902, r2=0.740, mae=0.351, rmse=0.506
+[11:05:19]   1403 fold 00: train 2428 cells, test 3
+[11:05:24]   1403 fold 01: train 2185 cells, test 178
+[11:05:29]   1403 fold 02: train 2011 cells, test 332
+[11:05:33]   1403 fold 03: train 2201 cells, test 189
+[11:05:39]   1403 fold 04: train 2430 cells, test 5
+[11:05:42]   1403 fold 05: train 2094 cells, test 243
+[11:05:46]   1403 fold 06: train 1671 cells, test 595
+[11:05:50]   1403 fold 07: train 2246 cells, test 140
+[11:05:56]   1403 fold 08: train 2374 cells, test 52
+[11:06:00]   1403 fold 09: train 2076 cells, test 319
+[11:06:03]   1403 fold 10: train 1996 cells, test 343
+[11:06:09]   1403 fold 11: train 2368 cells, test 37
+[11:06:09]   1403 CV: pr_auc=0.852, roc_auc=0.980, f1_top=0.762, spearman=0.908, r2=0.755, mae=0.328, rmse=0.495

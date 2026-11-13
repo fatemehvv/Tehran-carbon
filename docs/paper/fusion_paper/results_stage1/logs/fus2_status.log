@@ -1,0 +1,14 @@
+2026-11-13 10:55:16 START 9e28ddc paper fusion: pre-registration and stage 1 code (placebo branches)
+2026-11-13 10:55:52 pytest exit=0
+2026-11-13 10:58:38 prepare exit=0 (11 datasets ready)
+2026-11-13 10:58:38 Q1 BEGIN fus2_placebo_v1
+2026-11-13 10:58:38 Q3 BEGIN fus2_c1404_placebo_v1
+2026-11-13 10:58:38 Q2 BEGIN fus2_c1404_real_v1
+2026-11-13 11:04:29 Q2 END fus2_c1404_real_v1 exit=0
+2026-11-13 11:04:29 Q2 BEGIN fus2_c1404_context_v1
+2026-11-13 11:05:55 Q2 END fus2_c1404_context_v1 exit=0
+2026-11-13 11:05:55 Q2 BEGIN fus2_placebo_early_v1
+2026-11-13 11:12:40 Q2 END fus2_placebo_early_v1 exit=0
+2026-11-13 11:24:13 Q3 END fus2_c1404_placebo_v1 exit=0
+2026-11-13 11:24:46 Q1 END fus2_placebo_v1 exit=0
+2026-11-13 11:24:46 ALL DONE

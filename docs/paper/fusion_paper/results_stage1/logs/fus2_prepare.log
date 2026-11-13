@@ -1,0 +1,102 @@
+== fus2_placebo_v1 inputs.placebo.realization=0|modalities=energy_plc|fusion=gated -> a8b877e105ec
+dataset a8b877e105ec: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+dataset a8b877e105ec: 91 features, 2436 label cells (CORE 4484)
+== fus2_placebo_v1 inputs.placebo.realization=1|modalities=energy_plc|fusion=gated -> 8d61a1b1abf2
+dataset 8d61a1b1abf2: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+dataset 8d61a1b1abf2: 91 features, 2436 label cells (CORE 4484)
+== fus2_placebo_v1 inputs.placebo.realization=2|modalities=energy_plc|fusion=gated -> e792b83ff4cf
+dataset e792b83ff4cf: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+dataset e792b83ff4cf: 91 features, 2436 label cells (CORE 4484)
+== fus2_placebo_v1 inputs.placebo.realization=3|modalities=energy_plc|fusion=gated -> cc9712bd1c8f
+dataset cc9712bd1c8f: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+dataset cc9712bd1c8f: 91 features, 2436 label cells (CORE 4484)
+== fus2_placebo_v1 inputs.placebo.realization=4|modalities=energy_plc|fusion=gated -> c6077aebf476
+dataset c6077aebf476: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+dataset c6077aebf476: 91 features, 2436 label cells (CORE 4484)
+== fus2_c1404_real_v1 modalities=energy|fusion=gated -> 4ddc27e19eca
+dataset 4ddc27e19eca: building
+  source 'satellite' 1402
+  source 'satellite' 1403
+  source 'satellite' 1404
+  source 'context' 1402
+  source 'context' 1403
+  source 'context' 1404
+  source 'traffic' 1402
+  source 'traffic' 1403
+  source 'traffic' 1404
+  source 'energy' 1402
+  source 'energy' 1403
+  source 'energy' 1404
+  source 'pollution' 1402
+  source 'pollution' 1403
+  source 'pollution' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset 4ddc27e19eca: 54 features, 2436 label cells (CORE 4484)
+== fus2_c1404_placebo_v1 inputs.placebo.realization=0|modalities=energy_plc|fusion=gated -> 5e62b4892782
+dataset 5e62b4892782: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  source 'placebo' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset 5e62b4892782: 91 features, 2436 label cells (CORE 4484)
+== fus2_c1404_placebo_v1 inputs.placebo.realization=1|modalities=energy_plc|fusion=gated -> 1776adce37a1
+dataset 1776adce37a1: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  source 'placebo' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset 1776adce37a1: 91 features, 2436 label cells (CORE 4484)
+== fus2_c1404_placebo_v1 inputs.placebo.realization=2|modalities=energy_plc|fusion=gated -> 5053d5f2e9d8
+dataset 5053d5f2e9d8: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  source 'placebo' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset 5053d5f2e9d8: 91 features, 2436 label cells (CORE 4484)
+== fus2_c1404_placebo_v1 inputs.placebo.realization=3|modalities=energy_plc|fusion=gated -> b0f111b7bd08
+dataset b0f111b7bd08: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  source 'placebo' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset b0f111b7bd08: 91 features, 2436 label cells (CORE 4484)
+== fus2_c1404_placebo_v1 inputs.placebo.realization=4|modalities=energy_plc|fusion=gated -> dfa8e392464b
+dataset dfa8e392464b: building
+  source 'placebo' 1402
+  source 'placebo' 1403
+  source 'placebo' 1404
+  1402: 12 steps, 12 with a target
+  1403: 12 steps, 12 with a target
+  1404: 12 steps, 12 with a target
+dataset dfa8e392464b: 91 features, 2436 label cells (CORE 4484)
+11 datasets ready

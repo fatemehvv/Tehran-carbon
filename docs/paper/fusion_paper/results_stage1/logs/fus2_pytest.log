@@ -1,0 +1,24 @@
+........................................................................ [ 73%]
+..........................                                               [100%]
+=============================== warnings summary ===============================
+tests/test_models.py::test_model_shapes[sage-early]
+  /venv/main/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+tests/test_paper_inference.py::test_paper_evaluate_and_power_end_to_end
+tests/test_paper_inference.py::test_paper_evaluate_and_power_end_to_end
+tests/test_robustness.py::test_hypothesis_and_robustness_end_to_end
+tests/test_robustness.py::test_hypothesis_and_robustness_end_to_end
+  /root/Tehran-carbon-fusion/src/tehran_carbon/evaluation/hypotheses.py:78: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+    table["mean"] = table[[f"{self.metric}_{y}" for y in years]].mean(1)
+
+tests/test_rl.py::test_gymnasium_api
+  /venv/main/lib/python3.12/site-packages/gymnasium/utils/env_checker.py:372: UserWarning: [33mWARN: A Box observation space minimum value is -infinity. This is probably too low.[0m
+    logger.warn(
+
+tests/test_rl.py::test_gymnasium_api
+  /venv/main/lib/python3.12/site-packages/gymnasium/utils/env_checker.py:376: UserWarning: [33mWARN: A Box observation space maximum value is infinity. This is probably too high.[0m
+    logger.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+98 passed, 7 warnings in 33.71s

@@ -1,0 +1,20 @@
+{
+  "scheme": "block_lobo",
+  "buffer_km": 2.0,
+  "block_km": 22.0,
+  "n_folds": 12,
+  "test_cells_per_fold": [
+    3,
+    178,
+    332,
+    189,
+    5,
+    243,
+    595,
+    140,
+    52,
+    319,
+    343,
+    37
+  ]
+}

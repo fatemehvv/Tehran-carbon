@@ -1,0 +1,15 @@
+[11:14:36] dataset b0f111b7bd08: from cache
+[11:14:37] fus2_c1404_placebo_v1 [inputs.placebo.realization=3|modalities=energy_plc|fusion=gated]: 91 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:14:48]   1404 fold 00: train 2428 cells, test 3
+[11:14:59]   1404 fold 01: train 2185 cells, test 178
+[11:15:09]   1404 fold 02: train 2011 cells, test 332
+[11:15:20]   1404 fold 03: train 2201 cells, test 189
+[11:15:30]   1404 fold 04: train 2430 cells, test 5
+[11:15:40]   1404 fold 05: train 2094 cells, test 243
+[11:15:51]   1404 fold 06: train 1671 cells, test 595
+[11:16:00]   1404 fold 07: train 2246 cells, test 140
+[11:16:11]   1404 fold 08: train 2374 cells, test 52
+[11:16:22]   1404 fold 09: train 2076 cells, test 319
+[11:16:33]   1404 fold 10: train 1996 cells, test 343
+[11:16:41]   1404 fold 11: train 2368 cells, test 37
+[11:16:41]   1404 CV: pr_auc=0.776, roc_auc=0.962, f1_top=0.718, spearman=0.870, r2=0.690, mae=0.393, rmse=0.555

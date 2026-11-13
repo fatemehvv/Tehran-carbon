@@ -1,0 +1,45 @@
+{
+  "run_id": "20261113-112016_fus2_placebo_v1_5605ee",
+  "experiment": "fus2_placebo_v1",
+  "variant": {
+    "data.inputs.placebo.realization": 4,
+    "model.modalities": [
+      "energy_plc"
+    ],
+    "model.fusion.type": "gated"
+  },
+  "variant_label": "inputs.placebo.realization=4|modalities=energy_plc|fusion=gated",
+  "rq": "RQ1",
+  "kind": "train",
+  "version": 1,
+  "overrides": {},
+  "config_hash": "5605ee6ef826",
+  "data_hash": "c6077aebf476",
+  "git": {
+    "commit": "9e28ddc",
+    "branch": "paper_fusion",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.15",
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.14.1+cu130",
+      "torch_geometric": "2.8.1",
+      "geopandas": "1.2.0",
+      "rasterio": "1.5.2"
+    }
+  },
+  "started": "2026-11-13 11:20:16",
+  "status": "done",
+  "finished": "2026-11-13 11:22:00",
+  "duration_s": 104.1,
+  "summary": {
+    "pr_auc_1402": 0.6638,
+    "pr_auc_1403": 0.521
+  }
+}

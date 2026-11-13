@@ -1,0 +1,15 @@
+[11:04:32] dataset 4ddc27e19eca: from cache
+[11:04:32] fus2_c1404_context_v1 [-]: 54 features, 2436 label cells, 12 folds (block_lobo, 22 km, buffer 2.0 km)
+[11:04:40]   1404 fold 00: train 2428 cells, test 3
+[11:04:47]   1404 fold 01: train 2185 cells, test 178
+[11:04:55]   1404 fold 02: train 2011 cells, test 332
+[11:05:02]   1404 fold 03: train 2201 cells, test 189
+[11:05:07]   1404 fold 04: train 2430 cells, test 5
+[11:05:14]   1404 fold 05: train 2094 cells, test 243
+[11:05:19]   1404 fold 06: train 1671 cells, test 595
+[11:05:25]   1404 fold 07: train 2246 cells, test 140
+[11:05:32]   1404 fold 08: train 2374 cells, test 52
+[11:05:39]   1404 fold 09: train 2076 cells, test 319
+[11:05:46]   1404 fold 10: train 1996 cells, test 343
+[11:05:54]   1404 fold 11: train 2368 cells, test 37
+[11:05:54]   1404 CV: pr_auc=0.637, roc_auc=0.955, f1_top=0.638, spearman=0.912, r2=0.803, mae=0.324, rmse=0.441
