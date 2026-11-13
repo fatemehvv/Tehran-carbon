@@ -186,6 +186,13 @@ constructions.
 - We use five realisations. Every placebo comparison averages scores over the five, also inside the jackknife and inside
   the randomisation test.
 
+Fig. 1 shows a real layer and two realisations of each construction.
+
+![Figure 1](../figures/fig1_placebo_maps.png)
+
+**Fig. 1.** The residential CO₂ layer of the inventory (log scale, annual mean) and two realisations of each placebo
+construction: A, IAAFT surrogates; B, rotation by 180° and cyclic shift. Blue outline: label domain.
+
 ### 3.3 Target versions
 
 **Composites by wind.**
@@ -276,6 +283,8 @@ sets of placebo verdicts are reported, with that label.
 
 ### 4.1 Information beyond the placebo
 
+Table 1 and Fig. 2 give the tests of information; Fig. 2 also shows the effect of the branch itself (Section 4.2).
+
 **Table 1.** Real source minus placebo branch (gated fusion; Spearman; five-seed ensembles, placebos averaged over five
 realisations), for placebo A (IAAFT) and placebo B (rotation and shift). Intervals are delete-one-block jackknife 95 %
 intervals. p is the one-sided block sign-flip p-value after Holm adjustment within the family. Both constructions
@@ -313,7 +322,16 @@ year, construction or seed points to information that a relocated copy of the sa
 These numbers are smaller than the spread over placebo realisations: the placebo-energy PR-AUC ranged from 0.52 to
 0.85 (A) and 0.61 to 0.74 (B) in 1403.
 
+![Figure 2](../figures/fig2_information_architecture.png)
+
+**Fig. 2.** Information and architecture. Real source minus placebo (energy; traffic + stations given energy) and
+placebo branch minus context only, in Spearman (a, primary) and PR-AUC (b, descriptive), for 1402, 1403 and the held-out
+year 1404. Open markers: placebo A; filled markers: placebo B. Lines: jackknife 95 % intervals; band: equivalence margin
+±0.02.
+
 ### 4.2 The effect of the branch itself
+
+The grey rows of Fig. 2 show these estimates.
 
 **Table 2.** Placebo branch minus the context-only model (secondary estimates, no verdict), for placebo A and B.
 Spearman with 95 % jackknife intervals; PR-AUC point estimates.
@@ -345,7 +363,7 @@ while it kept a Spearman advantage of +0.021 to +0.037.
 **Checks.**
 - **M1 passed:** the composite of all clear days matched the monthly target (Spearman 0.98 in both years).
 - **M3 passed:** split-half reliability was 0.92–0.96.
-- **M2 failed:** calm-day composites were not sharper than windy-day composites.
+- **M2 failed:** calm-day composites were not sharper than windy-day composites (Fig. 3a).
   - The correlogram crossed zero at 23.6 km (calm) and 24.9 km (windy) in 1402, and at 23.9 and 24.7 km in 1403.
   - The correlation at 8–10 km was 0.753 against 0.756, and 0.754 against 0.776.
 - By the registered rule, **F3 is uninformative** (D = −0.004, 95 % interval −0.034 to +0.025) and was removed from the
@@ -365,13 +383,19 @@ while it kept a Spearman advantage of +0.021 to +0.037.
 | smoothed, σ = 12 km | +0.001 | +0.001 | |
 
 - **Fusion never improved the ranking.** Its small loss on the native target shrank as the target was smoothed and
-  vanished at 12 km.
+  vanished at 12 km (Fig. 3b).
 - **F4.** The registered contrast was −0.180 (95 % interval −0.549 to +0.189; inconclusive). Its direction is opposite to
   the prediction: the relative fusion gain was not larger on the sharper target, it was more negative.
 - **Skill falls with smoothing.** Skill fell for every model as the target was smoothed (the energy model from 0.92–0.93
   to 0.86 at 12 km), probably because the models' neighbourhood inputs reach only about 7.6 km.
 - **Technical note.** In the per-block contrast of F4, a few edge blocks of 3–5 cells had a reference Spearman of 1, so
   their relative gain was undefined and they left the block-level sign-flip test. The jackknife is not affected.
+
+![Figure 3](../figures/fig3_target_support.png)
+
+**Fig. 3.** Target support. (a) Correlogram of the monthly target and of the seasonal composites of all, the calmest and
+the windiest clear days, 1402. (b) Fusion gain (all three sources minus energy, Spearman) against the smoothing scale of
+the target, with jackknife 95 % intervals.
 
 ### 4.4 Placebo check and lineage audit
 
@@ -383,7 +407,7 @@ while it kept a Spearman advantage of +0.021 to +0.037.
 | B (rotation and shift) | 0.04–0.10 | 0.10–0.20 | 0 of 5 |
 
 - With placebo B, the texture differs only at the wrap-around seams. The single urban core of Tehran, which fills much
-  of the grid, is cut by them (Fig. 1).
+  of the grid, is cut by them (Fig. 1d, e).
 - In a bounded grid with one urban core, a relocation that removes the location either reshapes the core (A) or splits
   it (B).
 - By the registered rule, all placebo verdicts carry the label "placebo check failed".
@@ -586,24 +610,3 @@ appeared to influence the work reported in this paper.
 - Zhalehdoost, A., & Taleai, M. (2025). Unravelling the importance of spatial and temporal resolutions in modeling urban air pollution using a machine learning approach. *Scientific Reports*, 15, 27708. https://doi.org/10.1038/s41598-025-13639-3
 - Zheng, Y. (2015). Methodologies for cross-domain data fusion: an overview. *IEEE Transactions on Big Data*, 1, 16–34. https://doi.org/10.1109/TBDATA.2015.2465959 [check]
 
----
-
-## Figures
-
-![Figure 1](../figures/fig1_placebo_maps.png)
-
-**Fig. 1.** The residential CO₂ layer of the inventory (log scale, annual mean) and two realisations of each placebo
-construction: A, IAAFT surrogates; B, rotation by 180° and cyclic shift. Blue outline: label domain.
-
-![Figure 2](../figures/fig2_information_architecture.png)
-
-**Fig. 2.** Information and architecture. Real source minus placebo (energy; traffic + stations given energy) and
-placebo branch minus context only, in Spearman (a, primary) and PR-AUC (b, descriptive), for 1402, 1403 and the held-out
-year 1404. Open markers: placebo A; filled markers: placebo B. Lines: jackknife 95 % intervals; band: equivalence margin
-±0.02.
-
-![Figure 3](../figures/fig3_target_support.png)
-
-**Fig. 3.** Target support. (a) Correlogram of the monthly target and of the seasonal composites of all, the calmest and
-the windiest clear days, 1402. (b) Fusion gain (all three sources minus energy, Spearman) against the smoothing scale of
-the target, with jackknife 95 % intervals.
