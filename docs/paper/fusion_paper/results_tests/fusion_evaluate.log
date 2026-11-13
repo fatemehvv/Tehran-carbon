@@ -1,0 +1,89 @@
+[15:29:29] F1 ...
+[15:29:31] dataset 4e800dee03d6: from cache
+[15:33:21] F2 ...
+[15:33:22] dataset 4e800dee03d6: from cache
+[15:37:14] C1 ...
+[15:37:15] dataset 4ddc27e19eca: from cache
+[15:39:10] C2 ...
+[15:39:11] dataset 4ddc27e19eca: from cache
+[15:41:06] A_gated ...
+[15:41:07] dataset a8b877e105ec: from cache
+[15:41:09] A_early ...
+[15:41:10] dataset a8b877e105ec: from cache
+[15:41:11] A_gated_1404 ...
+[15:41:12] dataset 5e62b4892782: from cache
+[15:41:13] I_early ...
+[15:41:14] dataset 4e800dee03d6: from cache
+[15:41:16] dataset ce6c8fc6f5a4: from cache
+[15:41:17] dataset 51ed2be73d06: from cache
+[15:41:18] dataset 4e800dee03d6: from cache
+[15:41:19] dataset 16608e39750a: from cache
+/root/Tehran-carbon-fusion/src/tehran_carbon/analysis/fusion_eval.py:241: RuntimeWarning: divide by zero encountered in scalar divide
+  vals.append((sc - sr) / (1 - sr) if rel else sc - sr)
+[15:41:20] gain T0 ...
+[15:41:21] dataset 4e800dee03d6: from cache
+[15:41:22] gain T-all ...
+[15:41:22] dataset 3901f3d64ee5: from cache
+[15:41:22] gain T-calm ...
+[15:41:23] dataset ce6c8fc6f5a4: from cache
+[15:41:23] gain T-windy ...
+[15:41:24] dataset 51ed2be73d06: from cache
+[15:41:24] gain T-2km ...
+[15:41:25] dataset 43c4f91e9626: from cache
+[15:41:26] gain T-4km ...
+[15:41:27] dataset 861977af91e3: from cache
+[15:41:27] gain T-8km ...
+[15:41:28] dataset 16608e39750a: from cache
+[15:41:29] gain T-12km ...
+[15:41:30] dataset fbcb71251c99: from cache
+[15:41:31] gain 1404-T0 ...
+[15:41:31] dataset 4ddc27e19eca: from cache
+[15:41:31] gain 1404-T-8km ...
+[15:41:31] dataset 40668507112d: from cache
+[15:41:32] primary and secondary rows (Spearman):
+           test   year       metric  candidate  reference   delta  jack_low95  jack_high95                                      verdict
+             F1   1402     spearman     0.9185     0.8931  0.0254     -0.0104       0.0611                                 non-inferior
+             F1   1403     spearman     0.9273     0.8890  0.0383      0.0017       0.0748                                     superior
+             F2   1402     spearman     0.8975     0.9120 -0.0144     -0.0782       0.0493                                 inconclusive
+             F2   1403     spearman     0.9056     0.9181 -0.0124     -0.0717       0.0468                                 inconclusive
+             C1   1404     spearman     0.9110     0.8856  0.0255     -0.0041       0.0551                                 non-inferior
+             C2   1404     spearman     0.8832     0.9013 -0.0181     -0.1111       0.0748                                 inconclusive
+        A_gated   1402     spearman     0.8931     0.9140 -0.0209     -0.0485       0.0067                                          NaN
+        A_gated   1403     spearman     0.8890     0.9142 -0.0252     -0.0484      -0.0020                                          NaN
+        A_early   1402     spearman     0.8946     0.9140 -0.0194     -0.0452       0.0063                                          NaN
+        A_early   1403     spearman     0.8913     0.9142 -0.0230     -0.0616       0.0156                                          NaN
+   A_gated_1404   1404     spearman     0.8856     0.9124 -0.0268     -0.0525      -0.0012                                          NaN
+        I_early   1402     spearman     0.9230     0.8946  0.0284     -0.0036       0.0604                                          NaN
+        I_early   1403     spearman     0.9279     0.8913  0.0367     -0.0133       0.0867                                          NaN
+             F3 pooled     spearman    -0.0203    -0.0160 -0.0044     -0.0337       0.0249 uninformative (manipulation check M2 failed)
+             F4 pooled spearman_rel    -0.2775    -0.0972 -0.1803     -0.5491       0.1886                                 inconclusive
+        gain_T0   1402     spearman     0.8975     0.9185 -0.0209     -0.0728       0.0310                                          NaN
+        gain_T0   1403     spearman     0.9056     0.9273 -0.0217     -0.0918       0.0485                                          NaN
+     gain_T-all   1402     spearman     0.9153     0.9328 -0.0175     -0.0745       0.0396                                          NaN
+     gain_T-all   1403     spearman     0.9250     0.9409 -0.0159     -0.0790       0.0471                                          NaN
+    gain_T-calm   1402     spearman     0.9026     0.9284 -0.0258     -0.1051       0.0535                                          NaN
+    gain_T-calm   1403     spearman     0.9143     0.9291 -0.0148     -0.0702       0.0405                                          NaN
+   gain_T-windy   1402     spearman     0.8848     0.8940 -0.0092     -0.0599       0.0415                                          NaN
+   gain_T-windy   1403     spearman     0.8986     0.9213 -0.0227     -0.0823       0.0369                                          NaN
+     gain_T-2km   1402     spearman     0.9159     0.9264 -0.0105     -0.0393       0.0184                                          NaN
+     gain_T-2km   1403     spearman     0.9218     0.9365 -0.0148     -0.0373       0.0078                                          NaN
+     gain_T-4km   1402     spearman     0.9165     0.9263 -0.0098     -0.0416       0.0220                                          NaN
+     gain_T-4km   1403     spearman     0.9228     0.9416 -0.0188     -0.0398       0.0022                                          NaN
+     gain_T-8km   1402     spearman     0.8978     0.9041 -0.0064     -0.0332       0.0204                                          NaN
+     gain_T-8km   1403     spearman     0.9045     0.9153 -0.0108     -0.0366       0.0150                                          NaN
+    gain_T-12km   1402     spearman     0.8642     0.8635  0.0007     -0.0437       0.0450                                          NaN
+    gain_T-12km   1403     spearman     0.8660     0.8652  0.0008     -0.0429       0.0445                                          NaN
+   gain_1404-T0   1404     spearman     0.8832     0.9110 -0.0279     -0.1314       0.0757                                          NaN
+gain_1404-T-8km   1404     spearman     0.8853     0.8931 -0.0078     -0.0367       0.0211                                          NaN
+[15:41:32] Holm:
+family test   year       metric   delta  p_signflip  p_holm      verdict                         verdict_holm
+     F   F1   1402     spearman  0.0254      0.0259  0.1035 non-inferior                         non-inferior
+     F   F1   1403     spearman  0.0383      0.0112  0.0562     superior superior, not significant after Holm
+     F   F2   1402     spearman -0.0144      0.7642  1.0000 inconclusive                         inconclusive
+     F   F2   1403     spearman -0.0124      0.6853  1.0000 inconclusive                         inconclusive
+     F   F4 pooled spearman_rel -0.1803      0.1157  0.3472 inconclusive                         inconclusive
+     C   C1   1404     spearman  0.0255      0.0410  0.0820 non-inferior                         non-inferior
+     C   C2   1404     spearman -0.0181      0.6792  0.6792 inconclusive                         inconclusive
+
+[fusion finished in 12.1 min]
+EVAL_EXIT=0

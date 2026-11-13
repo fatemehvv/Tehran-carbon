@@ -1,0 +1,82 @@
+{
+  "m2_passed": false,
+  "holm": [
+    {
+      "family": "F",
+      "test": "F1",
+      "year": 1402,
+      "metric": "spearman",
+      "delta": 0.02538039721143348,
+      "p_signflip": 0.02587890625,
+      "p_holm": 0.103515625,
+      "verdict": "non-inferior",
+      "verdict_holm": "non-inferior"
+    },
+    {
+      "family": "F",
+      "test": "F1",
+      "year": 1403,
+      "metric": "spearman",
+      "delta": 0.03825098961401974,
+      "p_signflip": 0.01123046875,
+      "p_holm": 0.05615234375,
+      "verdict": "superior",
+      "verdict_holm": "superior, not significant after Holm"
+    },
+    {
+      "family": "F",
+      "test": "F2",
+      "year": 1402,
+      "metric": "spearman",
+      "delta": -0.014425438928901246,
+      "p_signflip": 0.76416015625,
+      "p_holm": 1.0,
+      "verdict": "inconclusive",
+      "verdict_holm": "inconclusive"
+    },
+    {
+      "family": "F",
+      "test": "F2",
+      "year": 1403,
+      "metric": "spearman",
+      "delta": -0.012441439897930007,
+      "p_signflip": 0.685302734375,
+      "p_holm": 1.0,
+      "verdict": "inconclusive",
+      "verdict_holm": "inconclusive"
+    },
+    {
+      "family": "F",
+      "test": "F4",
+      "year": "pooled",
+      "metric": "spearman_rel",
+      "delta": -0.18026450003198477,
+      "p_signflip": 0.11572265625,
+      "p_holm": 0.34716796875,
+      "verdict": "inconclusive",
+      "verdict_holm": "inconclusive"
+    },
+    {
+      "family": "C",
+      "test": "C1",
+      "year": 1404,
+      "metric": "spearman",
+      "delta": 0.025477161827900385,
+      "p_signflip": 0.041015625,
+      "p_holm": 0.08203125,
+      "verdict": "non-inferior",
+      "verdict_holm": "non-inferior"
+    },
+    {
+      "family": "C",
+      "test": "C2",
+      "year": 1404,
+      "metric": "spearman",
+      "delta": -0.01813588456988091,
+      "p_signflip": 0.67919921875,
+      "p_holm": 0.67919921875,
+      "verdict": "inconclusive",
+      "verdict_holm": "inconclusive"
+    }
+  ]
+}
