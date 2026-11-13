@@ -59,7 +59,7 @@ class FusionFigures:
         panels = [("a  Real", A["real"]), ("b  A, r = 0", A["plc0"]), ("c  A, r = 1", A["plc1"]),
                   ("d  B, r = 0", B["plc0"]), ("e  B, r = 1", B["plc1"])]
         plt = style()
-        fig, axes = plt.subplots(1, len(panels), figsize=(WIDTH, 1.45))
+        fig, axes = plt.subplots(1, len(panels), figsize=(WIDTH, 1.25))
         vmin, vmax = np.percentile(A["real"], [1, 99.5])
         for ax, (title, m) in zip(axes, panels):
             ax.imshow(m, cmap="Greys", vmin=vmin, vmax=vmax, interpolation="nearest")
@@ -68,9 +68,9 @@ class FusionFigures:
             for s in ax.spines.values():
                 s.set_visible(False)
             ax.set_title(title, fontsize=8, pad=3)
-        fig.text(0.5, -0.06, "Residential CO₂ of the inventory (log scale, annual mean). A: IAAFT surrogate; B: rotation by "
-                 "180° and cyclic shift. Blue outline: label domain", ha="center", color=INK2, fontsize=7)
-        fig.subplots_adjust(wspace=0.05)
+        fig.subplots_adjust(wspace=0.05, left=0.01, right=0.99, top=0.86, bottom=0.14)
+        fig.text(0.5, 0.02, "Residential CO$_2$ of the inventory (log scale, annual mean). A: IAAFT surrogate; B: rotation "
+                 "by 180° and cyclic shift. Blue outline: label domain", ha="center", va="bottom", color=INK2, fontsize=7)
         return save(fig, OUT / "fig1_placebo_maps")
 
     # ------------------------------------------------------------------ figure 2
