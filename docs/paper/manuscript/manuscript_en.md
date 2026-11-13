@@ -78,7 +78,8 @@ information of this kind improves neural networks (Xiao et al., 2023), convoluti
 
 Research on graph learning has addressed a related question. On citation and social graphs, linear models applied to
 features averaged over the same number of hops matched graph convolutional networks (Wu et al., 2019; Frasca et al.,
-2020); the receptive field can be set apart from the number of layers (Gasteiger et al., 2019; Zeng et al., 2021); and
+2020), whereas on synthetic graphs whose community structure is the target, a GNN outperformed a graph-augmented MLP
+given the same receptive field (Chen et al., 2020); the receptive field can be set apart from the number of layers (Gasteiger et al., 2019; Zeng et al., 2021); and
 simple, fairly tuned baselines often match GNNs, with evaluation choices changing the ranking of models (Shchur et al.,
 2018; Errica et al., 2020; Huang et al., 2021). A spatial-regression reading of graph convolution relates the number of
 layers to the order of the spatial lag (Zhu et al., 2021). These results concern non-spatial graphs, were obtained
@@ -105,7 +106,7 @@ Table 1 compares the reach of GNNs and their baselines in eleven studies whose f
 as the GNN, but the nonlinear baseline saw no neighbours. In Schmidt & Ong (2026) the random forest received the
 measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. Neither study made reach the
 object of the comparison, varied it, or tied it to the scale of the target. A structured ScienceDirect search (five
-Boolean queries, 191 unique records) and a semantic search of the wider literature found no study that does
+Boolean queries, 191 unique records) and a semantic search of the wider literature found no spatial or environmental study that does
 (`docs/paper/lit/`). Choosing a neighbourhood from the range of spatial dependence is itself established practice, for
 texture windows (Franklin et al., 1996), contextual covariates (Behrens et al., 2019), cross-validation blocks (Valavi
 et al., 2019), GNN depth (Alon & Yahav, 2021) and the receptive field of a GNN for turbulent transport (Freitas et al.,
@@ -551,7 +552,9 @@ that complex models are often matched by simple, well-specified baselines (Ferra
 neighbourhood. The no-graph network fed box means answers this for a smooth target and a distance-based graph: the
 graph adds nothing over neighbourhood means.
 
-This does not make graphs useless. They should matter where edges carry information that distance does not, such as
+This does not make graphs useless. At equal receptive field, a GNN outperformed a graph-augmented MLP where the target
+was the community structure of a synthetic graph (Chen et al., 2020). In spatial mapping, graphs should matter where
+edges carry information that distance does not, such as
 climate teleconnections (Chen et al., 2026), flows on a transport network (Mohseni et al., 2026), wind-aligned
 transport, or irregular units for which box windows are hard to define; and our results with larger buffers suggest
 that neural models extrapolate more gracefully than tree ensembles, whatever the role of the graph. We recommend five
@@ -681,6 +684,7 @@ four conference papers (NeurIPS, ICLR, MLSys), Holm (1979) and the thesis (Vafae
 - Bouthillier, X., et al. (2021). Accounting for variance in machine learning benchmarks. *Proceedings of Machine Learning and Systems*, 3.
 - Cameron, A. C., Gelbach, J. B., & Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. *Review of Economics and Statistics*, 90, 414–427. https://doi.org/10.1162/rest.90.3.414
 - Chen, D., Yang, Y., Hu, J., Kasoar, M., Arcucci, R., & Cheng, S. (2026). Explainable global wildfire prediction model using graph neural networks. *Geodata and AI*, 7, 100052. https://doi.org/10.1016/j.geoai.2026.100052
+- Chen, L., Chen, Z., & Bruna, J. (2020). On graph neural networks versus graph-augmented MLPs. arXiv:2010.15116. https://doi.org/10.48550/arXiv.2010.15116
 - Du, S., Wei, H., Lee, D., Hu, Z., & Pan, S. (2026). Graph-based physics-guided urban PM2.5 air quality imputation with constrained monitoring data. *ACM Transactions on Sensor Networks*, 22, 1–23. https://doi.org/10.1145/3734869
 - Fleischmann, M., & Arribas-Bel, D. (2024). Decoding (urban) form and function using spatially explicit deep learning. *Computers, Environment and Urban Systems*, 112, 102147. https://doi.org/10.1016/j.compenvurbsys.2024.102147
 - Errica, F., Podda, M., Bacciu, D., & Micheli, A. (2020). A fair comparison of graph neural networks for graph classification. *International Conference on Learning Representations (ICLR)*. arXiv:1912.09893. https://doi.org/10.48550/arXiv.1912.09893

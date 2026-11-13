@@ -115,3 +115,27 @@ Full texts were read for eleven studies that compare a GNN with baselines on spa
 
 - Ma et al. 2025 (*Spatial Statistics*)
 - Teng et al. 2026, Yuan et al. 2026, Bai et al. 2025
+
+## 6. LLM-assisted search (ChatGPT, 13 November 2026)
+
+**What was run.** ChatGPT with web search was given the four questions of the novelty check: (1) a GNN compared with a
+non-graph baseline given the same reach on purpose; (2) the reach of both varied; (3) the needed reach tied to the
+correlation length of the target; (4) a non-graph model with neighbourhood-aggregated features matching a GNN. It was
+also asked for the reach of the four studies still to read. It reported about 100 screened records from a general web
+and scholarly index (arXiv, publisher and author pages; IEEE and ACM only through domain-restricted web queries). It had
+no access to Google Scholar, Scopus or Web of Science, and no Elsevier full texts. This is not a reproducible database
+search; it is recorded as a supplementary check.
+
+**What was checked here.** DOIs against Crossref and arXiv; claims against the full text where it was open.
+
+| Study | Exists | Claim | Checked against | Use |
+|---|---|---|---|---|
+| Chen, Chen & Bruna (2020), arXiv:2010.15116 | yes (arXiv) | For community detection on synthetic SBM graphs, an sGNN variant was chosen "for a fairer comparison with GA-MLPs" so that it "has the same receptive field as the chosen GA-MLP models" (Appendix L.1); at equal receptive field the GNN outperformed GA-MLP-A and only matched an oracle GA-MLP (Section 6.3, Fig. 3). Their Table 1 varies K = 1–5 for both, but counts equivalence classes, not predictive skill | full text (arXiv v2) | Cited (Introduction and Section 5.2): reach-matched comparison exists on non-spatial graphs, with the opposite outcome where the target is graph structure |
+| Yang et al. (2022), *Neurocomputing* 505, 289–303, 10.1016/j.neucom.2022.07.030 | yes (Crossref) | A spatio-temporal semi-variogram that flattens beyond graph distance 2 sets a two-layer GCN for link prediction in dynamic networks | **not verified**: no open full text or abstract | Not cited until the PDF is read. If confirmed, it joins the prior art of Section 4 (choosing the neighbourhood from the dependence range) |
+| Frasca et al. (2020), SIGN | yes (arXiv) | Pre-computed diffusions fed to an MLP; receptive fields not matched against the compared GNNs | — | Already cited |
+| Maurya, Liu & Murata (2023), *CAAI Trans. Intell. Technol.* 8, 14–28, 10.1049/cit2.12166 | yes (Crossref) | A two-layer MLP on pre-computed hop features (K = 3) beats several GNNs; reach not matched | not checked | Not cited: same point as SGC and SIGN |
+| Ma et al. 2025; Teng et al. 2026; Yuan et al. 2026; Bai et al. 2025 | yes | Only abstracts were available; no reach could be established | — | Still to read (Section 5) |
+
+**Effect on the novelty statement.** A reach-matched comparison of a GNN with a non-graph model exists on non-spatial
+graphs (Chen et al., 2020), so the manuscript now says that no *spatial or environmental* study was found that makes
+reach the object of the comparison, varies it, or ties it to the scale of the target.
