@@ -247,6 +247,11 @@ def cmd_fusion(args):
         cfg = analysis_config("fusion_check", "RQ1", "placebo check M4, lineage audit and figure 1 of the fusion paper")
         with Run(cfg) as run:
             run.finish("done", FusionChecks(cfg, (args.exp or ["fus2_placebo_v1"])[0]).run(run))
+    elif args.what == "review":
+        from tehran_carbon.analysis.fusion_review import FusionReview
+        cfg = analysis_config("fusion_review", "RQ1", "analyses asked for by the reviewers of the fusion paper")
+        with Run(cfg) as run:
+            run.finish("done", FusionReview(cfg).run(run))
     elif args.what == "figures":
         from tehran_carbon.viz.fusion_figures import FusionFigures
         for f in FusionFigures().all():
@@ -339,7 +344,7 @@ def main():
     p.add_argument("--epochs", type=int, default=20, help="timing: epochs of the pilot fit")
     p.set_defaults(fn=cmd_paper)
     p = sub.add_parser("fusion", help="fusion paper analyses (branch paper_fusion)")
-    p.add_argument("what", choices=["support", "evaluate", "check", "figures"])
+    p.add_argument("what", choices=["support", "evaluate", "check", "figures", "review"])
     p.add_argument("--exp", nargs="+", help="support: an experiment with data.inputs.satellite_composite; "
                                              "check: the placebo experiment (default fus2_placebo_v1)")
     p.add_argument("--placebo", default="v1", help="evaluate: version of the placebo experiments (v1 = IAAFT, "
