@@ -85,9 +85,19 @@ the same shape.
   - spatially structured but meaningless predictors can carry skill (Meyer et al., 2019; Behrens & Viscarra Rossel,
     2020).
 
-What we did not find is such a surrogate used as a **whole placebo branch** in a multi-source fusion network: an input
-of the same shape as a real source, trained in the same network, whose comparison with the real source separates the
-information in the source from the effect of adding the input.
+- *Retraining with a randomised input:*
+  - refitting after a feature is permuted is known as permute-and-relearn (Mentch & Hooker, 2016);
+  - drawing the replacement conditionally on the other features before refitting is known as condition-and-relearn
+    (Hooker et al., 2021);
+  - residual permutation tests keep the part of a feature predicted by the other features (Freedman & Lane, 1983;
+    Huang, 2025);
+  - in multimodal prediction, whole modalities have been randomised and the models retrained from scratch (Bernett et
+    al., 2026; Georgiou et al., 2026).
+
+What we did not find is a **spatially structured** surrogate used as a whole branch of a multi-source spatial fusion
+network: an input of the same shape and texture as a real source, trained in the same network, whose comparison with
+the real source is meant to separate the information in the source from the effect of adding the input. We also did not
+find an analysis of how such a surrogate behaves when the map holds a single urban core.
 
 **Does fusion pay when the target is sharper or coarser?** If two sources differ only at scales finer than the target
 resolves, the target cannot reward their difference. Correlations rise as data are aggregated (Gehlke & Biehl, 1934),
@@ -645,6 +655,9 @@ null predictors with realistic spatial structure can look skilful (Fourcade et a
 **A placebo with the right texture is hard to build.** Neither construction met the registered texture tolerance,
 because the non-stationary map of a single city cannot be moved inside a bounded grid without being reshaped or cut. The
 same difficulty is known for null models of brain maps (Markello & Misic, 2021).
+- Toroidal shifts assume that the pattern repeats beyond the boundary (Radersma & Sheldon, 2015). They can produce
+  spurious results when the pattern is concentrated in part of the window (Buckley et al., 2016; Mrkvička et al.,
+  2021). A single city in a bounded grid is such a case.
 - The two constructions err in different ways: A reshapes the texture, B keeps it but adds seams.
 - They gave the same signs and similar sizes for every comparison. Their agreement is a robustness check, not a passed
   test.
@@ -695,7 +708,9 @@ result applies to the implementation above.
 5. **Report single seeds, placebo realisations and absolute skill, not only ensembles and differences.**
 
 **Next steps** (not done here):
-- a *conditional placebo* that keeps the part of each layer predicted by the context and relocates only the rest;
+- a *conditional placebo* that keeps the part of each layer predicted by the context and relocates only the rest, a
+  spatial form of condition-and-relearn (Hooker et al., 2021) and of residual permutation (Huang, 2025). It keeps only
+  the conditional mean, not the full conditional distribution, and assumes that the residual can be moved;
 - a *duplicate-context branch* that adds a copy of the context as a branch, to measure the cost of an added input that
   carries no new information but does not conflict with the context;
 - a *placebo-against-placebo null* with more realisations;
@@ -807,21 +822,27 @@ appeared to influence the work reported in this paper.
 - Baltrušaitis, T., Ahuja, C., & Morency, L.-P. (2019). Multimodal machine learning: a survey and taxonomy. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 41, 423–443. https://doi.org/10.1109/TPAMI.2018.2798607
 - Behrens, T., & Viscarra Rossel, R. A. (2020). On the interpretability of predictors in spatial data science: the information horizon. *Scientific Reports*, 10, 16737. https://doi.org/10.1038/s41598-020-73773-y
 - Beirle, S., Borger, C., Dörner, S., Li, A., Hu, Z., Liu, F., Wang, Y., & Wagner, T. (2019). Pinpointing nitrogen oxide emissions from space. *Science Advances*, 5, eaax9800. https://doi.org/10.1126/sciadv.aax9800
+- Bernett, J., Iversen, P., Picciani, M., Wilhelm, M., Baum, K., & List, M. (2026). Critical evaluation of drug response prediction models with DrEval. *Nature Communications*, 17, 4238. https://doi.org/10.1038/s41467-026-72903-w
+- Buckley, H. L., Case, B. S., & Ellison, A. M. (2016). Using codispersion analysis to characterize spatial patterns in species co-occurrences. *Ecology*, 97, 32–39. https://doi.org/10.1890/15-0578.1
 - Burt, J. B., Helmer, M., Shinn, M., Anticevic, A., & Murray, J. D. (2020). Generative modeling of brain maps with spatial autocorrelation. *NeuroImage*, 220, 117038. https://doi.org/10.1016/j.neuroimage.2020.117038
 - Candès, E., Fan, Y., Janson, L., & Lv, J. (2018). Panning for gold: 'model-X' knockoffs for high dimensional controlled variable selection. *Journal of the Royal Statistical Society Series B: Statistical Methodology*, 80, 551–577. https://doi.org/10.1111/rssb.12265
 - Fourcade, Y., Besnard, A. G., & Secondi, J. (2018). Paintings predict the distribution of species, or the challenge of selecting environmental predictors and evaluation statistics. *Global Ecology and Biogeography*, 27, 245–256. https://doi.org/10.1111/geb.12684
+- Freedman, D., & Lane, D. (1983). A nonstochastic interpretation of reported significance levels. *Journal of Business & Economic Statistics*, 1, 292–298. https://doi.org/10.1080/07350015.1983.10509354
 - Friedrichs-Manthey, M., Langhans, S. D., Hein, T., Borgwardt, F., Kling, H., Jähnig, S. C., & Domisch, S. (2020). From topography to hydrology — the modifiable area unit problem impacts freshwater species distribution models. *Ecology and Evolution*, 10, 2956–2968. https://doi.org/10.1002/ece3.6110
 - Gat, I., Schwartz, I., & Schwing, A. (2021). Perceptual score: what data modalities does your model perceive? *Advances in Neural Information Processing Systems*, 34. arXiv:2110.14375.
 - Gately, C. K., & Hutyra, L. R. (2017). Large uncertainties in urban-scale carbon emissions. *Journal of Geophysical Research: Atmospheres*, 122, 11242–11260. https://doi.org/10.1002/2017JD027359
 - Gehlke, C. E., & Biehl, K. (1934). Certain effects of grouping upon the size of the correlation coefficient in census tract material. *Journal of the American Statistical Association*, 29, 169–170. https://doi.org/10.1080/01621459.1934.10506247
 - Geng, G., Zhang, Q., Martin, R. V., Lin, J., Huo, H., Zheng, B., Wang, S., & He, K. (2017). Impact of spatial proxies on the representation of bottom-up emission inventories: a satellite-based analysis. *Atmospheric Chemistry and Physics*, 17, 4131–4145. https://doi.org/10.5194/acp-17-4131-2017
+- Georgiou, S., Stylianopoulos, T., & Voutouri, C. (2026). Multimodal transformers predict cancer therapy response from tumor mechanics. *Array*, 31, 101168. https://doi.org/10.1016/j.array.2026.101168
 - Goldberg, D. L., Tao, M., Kerr, G. H., Ma, S., Tong, D. Q., Fiore, A. M., Dickens, A. F., Adelman, Z. E., & Anenberg, S. C. (2024). Evaluating the spatial patterns of U.S. urban NOx emissions using TROPOMI NO₂. *Remote Sensing of Environment*, 300, 113917. https://doi.org/10.1016/j.rse.2023.113917
 - Gotway, C. A., & Young, L. J. (2002). Combining incompatible spatial data. *Journal of the American Statistical Association*, 97, 632–648. https://doi.org/10.1198/016214502760047140
 - Griffith, D. A. (2005). Effective geographic sample size in the presence of spatial autocorrelation. *Annals of the Association of American Geographers*, 95, 740–760. https://doi.org/10.1111/j.1467-8306.2005.00484.x
 - Harms, K. E., Condit, R., Hubbell, S. P., & Foster, R. B. (2001). Habitat associations of trees and shrubs in a 50-ha neotropical forest plot. *Journal of Ecology*, 89, 947–959. https://doi.org/10.1111/j.1365-2745.2001.00615.x
 - Hessel, J., & Lee, L. (2020). Does my multimodal model learn cross-modal interactions? It's harder to tell than you might think! *Proceedings of EMNLP 2020*, 861–877. https://doi.org/10.18653/v1/2020.emnlp-main.62
 - Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics*, 6, 65–70.
+- Hooker, G., Mentch, L., & Zhou, S. (2021). Unrestricted permutation forces extrapolation: variable importance requires at least one more model, or there is no free variable importance. *Statistics and Computing*, 31, 82. https://doi.org/10.1007/s11222-021-10057-z
 - Hu, P., Li, X., & Zhou, Y. (2022). SHAPE: an unified approach to evaluate the contribution and cooperation of individual modalities. *Proceedings of IJCAI-22*, 3064–3070. https://doi.org/10.24963/ijcai.2022/425
+- Huang, P.-H. (2025). Residual permutation tests for feature importance in machine learning. *British Journal of Mathematical and Statistical Psychology*. https://doi.org/10.1111/bmsp.70009
 - Huang, Y., Lin, J., Zhou, C., Yang, H., & Huang, L. (2022). Modality competition: what makes joint training of multi-modal network fail in deep learning? (Provably). *Proceedings of ICML*, PMLR 162, 9226–9259.
 - Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. *Patterns*, 4, 100804. https://doi.org/10.1016/j.patter.2023.100804
 - Kursa, M. B., & Rudnicki, W. R. (2010). Feature selection with the Boruta package. *Journal of Statistical Software*, 36(11), 1–13. https://doi.org/10.18637/jss.v036.i11
@@ -829,12 +850,14 @@ appeared to influence the work reported in this paper.
 - Liu, F., Beirle, S., Joiner, J., Choi, S., Tao, Z., Knowland, K. E., Smith, S. J., Tong, D. Q., Ma, S., Fasnacht, Z. T., & Wagner, T. (2024). High-resolution mapping of nitrogen oxide emissions in large US cities from TROPOMI retrievals of tropospheric nitrogen dioxide columns. *Atmospheric Chemistry and Physics*, 24, 3717–3728. https://doi.org/10.5194/acp-24-3717-2024
 - Markello, R. D., & Misic, B. (2021). Comparing spatial null models for brain maps. *NeuroImage*, 236, 118052. https://doi.org/10.1016/j.neuroimage.2021.118052
 - Mena, F., Pathak, D., Najjar, H., Sanchez, C., Helber, P., Bischke, B., et al. (2025). Adaptive fusion of multi-modal remote sensing data for optimal sub-field crop yield prediction. *Remote Sensing of Environment*, 318, 114547. https://doi.org/10.1016/j.rse.2024.114547
+- Mentch, L., & Hooker, G. (2016). Quantifying uncertainty in random forests via confidence intervals and hypothesis tests. *Journal of Machine Learning Research*, 17(26), 1–41.
 - Meyer, H., Reudenbach, C., Hengl, T., Katurji, M., & Nauss, T. (2018). Improving performance of spatio-temporal machine learning models using forward feature selection and target-oriented validation. *Environmental Modelling & Software*, 101, 1–9. https://doi.org/10.1016/j.envsoft.2017.12.001
 - Meyer, H., Reudenbach, C., Wöllauer, S., & Nauss, T. (2019). Importance of spatial predictor variable selection in machine learning applications — moving from data reproduction to spatial prediction. *Ecological Modelling*, 411, 108815. https://doi.org/10.1016/j.ecolmodel.2019.108815
 - Moudrý, V., Keil, P., Gábor, L., Lecours, V., Zarzo-Arias, A., Barták, V., Malavasi, M., Rocchini, D., Torresani, M., Gdulová, K., Grattarola, F., Leroy, F., Marchetto, E., Thouverai, E., Prošek, J., Wild, J., & Šímová, P. (2023). Scale mismatches between predictor and response variables in species distribution modelling: a review of practices for appropriate grain selection. *Progress in Physical Geography*, 47, 467–482. https://doi.org/10.1177/03091333231156362
 - Mrkvička, T., Dvořák, J., González, J. A., & Mateu, J. (2021). Revisiting the random shift approach for testing in spatial statistics. *Spatial Statistics*, 42, 100430. https://doi.org/10.1016/j.spasta.2020.100430
 - Mu, Q., Denby, B. R., Wærsted, E. G., & Fagerli, H. (2022). Downscaling of air pollutants in Europe using uEMEP_v6. *Geoscientific Model Development*, 15, 449–465. https://doi.org/10.5194/gmd-15-449-2022
 - Prichard, D., & Theiler, J. (1994). Generating surrogate data for time series with several simultaneously measured variables. *Physical Review Letters*, 73, 951–954. https://doi.org/10.1103/PhysRevLett.73.951
+- Radersma, R., & Sheldon, B. C. (2015). A new permutation technique to explore and control for spatial autocorrelation. *Methods in Ecology and Evolution*, 6, 1026–1033. https://doi.org/10.1111/2041-210X.12390
 - Ridder, G., Hardy, O. J., & Ovaskainen, O. (2024). Generating spatially realistic environmental null models with the shift-&-rotate approach helps evaluate false positives in species distribution modelling. *Methods in Ecology and Evolution*, 15, 2331–2342. https://doi.org/10.1111/2041-210X.14443
 - Roberts, D. R., Bahn, V., Ciuti, S., Boyce, M. S., Elith, J., Guillera-Arroita, G., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40, 913–929. https://doi.org/10.1111/ecog.02881
 - Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. *Physical Review Letters*, 77, 635–638. https://doi.org/10.1103/PhysRevLett.77.635
