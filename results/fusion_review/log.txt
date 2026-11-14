@@ -1,0 +1,50 @@
+[20:06:31] --- null
+[20:06:31] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['energy'], 'model.fusion.type': 'gated'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:06:31] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['energy'], 'model.fusion.type': 'early'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:06:31] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['traffic', 'energy', 'pollution'], 'model.fusion.type': 'gated'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:07:08] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['energy'], 'model.fusion.type': 'gated'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:07:08] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['energy'], 'model.fusion.type': 'early'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:07:08] null: skipped (no finished run of paper2_rq1_ablation_v1 {'model.modalities': ['traffic', 'energy', 'pollution'], 'model.fusion.type': 'gated'} in runs/ or docs/paper/fusion_paper/results_*/)
+[20:07:09] placebo vs placebo (null) and the real model's rank among the realisations:
+placebo                comparison  year   metric  real  placebo_mean  placebo_min  placebo_max  placebo_sd  null_pair_abs_max  delta  delta_over_sd  real_rank_of_6
+      A             energy, gated  1404 spearman 0.911         0.886        0.870        0.910       0.016              0.040  0.025          1.600               1
+      A             energy, gated  1404   pr_auc 0.658         0.644        0.470        0.804       0.142              0.333  0.013          0.094               3
+      A traffic + stations, gated  1404 spearman 0.883         0.901        0.885        0.916       0.012              0.030 -0.018         -1.511               6
+      A traffic + stations, gated  1404   pr_auc 0.769         0.686        0.546        0.794       0.098              0.248  0.082          0.841               2
+      B             energy, gated  1404 spearman 0.911         0.887        0.876        0.905       0.012              0.029  0.024          2.026               1
+      B             energy, gated  1404   pr_auc 0.658         0.642        0.583        0.679       0.038              0.096  0.016          0.423               3
+      B traffic + stations, gated  1404 spearman 0.883         0.904        0.896        0.907       0.005              0.012 -0.021         -4.241               6
+      B traffic + stations, gated  1404   pr_auc 0.769         0.675        0.609        0.714       0.043              0.106  0.094          2.174               1
+[20:07:09] --- domain
+[20:09:42] placebo on the label domain (medians over the layers):
+placebo  realisation  zero_share_real  zero_share_placebo    ks  abs_spearman_real  spearman_target_real  spearman_target_placebo  max_abs_spearman_context_real  max_abs_spearman_context_placebo  max_correlogram_diff
+      A            0            0.676               0.863 0.174              0.118                  0.43                   -0.094                          0.684                             0.136                 0.138
+      A            1            0.676               0.907 0.195              0.071                  0.43                    0.032                          0.684                             0.115                 0.216
+      A            2            0.676               0.952 0.267              0.062                  0.43                   -0.049                          0.684                             0.098                 0.255
+      A            3            0.676               0.941 0.258              0.037                  0.43                   -0.052                          0.684                             0.057                 0.206
+      A            4            0.676               0.946 0.258              0.098                  0.43                   -0.256                          0.684                             0.128                 0.184
+      B            0            0.676               0.978 0.310              0.036                  0.43                   -0.032                          0.684                             0.043                 0.345
+      B            1            0.676               0.975 0.306              0.089                  0.43                   -0.152                          0.684                             0.162                 0.440
+      B            2            0.676               0.875 0.204              0.053                  0.43                    0.157                          0.684                             0.144                 0.153
+      B            3            0.676               0.973 0.301              0.095                  0.43                   -0.151                          0.684                             0.157                 0.172
+      B            4            0.676               0.975 0.303              0.091                  0.43                   -0.170                          0.684                             0.183                 0.226
+[20:09:42] --- absolute
+[20:09:42] absolute: no runs for context only (paper2_rq1_context_only_v1)
+[20:09:42] absolute: no runs for energy, early (paper2_rq1_ablation_v1)
+[20:09:42] absolute: no runs for energy, gated (paper2_rq1_ablation_v1)
+[20:09:42] absolute: no runs for all three, gated (paper2_rq1_ablation_v1)
+[20:12:50] absolute skill:
+metric                                                    pr_auc               spearman              
+year                                                        1402   1403   1404     1402   1403   1404
+model                                                                                                
+all three, gated                                             NaN    NaN  0.769      NaN    NaN  0.883
+context only                                                 NaN    NaN  0.637      NaN    NaN  0.912
+energy + placebo traffic/stations A, gated                 0.714  0.772  0.686    0.912  0.918  0.901
+energy + placebo traffic/stations B, gated                 0.696  0.755  0.675    0.912  0.918  0.904
+energy, gated                                                NaN    NaN  0.658      NaN    NaN  0.911
+placebo energy A, early                                    0.625  0.681    NaN    0.895  0.891    NaN
+placebo energy A, gated                                    0.684  0.675  0.644    0.893  0.889  0.886
+placebo energy B, early                                    0.672  0.686    NaN    0.902  0.899    NaN
+placebo energy B, gated                                    0.688  0.666  0.642    0.901  0.901  0.887
+trivial: minus distance to the population-weighted centre  0.167  0.170    NaN    0.610  0.645    NaN
+trivial: viirs@lag3                                        0.637  0.668    NaN    0.701  0.719    NaN
