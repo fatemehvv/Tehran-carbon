@@ -215,7 +215,8 @@ Monthly sector layers are the annual allocation multiplied by monthly sector sha
 
 ### 3.1 Models
 
-All models use the same target and, unless stated, the same predictors (Table 2).
+All models use the same target and, unless stated, the same predictors (Table 2). Fig. 4 shows the shared network and
+how the comparison separates the graph from the reach.
 
 | Model | Description |
 |---|---|
@@ -233,6 +234,18 @@ ensembling, and supplies spatial context as fixed box means instead of learned m
 which cells contribute (all cells of a square against the sparse graph stencils), in how they are weighted, and in
 whether aggregation comes before or after the nonlinear encoder, so the comparison tests two ways of supplying the
 same maximum reach rather than one component of the GNN in isolation.
+
+![Figure 4](../figures/fig_design_en.png)
+
+**Fig. 4.** Study design. (a) The network shared by all neural models: one two-layer encoder per input group, a softmax
+gate that weights the groups for every cell and month (the fusion of RQ1), graph message passing in the GNN only, and a
+linear head trained on the monthly TROPOMI target (z) with a squared-error loss; hotspots are the top 10 % of cells. In
+the no-graph network the neighbourhood enters instead as box means of each input, and SLX models feed the same inputs and
+box means to OLS, GBM or RF. (b) The thesis compared a three-layer GNN that sees 22.7 km with SLX models that see at most
+12.6 km, so the graph and the reach differed at once. This study compares the GNN with the same network without a graph
+and with SLX models at the same reach, varies the reach of every family (dots; circles mark the thesis pair), and
+evaluates all models in the same way. Squares show which cells inform the prediction of the centre cell (black): the
+sparse stencil of the graph against full box windows. The maps in (a) are schematic.
 
 Message passing and SLX windows both use the predictors of every grid cell, including those of the held-out block; only
 the target of held-out cells is unseen. This is the mapping task, in which predictors are known everywhere. All
@@ -330,7 +343,7 @@ configuration hash, data hash and code version.
 
 ### 4.1 Skill rises with reach and levels off
 
-Every model family improves steeply as it is allowed to see further, and then gains much less (Fig. 4, Table 3). Models
+Every model family improves steeply as it is allowed to see further, and then gains much less (Fig. 5, Table 3). Models
 restricted to their own cell reach a Spearman correlation of 0.66–0.77. SLX models gain little from the nearest cells
 (0.73–0.79 at 0.8–2.5 km), reach 0.86–0.87 at 7.6 km and 0.91–0.93 at 12.6 km, and gain less beyond: at 22.7–37.8 km
 they reach 0.92–0.95, a further gain of the best SLX model of 0.026 in 1402 and 0.003 in 1403 from 12.6 to 37.8 km. The GNN follows the same curve, from 0.90–0.91 with one layer (7.6 km) to 0.94 with two layers and
@@ -341,7 +354,7 @@ length after the large-scale trend is removed (14–19 km; Section 3.2) and lies
 scatter between estimators and years.
 
 **Table 3.** Cross-validated Spearman correlation against reach, 1402 / 1403. SLX: the best of OLS, GBM and RF at each
-reach (estimator in brackets; Fig. 4 shows every estimator). Networks: five-seed ensembles.
+reach (estimator in brackets; Fig. 5 shows every estimator). Networks: five-seed ensembles.
 
 | Reach (km) | Best SLX | GNN | No-graph network |
 |---|---|---|---|
@@ -355,9 +368,9 @@ reach (estimator in brackets; Fig. 4 shows every estimator). Networks: five-seed
 | 30.3 | 0.942 (OLS) / 0.933 (GBM) | 0.950 / 0.949 | – |
 | 37.8 | 0.950 (GBM) / 0.937 (RF) | 0.946 / 0.946 | 0.958 / 0.956 |
 
-![Figure 4](../figures/fig4_reach.png)
+![Figure 5](../figures/fig4_reach.png)
 
-**Fig. 4.** Skill against reach under 22-km block cross-validation, Spearman (a, b) and PR-AUC (c, d), 1402 (left) and
+**Fig. 5.** Skill against reach under 22-km block cross-validation, Spearman (a, b) and PR-AUC (c, d), 1402 (left) and
 1403 (right). Lines: SLX models and the GNN with growing reach (five-seed ensembles for the GNN). Points: the no-graph
 network, run at 0, 22.7 and 37.8 km. Dashed line: zero crossing of the target correlogram (24 km).
 
@@ -399,11 +412,11 @@ pre-specified reference, the three-layer GNN led by +0.025 and +0.035 in Spearma
 Holm-adjusted 0.021 and 0.016) and by +0.037 and +0.051 in PR-AUC. These leads are partly a comparison of reaches, and
 given the liberal behaviour of the Spearman test, even the remaining part is uncertain: the jackknife intervals include
 zero (−0.003 to +0.052 and −0.013 to +0.082), and the block-level version of the test is not significant (p = 0.058
-and 0.055). Fig. 5 shows the differences against the pre-specified and against extended-reach references.
+and 0.055). Fig. 6 shows the differences against the pre-specified and against extended-reach references.
 
-![Figure 5](../figures/fig5_differences.png)
+![Figure 6](../figures/fig5_differences.png)
 
-**Fig. 5.** GNN (five-seed ensemble) minus reference in Spearman (a) and PR-AUC (b), with 90 % (thick) and 95 % (thin)
+**Fig. 6.** GNN (five-seed ensemble) minus reference in Spearman (a) and PR-AUC (b), with 90 % (thick) and 95 % (thin)
 delete-one-block jackknife intervals. Upper rows: the pre-specified references of the original study (SLX-GBM at
 12.6 km in cross-validation, SLX-RF at 12.6 km on the held-out year). Lower rows: references with extended reach (the
 best SLX model by Spearman at any reach in cross-validation; SLX-OLS at 22.7 km on the held-out year, shorter than the
@@ -439,16 +452,16 @@ the mean of its individual fits. Differences in the text are computed from unrou
 
 ### 4.4 Seed averaging hides instability
 
-Across seeds, the standard deviation of the GNN's Spearman correlation is about 0.005, but that of its PR-AUC is 0.028 in 1402, 0.038 in 1403 and 0.075 in 1404; in 1403 the individual fits range from 0.756 to 0.858 in PR-AUC (Fig. 6). Averaging five
+Across seeds, the standard deviation of the GNN's Spearman correlation is about 0.005, but that of its PR-AUC is 0.028 in 1402, 0.038 in 1403 and 0.075 in 1404; in 1403 the individual fits range from 0.756 to 0.858 in PR-AUC (Fig. 7). Averaging five
 seeds raises PR-AUC by 0.03–0.04 (for example 0.800 against 0.771 in 1402) and Spearman by about 0.005. The SLX models
 were run once, so they get no such benefit, and a comparison of a five-seed ensemble with single baselines favours the
 network by about the size of the PR-AUC leads in Table 4. This is why the GNN's PR-AUC leads at equal reach
 (Sections 4.2–4.3) are smaller and more variable for individual fits. Whether ensembling the stochastic SLX baselines would
 close the gap was not tested.
 
-![Figure 6](../figures/fig6_seeds.png)
+![Figure 7](../figures/fig6_seeds.png)
 
-**Fig. 6.** Seeds against ensemble, Spearman (a) and PR-AUC (b), with three lanes per row so that close values stay
+**Fig. 7.** Seeds against ensemble, Spearman (a) and PR-AUC (b), with three lanes per row so that close values stay
 visible. Upper lane: the GNN (bar: range of the five individual fits; tick: their mean; dot: five-seed ensemble). Middle
 lane: SLX with extended reach (best SLX model by Spearman at any reach in cross-validation; SLX-OLS at 22.7 km on 1404).
 Lower lane: the pre-specified SLX reference at 12.6 km.
@@ -777,7 +790,7 @@ and block-level), Holm-adjusted p-values of the registered family of 22 tests, a
 `configs/config.yaml` and `data/raw/MANIFEST.csv`].
 
 **Figures.** All figures use the same model colours (GNN blue, SLX-OLS orange, SLX-GBM aqua, SLX-RF yellow, no-graph network grey), grey text and unobtrusive axes. Each is saved as PNG (300
-dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3–6 are drawn from the committed result tables by
+dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3 and 5–7 are drawn from the committed result tables by
 `python main.py paper figures`; nothing is re-run.
 
 | Figure | Content | File | Source |
@@ -785,9 +798,10 @@ dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3–6 are drawn from the
 | 1 | From the literature to the gap (funnel) | `fig1_literature_funnel_en.svg` / `.png` | drawn; Persian version `fig1_literature_funnel_fa` for the thesis |
 | 2 | Domain, observed and predicted target, hotspots of 1404 | `docs/figures/fig06_maps_1404.png` | thesis figures (`python main.py figures`) |
 | 3 | Correlogram of the target | `fig3_correlogram` | `results_stageA/target/target_neff.csv`, `reach/reach_correlogram.csv` |
-| 4 | Skill against reach | `fig4_reach` | `results_stageA/reach/reach_curve.csv` |
-| 5 | GNN minus reference, jackknife intervals, equivalence band | `fig5_differences` | `results_stageA/evaluate_paper2/` (primary rows) |
-| 6 | Single seeds, ensemble and SLX references | `fig6_seeds` | the same tables (`part = seeds` rows) |
+| 4 | Study design: shared network and the reach-matched comparison | `fig_design_en.svg` / `.pdf` / `.png` | drawn by `figures/src/fig_design.py`, rendered by `figures/src/render_svg.js`; maps schematic |
+| 5 | Skill against reach | `fig4_reach` | `results_stageA/reach/reach_curve.csv` |
+| 6 | GNN minus reference, jackknife intervals, equivalence band | `fig5_differences` | `results_stageA/evaluate_paper2/` (primary rows) |
+| 7 | Single seeds, ensemble and SLX references | `fig6_seeds` | the same tables (`part = seeds` rows) |
 
-The numbers behind Figures 5 and 6 are written to `docs/paper/figures/figure_data_comparisons.csv`. Fig. 1 can also
+The numbers behind Figures 6 and 7 are written to `docs/paper/figures/figure_data_comparisons.csv`. Fig. 1 can also
 serve as the graphical abstract.
