@@ -217,3 +217,79 @@ Candidate and reference are fixed now. Δ = Spearman(candidate) − Spearman(ref
      - It keeps the texture except at the wrap-around seams.
    - **M4 is applied to it in the same way, and its verdicts are the placebo verdicts of the paper.** The stage 1
      results are reported as well, with their label.
+2. **Placebo B also failed M4 (2026-11-13).**
+   - Median correlogram difference 0.10–0.20; no realisation passed (`docs/paper/fusion_paper/results_v2/`).
+   - The registration did not say what to do in this case. Reporting A and B side by side, both labelled "placebo check
+     failed", is a post-hoc decision.
+3. **Analyses requested in review (2026-11-14; post hoc, no verdict).**
+   - These were the placebo-against-placebo spread, M4 on the label domain, absolute skill and trivial baselines
+     (`python main.py fusion review`, `results/fusion_review/`).
+   - On the label domain, both placebos were mostly zero (median share of zero cells 0.86–0.98 against 0.68 for the
+     real layers) and weakly anti-correlated with the target (median Spearman −0.26 to +0.16 against +0.43).
+
+## Amendment 1: conditional placebo (2026-11-14)
+
+**Status: FINAL.** It is written after the results of stages 1 and 2 and of the review analyses (Deviation 3) are
+known, and before any run of the configs below. It is frozen by the commit that adds it, pushed before the first run;
+the push time on GitHub is its registration time. The registered tests above are not changed. The amendment adds one
+family.
+
+**Why.** The review analyses showed that both placebos break the dependence of a layer on the context layers. On the
+cells of the city they are mostly zero and anti-correlated with the target. The contrast real − placebo therefore mixes
+the information of a source with the cost of a misleading input. A conditional placebo keeps the part of a layer that
+the context explains and relocates only the rest. Its contrast with the real source asks whether the source carries
+information **beyond the context**.
+
+**Construction** (`data/sources/placebo.py`, `method: conditional`). For every layer of a source, on its annual map
+(log1p where the dataset uses it):
+1. **Context fit.** f = gradient boosting of the layer on the context layers and their box means at lags 3 and 9:
+   - context layers: population, building volume, non-residential volume, night lights, industrial share;
+   - model settings as in the lineage audit;
+   - cross-fitted over 5 random groups of 22-km tiles of the whole grid, so no cell is predicted by a model that saw
+     it.
+2. **Residual.** r = layer − f.
+3. **Relocation.** r is rotated by 180° and shifted cyclically, with the offsets of placebo B for the same realisation.
+4. **Placebo.** f + relocated r, back-transformed, clipped at 0, with the city-wide monthly cycle of the layer.
+
+**Experiments** (`configs/config.yaml`). All three run on the same machine (laptop, CPU), so G1 does not mix hardware:
+- `fus3_cond_placebo_v1`: context + conditional placebo energy, gated, five realisations, five seeds each;
+- `fus3_ref_v1`: context + real energy, gated, five seeds;
+- `fus3_ctx_v1`: context only, five seeds.
+
+**Check M5** (`python main.py fusion amend`, before the verdict of G1 is read). It uses the label domain, annual maps,
+every energy layer that varies on the domain, and 1402 and 1403. A realisation passes if the medians over its layers
+and years meet all three conditions:
+- **M5a (dependence kept):** the largest |Spearman| of the placebo with a context layer differs from that of the real
+  layer by ≤ 0.10;
+- **M5b (values kept):** Kolmogorov–Smirnov distance between placebo and real layer ≤ 0.10;
+- **M5c (residual relocated):** |Spearman| between placebo − f and layer − f < 0.10.
+
+If more than two of the five realisations fail, G1 is labelled "conditional placebo check failed". It is still
+reported.
+
+**Family G** (1402, 1403; Holm over the two tests, α = 0.05). The inference is that of families F and C:
+- primary metric Spearman, margin δ = 0.02;
+- jackknife verdict;
+- one-sided block sign-flip;
+- placebo scores averaged over the realisations;
+- seed s compared with realisation s.
+
+The family has one comparison:
+- **G1:** `fus3_ref_v1` (context + energy, gated) vs `fus3_cond_placebo_v1` (context + conditional placebo energy,
+  gated).
+
+**Secondary estimates** (intervals, no verdict):
+- **K1:** conditional placebo − context only (the cost of an added input that agrees with the context);
+- **K2:** real energy − context only, same machine (the ablation, repeated on this hardware);
+- **K3:** conditional placebo − rotation-and-shift placebo (`fus2_placebo_v2`). It is descriptive, because it compares
+  two machines, and it is skipped if those runs are not available.
+
+**Expected directions, written before the runs.**
+- **G1:** equivalent or inconclusive. The real energy layers gained only +0.004 and +0.013 over context alone.
+- **K1:** within ±0.02 of zero, smaller in magnitude than the cost of placebo B (−0.013 to −0.014).
+
+**Limitations known now.**
+- If the context fit is nearly perfect (residential R² 0.98), the conditional placebo is close to the real layer. G1
+  then has little room, which is the point: it measures information beyond the context.
+- The relocated residual keeps the seams of placebo B.
+- No held-out-year test (1404) is run in this amendment.

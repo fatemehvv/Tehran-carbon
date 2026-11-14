@@ -103,3 +103,26 @@ def test_rotate_shift_keeps_values_cycle_and_moves_the_city():
     assert abs(lag1(m[0]) - lag1(r[0])) < 0.15                               # same texture (up to the seams)
     assert np.corrcoef(m.mean(0).ravel(), r.mean(0).ravel())[0, 1] < 0.9     # the city has moved
     assert np.array_equal(out["plc_cw"], real["cw"])
+
+
+# ---------------------------------------------------------------- conditional placebo (amendment 1)
+def test_tile_folds_cover_the_grid_with_whole_tiles():
+    from types import SimpleNamespace
+    from tehran_carbon.data.sources.placebo import tile_folds
+    g = SimpleNamespace(H=H, W=W, km_y=1.0, km_x=1.0)
+    f = tile_folds(g, 8.0, 5, 0).reshape(H, W)
+    assert set(np.unique(f)) <= set(range(5))
+    assert np.all(f[:8, :8] == f[0, 0])                       # one tile, one fold
+    assert np.array_equal(f, tile_folds(g, 8.0, 5, 0).reshape(H, W))
+
+
+def test_cross_fit_keeps_the_part_explained_by_the_context():
+    from types import SimpleNamespace
+    from tehran_carbon.data.sources.placebo import cross_fit, tile_folds
+    g = SimpleNamespace(H=H, W=W, km_y=1.0, km_x=1.0)
+    c = city(0)
+    X = np.stack([c.ravel(), (c ** 2).ravel()], 1)
+    rng = np.random.default_rng(3)
+    y = 2 * c.ravel() + 0.01 * rng.standard_normal(H * W)    # a layer derived from the context
+    f = cross_fit(X, y, tile_folds(g, 8.0, 5, 0))
+    assert np.corrcoef(f, y)[0, 1] > 0.95

@@ -1036,6 +1036,35 @@ experiments:
       model.modalities: [[energy_plc], [energy, traffic_plc, pollution_plc]]
       model.fusion.type: [gated]
 
+  # ---------------------------------------------------------------- fusion paper, amendment 1: conditional placebo
+  # docs/paper/fusion_paper/preregistration_fusion_v1.md, "Amendment 1". Registered before any of these runs.
+  # All three run on the same machine (laptop CPU), so the comparison G1 does not mix hardware.
+  # After the runs: python main.py fusion amend (check M5, family G).
+  fus3_cond_placebo_v1:
+    rq: RQ1
+    description: fusion paper amendment 1 - conditional placebo energy (context-explained part kept, residual relocated)
+    inherits: fus2_placebo_v2
+    data: {inputs: {placebo: {method: conditional, cross_fit_folds: 5}}}
+    sweep:
+      data.inputs.placebo.realization: [0, 1, 2, 3, 4]
+      model.modalities: [[energy_plc]]
+      model.fusion.type: [gated]
+  fus3_ref_v1:
+    rq: RQ1
+    description: fusion paper amendment 1 - context + real energy, gated (reference of G1, same machine)
+    inherits: paper2_rq1_ablation_v1
+    split: {transfer: false}
+    train: {save_final: false}
+    sweep:
+      model.modalities: [[energy]]
+      model.fusion.type: [gated]
+  fus3_ctx_v1:
+    rq: RQ1
+    description: fusion paper amendment 1 - context only (reference of the secondary estimates, same machine)
+    inherits: paper2_rq1_context_only_v1
+    split: {transfer: false}
+    train: {save_final: false}
+
   # ---------------------------------------------------------------- fusion paper, stage 2: target support (F3, F4)
   # Same registration. Before any of these runs: python main.py fusion support --exp fus1_all_v1 (checks M1-M3).
   # (a) seasonal composites of the daily TROPOMI files by overpass wind (data/sources/composite.py), placed on the
