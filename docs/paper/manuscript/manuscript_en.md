@@ -803,5 +803,7 @@ dpi) and PDF (vector) in `docs/paper/figures/`. Figures 3 and 5–7 are drawn fr
 | 6 | GNN minus reference, jackknife intervals, equivalence band | `fig5_differences` | `results_stageA/evaluate_paper2/` (primary rows) |
 | 7 | Single seeds, ensemble and SLX references | `fig6_seeds` | the same tables (`part = seeds` rows) |
 
-The numbers behind Figures 6 and 7 are written to `docs/paper/figures/figure_data_comparisons.csv`. Fig. 1 can also
-serve as the graphical abstract.
+The numbers behind Figures 6 and 7 are written to `docs/paper/figures/figure_data_comparisons.csv`. The graphical
+abstract is `graphical_abstract.svg` / `.pdf` / `.png` (1600 × 690, rendered at 3200 × 1380 px), drawn by
+`figures/src/fig_graphical_abstract.py` from `results_review/reach/reach_curve.csv` (Spearman, mean of 1402 and 1403;
+best SLX estimator at each reach). Persian versions for the thesis: `fig1_literature_funnel_fa`, `fig_design_fa`.
