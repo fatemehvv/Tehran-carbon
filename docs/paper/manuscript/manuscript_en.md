@@ -23,18 +23,19 @@ Data and code availability). Items in [brackets] are to be completed before subm
 ## Abstract
 
 The gains of graph neural networks (GNNs) in mapping urban emissions and air pollution are usually credited to
-learning on a graph, yet a GNN also sees further than its baselines. We separate the two in mapping intra-urban NO₂ hotspots in Tehran from the monthly TROPOMI NO₂ pattern on a 1-km grid
+learning on a graph, yet a GNN also sees further than its baselines. We separate the two in mapping intra-urban NO₂ hotspots in Tehran from monthly TROPOMI NO₂ on a 1-km grid
 (2,436 cells), asking whether fusing traffic, energy and station data improves the maps (RQ1) and whether a GNN
-improves on conventional spatial models (RQ2). A multi-scale GraphSAGE model on a distance-based graph is compared
-with spatial-lag-of-X (SLX) models, and with the same network fed box means of its neighbourhood instead of a graph, at
+improves on conventional spatial models and, if so, whether the gain comes from the graph or from seeing further
+(RQ2). A multi-scale GraphSAGE model on a distance-based graph is compared
+with spatial-lag-of-X (SLX) models, and with the same network fed neighbourhood box means instead of a graph, at
 matched maximum reach from 0 to 38 km. Validation uses 22-km spatial blocks, a held-out year,
 fold-specific station interpolation, five seeds and block randomisation tests. Skill depends mainly on reach: the
 best SLX models rise from a Spearman correlation of about 0.75 for the cell alone to 0.91–0.93 at 12.6 km and gain at
 most 0.03 beyond. The GNN's lead over SLX at equal reach shrinks from about 0.04 at 7.6 km to −0.004 and +0.009 at
 37.8 km, all comparisons inconclusive, and the network fed box means is statistically equivalent to the GNN at 22.7 km
-(Spearman differences −0.005 and −0.008). On the held-out year the GNN and SLX are equivalent in Spearman at 30.3 km and
-differ by 0.002 at 37.8 km. The GNN's PR-AUC leads shrink for individual fits. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
-nearly identical at the scale over which the target varies. With about five effective degrees of
+(Spearman differences −0.005 and −0.008). On the held-out year, GNN and SLX are equivalent in Spearman at 30.3 km and
+differ by 0.002 at 37.8 km. GNN PR-AUC leads shrink for individual fits. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
+nearly identical at the target's scale. With about five effective degrees of
 freedom, the choice of inference changed several verdicts. For this smooth target and distance-based
 graph, reach explains most of the GNN's skill; graph models need reach-matched baselines.
 
@@ -141,7 +142,8 @@ We address two research questions for intra-urban NO₂ hotspots observed by TRO
 million people at the foot of the Alborz mountains with one of the highest NO₂ columns among large cities worldwide
 (Huber et al., 2026). RQ1 asks whether fusing traffic, energy and station data improves the maps over the best single
 source. RQ2 asks whether a GNN improves on conventional spatial models, and whether any improvement comes from the graph
-or from reach. Our contribution is a reach-matched evaluation: SLX baselines, and the same network without a graph, are
+or from reach. RQ2 is the main question of this paper; RQ1 is answered with the same models and the same evaluation,
+and its result is explained by the same scale argument. Our contribution is a reach-matched evaluation: SLX baselines, and the same network without a graph, are
 given the GNN's reach, and reach is varied for all of them, under spatial block cross-validation and on a held-out
 year. Matching is by maximum nominal reach: the models see up to the same distance, though not always the same cells. We
 relate the reach at which skill levels off to the correlation length of the target, quantify how seed
