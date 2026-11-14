@@ -461,11 +461,11 @@ const gFunnel = group("funnel", 1080, 0, 0);
     ring.rotation.x = Math.PI / 2; ring.position.y = y; gFunnel.add(ring);
     label(gFunnel, -r - 2, y, 0, t, i === 4 ? "hot" : "");
   });
-  const STUDIES = [["Wang 2020", "part"], ["Liang 2023", "part"], ["Klemmer 2023", "no"], ["Hettige 2024", "no"], ["Gueterbock 2025", "nr"],
-                   ["Du 2026", "part"], ["Zhao 2026", "nr"], ["Schmidt & Ong 2026", "part"], ["Mohseni 2026", "no"], ["Zhu 2026", "part"], ["Shao 2026", "no"]];
+  const STUDIES = [["Wang 2020", "part"], ["Liang 2023", "part"], ["Klemmer 2023", "no"], ["Hettige 2024", "no"], ["Gueterbock 2025", "nr"], ["Bai 2025", "part"], ["Ma 2025", "no"],
+                   ["Du 2026", "part"], ["Zhao 2026", "nr"], ["Schmidt & Ong 2026", "part"], ["Mohseni 2026", "no"], ["Zhu 2026", "part"], ["Shao 2026", "no"], ["Teng 2026", "no"], ["Yuan 2026", "no"]];
   const tok = { no: "--ols", part: "--rf", nr: "--mlp" };
   STUDIES.forEach(([n, s], i) => {
-    const a = (i / STUDIES.length) * Math.PI * 2, x = Math.cos(a) * 20, z = Math.sin(a) * 20;
+    const a = (i / STUDIES.length) * Math.PI * 2, x = Math.cos(a) * 24, z = Math.sin(a) * 24;
     box(gFunnel, [x, -4, z], [2.4, 2.4, 2.4], stdm(tok[s]));
     label(gFunnel, x, -7.2, z, n, "tick");
   });
@@ -728,22 +728,26 @@ const STEPS = [
   <span class="muted">پنجرهٔ SLX:</span><div class="seg" id="segS"><button type="button" data-v="0">بدون</button><button type="button" data-v="15" aria-pressed="true">۱۲٫۶ km</button><button type="button" data-v="27">۲۲٫۷ km</button></div>` },
 
 { id: "literature", part: "ایدهٔ مقاله", title: "ادبیات: کسی شعاع را کنترل نکرده بود", groups: ["funnel"], cam: [[1080, 34, 132], [1080, 16, 0]], spin: true,
-  caption: "مکعب‌ها: ۱۱ مطالعهٔ نزدیک. نارنجی: شعاع برابر نیست · زرد: فقط برای بخشی از مرجع‌ها · خاکستری: گزارش نشده.",
-  html: T(`<p class="lead">متن کامل ۱۱ مطالعهٔ نزدیک خوانده شد. برای هر کدام ثبت شد که GNN و مرجع‌هایش تا کجا را می‌بینند (جدول ۱ مقاله).</p>
+  caption: "مکعب‌ها: ۱۵ مطالعهٔ نزدیک. نارنجی: شعاع برابر نیست · زرد: فقط برای بخشی از مرجع‌ها · خاکستری: گزارش نشده.",
+  html: T(`<p class="lead">متن کامل ۱۵ مطالعهٔ نزدیک خوانده شد. برای هر کدام ثبت شد که GNN و مرجع‌هایش تا کجا را می‌بینند (جدول ۱ مقاله).</p>
 <div class="tw"><table><tr><th>مطالعه</th><th>موضوع</th><th>شعاع برابر؟</th></tr>
 <tr><td>Wang 2020</td><td>PM2.5، ۱۸۴ شهر چین</td><td><span class="chip c-part">فقط مدل گرافی دیگر</span></td></tr>
 <tr><td>Liang 2023</td><td>دوچرخهٔ اشتراکی، نیویورک</td><td><span class="chip c-part">فقط SLX خطی</span></td></tr>
 <tr><td>Klemmer 2023</td><td>چهار دادهٔ رگرسیون جغرافیایی</td><td><span class="chip c-no">مرجع بیشتر می‌بیند</span></td></tr>
 <tr><td>Hettige 2024</td><td>PM2.5، پکن و شنژن</td><td><span class="chip c-no">نه</span></td></tr>
 <tr><td>Gueterbock 2025</td><td>NO₂ با TROPOMI، بریستول</td><td><span class="chip c-nr">گزارش نشده</span></td></tr>
+<tr><td>Bai 2025</td><td>PM2.5، کل جهان</td><td><span class="chip c-part">همان ۳۲ ورودی، در فضای شباهت صحنه</span></td></tr>
+<tr><td>Ma 2025</td><td>شهرنشینی، پرت</td><td><span class="chip c-no">نه</span></td></tr>
 <tr><td>Du 2026</td><td>PM2.5، فرزنو</td><td><span class="chip c-part">جزئی</span></td></tr>
 <tr><td>Zhao 2026</td><td>سلامت، لندن</td><td><span class="chip c-nr">گزارش نشده</span></td></tr>
 <tr><td>Schmidt &amp; Ong 2026</td><td>NO₂ ساعتی، برلین</td><td><span class="chip c-part">تقریباً</span></td></tr>
 <tr><td>Mohseni 2026</td><td>دوچرخهٔ اشتراکی، تورنتو</td><td><span class="chip c-no">نه</span></td></tr>
 <tr><td>Zhu 2026</td><td>قیمت مسکن، بوستون</td><td><span class="chip c-part">فقط مرجع‌های خطی</span></td></tr>
 <tr><td>Shao 2026</td><td>CO₂ سالانه، ۳۲۹ شهر چین</td><td><span class="chip c-no">نه</span></td></tr>
+<tr><td>Teng 2026</td><td>PM2.5 ساعتی، چین</td><td><span class="chip c-no">نه</span></td></tr>
+<tr><td>Yuan 2026</td><td>PM2.5 ساعتی، نیویورک و پکن</td><td><span class="chip c-no">نه</span></td></tr>
 <tr><td><b>این پژوهش</b></td><td>کانون‌های NO₂، تهران</td><td><span class="chip c-yes">بله، و شعاع تغییر داده شد</span></td></tr></table></div>
-<p>دو مطالعه نزدیک شدند. در <span class="en">Schmidt &amp; Ong (2026)</span> جنگل تصادفی NO₂ ایستگاه‌های دیگر را با همان وزن‌های گراف گرفت و به GNN رسید. در <span class="en">Liang (2023)</span> فقط مرجع خطی همان همسایه‌ها را داشت. هیچ‌کدام شعاع را موضوع مقایسه نکرد، تغییرش نداد یا به مقیاس هدف ربطش نداد.</p>
+<p>سه مطالعه نزدیک شدند. در <span class="en">Schmidt &amp; Ong (2026)</span> جنگل تصادفی NO₂ ایستگاه‌های دیگر را با همان وزن‌های گراف گرفت و به GNN رسید. در <span class="en">Liang (2023)</span> فقط مرجع خطی همان همسایه‌ها را داشت. در <span class="en">Bai (2025)</span> جنگل تصادفی و دو روش میانگین‌گیری همان ۳۲ ورودی شبکهٔ توجه گرافی را گرفتند و شبکه خطا را ۸٫۵٪ کمتر کرد؛ ولی این ۳۲ همسایه شبیه‌ترین‌ها در ویژگی‌های صحنه‌اند، نه نزدیک‌ترین‌ها در فاصله. هیچ‌کدام شعاع را موضوع مقایسه نکرد، تغییرش نداد یا به مقیاس هدف ربطش نداد.</p>
 <p>جستجوی ساختاریافته در ScienceDirect (۵ پرس‌وجو، ۱۹۱ رکورد یکتا) و جستجوی معنایی گسترده‌تر هم چنین مطالعه‌ای پیدا نکرد. انتخاب همسایگی از روی دامنهٔ همبستگی سابقه دارد <span class="en">(Franklin 1996; Behrens 2019; Valavi 2019; Alon &amp; Yahav 2021; Freitas 2026)</span>، ولی برای هم‌شعاع کردن GNN و مرجع‌هایش به کار نرفته بود. در گراف‌های غیرمکانی ایده‌های نزدیکی هست: مدل خطی روی ویژگی‌های میانگین‌گرفته‌شده به پای GCN رسید <span class="en">(SGC; Wu et al., 2019)</span>، و در تشخیص اجتماع روی گراف ساختگی، GNN از MLP هم‌شعاع بهتر شد <span class="en">(Chen et al., 2020)</span>. هیچ‌کدام اعتبارسنجی مکانی و مرجع‌های SLX نداشتند.</p>`) },
 
 { id: "design", part: "کار مقاله", title: "طراحی یک مقایسهٔ منصفانه", groups: ["blocks"], cam: [[1350, 108, 132], [1352, 0, 0]], blocks: true,

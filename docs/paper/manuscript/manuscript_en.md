@@ -102,10 +102,12 @@ cross-validation overstates skill for autocorrelated targets (Roberts et al., 20
 unequal clusters (Cameron et al., 2008; MacKinnon et al., 2023), deep models vary from seed to seed (Bouthillier et al.,
 2021), and pre-processing that sees the test area inflates skill (Kapoor & Narayanan, 2023).
 
-Table 1 compares the reach of GNNs and their baselines in eleven studies whose full texts describe both. In most of them, the baselines use only their own location, a neighbourhood of a different size, or one whose size is not reported. Two studies come close. In Liang et al. (2023) a linear SLX baseline averaged over the same nearest stations
+Table 1 compares the reach of GNNs and their baselines in fifteen studies whose full texts describe both. In most of them, the baselines use only their own location, a neighbourhood of a different size, or one whose size is not reported. Three studies come close. In Liang et al. (2023) a linear SLX baseline averaged over the same nearest stations
 as the GNN, but the nonlinear baseline saw no neighbours. In Schmidt & Ong (2026) the random forest received the
-measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. Neither study made reach the
-object of the comparison, varied it, or tied it to the scale of the target. A structured ScienceDirect search (five
+measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. In Bai et al. (2025) a random
+forest and two averaging rules combined the same 32 estimates as the graph attention network, which lowered the error
+by 8.5 %; these 32 neighbours are the most similar in scene attributes, not the nearest in distance. None of the three
+made reach the object of the comparison, varied it, or tied it to the scale of the target. A structured ScienceDirect search (five
 Boolean queries, 191 unique records) and a semantic search of the wider literature found no spatial or environmental study that does
 (`docs/paper/lit/`). Choosing a neighbourhood from the range of spatial dependence is itself established practice, for
 texture windows (Franklin et al., 1996), contextual covariates (Behrens et al., 2019), cross-validation blocks (Valavi
@@ -122,16 +124,18 @@ narrows to this gap.
 | Klemmer et al. (2023) | Four geographic regression datasets | GCN, GAT, GraphSAGE: 2 layers on a 5-nearest-neighbour graph | Exact Gaussian process: all training points | No: the baseline sees more |
 | Hettige et al. (2024) | PM2.5 forecasts; 35 and 11 stations, Beijing and Shenzhen | Distance- and wind-weighted station graph; reach n.r. | Historical average, ODE models: none. DCRNN, STGCN: 3-step graph diffusion. AirFormer: 50 and 200 km. GTS: learned 30-nearest graph | No |
 | Gueterbock et al. (2025) | Hourly NO₂ with TROPOMI; 8 sites, Bristol | GraphSAGE, 2 hops (3 and 5 sampled neighbours) | XGBoost, MLP, CNN: per-site inputs; neighbours n.r. | n.r. |
+| Bai et al. (2025) | Daily PM2.5 maps; global, 1 km | Graph attention over the 32 site-specific random forests most similar in nine scene attributes (scene space, not distance); 32 chosen by trial and error | Random forest, arithmetic mean and weighted mean combining the same 32 estimates. XGBoost, STRF, GWR: settings in the supplement | Partly: same 32 inputs, in scene space, not varied; the attention network lowered the error by 8.5 % against the random forest |
+| Ma et al. (2025) | Urbanisation level (3 classes); SA2 areas, Greater Perth, and synthetic hexagons | GIGNN: aggregation over 2nd-order contiguity neighbours ("default 2nd order") in graph-convolution layers; layers n.r. | GAT, GIN, ChebNet, MPNN: n.r. Random forest: own-unit features only | No; the authors note that the fixed 2nd-order aggregation may mismatch the spatial lag order and then trails the random forest |
 | Du et al. (2026) | PM2.5 imputation; 41 sensors, Fresno | 5 layers on complete graphs (all sensors) | Inverse-distance weighting, mean fill: all sensors. Kriging, Gaussian process: n.r. Geo-LSTM: K nearest, K n.r. | Partly; simple interpolation beat the data-driven GNNs |
 | Zhao et al. (2026) | Health outcome; 4,835 areas of 1–4 km², London | GATv2, 2 layers on contiguity (2 steps) | Spatial lag model, GWR: weights and bandwidth n.r. RF, LightGBM: none | n.r.; 2- and 3-step graphs lowered skill |
 | Schmidt & Ong (2026) | Hourly NO₂; 16 stations, Berlin (3 held out) | Graph convolution, contrastive embedding and attention over all stations; edges weighted by similarity of distance to the city centre | RF: buffers of 25–500 m, plus the NO₂ of all other stations with the same weights (its most important feature) | Roughly (same weights, lag of the measured NO₂); R² 0.58 vs 0.61 |
 | Mohseni et al. (2026) | Station-to-station ridership; bike share, Toronto | GraphSAGE, 6 layers (6 hops) | Linear regression, XGBoost, ANN: own-station features (points of interest within 2.5 km). Spatial regression: weights n.r. | No |
 | Zhu et al. (2026) | House prices; census block groups, Boston | 3 graph-convolution modules on a 20-nearest-neighbour graph (3 hops) | OLS: none. SAR: predefined adjacency (linear). GWR: 64 nearest neighbours | Linear baselines only; in-sample fit, no held-out test |
 | Shao et al. (2026) | Annual CO₂; 329 cities, China | Graph convolution over all cities, weights 1/distance; depth n.r. | Linear regression on night lights, MLP, XGBoost: own-city features only | No; the graph model without added constraints did not beat them |
+| Teng et al. (2026) | Hourly PM2.5; 1,168 station pixels, China | GCN on edges between station pixels < 50 km apart (20–200 km tried for the GCN only); layers n.r. | Random forest, CatBoost, XGBoost, LightGBM, Extra Trees: own-pixel inputs ("treat each pixel independently"); compared under random sample cross-validation | No |
+| Yuan et al. (2026) | One-hour-ahead PM2.5 at stations; New York and Beijing–Tianjin–Hebei | Directional attention over the 5 nearest stations and a dynamic top-5 feature-similarity graph; k = 1–5 tried for this model only (k = 1 clearly worse) | ARIMA: own station. GCN, GAT, ST-GCN, GeoMAN, AirFormer, MS-STGAT, VMD-GAT-BiLSTM: graph or multi-site models, neighbourhoods n.r. Chronological split at the same stations | No non-graph neighbourhood baseline |
 | **This study** | NO₂ hotspots; 2,436 cells of 1 km, Tehran | GraphSAGE on a distance-based graph, 3 layers × 9 cells: 22.7 km (4 and 5 layers, 30.3 and 37.8 km, on the held-out year) | SLX-OLS, SLX-GBM, SLX-RF: 0–37.8 km. Same network without a graph: box means at 0, 22.7 and 37.8 km | **Yes**: SLX reach matched to the GNN's, and varied |
 
-[Rows to be added once the full texts of Ma et al. (2025), Teng et al. (2026), Yuan et al. (2026) and Bai et al. (2025)
-have been read.]
 
 We address two research questions for intra-urban NO₂ hotspots observed by TROPOMI in Tehran, a megacity of about nine
 million people at the foot of the Alborz mountains with one of the highest NO₂ columns among large cities worldwide
@@ -555,7 +559,8 @@ graph adds nothing over neighbourhood means.
 This does not make graphs useless. At equal receptive field, a GNN outperformed a graph-augmented MLP where the target
 was the community structure of a synthetic graph (Chen et al., 2020). In spatial mapping, graphs should matter where
 edges carry information that distance does not, such as
-climate teleconnections (Chen et al., 2026), flows on a transport network (Mohseni et al., 2026), wind-aligned
+climate teleconnections (Chen et al., 2026), flows on a transport network (Mohseni et al., 2026), similarity of
+geographic scenes, where graph attention beat a random forest given the same 32 estimates (Bai et al., 2025), wind-aligned
 transport, or irregular units for which box windows are hard to define; and our results with larger buffers suggest
 that neural models extrapolate more gracefully than tree ensembles, whatever the role of the graph. We recommend five
 practices for spatial GNN studies: give baselines the model's reach, which costs seconds; report skill against reach

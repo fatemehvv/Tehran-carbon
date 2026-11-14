@@ -78,11 +78,12 @@ All DOIs cited in the manuscript were checked against the Crossref API on 8 Nove
 
 ## 5. Reach audit of comparable studies (Table 1 of the manuscript)
 
-Full texts were read for eleven studies that compare a GNN with baselines on spatial data.
+Full texts were read for fifteen studies that compare a GNN with baselines on spatial data.
 
 - **Sources.**
   - Seven: arXiv versions or open proceedings.
   - Four (Schmidt & Ong; Mohseni et al.; Zhu, Wang & Luo; Shao et al.): PDFs supplied by the user on 12 November 2026.
+  - Four (Bai et al.; Ma, Zhang & Song; Teng et al.; Yuan et al.): PDFs supplied by the user on 14 November 2026.
     Publisher sites block automated reading.
 - **For each study:** how far the GNN sees, and how far each baseline sees.
 - **Main finding:** no study makes reach the object of the comparison. None varies the reach of both models or sets it
@@ -93,6 +94,12 @@ Full texts were read for eleven studies that compare a GNN with baselines on spa
   - Schmidt & Ong (2026, *Ecol. Inform.* 93:103568): the random forest received a "weighted mean pollution" feature,
     the NO₂ of all other stations weighted as in the graph. It was the forest's most important feature. RF R² 0.584
     vs GNN 0.613, on three test stations. This supports our result.
+  - Bai et al. (2025, *ISPRS J. Photogramm. Remote Sens.* 225:19–35): a random forest, an arithmetic mean and a
+    weighted mean combine the same 32 site-specific estimates as the graph attention network (Table 1 of the paper).
+    The attention network lowers the error by 8.53 % against the random forest (p. 26, site-based ten-fold CV). The
+    32 neighbours are the most similar in nine scene attributes, not the nearest in distance, and 32 was set by trial
+    and error, not varied in the comparison (p. 22). A matched input set, but in scene space; it does not make reach
+    the object of the comparison.
 - **Also telling:** Shao et al. (2026). The graph model trained with city supervision only reached R² 0.65, against
   linear regression 0.66, MLP 0.68 and XGBoost 0.64. Its final 0.78 came from added weak-supervision losses
   (provincial totals, masking, smoothness).
@@ -110,11 +117,12 @@ Full texts were read for eleven studies that compare a GNN with baselines on spa
 | Mohseni et al. 2026 | PDF (user) | GraphSAGE 6 layers (6 hops) | LR, XGBoost, ANN own station (POIs ≤ 2.5 km); spatial regression weights not reported |
 | Zhu, Wang & Luo 2026 | PDF (user) | 3 GCN modules on 20-NN graph | OLS none; SAR predefined adjacency; GWR 64 NN; in-sample only |
 | Shao et al. 2026 | PDF (user) | graph convolution over 329 cities, 1/distance weights; depth not reported | LR (night lights), MLP, XGBoost own city |
+| Bai et al. 2025 (SCAGAT) | PDF (user) | GAT over the 32 site-specific RFs most similar in nine scene attributes (p. 22) | RF, mean and weighted mean over the same 32 estimates (p. 25–26); XGBoost, STRF, GWR in the supplement (not read) |
+| Ma, Zhang & Song 2025 (GIGNN) | PDF (user) | k-order contiguity aggregation, "default 2nd order" (p. 4, p. 15); layers not reported | GAT, GIN, ChebNet, MPNN not reported; RF own-unit features (p. 8); random k-fold CV |
+| Teng et al. 2026 (G-STDNN) | PDF (user) | GCN, edges between station pixels < 50 km (20–200 km tried for the GCN only, p. 4); layers not reported | RF, CatBoost, XGBoost, LightGBM, Extra Trees own pixel (p. 6, p. 12); random sample CV |
+| Yuan et al. 2026 (SDDAG-Net) | PDF (user) | directional attention over 5 nearest stations + dynamic top-5 feature graph (p. 7); k = 1–5 tried for this model (p. 10) | ARIMA own station; GCN, GAT, ST-GCN, GeoMAN, AirFormer, MS-STGAT, VMD-GAT-BiLSTM not reported (p. 9); chronological split |
 
-**Still to read** (the user can download the PDFs):
-
-- Ma et al. 2025 (*Spatial Statistics*)
-- Teng et al. 2026, Yuan et al. 2026, Bai et al. 2025
+**Still to read:** Yang et al. 2022 (*Neurocomputing*; see Section 6). The user had no access to the PDF.
 
 ## 6. LLM-assisted search (ChatGPT, 13 November 2026)
 
@@ -134,7 +142,7 @@ search; it is recorded as a supplementary check.
 | Yang et al. (2022), *Neurocomputing* 505, 289–303, 10.1016/j.neucom.2022.07.030 | yes (Crossref) | A spatio-temporal semi-variogram that flattens beyond graph distance 2 sets a two-layer GCN for link prediction in dynamic networks | **not verified**: no open full text or abstract | Not cited until the PDF is read. If confirmed, it joins the prior art of Section 4 (choosing the neighbourhood from the dependence range) |
 | Frasca et al. (2020), SIGN | yes (arXiv) | Pre-computed diffusions fed to an MLP; receptive fields not matched against the compared GNNs | — | Already cited |
 | Maurya, Liu & Murata (2023), *CAAI Trans. Intell. Technol.* 8, 14–28, 10.1049/cit2.12166 | yes (Crossref) | A two-layer MLP on pre-computed hop features (K = 3) beats several GNNs; reach not matched | not checked | Not cited: same point as SGC and SIGN |
-| Ma et al. 2025; Teng et al. 2026; Yuan et al. 2026; Bai et al. 2025 | yes | Only abstracts were available; no reach could be established | — | Still to read (Section 5) |
+| Ma et al. 2025; Teng et al. 2026; Yuan et al. 2026; Bai et al. 2025 | yes | Only abstracts were available to ChatGPT; no reach could be established | full texts (PDFs from the user, 14 November 2026) | Added to Table 1 (Section 5) |
 
 **Effect on the novelty statement.** A reach-matched comparison of a GNN with a non-graph model exists on non-spatial
 graphs (Chen et al., 2020), so the manuscript now says that no *spatial or environmental* study was found that makes
