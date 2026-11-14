@@ -228,6 +228,28 @@ how the comparison separates the graph from the reach.
 | **Multi-scale GraphSAGE (GNN)** | The same gated encoder followed by L residual GraphSAGE layers (Hamilton et al., 2017) with mean aggregation over three edge sets: the 8 neighbours at distances of 1, 3 and 9 cells. One layer reaches 9 cells; L layers reach 9L cells. |
 | **Physical operator** | Gaussian-smoothed inventory layers with one non-negative NO₂ yield per sector, width and yields fitted on the training cells |
 
+For a predictor $x$ (log-transformed where stated in Table 2) and a cell $i$, the box mean over half-width $k$ cells
+is
+
+$$\bar{x}_i^{(k)} = \frac{1}{(2k+1)^2} \sum_{j:\ \lVert j - i \rVert_\infty \le k} x_j , \tag{1}$$
+
+the mean over the $(2k+1) \times (2k+1)$ cells centred on $i$, with edge values repeated beyond the grid. SLX models use
+$x_i$ and $\bar{x}_i^{(k)}$ for every window $k$ of the model; the no-graph network receives the same box means as
+extra inputs of each group. In the networks, each input group $m$ (traffic, energy, pollution, context) is encoded to
+$e_{i,m} = f_m(x_{i,m}) \in \mathbb{R}^{32}$, and the gate weights the groups for every cell and month:
+
+$$a_i = \operatorname{softmax}\!\big(W_g\,[e_{i,1}; \dots ; e_{i,M}] + b_g\big), \qquad h_i^{(0)} = \sum_{m=1}^{M} a_{i,m}\, e_{i,m}, \tag{2}$$
+
+with $\sum_m a_{i,m} = 1$. Without a graph, the prediction is $\hat{z}_i = w^{\top} h_i^{(0)} + c$. The GNN applies $L$
+residual layers before the same linear head,
+
+$$h_i^{(l+1)} = h_i^{(l)} + \operatorname{Dropout}\!\Big(\operatorname{SiLU}\Big(\sum_{s \in \{1,3,9\}} \big[\, W_s^{(l)} h_i^{(l)} + U_s^{(l)} \tfrac{1}{|\mathcal{N}_s(i)|} \sum_{j \in \mathcal{N}_s(i)} h_j^{(l)} + b_s^{(l)} \big]\Big)\Big), \tag{3}$$
+
+where $\mathcal{N}_s(i)$ holds the up to 8 cells at offsets $(\pm s, 0)$, $(0, \pm s)$ and $(\pm s, \pm s)$ from $i$, and
+$\hat{z}_i = w^{\top} h_i^{(L)} + c$. All networks minimise the squared error between $\hat{z}_i$ and the target $z_i$
+on the training cells. Eq. (1) averages the inputs over every cell of a window with fixed, equal weights before the
+encoders; Eq. (3) combines learned representations of sparse stencils after them.
+
 The edges of the GNN join cells at fixed grid distances and carry no information beyond distance, so the network is
 close to a dilated convolution with learned, nonlinear aggregation. The comparison therefore tests learned against
 fixed aggregation up to the same distance; it does not test graphs whose edges carry other information, such as road
@@ -258,9 +280,10 @@ fusion networks of RQ1 (Section 4.6) are no-graph networks with box means at hal
 
 ### 3.2 Reach and reach-matched comparisons
 
-The reach of a model is how far, in cells, a predictor value can be from a cell and still influence its prediction: the
-largest window half-width for SLX models and the no-graph network, 9L cells for a GNN with L layers, and zero for
-own-cell models. Reach is counted in cells on the same grid for every model, and both box windows and graph stencils
+The reach of a model is how far, in cells, a predictor value can be from a cell and still influence its prediction:
+
+$$R = \begin{cases} 9L & \text{GNN with } L \text{ layers (Eq. 3)},\\ \max k & \text{SLX models and the no-graph network (Eq. 1)},\\ 0 & \text{own-cell models,} \end{cases} \qquad R_{\mathrm{km}} = 0.84\,R . \tag{4}$$
+ Reach is counted in cells on the same grid for every model, and both box windows and graph stencils
 are square, so reach is a Chebyshev distance. A box window covers every cell within its reach; the graph reaches the
 same distance through sparse stencils composed over layers, so it does not draw on every cell inside the square.
 Distances in kilometres are nominal and use the mean cell size (0.84 km). Reach is the largest distance a model can use; its effective receptive field may be shorter (Luo et al., 2016). We call a comparison reach-matched when the models
@@ -305,11 +328,18 @@ being exchangeable under the null hypothesis, which dependence between neighbour
 below). All 12 blocks enter this test, also for PR-AUC, because blocks without hotspots still contribute negative cells;
 as a check, the test is also applied to the cell-weighted mean of per-block differences. Intervals are delete-one-block
 jackknife intervals with K − 1 degrees of freedom: each block is removed in turn and the city-wide difference is
-recomputed from the other eleven.
+recomputed from the other eleven. With $\Delta = M_{\mathrm{cand}} - M_{\mathrm{ref}}$ the difference of a metric $M$
+(averaged over months) and $\Delta_{(-b)}$ the same difference without block $b$,
 
-Each comparison receives one of five verdicts, applied in this order: superior (95 % interval above zero), equivalent
-(90 % interval inside ±δ, i.e. two one-sided tests; Lakens, 2017), non-inferior (95 % lower bound above −δ), inferior
-(95 % interval below zero) or inconclusive. Equivalence is checked before inferiority, so a difference whose 95 %
+$$\widehat{\mathrm{SE}} = \sqrt{\frac{K-1}{K} \sum_{b=1}^{K} \big(\Delta_{(-b)} - \bar{\Delta}_{(\cdot)}\big)^2}, \qquad \mathrm{CI}_{1-\alpha} = \Delta \pm t_{1-\alpha/2,\,K-1}\, \widehat{\mathrm{SE}}, \tag{5}$$
+
+with $K = 12$ blocks and $\bar{\Delta}_{(\cdot)}$ the mean of the $K$ leave-one-out differences.
+
+Each comparison receives one of five verdicts, applied in this order (two one-sided tests for equivalence; Lakens,
+2017), with $[\ell_{95}, u_{95}]$ and $[\ell_{90}, u_{90}]$ the intervals of Eq. (5) and margin $\delta$:
+
+$$\text{verdict} = \begin{cases} \text{superior} & \ell_{95} > 0,\\ \text{equivalent} & -\delta < \ell_{90} \text{ and } u_{90} < \delta,\\ \text{non-inferior} & \ell_{95} > -\delta,\\ \text{inferior} & u_{95} < 0,\\ \text{inconclusive} & \text{otherwise.} \end{cases} \tag{6}$$
+ Equivalence is checked before inferiority, so a difference whose 95 %
 interval excludes zero but whose 90 % interval lies inside ±δ is called equivalent: it is detectable but smaller than
 the margin. The registration set δ = 0.02 for Spearman, the larger of 0.02 and twice the seed-to-seed standard
 deviation measured then (0.0077); 0.02 is about a tenth of the gain from no neighbourhood to a reach of 12.6 km. PR-AUC
