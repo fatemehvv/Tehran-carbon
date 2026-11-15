@@ -287,7 +287,8 @@ Fig. 2 shows a real layer and realisations of each construction.
 **Fig. 2.** The residential CO₂ layer of the inventory (log scale, annual mean; one grey scale for all panels; white =
 zero) and two realisations of each placebo construction. (a) Real layer; (b, c) placebo A, IAAFT surrogates,
 realisations 0 and 1; (d, e) placebo B, rotation by 180° and cyclic shift, realisations 0 and 1; (f) placebo C,
-conditional placebo, realisation 0. Blue outline: label domain.
+conditional placebo, realisation 0: the urban core stays in place, and small non-zero values appear where the real layer
+is zero (Section 4.7). Blue outline: label domain.
 
 ### 3.3 Target versions
 
