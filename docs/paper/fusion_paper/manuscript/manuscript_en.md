@@ -1,46 +1,46 @@
-# Do urban data sources add information to fusion models? A pre-registered placebo test for satellite NO₂ mapping in Tehran
+# Relocated placebo layers inflate the apparent value of urban data in fusion models: a pre-registered test with a conditional placebo for satellite NO₂ mapping in Tehran
 
 **Fatemeh Vafaeian¹, Vahid Khatibi¹\***
 
 ¹ [Affiliation to be completed]  
 \* Corresponding author: [e-mail to be completed]
 
-*Draft manuscript, 13 November 2026. All numbers come from the runs on branch `paper_fusion` of the project repository
-(`docs/paper/fusion_paper/results_stage1`, `results_stage2`, `results_tests`, `results_check`, `results_v2`). Items in
+*Draft manuscript, 15 November 2026. All numbers come from the runs on branch `paper_fusion` of the project repository
+(`docs/paper/fusion_paper/results_stage1`, `results_stage2`, `results_tests`, `results_check`, `results_v2`;
+`results/fusion_review`, `results/fusion_amend`). Items in
 [brackets] are to be completed before submission. Revised after two internal reviews (`docs/paper/fusion_paper/review/`).*
 
 ---
 
 ## Highlights
 
-- Adding a data source to a fusion network also adds inputs and parameters.
-- Placebo branches move a source's layers to a random location in the same network.
-- Relocated layers were mostly zero inside the city and lowered map skill.
-- Energy layers added almost nothing over the urban-form data they derive from.
-- Both placebo constructions failed their registered texture check.
+- Ablating a data source confounds its information with the cost of an added input.
+- Relocated placebo layers were mostly zero and anti-correlated inside the city.
+- Their cost to the model made up most of the real-minus-placebo gap for energy data.
+- A conditional placebo cut that cost by half on average but failed its value check.
+- Energy hotspot gains were matched by a layer derived from urban-form data.
 
 ---
 
 ## Abstract
 
 Fusing urban data sources is a common route to better maps of emissions and air pollution, and the value of a source is
-usually judged by ablation: the source is added to or removed from a multi-branch network. Adding a source, however,
-also adds inputs and parameters. We test this confound with placebo branches, the layers of a source moved to a random
-location by IAAFT surrogates or by rotation with a cyclic shift, trained in the same network. The task is the
-intra-urban pattern of monthly TROPOMI NO₂ in Tehran on 2,436 cells of about 0.75 × 0.93 km, fused from traffic,
-energy-inventory and station data with urban-form context, under a pre-registered protocol with 22-km spatial blocks, a
-held-out year, five seeds and five placebo realisations. A placebo input lowered the Spearman correlation of the map by
-0.01–0.03. Real energy layers scored 0.018–0.038 above their placebos but only −0.001 to +0.013 above the urban-form
-context alone. Gradient boosting on the context predicts three of the four energy layers with cross-validated R² of
-0.89–0.98. Most of the real-minus-placebo contrast is therefore the cost of the placebo input, not information in the
-energy layers. On the cells of the city the placebos were mostly zero and weakly anti-correlated with the target, so
-they were misleading rather than empty inputs. Traffic and station layers scored below their placebos in all 30 seed
-comparisons. Neither placebo construction passed the registered texture check, because the single urban core of a
-bounded map cannot be moved without being reshaped or cut. Fusion did not improve the map on targets smoothed over 2–12
-km, and calm-day composites were not sharper than windy-day ones. Ablation gains of the size reported for urban data
-fusion need a placebo control, and the placebo itself needs checking.
+usually judged by ablation. Adding a source, however, also adds inputs and parameters. We tested placebo branches: the
+layers of a source relocated at random and trained in the same network. The task was the intra-urban pattern of monthly
+TROPOMI NO₂ in Tehran on 2,436 cells of about 0.75 × 0.93 km, fused from traffic, energy-inventory and station data with
+urban-form context, under a pre-registered protocol with 22-km spatial blocks, a held-out year, five seeds and five
+placebo realisations. Real energy layers scored 0.018–0.038 (Spearman) above their relocated placebos but only −0.001 to
++0.013 above the context alone. Traffic and station layers scored below their placebos in all 30 seed comparisons. The
+relocated placebos were not empty inputs: inside the city they were mostly zero and weakly anti-correlated with the
+target, because the single urban core of a bounded map cannot be moved without leaving it, and they lowered skill by
+0.013–0.027. In a registered amendment, a conditional placebo that keeps the part of each layer predicted by the context
+and relocates only the residual reduced this cost to 0.006–0.010 and the energy contrast to 0.010–0.023. It raised
+hotspot PR-AUC as much as the real energy layers did. It failed its own value check, because the context model does not
+reproduce the exact zeros of sparse layers. No placebo construction passed its check, so the conclusions rest on the
+agreement between three constructions. Fusion did not help on targets smoothed over 2–12 km. A placebo control for urban
+data fusion must keep the dependence of a source on the other inputs and must be checked where the model is evaluated.
 
-**Keywords:** data fusion; multimodal learning; ablation; placebo control; surrogate data; TROPOMI; NO₂; urban
+**Keywords:** data fusion; multimodal learning; ablation; placebo control; conditional permutation; surrogate data; TROPOMI; NO₂; urban
 emissions; spatial cross-validation; Tehran
 
 ---
@@ -110,12 +110,44 @@ al., 2020; Moudrý et al., 2023), including for air pollution in Tehran (Zhalehd
 - Low-wind TROPOMI observations have been selected to reduce the smearing of NO₂ by wind (Goldberg et al., 2024), and
   calm-wind coverage of a city needs several months of data (Liu et al., 2024).
 
-We ask three questions, in a pre-registered design:
+We ask four questions:
 1. **Information.** Does each urban data source score better than a placebo input of the same shape?
 2. **Added input.** How large is the effect of adding a placebo input, compared with the effect of a real
    source?
 3. **Target support.** Does the value of fusion change when the satellite target is sharper (calm days) or coarser
    (smoothed)?
+4. **Placebo construction.** Does a relocated placebo act as an empty input in the map of a single city, and does a
+   placebo conditioned on the other inputs behave better?
+
+Questions 1–3 were registered before any run. Question 4 arose from the results of questions 1 and 2; its test was
+registered as an amendment before it was run (Section 3.6).
+
+**Contributions.**
+1. **A spatial placebo branch as a control for source ablation in spatial data fusion.**
+   - Randomised-modality retraining has been used in drug-response and medical prediction (Bernett et al., 2026;
+     Georgiou et al., 2026), but without spatial structure.
+   - Spatial null models have been used to refit species distribution models (Ridder et al., 2024), but not as a branch
+     of a multi-source fusion network.
+   - We combine the two in a pre-registered design, with several realisations and three constructions.
+2. **A diagnosis of why relocated placebos mislead in the map of a single city.**
+   - In a bounded grid with one urban core, relocation moves the city's values out of the cells where the model is
+     evaluated.
+   - The placebo becomes zero-inflated and anti-correlated with the target, so its cost inflates the apparent gain of
+     the real source.
+   - We show this with a check of the placebo on the evaluated cells and a decomposition of the real-minus-placebo
+     contrast.
+   - Edge and stationarity problems of toroidal null models are known (Mrkvička et al., 2021; Buckley et al., 2016);
+     their effect on model comparisons in data fusion had not been shown.
+3. **A conditional spatial placebo.**
+   - It is a retrained, spatial form of condition-and-relearn (Hooker et al., 2021) and of residual permutation (Huang,
+     2025).
+   - It keeps the part of a layer that the other inputs explain and relocates only the residual.
+   - It cut the placebo cost by half on average, and it showed that the hotspot gain of an energy inventory needs no
+     information beyond urban form.
+4. **Practical rules for judging data sources in fusion:**
+   - report the decomposition;
+   - check the placebo on the evaluated cells;
+   - report how much of each source the other inputs predict.
 
 ## 2. Study area and data
 
@@ -204,14 +236,29 @@ two constructions.
 - It keeps the values, the monthly cycle and the correlation between the layers of the source exactly, and the texture
   everywhere except at the wrap-around seams.
 
-**For both constructions:**
+**Placebo C (registered amendment): conditional placebo.** It keeps the part of a layer that the context explains and
+relocates only the rest, a spatial form of condition-and-relearn (Hooker et al., 2021) and of residual permutation
+(Freedman & Lane, 1983; Huang, 2025). For every layer, on its annual map (log1p where the dataset uses it):
+1. **Context fit.** f is gradient boosting of the layer on the context layers and their box means at lags 3 and 9.
+   - The fit is cross-fitted over five random groups of 22-km tiles of the whole grid, so no cell is predicted by a
+     model that saw it.
+   - The settings are those of the lineage audit.
+2. **Residual.** r = layer − f.
+3. **Relocation.** r is relocated with the rotation and shift of placebo B for the same realisation.
+4. **Placebo.** f + relocated r, back-transformed and clipped at 0, with the city-wide monthly cycle of the layer.
+
+Placebo C keeps the conditional mean of a layer given the context, not its full conditional distribution. It was built
+for the energy source only.
+
+**For all constructions:**
 - City-wide layers (degree-days) are copied unchanged, so a placebo branch has as many inputs as the real one.
 - A placebo depends on the realisation, not on the year: it stays in place across years, as real static layers do.
 - We use five realisations. Every placebo comparison averages scores over the five, also inside the jackknife and inside
   the randomisation test.
 - Placebos are built on the full grid. The station placebo is built from the all-station layer, and the relocation
-  removes any information on the test block. Both constructions break the dependence of a source on the context
-  layers as well as on the target; Section 5.1 discusses what this implies.
+  removes any information on the test block.
+- Placebos A and B break the dependence of a source on the context layers as well as on the target. Placebo C is meant
+  to keep it.
 
 Fig. 1 shows a real layer and two realisations of each construction.
 
@@ -355,6 +402,30 @@ held-out year.
 - *Secondary estimates:* the added-input estimates (Section 4.3) and the early-fusion comparisons were registered as
   secondary estimates without a verdict.
 
+**Amendment 1: conditional placebo.** The amendment was registered on 14 November 2026, after the review analyses and
+before its runs (commit `4859332`). It added placebo C, a check M5 and a family G. It changed none of the registered
+tests.
+- **Check M5.** It uses the label domain, annual maps, every energy layer that varies there, and 1402 and 1403. A
+  realisation passes if the medians over layers and years meet three conditions:
+  - the largest |Spearman| with a context layer differs from that of the real layer by ≤ 0.10;
+  - the Kolmogorov–Smirnov distance to the real layer is ≤ 0.10;
+  - |Spearman| between placebo − f and layer − f is < 0.10.
+
+  If more than two of five realisations failed, G1 was to be labelled "conditional placebo check failed".
+- **Family G** (1402, 1403; Holm over two tests).
+  - **G1:** context + energy vs context + conditional placebo energy, both gated, with the inference of families F and
+    C.
+  - Secondary estimates: K1, conditional placebo − context only; K2, real energy − context only.
+  - A third estimate, K3 (conditional placebo − placebo B), was skipped because the placebo-B runs were not on the
+    machine that ran the amendment.
+- **Expected directions:**
+  - G1 equivalent or inconclusive;
+  - K1 within ±0.02 and smaller in size than the cost of placebo B.
+- **Hardware.** The three amendment experiments ran on one laptop CPU, so G1 does not mix hardware. The other runs used
+  a GPU server.
+- **Code fix.** The first evaluation run stopped because the code did not yet treat family G as confirmatory. The fix
+  changed no analysis; the failed run is kept in `results/fusion_amend/`.
+
 ## 4. Results
 
 ### 4.1 Absolute skill
@@ -378,6 +449,13 @@ without training were computed for the development years only (`results/fusion_r
 | Context + energy, early | 0.923 | 0.928 | – | 0.621 | 0.676 | – |
 | Context + energy + placebo traffic and stations, gated, A / B | 0.912 / 0.912 | 0.918 / 0.918 | 0.901 / 0.904 | 0.714 / 0.696 | 0.772 / 0.755 | 0.686 / 0.675 |
 | Context + energy + traffic + stations, gated | 0.898 | 0.906 | 0.883 | 0.792 | 0.797 | 0.769 |
+| *Amendment 1 (laptop CPU)* | | | | | | |
+| Context only | 0.914 | 0.914 | – | 0.577 | 0.592 | – |
+| Context + conditional placebo energy, gated | 0.908 | 0.904 | – | 0.751 | 0.753 | – |
+| Context + energy, gated | 0.919 | 0.927 | – | 0.771 | 0.753 | – |
+
+The re-runs of the context-only and energy models on the laptop CPU reproduced the GPU runs to within 0.001 in
+Spearman and 0.004 in PR-AUC.
 
 All fusion networks ranked the cells with Spearman 0.88–0.93. The context-only model already reached 0.91, above a
 Gaussian process on the coordinates (0.81–0.86, same blocks; Vafaeian & Khatibi, in review). The differences that the
@@ -447,8 +525,8 @@ Two readings fit these numbers:
 
 The check on the label domain (Section 4.6) favours the second reading. On the cells of the city, the placebo layers
 were mostly zero, and their correlation with the target was weakly negative, where the real layers correlated
-positively. A conditional placebo that relocates only the part of each layer not explained by the context would test
-this directly (Section 5.4). The result that holds under both readings is the small gain over context alone.
+positively. The conditional placebo (Section 4.7) supports it as well: keeping the context-explained part halved the
+cost on average and reduced the contrast. The result that holds under every reading is the small gain over context alone.
 
 **Spread over realisations.** Each placebo realisation is itself a five-seed ensemble.
 - **Energy, Spearman.** The real-energy model scored above all five realisations in all six comparisons (three years,
@@ -624,6 +702,59 @@ city loses most of its mass from the city when it is relocated, and the empty su
 not an empty input but a misleading one, high where NO₂ is low. The station layer, which correlates negatively with the
 target (−0.21), behaves the other way: its placebos correlate positively (+0.17 and +0.43, medians).
 
+### 4.7 Conditional placebo (amendment 1)
+
+**Check M5 failed** in all five realisations (Table 7).
+
+**Table 7.** Check M5 of the conditional placebo energy layers on the label domain. Medians over the energy layers and
+the two development years; the range is over the five realisations (`results/fusion_amend/fusion_amend_m5.csv`). The
+medians cover the energy layers only and are not comparable with the all-source medians of Table 6.
+
+| Quantity | Real layers | Conditional placebo | Threshold |
+|---|---|---|---|
+| Share of zero cells | 0.69 | 0.34–0.38 | – |
+| Kolmogorov–Smirnov distance to the real layer | – | 0.31–0.36 | ≤ 0.10 |
+| Gap in the largest \|Spearman\| with a context layer | – | 0.14–0.17 | ≤ 0.10 |
+| \|Spearman\| of placebo − f with layer − f | – | 0.15–0.21 | < 0.10 |
+| Spearman with the target | 0.20 | 0.19–0.25 | – |
+
+- **Why it failed.** The failure comes from the sparse layers.
+  - The context model predicts small positive values where the power-plant, industrial and commercial layers are
+    exactly zero.
+  - The placebo therefore has about half as many zero cells as the real layers.
+  - For the power-plant layer, the residual kept most of its location (median |Spearman| 0.63).
+- **Residential layer.** The densest layer came close to the thresholds: KS distance 0.15, residual |Spearman| 0.06,
+  and Spearman with the target 0.66 against 0.73.
+- **What it fixed.** Unlike placebos A and B, the conditional placebo was not anti-correlated with the target.
+
+**Table 8.** Family G and its secondary estimates, gated fusion, laptop CPU (`results/fusion_amend/fusion_amend.csv`).
+Spearman with 95 % jackknife intervals; PR-AUC point estimates. Verdicts carry the label "conditional placebo check
+failed".
+
+| Comparison | Year | Spearman Δ (95 % interval) | Seeds > 0 | Verdict | p (Holm) | PR-AUC Δ |
+|---|---|---|---|---|---|---|
+| G1: energy − conditional placebo | 1402 | +0.010 (−0.005, +0.026) | 3 / 5 | non-inferior | 0.055 | +0.020 |
+| | 1403 | +0.023 (−0.015, +0.061) | 5 / 5 | non-inferior | 0.009 | +0.000 |
+| K1: conditional placebo − context only | 1402 | −0.006 (−0.030, +0.019) | – | – | – | +0.174 |
+| | 1403 | −0.010 (−0.040, +0.019) | – | – | – | +0.161 |
+| K2: energy − context only | 1402 | +0.005 (−0.025, +0.035) | – | – | – | +0.194 |
+| | 1403 | +0.013 (−0.009, +0.034) | – | – | – | +0.161 |
+
+**Ranking.**
+- The cost of the added input fell from 0.013–0.025 (placebos A and B, Table 3) to 0.006–0.010 (K1), as expected.
+- The energy contrast fell from 0.018–0.038 (Table 2) to 0.010–0.023 (G1).
+- G1 is again the sum of the gain over context (K2) and the placebo cost (K1).
+- The verdicts are non-inferior, between the expected "equivalent" and "inconclusive". The 1403 sign-flip test is below
+  0.05 after Holm adjustment while its interval includes zero; the test is liberal for Spearman (Section 3.5).
+- The real-energy model scored above all five conditional realisations in both years (realisations 0.888–0.915 and
+  0.878–0.915).
+
+**Hotspots.** The conditional placebo raised PR-AUC over context alone as much as the real energy layers did: +0.17 and
++0.16, against +0.19 and +0.16. The hotspot gain credited to the energy inventory was thus also obtained with a layer
+built from the context and a relocated residual.
+- The residual of the placebo kept part of its location (Table 7). It could therefore carry some real information,
+  which would make the placebo look more like the real layer.
+
 ## 5. Discussion
 
 ### 5.1 What the placebo control showed
@@ -642,11 +773,19 @@ the same shape and texture but at the wrong place. In this study, the two compar
 The control was therefore useful mainly as a warning. Part of the hotspot gain of a source is obtained without its
 information, and the ranking effect of any added input is as large as the information effect being measured.
 
+**The conditional placebo narrowed the gap between the two comparisons.**
+- Ranking: it credited the energy layers with 0.010–0.023, closer to the ablation (0.005–0.013) than to the relocated
+  placebos (0.018–0.038).
+- Hotspots: it reproduced the whole PR-AUC gain of the energy layers.
+
+The energy inventory's contribution to this map is therefore small, and its hotspot gain does not require information
+beyond the context. A layer derived from the context, given its own branch, helps the network find hotspots as much.
+
 **What the placebo is not.** The placebo removes the location of a source and, with it, the source's dependence on the
 context layers. It is therefore a test of "this source, at its true place, against the same values elsewhere", not a
 test of conditional information given the context. Where a source is largely derived from the context, as the energy
-inventory is here, the two questions differ, and the placebo contrast overstates the information of the source. A
-conditional placebo (Section 5.4) addresses the second question.
+inventory is here, the two questions differ, and the placebo contrast overstates the information of the source. The
+conditional placebo addresses the second question (Section 4.7).
 
 **Relation to the literature.** These results agree with machine-learning evidence that multimodal networks overfit and
 that their modalities compete (Wang et al., 2020; Huang et al., 2022). They also agree with ecological work showing that
@@ -663,6 +802,8 @@ same difficulty is known for null models of brain maps (Markello & Misic, 2021).
   test.
 - On the label domain, both constructions were mostly zero and anti-correlated with the target (Table 6). A
   relocation inside one city's grid cannot keep the values where the model is evaluated.
+- The conditional placebo kept the dependence on the context and the sign of the correlation with the target. It lost
+  the exact zeros of sparse layers, because the context model predicts small positive values.
 - A placebo drawn from the same layers of another city (a donor-city placebo) would keep a whole urban core.
 
 ### 5.2 Why the urban sources add little
@@ -707,10 +848,12 @@ result applies to the implementation above.
 4. **Report the lineage of every source.** Measure how much of it the other sources predict before training.
 5. **Report single seeds, placebo realisations and absolute skill, not only ensembles and differences.**
 
+6. **Condition the placebo on the other inputs.** Keep the part of each layer that they predict (Section 4.7), and
+   check zeros and value distributions on the evaluated cells.
+
 **Next steps** (not done here):
-- a *conditional placebo* that keeps the part of each layer predicted by the context and relocates only the rest, a
-  spatial form of condition-and-relearn (Hooker et al., 2021) and of residual permutation (Huang, 2025). It keeps only
-  the conditional mean, not the full conditional distribution, and assumes that the residual can be moved;
+- a *zero-preserving conditional placebo*: a two-part (hurdle) context model, or a rank remapping of the placebo to the
+  real values within the label domain;
 - a *duplicate-context branch* that adds a copy of the context as a branch, to measure the cost of an added input that
   carries no new information but does not conflict with the context;
 - a *placebo-against-placebo null* with more realisations;
@@ -719,12 +862,20 @@ result applies to the implementation above.
 ### 5.5 Limitations
 
 - **Scope.** One city, one target product and one family of fusion networks without a graph.
-- **Placebo check.** Both constructions failed the registered texture check M4, and on the label domain they did not
-  keep the values of the real layers (Table 6). Their agreement is the basis of the
-  placebo results, not a passed check. A smooth surrogate can itself act as a spatial basis (Behrens & Viscarra Rossel,
+- **Placebo checks.** No construction passed its check.
+  - Placebos A and B failed M4, and on the label domain they did not keep the values of the real layers (Table 6).
+  - Placebo C failed M5 (Table 7).
+  - The agreement of the three constructions is the basis of the placebo results, not a passed check. A smooth surrogate can itself act as a spatial basis (Behrens & Viscarra Rossel,
   2020).
-- **What the contrast measures.** The placebo breaks the dependence of a source on the context, so the energy contrast
-  mostly reflects the cost of the placebo input (Section 4.2). A conditional placebo was not run.
+- **What the contrast measures.**
+  - Placebos A and B break the dependence of a source on the context, so their energy contrast mostly reflects the cost
+    of the placebo input (Section 4.2).
+  - Placebo C keeps only the conditional mean, assumes that the residual can be moved, and was built for one source and
+    the development years only.
+- **Post-hoc question.** Question 4 was formed after the results of questions 1 and 2 were known. Its test was
+  registered before it was run.
+- **Hardware.** The amendment ran on a CPU and the other experiments on a GPU. The re-run references agreed to within
+  0.001 in Spearman, and G1 compares runs from one machine.
 - **Low power.**
   - The effective sample size of the target is about five per month, so most comparisons have low power.
   - Neighbouring 22-km blocks are not independent at a correlation length of 24 km.
@@ -742,23 +893,26 @@ result applies to the implementation above.
 
 ## 6. Conclusions
 
-Ablations of data sources in multi-branch fusion networks confound the information in a source with the effect of the
-added input. We tested a placebo control for this — the same layers at a random location, trained in the same network —
-in mapping the intra-urban NO₂ pattern of Tehran from TROPOMI.
+Ablations of data sources in multi-branch fusion networks confound the information in a source with the cost of the
+added input. We tested placebo controls for this in mapping the intra-urban NO₂ pattern of Tehran from TROPOMI.
 
-- **Added input.** A placebo input lowered the ranking skill of the map by 0.01–0.03 and raised hotspot PR-AUC by
-  0.05–0.11. These effects are as large as those usually credited to data sources.
-- **Energy.** The energy-inventory layers scored above their placebos (0.018–0.038). Most of that contrast was the cost
-  of the placebo: over the urban-form context alone they gained at most 0.013, and the context predicted three of the
-  four energy layers almost fully.
-- **Traffic and stations.** The traffic and station layers did not score above their placebos.
+- **Relocated placebos mislead in a single city.** Inside the city they were mostly zero and weakly anti-correlated
+  with the target. They lowered ranking skill by 0.013–0.027, and this cost made up most of the 0.018–0.038 by which
+  real energy layers beat them.
+- **A conditional placebo did better.** It kept the context-explained part of each layer and relocated only the
+  residual. This cut the cost to 0.006–0.010 and the energy contrast to 0.010–0.023. It failed its value check because
+  it did not keep the zeros of sparse layers.
+- **The urban sources added little.**
+  - Energy layers gained at most 0.013 in ranking skill over the urban-form context, which predicts most of them.
+  - Their hotspot gain was matched by the conditional placebo.
+  - Traffic and station layers did not beat their placebos.
 - **Target support.** Fusion did not help at any target resolution tested, and calm-day composites were not sharper.
-- **Placebo check failed.** Neither placebo construction passed the registered texture check.
-  - The single urban core of a bounded map cannot be relocated without being reshaped or cut.
-  - Inside the city, the placebos were mostly zero and weakly anti-correlated with the target.
+- **Placebo checks failed.** No construction passed its registered check. The conclusions rest on the agreement between
+  three constructions.
 
-A placebo control is cheap and changes how an ablation table reads. To measure conditional information, however, it
-must keep the dependence of a source on the other inputs, and its quality must be checked.
+A placebo control is cheap and changes how an ablation table reads. To measure what a source adds beyond the other
+inputs, the placebo must keep the dependence of the source on those inputs. It must also be checked, value by value, on
+the cells where the model is evaluated.
 
 ---
 
@@ -774,6 +928,8 @@ must keep the dependence of a source on the other inputs, and its quality must b
   - Tests: `src/tehran_carbon/analysis/fusion_eval.py`.
   - Checks and lineage audit: `src/tehran_carbon/analysis/fusion_checks.py`.
   - Analyses requested in review: `src/tehran_carbon/analysis/fusion_review.py`, results in `results/fusion_review/`.
+  - Amendment 1 (conditional placebo, check M5, family G): `src/tehran_carbon/analysis/fusion_amend.py`, results and
+    training logs in `results/fusion_amend/`.
     The reviews and responses are in `docs/paper/fusion_paper/review/`.
   - Figures: `src/tehran_carbon/viz/fusion_figures.py`.
   - A versioned copy will be archived on Zenodo on acceptance [DOI to be added].
