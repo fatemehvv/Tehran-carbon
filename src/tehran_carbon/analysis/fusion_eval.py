@@ -197,11 +197,11 @@ class FusionEvaluation:
                 lo95, hi95 = t_interval(est, se, k - 1, 0.95)
                 lo90, hi90 = t_interval(est, se, k - 1, 0.90)
                 row = dict(test=name, family=family, year=y, metric=metric,
-                           part="primary" if (metric == "spearman" and family in "FC") else "descriptive",
+                           part="primary" if (metric == "spearman" and family in ("F", "C", "G")) else "descriptive",
                            candidate=score(z, hot, pcs, metric), reference=score(z, hot, prs, metric), delta=est,
                            jack_se=se, jack_blocks=k, jack_low95=lo95, jack_high95=hi95, jack_low90=lo90,
                            jack_high90=hi90, margin=self.margin)
-                if family in "FC":
+                if family in ("F", "C", "G"):
                     row["verdict"] = verdict(lo95, hi95, lo90, hi90, self.margin)
                     if metric == "spearman":
                         row["p_signflip"], row["p_signflip_two"] = pooled_signflip(z, hot, pcs, prs, blocks, metric, self.sf)
