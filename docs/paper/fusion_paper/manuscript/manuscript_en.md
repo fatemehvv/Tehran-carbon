@@ -22,6 +22,14 @@
 
 ---
 
+## Graphical abstract
+
+![Graphical abstract](../figures/graphical_abstract.png)
+
+*Vector source: `figures/graphical_abstract.svg` (1328 × 531 px, the minimum size of Elsevier journals; PNG at twice that).*
+
+---
+
 ## Abstract
 
 Fusing urban data sources is a common route to better maps of emissions and air pollution, and the value of a source is
@@ -200,6 +208,18 @@ Emission inventories inherit the spatial pattern of their allocation proxies (Ge
 
 ## 3. Methods
 
+Fig. 1 summarises the design: the fusion network with a real or a placebo branch, the three placebo constructions, and
+what is compared.
+
+![Figure 1](../figures/fig0_design.png)
+
+**Fig. 1.** Study design. (a) The fusion network. Context is always a branch; a real source or its placebo is a second
+branch, combined by a softmax gate (gated fusion) or concatenated (early fusion). (b) Placebo constructions, sketched
+on the residential CO₂ layer: A, IAAFT surrogate; B, rotation by 180° and cyclic shift; C, conditional placebo (the
+part predicted by the context is kept, the residual is relocated). Dashed outline: cells where the model is evaluated.
+Schematic, not data. (c) The contrast of a real source with its placebo splits into the information beyond the context
+and the cost of an added input; validation design and checks of the placebo. Vector source: `figures/fig0_design.svg`.
+
 ### 3.1 Fusion network
 
 Every model is the fusion network of the companion study, without a graph:
@@ -260,11 +280,11 @@ for the energy source only.
 - Placebos A and B break the dependence of a source on the context layers as well as on the target. Placebo C is meant
   to keep it.
 
-Fig. 1 shows a real layer and two realisations of each construction.
+Fig. 2 shows a real layer and realisations of each construction.
 
-![Figure 1](../figures/fig1_placebo_maps.png)
+![Figure 2](../figures/fig1_placebo_maps.png)
 
-**Fig. 1.** The residential CO₂ layer of the inventory (log scale, annual mean; one grey scale for all panels; white =
+**Fig. 2.** The residential CO₂ layer of the inventory (log scale, annual mean; one grey scale for all panels; white =
 zero) and two realisations of each placebo construction. (a) Real layer; (b, c) placebo A, IAAFT surrogates,
 realisations 0 and 1; (d, e) placebo B, rotation by 180° and cyclic shift, realisations 0 and 1; (f) placebo C,
 conditional placebo, realisation 0. Blue outline: label domain.
@@ -474,7 +494,7 @@ The baselines without training show where the skill comes from:
 
 ### 4.2 Information beyond the placebo
 
-Table 2 and Fig. 2 give the tests of information; Fig. 2 also shows the effect of the added input itself (Section 4.3).
+Table 2 and Fig. 3 give the tests of information; Fig. 3 also shows the effect of the added input itself (Section 4.3).
 
 **Table 2.** Real source minus placebo branch (gated fusion; Spearman; five-seed ensembles, placebos averaged over five
 realisations), for placebo A (IAAFT) and placebo B (rotation and shift). Intervals are delete-one-block jackknife 95 %
@@ -553,9 +573,9 @@ year, construction or seed points to information that a relocated copy of the sa
 These numbers are smaller than the spread over placebo realisations: the placebo-energy PR-AUC ranged from 0.52 to
 0.85 (A) and 0.61 to 0.74 (B) in 1403.
 
-![Figure 2](../figures/fig2_information_architecture.png)
+![Figure 3](../figures/fig2_information_architecture.png)
 
-**Fig. 2.** Information and added input. Blue: energy minus placebo energy. Orange: traffic + stations minus their
+**Fig. 3.** Information and added input. Blue: energy minus placebo energy. Orange: traffic + stations minus their
 placebos, energy present. Grey: placebo-energy model minus context only (the effect of an added
 placebo input; Section 4.3). Spearman (a, primary) and PR-AUC (b, descriptive) for 1402, 1403 and the held-out year 1404.
 Open circles: placebo A; filled circles: placebo B; squares: placebo C (conditional; energy and grey rows,
@@ -564,7 +584,7 @@ passed its check (M4 for A and B, M5 for C).
 
 ### 4.3 The effect of an added placebo input
 
-The grey rows of Fig. 2 show these estimates.
+The grey rows of Fig. 3 show these estimates.
 
 **Table 3.** Placebo-energy model minus the context-only model (secondary estimates, no verdict), for placebo A and B.
 Spearman with 95 % jackknife intervals; PR-AUC point estimates.
@@ -599,7 +619,7 @@ and −0.010), while it kept a Spearman advantage of +0.021 to +0.037.
 **Checks.**
 - **M1 passed:** the composite of all clear days matched the monthly target (Spearman 0.98 in both years).
 - **M3 passed:** split-half reliability was 0.92–0.96.
-- **M2 failed:** calm-day composites were not sharper than windy-day composites (Fig. 3a).
+- **M2 failed:** calm-day composites were not sharper than windy-day composites (Fig. 4a).
   - The correlogram crossed zero at 23.6 km (calm) and 24.9 km (windy) in 1402, and at 23.9 and 24.7 km in 1403.
   - The correlation at 8–10 km was 0.753 against 0.756, and 0.754 against 0.776.
 - By the registered rule, **F3 is uninformative** (D = −0.004, 95 % interval −0.034 to +0.025) and was removed from the
@@ -620,7 +640,7 @@ Blank cells were not run: for 1404 only the native and the 8-km targets were reg
 | smoothed, σ = 12 km | +0.001 | +0.001 | |
 
 - **Fusion never improved the ranking.** Its small loss on the native target shrank as the target was smoothed and
-  vanished at 12 km (Fig. 3b).
+  vanished at 12 km (Fig. 4b).
 - **F4.** The registered contrast was −0.180 (95 % interval −0.549 to +0.189; inconclusive). Its direction is opposite to
   the prediction: the relative fusion gain was not larger on the sharper target, it was more negative.
 - **Skill falls with smoothing.** Skill fell for every model as the target was smoothed (the energy model from 0.92–0.93
@@ -628,9 +648,9 @@ Blank cells were not run: for 1404 only the native and the 8-km targets were reg
 - **Technical note.** In the per-block contrast of F4, a few edge blocks of 3–5 cells had a reference Spearman of 1, so
   their relative gain was undefined and they left the block-level sign-flip test. The jackknife is not affected.
 
-![Figure 3](../figures/fig3_target_support.png)
+![Figure 4](../figures/fig3_target_support.png)
 
-**Fig. 3.** Target support. (a) Correlogram of the monthly target and of the seasonal composites of all, the calmest and
+**Fig. 4.** Target support. (a) Correlogram of the monthly target and of the seasonal composites of all, the calmest and
 the windiest clear days, 1402. (b) Fusion gain (all three sources minus energy, Spearman) against the smoothing scale of
 the target, with jackknife 95 % intervals.
 
@@ -644,7 +664,7 @@ the target, with jackknife 95 % intervals.
 | B (rotation and shift) | 0.04–0.10 | 0.10–0.20 | 0 of 5 |
 
 - With placebo B, the texture differs only at the wrap-around seams. The single urban core of Tehran, which fills much
-  of the grid, is cut by them (Fig. 1d, e).
+  of the grid, is cut by them (Fig. 2d, e).
 - In a bounded grid with one urban core, a relocation that removes the location either reshapes the core (A) or splits
   it (B).
 - By the registered rule, all placebo verdicts carry the label "placebo check failed".

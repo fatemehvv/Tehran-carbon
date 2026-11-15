@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1328 531" width="1328" height="531" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <clipPath id="mapclip"><rect width="160" height="120"/></clipPath>
+    <radialGradient id="city" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0b0b0b"/>
+      <stop offset="55%" stop-color="#7d7c78"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+  </defs>
+  <rect width="1328" height="531" fill="#ffffff"/>
+
+  <!-- title -->
+  <text x="664" y="44" font-size="24" font-weight="bold" text-anchor="middle" fill="#0b0b0b">Is the gain from the data, or from the added input?</text>
+  <text x="664" y="72" font-size="15" text-anchor="middle" fill="#52514e">Placebo controls for urban data fusion · intra-urban TROPOMI NO₂ · Tehran · pre-registered</text>
+
+  <!-- ============ left: the problem ============ -->
+  <text x="40" y="118" font-size="17" font-weight="bold" fill="#0b0b0b">1  A relocated placebo misleads in one city</text>
+  <g transform="translate(40,136)">
+    <rect width="160" height="120" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="82" cy="62" rx="46" ry="34" fill="url(#city)"/>
+    </g>
+    <path d="M42,46 Q58,24 90,28 Q126,32 124,64 Q120,94 84,96 Q50,96 40,74 Z" fill="none" stroke="#2a78d6" stroke-width="2" stroke-dasharray="5 3"/>
+    <text x="80" y="146" font-size="14" font-weight="bold" text-anchor="middle" fill="#0b0b0b">real layer</text>
+  </g>
+  <line x1="214" y1="196" x2="252" y2="196" stroke="#52514e" stroke-width="2" marker-end="url(#ar)"/>
+  <g transform="translate(262,136)">
+    <rect width="160" height="120" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="0" cy="120" rx="46" ry="34" fill="url(#city)"/>
+    <ellipse cx="160" cy="120" rx="46" ry="34" fill="url(#city)"/>
+    <ellipse cx="0" cy="0" rx="46" ry="34" fill="url(#city)"/>
+    <ellipse cx="160" cy="0" rx="46" ry="34" fill="url(#city)"/>
+    <rect width="160" height="120" fill="none" stroke="#c9c8c3"/>
+    </g>
+    <path d="M42,46 Q58,24 90,28 Q126,32 124,64 Q120,94 84,96 Q50,96 40,74 Z" fill="none" stroke="#2a78d6" stroke-width="2" stroke-dasharray="5 3"/>
+    <text x="80" y="146" font-size="14" font-weight="bold" text-anchor="middle" fill="#0b0b0b">relocated placebo</text>
+  </g>
+  <text x="40" y="320" font-size="14" fill="#0b0b0b">Inside the city (dashed), the placebo is</text>
+  <text x="40" y="341" font-size="14" fill="#0b0b0b"><tspan font-weight="bold">mostly zero</tspan> (86–98 % of cells, real 68 %)</text>
+  <text x="40" y="362" font-size="14" fill="#0b0b0b">and <tspan font-weight="bold">anti-correlated with NO₂</tspan>.</text>
+  <text x="40" y="392" font-size="14" fill="#0b0b0b">It costs the model skill, and that cost</text>
+  <text x="40" y="413" font-size="14" fill="#0b0b0b">is credited to the real source.</text>
+
+  <line x1="452" y1="104" x2="452" y2="470" stroke="#e6e5e0" stroke-width="2"/>
+
+  <!-- ============ middle: the result ============ -->
+  <text x="476" y="118" font-size="17" font-weight="bold" fill="#0b0b0b">2  Gain of the energy inventory in map ranking</text>
+  <text x="476" y="140" font-size="13" fill="#52514e">Spearman ρ, gated fusion, range over years and constructions</text>
+
+  <!-- axis: x(v) = 506 + (v + 0.005) * 8000 ; v from -0.005 to 0.040 -> 506..866 -->
+  <line x1="546" y1="160" x2="546" y2="410" stroke="#8a8984" stroke-width="1.2"/>
+  <line x1="506" y1="410" x2="866" y2="410" stroke="#8a8984" stroke-width="1.2"/>
+  <g font-size="12.5" fill="#52514e" text-anchor="middle">
+    <line x1="546" y1="410" x2="546" y2="416" stroke="#8a8984"/><text x="546" y="432">0</text>
+    <line x1="626" y1="410" x2="626" y2="416" stroke="#8a8984"/><text x="626" y="432">0.01</text>
+    <line x1="706" y1="410" x2="706" y2="416" stroke="#8a8984"/><text x="706" y="432">0.02</text>
+    <line x1="786" y1="410" x2="786" y2="416" stroke="#8a8984"/><text x="786" y="432">0.03</text>
+    <line x1="866" y1="410" x2="866" y2="416" stroke="#8a8984"/><text x="866" y="432">0.04</text>
+  </g>
+  <text x="706" y="454" font-size="13" text-anchor="middle" fill="#52514e">real energy layers minus the comparison model</text>
+
+  <!-- row 1: relocated placebos A/B 0.018-0.038 -->
+  <text x="476" y="182" font-size="14" font-weight="bold" fill="#0b0b0b">vs relocated placebo (A, B)</text>
+  <line x1="690" y1="204" x2="850" y2="204" stroke="#8a8984" stroke-width="14" stroke-linecap="round"/>
+  <text x="856" y="191" font-size="13" fill="#52514e" text-anchor="end">0.018–0.038</text>
+
+  <!-- row 2: conditional placebo C 0.010-0.023 -->
+  <text x="476" y="258" font-size="14" font-weight="bold" fill="#0b0b0b">vs conditional placebo (C)</text>
+  <line x1="626" y1="280" x2="730" y2="280" stroke="#6250d6" stroke-width="14" stroke-linecap="round"/>
+  <text x="740" y="285" font-size="13" fill="#52514e">0.010–0.023</text>
+
+  <!-- row 3: context only (ablation) -0.001-0.013 -->
+  <text x="476" y="334" font-size="14" font-weight="bold" fill="#0b0b0b">vs urban-form context only (ablation)</text>
+  <line x1="538" y1="356" x2="650" y2="356" stroke="#2a78d6" stroke-width="14" stroke-linecap="round"/>
+  <text x="660" y="361" font-size="13" fill="#52514e">−0.001 to +0.013</text>
+
+  <line x1="900" y1="104" x2="900" y2="470" stroke="#e6e5e0" stroke-width="2"/>
+
+  <!-- ============ right: take-home ============ -->
+  <text x="924" y="118" font-size="17" font-weight="bold" fill="#0b0b0b">3  What follows</text>
+  <g font-size="14" fill="#0b0b0b">
+    <text x="924" y="152"><tspan font-weight="bold">Conditional placebo:</tspan> keep the part</text>
+    <text x="924" y="172">the context predicts, move only the residual.</text>
+    <text x="924" y="194">Placebo cost: 0.013–0.025 → 0.006–0.010.</text>
+
+    <text x="924" y="232"><tspan font-weight="bold">Hotspot gain</tspan> of the energy inventory</text>
+    <text x="924" y="252">(PR-AUC +0.16 to +0.19) was matched by</text>
+    <text x="924" y="272">a layer built from urban-form data.</text>
+
+    <text x="924" y="310"><tspan font-weight="bold">Check every placebo</tspan> on the cells</text>
+    <text x="924" y="330">where the model is evaluated. None of the</text>
+    <text x="924" y="350">three constructions passed its check.</text>
+
+    <text x="924" y="388"><tspan font-weight="bold">Report the decomposition:</tspan></text>
+    <text x="924" y="408">real − placebo = information + input cost.</text>
+  </g>
+
+  <!-- footer -->
+  <rect x="0" y="490" width="1328" height="41" fill="#f0efec"/>
+  <text x="664" y="516" font-size="13.5" text-anchor="middle" fill="#52514e">2,436 cells of 0.75 × 0.93 km · 12 spatial blocks of 22 km · held-out year · 5 seeds × 5 placebo realisations · open code and data</text>
+</svg>

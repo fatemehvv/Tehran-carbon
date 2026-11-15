@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 640" width="1260" height="640" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <clipPath id="mapclip"><rect width="140" height="104"/></clipPath>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#ffffff"/>
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#c9c8c3" stroke-width="2"/>
+    </pattern>
+    <radialGradient id="city" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0b0b0b"/>
+      <stop offset="55%" stop-color="#7d7c78"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cityb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2a78d6"/>
+      <stop offset="60%" stop-color="#8fb8ea"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="resid" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6250d6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1260" height="640" fill="#ffffff"/>
+
+  <!-- ============================== panel a: network ============================== -->
+  <text x="20" y="32" font-size="17" font-weight="bold" fill="#0b0b0b">a  Fusion network (one run per input set)</text>
+
+  <rect x="20" y="60" width="200" height="92" rx="8" fill="#e8f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="120" y="83" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">Context (always)</text>
+  <text x="120" y="102" font-size="11.5" text-anchor="middle" fill="#52514e">population, building volume,</text>
+  <text x="120" y="117" font-size="11.5" text-anchor="middle" fill="#52514e">night lights, industry, weather</text>
+  <text x="120" y="135" font-size="11.5" text-anchor="middle" fill="#52514e">+ box means (lags 3, 9)</text>
+
+  <rect x="20" y="178" width="200" height="74" rx="8" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="120" y="201" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">Real source</text>
+  <text x="120" y="220" font-size="11.5" text-anchor="middle" fill="#52514e">energy inventory, traffic</text>
+  <text x="120" y="236" font-size="11.5" text-anchor="middle" fill="#52514e">or station layers</text>
+
+  <text x="120" y="273" font-size="12.5" font-style="italic" text-anchor="middle" fill="#52514e">or, in its place</text>
+
+  <rect x="20" y="284" width="200" height="74" rx="8" fill="url(#hatch)" stroke="#8a8984" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="120" y="307" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">Placebo of the source</text>
+  <text x="120" y="326" font-size="11.5" text-anchor="middle" fill="#52514e">same layers, same shape,</text>
+  <text x="120" y="342" font-size="11.5" text-anchor="middle" fill="#52514e">relocated (A, B or C, panel b)</text>
+
+  <rect x="262" y="84" width="104" height="44" rx="6" fill="#ffffff" stroke="#52514e"/>
+  <text x="314" y="104" font-size="12" text-anchor="middle" fill="#0b0b0b">encoder</text>
+  <text x="314" y="119" font-size="10.5" text-anchor="middle" fill="#52514e">MLP 2 × 32</text>
+  <rect x="262" y="246" width="104" height="44" rx="6" fill="#ffffff" stroke="#52514e"/>
+  <text x="314" y="266" font-size="12" text-anchor="middle" fill="#0b0b0b">encoder</text>
+  <text x="314" y="281" font-size="10.5" text-anchor="middle" fill="#52514e">MLP 2 × 32</text>
+
+  <line x1="220" y1="106" x2="258" y2="106" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M220,215 C240,215 240,262 258,265" fill="none" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M220,321 C240,321 240,272 258,270" fill="none" stroke="#8a8984" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#ar)"/>
+
+  <rect x="398" y="152" width="96" height="70" rx="8" fill="#f0efec" stroke="#52514e"/>
+  <text x="446" y="179" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">softmax</text>
+  <text x="446" y="195" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">gate</text>
+  <text x="446" y="212" font-size="10" text-anchor="middle" fill="#52514e">per cell, month</text>
+  <path d="M366,106 C384,106 384,170 394,174" fill="none" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M366,268 C384,268 384,204 394,200" fill="none" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <line x1="446" y1="222" x2="446" y2="252" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="398" y="256" width="96" height="36" rx="6" fill="#ffffff" stroke="#52514e"/>
+  <text x="446" y="279" font-size="12" text-anchor="middle" fill="#0b0b0b">linear head</text>
+  <line x1="446" y1="292" x2="446" y2="320" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="376" y="324" width="140" height="50" rx="8" fill="#fff4e0" stroke="#eda100" stroke-width="1.5"/>
+  <text x="446" y="345" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0b0b0b">NO₂ pattern</text>
+  <text x="446" y="362" font-size="10.5" text-anchor="middle" fill="#52514e">TROPOMI, monthly z</text>
+
+  <text x="20" y="398" font-size="11.5" fill="#52514e">Early fusion: all inputs in one encoder (no gate).</text>
+  <text x="20" y="415" font-size="11.5" fill="#52514e">5 seeds per run; 2,436 cells of 0.75 × 0.93 km.</text>
+
+  <!-- ============================== panel b: placebos ============================== -->
+  <text x="560" y="32" font-size="17" font-weight="bold" fill="#0b0b0b">b  Placebo constructions (energy, residential CO₂)</text>
+
+  <!-- map template: 120 x 90, domain outline -->
+  <g transform="translate(560,60)">
+    <rect width="140" height="104" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="72" cy="54" rx="40" ry="30" fill="url(#city)"/>
+    </g>
+    <path d="M38,40 Q52,22 80,26 Q110,30 108,56 Q104,82 74,84 Q44,84 36,64 Z" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="4 2"/>
+    <text x="70" y="124" font-size="13" font-weight="bold" text-anchor="middle" fill="#0b0b0b">Real layer</text>
+    <text x="70" y="140" font-size="11" text-anchor="middle" fill="#52514e">dashed: cells evaluated</text>
+  </g>
+
+  <g transform="translate(730,60)">
+    <rect width="140" height="104" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="24" cy="22" rx="20" ry="16" fill="url(#city)"/>
+    <ellipse cx="118" cy="86" rx="22" ry="15" fill="url(#city)"/>
+    <ellipse cx="112" cy="20" rx="14" ry="11" fill="url(#city)"/>
+    </g>
+    <path d="M38,40 Q52,22 80,26 Q110,30 108,56 Q104,82 74,84 Q44,84 36,64 Z" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="4 2"/>
+    <text x="70" y="124" font-size="13" font-weight="bold" text-anchor="middle" fill="#0b0b0b">A  IAAFT surrogate</text>
+    <text x="70" y="140" font-size="11" text-anchor="middle" fill="#52514e">values kept, texture reshaped</text>
+  </g>
+
+  <g transform="translate(900,60)">
+    <rect width="140" height="104" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="0" cy="104" rx="40" ry="30" fill="url(#city)"/>
+    <ellipse cx="140" cy="104" rx="40" ry="30" fill="url(#city)"/>
+    <ellipse cx="0" cy="0" rx="40" ry="30" fill="url(#city)"/>
+    <ellipse cx="140" cy="0" rx="40" ry="30" fill="url(#city)"/>
+    <rect width="140" height="104" fill="none" stroke="#c9c8c3"/>
+    </g>
+    <path d="M38,40 Q52,22 80,26 Q110,30 108,56 Q104,82 74,84 Q44,84 36,64 Z" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="4 2"/>
+    <text x="70" y="124" font-size="13" font-weight="bold" text-anchor="middle" fill="#0b0b0b">B  rotate 180° + shift</text>
+    <text x="70" y="140" font-size="11" text-anchor="middle" fill="#52514e">core cut at the seams</text>
+  </g>
+
+  <g transform="translate(1070,60)">
+    <rect width="140" height="104" fill="#ffffff" stroke="#c9c8c3"/>
+    <g clip-path="url(#mapclip)">
+    <ellipse cx="72" cy="54" rx="38" ry="28" fill="url(#cityb)"/>
+    <ellipse cx="22" cy="86" rx="16" ry="11" fill="url(#resid)"/>
+    <ellipse cx="118" cy="18" rx="13" ry="10" fill="url(#resid)"/>
+    </g>
+    <path d="M38,40 Q52,22 80,26 Q110,30 108,56 Q104,82 74,84 Q44,84 36,64 Z" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="4 2"/>
+    <text x="70" y="124" font-size="13" font-weight="bold" text-anchor="middle" fill="#0b0b0b">C  conditional</text>
+    <text x="70" y="140" font-size="11" text-anchor="middle" fill="#52514e">context part kept in place</text>
+  </g>
+
+  <!-- conditional recipe -->
+  <rect x="560" y="222" width="650" height="142" rx="8" fill="#fbfaf8" stroke="#e6e5e0"/>
+  <text x="576" y="246" font-size="13.5" font-weight="bold" fill="#0b0b0b">Placebo C, step by step (registered amendment)</text>
+  <rect x="576" y="262" width="186" height="80" rx="6" fill="#e9f1fb" stroke="#2a78d6"/>
+  <text x="669" y="284" font-size="12" font-weight="bold" text-anchor="middle" fill="#0b0b0b">1  f = fit from context</text>
+  <text x="669" y="302" font-size="10.5" text-anchor="middle" fill="#52514e">gradient boosting,</text>
+  <text x="669" y="317" font-size="10.5" text-anchor="middle" fill="#52514e">cross-fitted over 22-km tiles</text>
+  <text x="669" y="332" font-size="10.5" text-anchor="middle" fill="#52514e">(kept in place)</text>
+  <line x1="762" y1="302" x2="792" y2="302" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="796" y="262" width="186" height="80" rx="6" fill="#efedfb" stroke="#6250d6"/>
+  <text x="889" y="284" font-size="12" font-weight="bold" text-anchor="middle" fill="#0b0b0b">2  residual r = layer − f</text>
+  <text x="889" y="302" font-size="10.5" text-anchor="middle" fill="#52514e">relocated by the rotation</text>
+  <text x="889" y="317" font-size="10.5" text-anchor="middle" fill="#52514e">and shift of placebo B</text>
+  <text x="889" y="332" font-size="10.5" text-anchor="middle" fill="#52514e">(one offset per realisation)</text>
+  <line x1="982" y1="302" x2="1012" y2="302" stroke="#52514e" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="1016" y="262" width="178" height="80" rx="6" fill="#ffffff" stroke="#52514e"/>
+  <text x="1105" y="284" font-size="12" font-weight="bold" text-anchor="middle" fill="#0b0b0b">3  placebo = f + moved r</text>
+  <text x="1105" y="302" font-size="10.5" text-anchor="middle" fill="#52514e">keeps the dependence</text>
+  <text x="1105" y="317" font-size="10.5" text-anchor="middle" fill="#52514e">on the context; loses what</text>
+  <text x="1105" y="332" font-size="10.5" text-anchor="middle" fill="#52514e">the context does not explain</text>
+
+  <text x="560" y="392" font-size="11.5" fill="#52514e">Five realisations per construction, each a five-seed ensemble. A and B for every source; C for energy (1402, 1403).</text>
+
+  <!-- ============================== panel c: evaluation ============================== -->
+  <line x1="20" y1="440" x2="1240" y2="440" stroke="#e6e5e0" stroke-width="1.5"/>
+  <text x="20" y="474" font-size="17" font-weight="bold" fill="#0b0b0b">c  What is compared, and how</text>
+
+  <rect x="20" y="492" width="560" height="128" rx="8" fill="#fbfaf8" stroke="#e6e5e0"/>
+  <text x="300" y="522" font-size="15" text-anchor="middle" fill="#0b0b0b">
+    <tspan font-weight="bold">real − placebo</tspan>  =  <tspan fill="#2a78d6" font-weight="bold">(real − context only)</tspan>  +  <tspan fill="#8a8984" font-weight="bold">(context only − placebo)</tspan>
+  </text>
+  <text x="300" y="552" font-size="12.5" text-anchor="middle" fill="#52514e">
+    <tspan fill="#2a78d6">information beyond the context</tspan>   +   <tspan fill="#8a8984">cost of an added input</tspan>
+  </text>
+  <text x="300" y="584" font-size="12" text-anchor="middle" fill="#52514e">An ablation table sees the first term; a placebo contrast sees the sum.</text>
+  <text x="300" y="604" font-size="12" text-anchor="middle" fill="#52514e">A misleading placebo inflates the second term.</text>
+
+  <rect x="600" y="492" width="300" height="128" rx="8" fill="#fbfaf8" stroke="#e6e5e0"/>
+  <text x="616" y="516" font-size="13.5" font-weight="bold" fill="#0b0b0b">Validation (pre-registered)</text>
+  <text x="616" y="538" font-size="11.5" fill="#52514e">• 12 blocks of 22 km, 2-km buffer</text>
+  <text x="616" y="556" font-size="11.5" fill="#52514e">• 1402–1403; held-out year 1404</text>
+  <text x="616" y="574" font-size="11.5" fill="#52514e">• Spearman ρ (primary), PR-AUC</text>
+  <text x="616" y="592" font-size="11.5" fill="#52514e">• jackknife, block sign-flip, Holm</text>
+  <text x="616" y="610" font-size="11.5" fill="#52514e">• margin ±0.02; seed s vs realisation s</text>
+
+  <rect x="920" y="492" width="320" height="128" rx="8" fill="#fbfaf8" stroke="#e6e5e0"/>
+  <text x="936" y="516" font-size="13.5" font-weight="bold" fill="#0b0b0b">Checks of the placebo</text>
+  <text x="936" y="538" font-size="11.5" fill="#52514e">• M4 (A, B): location removed, texture kept</text>
+  <text x="936" y="556" font-size="11.5" fill="#52514e">• on the evaluated cells: zeros, values,</text>
+  <text x="936" y="572" font-size="11.5" fill="#52514e">   correlation with target and context</text>
+  <text x="936" y="592" font-size="11.5" fill="#52514e">• M5 (C): dependence, values, residual</text>
+  <text x="936" y="610" font-size="11.5" fill="#52514e">• lineage: each source from the context</text>
+</svg>
