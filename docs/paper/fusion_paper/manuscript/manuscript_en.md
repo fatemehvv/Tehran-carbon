@@ -266,8 +266,8 @@ Fig. 1 shows a real layer and two realisations of each construction.
 
 **Fig. 1.** The residential CO₂ layer of the inventory (log scale, annual mean; one grey scale for all panels; white =
 zero) and two realisations of each placebo construction. (a) Real layer; (b, c) placebo A, IAAFT surrogates,
-realisations 0 and 1; (d, e) placebo B, rotation by 180° and cyclic shift, realisations 0 and 1. Blue outline: label
-domain.
+realisations 0 and 1; (d, e) placebo B, rotation by 180° and cyclic shift, realisations 0 and 1; (f) placebo C,
+conditional placebo, realisation 0. Blue outline: label domain.
 
 ### 3.3 Target versions
 
@@ -558,8 +558,9 @@ These numbers are smaller than the spread over placebo realisations: the placebo
 **Fig. 2.** Information and added input. Blue: energy minus placebo energy. Orange: traffic + stations minus their
 placebos, energy present. Grey: placebo-energy model minus context only (the effect of an added
 placebo input; Section 4.3). Spearman (a, primary) and PR-AUC (b, descriptive) for 1402, 1403 and the held-out year 1404.
-Open markers: placebo A; filled markers: placebo B. Lines: jackknife 95 % intervals; band: equivalence margin ±0.02.
-Both placebo constructions failed check M4.
+Open circles: placebo A; filled circles: placebo B; squares: placebo C (conditional; energy and grey rows,
+1402–1403, laptop runs). Lines: jackknife 95 % intervals; band: equivalence margin ±0.02. No placebo construction
+passed its check (M4 for A and B, M5 for C).
 
 ### 4.3 The effect of an added placebo input
 
