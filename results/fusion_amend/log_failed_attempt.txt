@@ -1,0 +1,42 @@
+[03:38:09] dataset 4e800dee03d6: from cache
+[03:38:14] M5: 1402, realisation 0
+[03:39:37] M5: 1402, realisation 1
+[03:41:01] M5: 1402, realisation 2
+[03:42:25] M5: 1402, realisation 3
+[03:43:47] M5: 1402, realisation 4
+[03:45:14] M5: 1403, realisation 0
+[03:46:38] M5: 1403, realisation 1
+[03:48:16] M5: 1403, realisation 2
+[03:49:38] M5: 1403, realisation 3
+[03:50:58] M5: 1403, realisation 4
+[03:52:19] M5 per realisation (medians over layers and years):
+ realisation  dependence_gap    ks  residual_abs_spearman  zero_share_real  zero_share_placebo  spearman_target_real  spearman_target_placebo  passed
+           0           0.135 0.341                  0.173            0.693               0.363                 0.203                    0.192   False
+           1           0.146 0.308                  0.207            0.693               0.383                 0.203                    0.199   False
+           2           0.136 0.318                  0.196            0.693               0.378                 0.203                    0.190   False
+           3           0.148 0.357                  0.157            0.693               0.336                 0.203                    0.252   False
+           4           0.170 0.321                  0.154            0.693               0.355                 0.203                    0.200   False
+M5: conditional placebo check failed (5 of 5 failed)
+[03:52:19] G1 ...
+[03:52:19] dataset 4e800dee03d6: from cache
+[03:52:22] K1 ...
+[03:52:23] dataset 3e095c67163c: from cache
+[03:52:26] K2 ...
+[03:52:26] dataset 4e800dee03d6: from cache
+[03:52:27] K3 ...
+[03:52:28] K3: skipped ({'experiment': 'fus2_placebo_v2', 'where': {'data.inputs.placebo.realization': 0, 'model.modalities': ['energy_plc'], 'model.fusion.type': 'gated'}} matches 0 finished runs (need exactly 1))
+[03:52:28] FAILED:
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\MasterThesis\Tehran-carbon-paper_fusion\main.py", line 254, in cmd_fusion
+    run.finish("done", FusionAmendment(cfg).run(run))
+                       ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\user\Desktop\MasterThesis\Tehran-carbon-paper_fusion\src\tehran_carbon\analysis\fusion_amend.py", line 141, in run
+    holm_t = self.tests(run, m5["verdict"])
+  File "C:\Users\user\Desktop\MasterThesis\Tehran-carbon-paper_fusion\src\tehran_carbon\analysis\fusion_amend.py", line 122, in tests
+    adj = holm(dict(zip(keys, sub.p_signflip)))
+                              ^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6299, in __getattr__
+    return object.__getattribute__(self, name)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AttributeError: 'DataFrame' object has no attribute 'p_signflip'
+

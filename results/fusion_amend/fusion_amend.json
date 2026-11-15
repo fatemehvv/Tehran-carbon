@@ -1,0 +1,87 @@
+{
+  "M5": {
+    "verdict": "conditional placebo check failed",
+    "failed": 5,
+    "per_realisation": [
+      {
+        "realisation": 0,
+        "dependence_gap": 0.13516789448462896,
+        "ks": 0.34092775041050905,
+        "residual_abs_spearman": 0.17311072202757333,
+        "zero_share_real": 0.6933497536945812,
+        "zero_share_placebo": 0.3633004926108374,
+        "spearman_target_real": 0.20258636323542367,
+        "spearman_target_placebo": 0.19210614258888364,
+        "passed": false
+      },
+      {
+        "realisation": 1,
+        "dependence_gap": 0.14613046616630332,
+        "ks": 0.3080870279146141,
+        "residual_abs_spearman": 0.20672588875563142,
+        "zero_share_real": 0.6933497536945812,
+        "zero_share_placebo": 0.3832101806239737,
+        "spearman_target_real": 0.20258636323542367,
+        "spearman_target_placebo": 0.19899196850186027,
+        "passed": false
+      },
+      {
+        "realisation": 2,
+        "dependence_gap": 0.13573305428995447,
+        "ks": 0.31773399014778325,
+        "residual_abs_spearman": 0.19601500630194946,
+        "zero_share_real": 0.6933497536945812,
+        "zero_share_placebo": 0.37807881773399016,
+        "spearman_target_real": 0.20258636323542367,
+        "spearman_target_placebo": 0.1904008933513714,
+        "passed": false
+      },
+      {
+        "realisation": 3,
+        "dependence_gap": 0.1476372928071063,
+        "ks": 0.3573481116584565,
+        "residual_abs_spearman": 0.15668981637404364,
+        "zero_share_real": 0.6933497536945812,
+        "zero_share_placebo": 0.3360016420361248,
+        "spearman_target_real": 0.20258636323542367,
+        "spearman_target_placebo": 0.252418841132514,
+        "passed": false
+      },
+      {
+        "realisation": 4,
+        "dependence_gap": 0.16959189929878593,
+        "ks": 0.32081280788177335,
+        "residual_abs_spearman": 0.15396352786094317,
+        "zero_share_real": 0.6933497536945812,
+        "zero_share_placebo": 0.3552955665024631,
+        "spearman_target_real": 0.20258636323542367,
+        "spearman_target_placebo": 0.19965830143616314,
+        "passed": false
+      }
+    ]
+  },
+  "holm": [
+    {
+      "family": "G",
+      "test": "G1",
+      "year": 1402,
+      "metric": "spearman",
+      "delta": 0.010430687421034257,
+      "p_signflip": 0.0546875,
+      "p_holm": 0.0546875,
+      "verdict": "non-inferior",
+      "verdict_holm": "non-inferior (conditional placebo check failed)"
+    },
+    {
+      "family": "G",
+      "test": "G1",
+      "year": 1403,
+      "metric": "spearman",
+      "delta": 0.02321972181319043,
+      "p_signflip": 0.004638671875,
+      "p_holm": 0.00927734375,
+      "verdict": "non-inferior",
+      "verdict_holm": "non-inferior (conditional placebo check failed)"
+    }
+  ]
+}
