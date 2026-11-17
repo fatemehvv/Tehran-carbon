@@ -22,22 +22,22 @@ Data and code availability). Items in [brackets] are to be completed before subm
 
 ## Abstract
 
-The gains of graph neural networks (GNNs) in mapping urban emissions and air pollution are usually credited to the
-graph. But a GNN also sees further than its baselines. We separate the two for intra-urban NO₂ hotspots in Tehran, using
-monthly TROPOMI NO₂ on a 1-km grid (2,436 cells). We ask whether fusing traffic, energy and station data improves the
-maps (RQ1), and whether a GNN improves on conventional spatial models and, if so, through the graph or through seeing
-further (RQ2). A multi-scale GraphSAGE model on a distance-based graph is compared with spatial-lag-of-X (SLX) models
-and with the same network fed neighbourhood box means instead of a graph, at matched maximum reach from 0 to 38 km.
-Validation uses 22-km spatial blocks, a held-out year, fold-specific station interpolation, five seeds and block
-randomisation tests. Reach accounts for most of the skill. The best SLX models rise from a Spearman correlation of about
-0.75 with the cell alone to 0.91–0.93 at 12.6 km, then gain at most 0.03. At equal reach, the GNN's lead over SLX
-shrinks from about 0.04 at 7.6 km to −0.004 and +0.009 at 37.8 km, none of them conclusive. At 22.7 km, the network fed
-box means is statistically equivalent to the GNN (Spearman differences −0.005 and −0.008). On the held-out year, GNN and
-SLX are equivalent in Spearman at 30.3 km and differ by 0.002 at 37.8 km. The GNN's leads in hotspot PR-AUC shrink for
-single fits. Fusion raised PR-AUC within seed noise and lowered Spearman, because the main emission layers become nearly
-identical at the target's scale. With about five effective degrees of freedom, the choice of inference changed several
-verdicts. For this smooth target and distance-based graph, reach explains most of the GNN's skill; graph models need
-reach-matched baselines.
+The gains of graph neural networks (GNNs) in mapping urban emissions and air pollution are usually credited to
+learning on a graph, yet a GNN also sees further than its baselines. We separate the two in mapping intra-urban NO₂ hotspots in Tehran from monthly TROPOMI NO₂ on a 1-km grid
+(2,436 cells), asking whether fusing traffic, energy and station data improves the maps (RQ1) and whether a GNN
+improves on conventional spatial models and, if so, whether the gain comes from the graph or from seeing further
+(RQ2). A multi-scale GraphSAGE model on a distance-based graph is compared
+with spatial-lag-of-X (SLX) models, and with the same network fed neighbourhood box means instead of a graph, at
+matched maximum reach from 0 to 38 km. Validation uses 22-km spatial blocks, a held-out year,
+fold-specific station interpolation, five seeds and block randomisation tests. Skill depends mainly on reach: the
+best SLX models rise from a Spearman correlation of about 0.75 for the cell alone to 0.91–0.93 at 12.6 km and gain at
+most 0.03 beyond. The GNN's lead over SLX at equal reach shrinks from about 0.04 at 7.6 km to −0.004 and +0.009 at
+37.8 km, all comparisons inconclusive, and the network fed box means is statistically equivalent to the GNN at 22.7 km
+(Spearman differences −0.005 and −0.008). On the held-out year, GNN and SLX are equivalent in Spearman at 30.3 km and
+differ by 0.002 at 37.8 km. GNN PR-AUC leads shrink for individual fits. Fusion raised PR-AUC within seed noise and lowered Spearman; the main emission layers become
+nearly identical at the target's scale. With about five effective degrees of
+freedom, the choice of inference changed several verdicts. For this smooth target and distance-based
+graph, reach explains most of the GNN's skill; graph models need reach-matched baselines.
 
 **Keywords:** graph neural networks; receptive field; spatial lag of X; TROPOMI; NO₂; data fusion; spatial
 cross-validation; Tehran
@@ -46,84 +46,75 @@ cross-validation; Tehran
 
 ## 1. Introduction
 
-Cutting urban fossil CO₂ emissions requires knowing *where* in a city combustion is concentrated. Satellite NO₂ has
-become a practical tracer for this. It is co-emitted with CO₂ and short-lived, so its pattern stays close to where it is
-emitted, and since 2018 the TROPOMI instrument on Sentinel-5P has mapped it daily at a resolution of a few kilometres
-(Beirle et al., 2019; Li et al., 2025). TROPOMI NO₂ has been used to locate urban CO₂ plumes and estimate city emissions
-(Reuter et al., 2019; Ahn et al., 2025), to derive gridded NOx emissions (Rey-Pommier et al., 2025) and to evaluate
-kilometre-scale inventories (Goldberg et al., 2024). Models that link emission and urban-form data to the observed NO₂
-pattern can therefore help to screen cities for combustion hotspots, test inventories and explore scenarios.
+Policies to cut urban fossil CO₂ emissions depend on knowing *where* in a city combustion is concentrated. Satellite NO₂ has
+become a practical tracer of urban fossil combustion: it is co-emitted with CO₂, it is short-lived, and since 2018 the
+TROPOMI instrument on Sentinel-5P has mapped it daily at a resolution of a few kilometres (Beirle et al., 2019; Li et
+al., 2025). It has been used to locate urban CO₂ plumes and estimate city emissions (Reuter et al., 2019; Ahn et al.,
+2025), to derive gridded NOx emissions (Rey-Pommier et al., 2025) and to evaluate kilometre-scale inventories (Goldberg
+et al., 2024). Models that link emission and urban-form data to the observed NO₂ pattern can therefore screen cities
+for combustion hotspots, test inventories and support scenario analysis.
 
-Two choices shape such models: which data to use, and which model. On the data side, bottom-up inventories, traffic
-models and ground stations each describe part of urban combustion, so fusing them is an obvious way to try to improve a
-map. On the model side, graph neural networks have become the method of choice. Recent models learn urban carbon
-emissions from satellite images and points of interest (Zeng et al., 2025), from road networks and origin–destination
-flows (Zeng et al., 2024), at the level of individual buildings (Yap et al., 2025) and across 329 Chinese cities (Shao
-et al., 2026). In air quality, GNNs with physically motivated edges are used for prediction (Wang et al., 2020; Hettige
-et al., 2024), graph networks have been combined with high-resolution satellite data to predict PM2.5 and NO₂ (Wang et
-al., 2025) and to map PM2.5 from regional to global scales (Bai et al., 2025; Teng et al., 2026; Yuan et al., 2026), and
-GraphSAGE has been applied to urban NO₂ (Gueterbock et al., 2025). The gains of these models are usually credited to the
-graph, that is, to learning how information should flow between neighbouring places.
+Two choices shape such models. The first is which data to use. Bottom-up inventories, traffic models and ground
+stations each describe part of urban combustion, and fusing them is an obvious way to try to improve a map. The second
+is which model to use, and here graph neural networks have become the method of choice. Recent models learn urban
+carbon emissions from satellite images and points of interest (Zeng et al., 2025), from road networks and
+origin–destination flows (Zeng et al., 2024), at the level of individual buildings (Yap et al., 2025) and across 329
+Chinese cities (Shao et al., 2026). GNNs with physically motivated edges are used for air-quality prediction (Wang et
+al., 2020; Hettige et al., 2024), graph networks have been fused with high-resolution satellite data to predict PM2.5
+and NO₂ (Wang et al., 2025) and to map PM2.5 from regional to global scales (Bai et al., 2025; Teng et al., 2026; Yuan et
+al., 2026), and GraphSAGE has been applied to urban NO₂ (Gueterbock et al., 2025). The gains of these models are
+usually credited to the graph, that is, to learning how information should flow between neighbouring places.
 
-A graph model, however, differs from a conventional one in two ways at once. It *learns* how to combine information from
-its neighbourhood, and it *sees* a neighbourhood that grows with every message-passing layer. That neighbourhood is its
-receptive field, which we call its reach (Luo et al., 2016). Graph-learning research treats the receptive field as a
-design choice to be tuned or learned (Gao et al., 2025), and convolutional models fail where it is too small for the
-process they model (Chen et al., 2026). The baselines that GNNs are judged against, by contrast, often see no
-neighbourhood at all, or a much smaller one. In such comparisons, an advantage of the GNN may simply mean that it looks
-further.
+A graph model, however, differs from a conventional model in two ways at once. It *learns* how to combine its
+neighbourhood, and it *sees* a neighbourhood whose size grows with every message-passing layer: its receptive field,
+which we call its reach (Luo et al., 2016). Within graph learning the receptive field is treated as a design choice to
+be tuned or learned (Gao et al., 2025), and convolutional models fail where it is too small for the process (Chen et
+al., 2026). The baselines against which GNNs are judged, by contrast, often see no neighbourhood at all, or a much
+smaller one. Under such comparisons an advantage of the GNN may simply mean that it looks further. The conventional
+answer to "the neighbours matter" is the spatial lag of X (SLX) model of spatial econometrics, which adds neighbourhood
+means of the predictors (Halleck Vega & Elhorst, 2015), and the buffer variables of land-use regression do the same in
+air-quality science (Hoek et al., 2008). Both can be given any reach at negligible cost, and explicit neighbourhood
+information of this kind improves neural networks (Xiao et al., 2023), convolutional classifiers of urban form
+(Fleischmann & Arribas-Bel, 2024) and tabular learners (Schmidinger et al., 2026).
 
-Giving a conventional model the same view is not hard. Spatial econometrics answers "the neighbours matter" with the
-spatial lag of X (SLX) model, which adds neighbourhood means of the predictors (Halleck Vega & Elhorst, 2015), and the
-buffer variables of land-use regression do the same in air-quality science (Hoek et al., 2008). Both can be given any
-reach at negligible cost. Explicit neighbourhood information of this kind also improves neural networks (Xiao et al.,
-2023), convolutional classifiers of urban form (Fleischmann & Arribas-Bel, 2024) and tabular learners (Schmidinger et
-al., 2026).
+Research on graph learning has addressed a related question. On citation and social graphs, linear models applied to
+features averaged over the same number of hops matched graph convolutional networks (Wu et al., 2019; Frasca et al.,
+2020), whereas on synthetic graphs whose community structure is the target, a GNN outperformed a graph-augmented MLP
+given the same receptive field (Chen et al., 2020); the receptive field can be set apart from the number of layers (Gasteiger et al., 2019; Zeng et al., 2021); and
+simple, fairly tuned baselines often match GNNs, with evaluation choices changing the ranking of models (Shchur et al.,
+2018; Errica et al., 2020; Huang et al., 2021). A spatial-regression reading of graph convolution relates the number of
+layers to the order of the spatial lag (Zhu et al., 2021). These results concern non-spatial graphs, were obtained
+without spatial validation and did not involve geographic spatial-lag baselines.
 
-Graph-learning research has asked a related question, mostly on non-spatial graphs. On citation and social graphs,
-linear models applied to features averaged over the same number of hops matched graph convolutional networks (Wu et al.,
-2019; Frasca et al., 2020). On synthetic graphs whose community structure is the target, on the other hand, a GNN
-outperformed a graph-augmented MLP given the same receptive field (Chen et al., 2020). The receptive field can also be
-set apart from the number of layers (Gasteiger et al., 2019; Zeng et al., 2021), and simple, fairly tuned baselines
-often match GNNs, with evaluation choices changing the ranking of models (Shchur et al., 2018; Errica et al., 2020;
-Huang et al., 2021). These results come from non-spatial graphs, without spatial validation and without geographic
-spatial-lag baselines. A spatial-regression reading of graph convolution links the two fields by relating the number of
-layers to the order of the spatial lag (Zhu et al., 2021).
+In geospatial and environmental work, comparisons of GNNs with spatial regression are common, but their baselines
+differ in reach from the GNN. Graph convolutional networks have been compared with spatial and geographically weighted
+regression (Zhu et al., 2021; Liu et al., 2025), deep spatial regression on a graph fitted house prices better than
+spatial-regression baselines in sample (Zhu et al., 2026), and GNNs have beaten spatial-lag, geographically weighted,
+gradient-boosting and linear baselines for health outcomes and bike-share ridership (Zhao et al., 2026; Mohseni et al.,
+2026). GNNs can be read as generalised spatial regressions (Liang et al., 2023; Ma et al., 2025), and neural networks
+for geospatial data relate closely to kriging (Zhan & Datta, 2024; Abémgnigni Njifon & Schuhmacher, 2024). Simple
+baselines remain strong: in Berlin a random forest matched a spatial GNN for urban NO₂ (Schmidt & Ong, 2026), a graph
+model of city CO₂ did not beat an MLP or XGBoost until extra constraints were added (Shao et al., 2026), and simple
+interpolation beat data-driven GNNs for urban PM2.5 (Du et al., 2026). Evaluation matters as much: GNN residuals can
+remain spatially autocorrelated (Bao et al., 2024), a GNN can fail under leave-one-cluster-out validation (Flores et al.,
+2026), reported skill for satellite NO₂ varies with the validation strategy (Zhang et al., 2026), random
+cross-validation overstates skill for autocorrelated targets (Roberts et al., 2017; Ploton et al., 2020; Meyer & Pebesma,
+2022; Wadoux et al., 2021; Milà et al., 2022; Linnenbrink et al., 2026), bootstrap inference is unreliable with few,
+unequal clusters (Cameron et al., 2008; MacKinnon et al., 2023), deep models vary from seed to seed (Bouthillier et al.,
+2021), and pre-processing that sees the test area inflates skill (Kapoor & Narayanan, 2023).
 
-In geospatial and environmental work, GNNs are often compared with spatial regression, but the baselines usually differ
-from the GNN in reach. Graph convolutional networks have been compared with spatial and geographically weighted
-regression (Zhu et al., 2021; Liu et al., 2025). Deep spatial regression on a graph fitted house prices better than
-spatial-regression baselines, though only in sample (Zhu et al., 2026), and GNNs have beaten spatial-lag, geographically
-weighted, gradient-boosting and linear baselines for health outcomes and bike-share ridership (Zhao et al., 2026;
-Mohseni et al., 2026). GNNs can be read as generalised spatial regressions (Liang et al., 2023; Ma et al., 2025), and
-neural networks for geospatial data are closely related to kriging (Zhan & Datta, 2024; Abémgnigni Njifon & Schuhmacher,
-2024).
-
-Simple baselines nonetheless remain strong. In Berlin, a random forest matched a spatial GNN for urban NO₂ (Schmidt &
-Ong, 2026). A graph model of city CO₂ did not beat an MLP or XGBoost until extra constraints were added (Shao et al.,
-2026), and simple interpolation beat data-driven GNNs for urban PM2.5 (Du et al., 2026). How the models are evaluated
-matters just as much. Random cross-validation overstates skill for spatially autocorrelated targets (Roberts et al.,
-2017; Ploton et al., 2020; Meyer & Pebesma, 2022; Wadoux et al., 2021; Milà et al., 2022; Linnenbrink et al., 2026), and
-the reported skill for satellite NO₂ changes with the validation strategy (Zhang et al., 2026). GNN residuals can remain
-spatially autocorrelated (Bao et al., 2024), and a GNN can fail under leave-one-cluster-out validation (Flores et al.,
-2026). Pre-processing that sees the test area inflates skill (Kapoor & Narayanan, 2023), deep models vary from seed to
-seed (Bouthillier et al., 2021), and bootstrap inference is unreliable with few, unequal clusters (Cameron et al., 2008;
-MacKinnon et al., 2023).
-
-Table 1 compares the reach of GNNs and their baselines in fifteen studies whose full texts describe both. In most of
-them, the baselines see only their own location, a neighbourhood of a different size, or one whose size is not reported.
-Three studies come close to matching reach. In Liang et al. (2023), a linear SLX baseline averaged over the same nearest
-stations as the GNN, but the nonlinear baseline saw no neighbours. In Schmidt & Ong (2026), the random forest received
-the measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. In Bai et al. (2025), a
-random forest and two averaging rules combined the same 32 estimates as the graph attention network, which lowered the
-error by 8.5 %. These 32 neighbours, however, are the most similar in scene attributes, not the nearest in distance.
-None of the three made reach the object of the comparison, varied it, or tied it to the scale of the target. Nor did we
-find a spatial or environmental study that does, either in a structured ScienceDirect search (five Boolean queries, 191
-unique records) or in a semantic search of the wider literature (`docs/paper/lit/`). Choosing a neighbourhood from the
-range of spatial dependence is itself established practice. It has been used for texture windows (Franklin et al.,
-1996), contextual covariates (Behrens et al., 2019), cross-validation blocks (Valavi et al., 2019), GNN depth (Alon &
-Yahav, 2021) and the receptive field of a GNN for turbulent transport (Freitas et al., 2026). It has not, however, been
-used to give a GNN and its baselines the same reach. Fig. 1 summarises how the literature narrows to this gap.
+Table 1 compares the reach of GNNs and their baselines in fifteen studies whose full texts describe both. In most of them, the baselines use only their own location, a neighbourhood of a different size, or one whose size is not reported. Three studies come close. In Liang et al. (2023) a linear SLX baseline averaged over the same nearest stations
+as the GNN, but the nonlinear baseline saw no neighbours. In Schmidt & Ong (2026) the random forest received the
+measured NO₂ of the other stations, weighted as in the graph, and then matched the GNN. In Bai et al. (2025) a random
+forest and two averaging rules combined the same 32 estimates as the graph attention network, which lowered the error
+by 8.5 %; these 32 neighbours are the most similar in scene attributes, not the nearest in distance. None of the three
+made reach the object of the comparison, varied it, or tied it to the scale of the target. A structured ScienceDirect search (five
+Boolean queries, 191 unique records) and a semantic search of the wider literature found no spatial or environmental study that does
+(`docs/paper/lit/`). Choosing a neighbourhood from the range of spatial dependence is itself established practice, for
+texture windows (Franklin et al., 1996), contextual covariates (Behrens et al., 2019), cross-validation blocks (Valavi
+et al., 2019), GNN depth (Alon & Yahav, 2021) and the receptive field of a GNN for turbulent transport (Freitas et al.,
+2026), but it has not been used to give a GNN and its baselines the same reach. Fig. 1 summarises how the literature
+narrows to this gap.
 
 **Table 1.** How far the GNN and its baselines see in comparable studies (full texts read; "n.r.": not reported).
 
@@ -148,18 +139,17 @@ used to give a GNN and its baselines the same reach. Fig. 1 summarises how the l
 
 
 We address two research questions for intra-urban NO₂ hotspots observed by TROPOMI in Tehran, a megacity of about nine
-million people at the foot of the Alborz mountains, with one of the highest NO₂ columns among large cities worldwide
+million people at the foot of the Alborz mountains with one of the highest NO₂ columns among large cities worldwide
 (Huber et al., 2026). RQ1 asks whether fusing traffic, energy and station data improves the maps over the best single
-source. RQ2 asks whether a GNN improves on conventional spatial models and, if it does, whether the improvement comes
-from the graph or from reach. RQ2 is the main question of this paper. RQ1 is answered with the same models and the same
-evaluation, and its result is explained by the same argument about scale.
-
-Our contribution is a reach-matched evaluation. SLX baselines and the same network without a graph are given the GNN's
-reach, and reach is then varied for all of them, under spatial block cross-validation and on a held-out year. We match
-by maximum nominal reach, so the models see up to the same distance, though not always the same cells. We then relate
-the reach at which skill levels off to the correlation length of the target, and quantify how seed averaging and the
-choice of inference change the verdicts for a target with few effective degrees of freedom. Decision rules for the main
-comparisons were registered before the corresponding runs (Section 3.6).
+source. RQ2 asks whether a GNN improves on conventional spatial models, and whether any improvement comes from the graph
+or from reach. RQ2 is the main question of this paper; RQ1 is answered with the same models and the same evaluation,
+and its result is explained by the same scale argument. Our contribution is a reach-matched evaluation: SLX baselines, and the same network without a graph, are
+given the GNN's reach, and reach is varied for all of them, under spatial block cross-validation and on a held-out
+year. Matching is by maximum nominal reach: the models see up to the same distance, though not always the same cells. We
+relate the reach at which skill levels off to the correlation length of the target, quantify how seed
+averaging and the choice of inference change verdicts in a target with few effective degrees of freedom, and explain
+the RQ1 result by the same scale argument. Decision rules for the main comparisons were registered before the
+corresponding runs (Section 3.6).
 
 ![Figure 1](../figures/fig1_literature_funnel_en.png)
 
