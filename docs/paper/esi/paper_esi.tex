@@ -227,7 +227,7 @@ The edges of the GNN join cells at fixed grid distances and carry no information
 
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/Fig4.pdf}
+\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{figures/Fig4.pdf}
 \caption{Study design. (a) The network shared by all neural models: one two-layer encoder per input group, a softmax gate that weights the groups for every cell and month (the fusion of RQ1), graph message passing in the GNN only, and a linear head trained on the monthly TROPOMI target (z) with a squared-error loss; hotspots are the top 10\,\% of cells. In the no-graph network the neighbourhood enters instead as box means of each input, and SLX models feed the same inputs and box means to OLS, GBM or RF. (b) The thesis compared a three-layer GNN that sees 22.7 km with SLX models that see at most 12.6 km, so the graph and the reach differed at once. This study compares the GNN with the same network without a graph and with SLX models at the same reach, varies the reach of every family (dots; circles mark the thesis pair), and evaluates all models in the same way. Squares show which cells inform the prediction of the centre cell (black): the sparse stencil of the graph against full box windows. The maps in (a) are schematic}\label{fig:design}
 \end{figure*}
 
@@ -477,7 +477,7 @@ This publication contains modified Copernicus Sentinel data (2023--2026) and mod
 This research did not receive any specific grant from funding agencies in the public, commercial or not-for-profit sectors.
 
 \bmhead{Data availability}
-The public data used in this study are freely available: TROPOMI NO₂ (Copernicus Sentinel-5P offline level 3; Google Earth Engine \nolinkurl{COPERNICUS/S5P/OFFL/L3_NO2}), ERA5-Land reanalysis (\nolinkurl{ECMWF/ERA5_LAND/DAILY_AGGR}), VIIRS night lights (\nolinkurl{NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG}), SRTM elevation (\nolinkurl{USGS/SRTMGL1_003}), and GHSL population and building volume for 2020 at 100 m from the Joint Research Centre of the European Commission. The Google Earth Engine scripts that export them on the study grid are in the code repository (see Code availability). The estimated traffic and energy layers and the data of the municipal air-quality monitoring network are not publicly available.
+The public data used in this study are freely available: TROPOMI NO₂ (Copernicus Sentinel-5P offline level 3; Google Earth Engine \nolinkurl{COPERNICUS/S5P/OFFL/L3_NO2}), ERA5-Land reanalysis (\nolinkurl{ECMWF/ERA5_LAND/DAILY_AGGR}), VIIRS night lights (\nolinkurl{NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG}), SRTM elevation (\nolinkurl{USGS/SRTMGL1_003}), GHSL population and building volume for 2020 at 100 m from the Joint Research Centre of the European Commission, and the OpenStreetMap road network and industrial land use (© OpenStreetMap contributors, available under the Open Database Licence). The Google Earth Engine scripts that export them on the study grid are in the code repository (see Code availability). The estimated traffic and energy layers and the data of the municipal air-quality monitoring network are not publicly available.
 
 \bmhead{Code availability}
 The code, configurations, run registry, pre-registrations, all result tables and the figure scripts are openly available at \url{https://github.com/fatemehvv/Tehran-carbon} (branch \texttt{paper\_TC}). A versioned copy will be archived on Zenodo on acceptance \tbc{DOI to be added}.
