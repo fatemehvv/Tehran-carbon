@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="690" viewBox="0 0 1600 690" role="img" aria-labelledby="t d">
-<title id="t">Reach, not graphs: graphical abstract</title>
+<title id="t">Reach, not the graph: graphical abstract</title>
 <desc id="d">Left: in the usual comparison the GNN sees 22.7 km and the SLX baseline 12.6 km. Middle: this study gives the GNN, the same network without a graph and SLX models the same reach. Right: skill against reach; all models rise and level off on one curve near the target correlation length, so at equal reach the graph adds nothing.</desc>
 <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#104281"/></marker></defs>
 <style>text { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; }</style>
@@ -40,7 +40,7 @@
 <text x="810.0" y="530.0" font-size="22" fill="#52514e" font-weight="400" text-anchor="middle">reach varied from 0 to 38 km</text>
 <text x="810.0" y="562.0" font-size="22" fill="#52514e" font-weight="400" text-anchor="middle">12 spatial blocks + a held-out year</text>
 <line x1="1052" y1="330" x2="1110" y2="330" stroke="#104281" stroke-width="5" marker-end="url(#arr)"/>
-<text x="1370.0" y="150.0" font-size="27" fill="#104281" font-weight="700" text-anchor="middle">Result: reach, not graphs</text>
+<text x="1370.0" y="150.0" font-size="27" fill="#104281" font-weight="700" text-anchor="middle">Result: reach, not the graph</text>
 <line x1="1190" y1="472.9" x2="1560" y2="472.9" stroke="#e6e5e0" stroke-width="1.5"/>
 <text x="1180.0" y="480.9" font-size="21" fill="#52514e" font-weight="400" text-anchor="end">0.7</text>
 <line x1="1190" y1="378.6" x2="1560" y2="378.6" stroke="#e6e5e0" stroke-width="1.5"/>

@@ -112,7 +112,7 @@ def py(v):
     return Y0 - (v - y_lo) / (y_hi - y_lo) * (Y0 - Y1)
 
 
-text(1370, 150, "Result: reach, not graphs", size=27, weight=700, fill=NAVY, anchor="middle")
+text(1370, 150, "Result: reach, not the graph", size=27, weight=700, fill=NAVY, anchor="middle")
 for g in (0.7, 0.8, 0.9):
     add(f'<line x1="{X0}" y1="{py(g):.1f}" x2="{X1c}" y2="{py(g):.1f}" stroke="{GRID}" stroke-width="1.5"/>')
     text(X0 - 10, py(g) + 8, f"{g:.1f}", size=21, fill=INK2, anchor="end")
@@ -140,7 +140,7 @@ text(1375, 638, "All models follow one curve;", size=22, weight=700, anchor="mid
 text(1375, 666, "at equal reach the graph adds nothing", size=22, anchor="middle")
 
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
-       'aria-labelledby="t d">\n<title id="t">Reach, not graphs: graphical abstract</title>\n'
+       'aria-labelledby="t d">\n<title id="t">Reach, not the graph: graphical abstract</title>\n'
        '<desc id="d">Left: in the usual comparison the GNN sees 22.7 km and the SLX baseline 12.6 km. Middle: this '
        'study gives the GNN, the same network without a graph and SLX models the same reach. Right: skill against '
        'reach; all models rise and level off on one curve near the target correlation length, so at equal reach '
