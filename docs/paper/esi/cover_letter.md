@@ -14,8 +14,7 @@ with about five independent cells, and recommend reach-matched baselines for gra
 mapping.
 
 We believe the article fits the journal's focus on informatics methods for the Earth sciences: it concerns how
-data-driven spatial models built on satellite observations should be evaluated, and its code, run registry and result
-tables are openly available.
+data-driven spatial models built on satellite observations should be evaluated.
 
 The manuscript is not under consideration elsewhere, and both authors have approved its submission. The authors
 declare no competing interests. Supplementary material is provided as Online Resource 1.
