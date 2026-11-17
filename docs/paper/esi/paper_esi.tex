@@ -164,7 +164,7 @@ The north of the city lies about 700 m higher than the south, and a TROPOMI emis
 The predictors fall into four groups (Table~\ref{tab:predictors}). The traffic and energy layers are estimates, not measurements. The emission layers come from a bottom-up inventory that allocates sector totals to the grid, and the traffic variables come from a traffic assignment model; neither has been checked against measured emissions or traffic counts at the scale of the grid. Monthly sector layers are the annual allocation multiplied by monthly sector shares. No inventory is available yet for 1404, so all models use the 1403 inventory and traffic layers.
 
 \begin{table}[!htbp]
-\caption{Predictor groups. The traffic and energy layers are model estimates, not measurements. Sources, years and processing of every layer are listed in Table S2 (Online Resource 1)}\label{tab:predictors}
+\caption{Predictor groups. The traffic and energy layers are model estimates, not measurements. Years and processing of every layer are described in Table S2 (Online Resource 1)}\label{tab:predictors}
 \footnotesize
 \begin{tabularx}{\linewidth}{@{}L{1.6cm}Y{1}@{}}
 \toprule
@@ -278,7 +278,7 @@ The correlation length (24 km) exceeds the block size, so neighbouring blocks ar
 
 \subsection{Pre-registration, transparency and use of AI tools}\label{sec:prereg}
 
-This paper re-examines the model comparison of a master's thesis, the ``original study'' \citep{vafaeian2026}, whose models, windows, folds and hyper-parameters are reused unless stated otherwise. Its decision rules, including a held-out-year test on 1404, were written before any model was evaluated. The checks of this paper (reach-matched SLX models, the leakage control, the physical operator and the inference rules) were registered before the corresponding runs. The registrations are timestamped by the project's version control, and deviations are listed in the registration documents. A planned second held-out year (1405) and a hyper-parameter search were registered but not carried out. The GNN depth curve, the no-graph network with box means, the short SLX windows, the larger buffers and the interpolation baselines were added after the first results and are exploratory. All runs used one RTX 4080 GPU, and every run is logged with its configuration hash, data hash and code version.
+This paper re-examines the model comparison of an unpublished master's thesis by one of the authors, the ``original study'', whose models, windows, folds and hyper-parameters are reused unless stated otherwise. Its decision rules, including a held-out-year test on 1404, were written before any model was evaluated. The checks of this paper (reach-matched SLX models, the leakage control, the physical operator and the inference rules) were registered before the corresponding runs. The registrations are timestamped by the project's version control, and deviations are listed in the registration documents. A planned second held-out year (1405) and a hyper-parameter search were registered but not carried out. The GNN depth curve, the no-graph network with box means, the short SLX windows, the larger buffers and the interpolation baselines were added after the first results and are exploratory. All runs used one RTX 4080 GPU, and every run is logged with its configuration hash, data hash and code version.
 
 The authors used Claude (Anthropic), a large language model, to help write and review the analysis code and to draft and edit parts of the text. They reviewed and edited the content as needed and take full responsibility for the content of the article.
 
@@ -462,10 +462,10 @@ In mapping intra-urban NO₂ hotspots from TROPOMI in Tehran, the skill of a dis
 \backmatter
 
 \bmhead{Supplementary Information}
-The online version contains supplementary material (Online Resource 1): the literature search (Section S1), all comparisons with intervals, $p$-values and verdicts (Table S1), and the sources and processing of the predictor layers (Table S2).
+The online version contains supplementary material (Online Resource 1): the literature search (Section S1), all comparisons with intervals, $p$-values and verdicts (Table S1), and the years and processing of the predictor layers (Table S2).
 
 \bmhead{Acknowledgements}
-This publication contains modified Copernicus Sentinel data (2023--2026) and modified Copernicus Climate Change Service information (2023--2026). Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains. \tbc{We thank the Tehran Air Quality Control Company for the monitoring data.}
+This publication contains modified Copernicus Sentinel data (2023--2026) and modified Copernicus Climate Change Service information (2023--2026). Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.
 
 \section*{Declarations}
 
@@ -473,10 +473,10 @@ This publication contains modified Copernicus Sentinel data (2023--2026) and mod
 \tbc{Vahid Khatibi: conceptualization, methodology, supervision, validation, writing -- review and editing. Fatemeh Vafaeian: conceptualization, methodology, software, data curation, formal analysis, investigation, visualization, writing -- original draft. Both authors read and approved the final manuscript.}
 
 \bmhead{Funding}
-\tbc{This research did not receive any specific grant from funding agencies in the public, commercial or not-for-profit sectors.}
+This research did not receive any specific grant from funding agencies in the public, commercial or not-for-profit sectors.
 
 \bmhead{Data availability}
-TROPOMI NO₂ (Copernicus Sentinel-5P, offline level 3), ERA5 reanalysis, VIIRS night lights, GHSL population and building volume and SRTM elevation are freely available; the Google Earth Engine scripts that export them on the study grid are in the code repository (see Code availability). The traffic and energy layers are estimates derived from annual and monthly statistics in public reports of Iranian agencies \tbc{names to be confirmed: Tehran Municipality Transportation and Traffic Organization; Ministry of Energy; National Iranian Oil Products Distribution Company}; these sources are listed with checksums in the repository. The derived 1-km inventory and traffic layers are \tbc{included in the repository / available from the corresponding author on request}. Data of the municipal air-quality monitoring network \tbc{Tehran Air Quality Control Company} are \tbc{available from the data owner on request / redistributed with permission}.
+The public data used in this study are TROPOMI NO₂ (Copernicus Sentinel-5P, offline level 3), ERA5 reanalysis, VIIRS night lights, GHSL population and building volume, and SRTM elevation; they are freely available, and the Google Earth Engine scripts that export them on the study grid are in the code repository (see Code availability). The estimated traffic and energy layers and the data of the municipal air-quality monitoring network are not publicly available.
 
 \bmhead{Code availability}
 The code, configurations, run registry, pre-registrations, all result tables and the figure scripts are openly available at \url{https://github.com/fatemehvv/Tehran-carbon} (branch \texttt{paper\_TC}). A versioned copy will be archived on Zenodo on acceptance \tbc{DOI to be added}.
