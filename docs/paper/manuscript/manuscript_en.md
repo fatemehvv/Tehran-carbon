@@ -1,4 +1,4 @@
-# Reach, not graphs: neighbourhood reach explains the skill of distance-based graph neural networks in mapping intra-urban NO₂ hotspots from TROPOMI
+# Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI
 
 **Fatemeh Vafaeian¹, Vahid Khatibi¹\***
 

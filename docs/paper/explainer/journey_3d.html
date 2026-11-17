@@ -625,7 +625,7 @@ const gPaper = new THREE.Group(); gTree.add(gPaper);
   const pm = stdm("--accent");
   rod(gPaper, [-30, 12, 0], [-15, -16, 0], 0.45, pm); rod(gPaper, [0, 12, 0], [-15, -16, 0], 0.45, pm);
   const gem = new THREE.Mesh(new THREE.OctahedronGeometry(4.5), pm); gem.position.set(-15, -16, 0); gPaper.add(gem);
-  gTree.userData.paperLbl = label(gTree, -15, -24, 0, "مقاله: Reach, not graphs (RQ1 و RQ2)", "hot");
+  gTree.userData.paperLbl = label(gTree, -15, -24, 0, "مقاله: Reach, not the graph (RQ1 و RQ2)", "hot");
   gTree.userData.thesisLbl = label(gTree, 30, -4, 0, "در پایان‌نامه می‌ماند", "plain");
 })();
 
@@ -849,7 +849,7 @@ const STEPS = [
 <li><b>ارزیابی در هدفی با ۵ درجهٔ آزادی.</b> میانگین seed و روش استنباط حکم را عوض می‌کنند. همان استدلال مقیاس نتیجهٔ RQ1 را هم توضیح می‌دهد.</li></ol>
 <h3>پنج توصیه برای مطالعات GNN مکانی</h3>
 <ol><li>به مرجع‌ها شعاع مدل را بدهید (چند ثانیه هزینه دارد).</li><li>مهارت را بر حسب شعاع گزارش کنید و نقطهٔ صاف شدن را با طول همبستگی هدف بسنجید.</li><li>تک‌seedها را کنار میانگین گزارش کنید، یا مرجع‌ها را هم میانگین بگیرید.</li><li>استنباطی به کار ببرید که برای تعداد کم بلوک ساخته شده، و اندازهٔ نمونهٔ مؤثر را گزارش کنید.</li><li>متغیرهای درون‌یابی‌شده را درون اعتبارسنجی بسازید.</li></ol>
-<p>عنوان مقاله: <span class="en"><i>Reach, not graphs: neighbourhood reach explains the skill of distance-based graph neural networks in mapping intra-urban NO₂ hotspots from TROPOMI</i></span></p>
+<p>عنوان مقاله: <span class="en"><i>Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI</i></span></p>
 <p class="muted">مطالعه‌های ۲۰۲۶ با یافته‌های هم‌جهت در مجلات معتبر چاپ شده‌اند <span class="en">(Shao et al., GIScience &amp; Remote Sensing; Schmidt &amp; Ong)</span>. مقالهٔ ما سازوکار را جدا می‌کند و قاعده‌ای عملی برای آن می‌دهد.</p>`) },
 
 { id: "thesis-paper", part: "پایان‌نامه و مقاله", title: "پایان‌نامه و مقاله: دو خروجی از یک کار", groups: ["tree"], cam: [[-300, 6, 112], [-304, 8, 0]], paper: true,
@@ -859,7 +859,7 @@ const STEPS = [
 <tr><td>محور</td><td>همجوشی داده برای تحلیل پیش‌بینانهٔ کاهش ردپای کربن</td><td>چرا GNN در نقشهٔ کانون‌ها جلو بود: شعاع یا گراف؟</td></tr>
 <tr><td>پرسش‌ها</td><td>RQ1، RQ2، RQ3</td><td>RQ1 و RQ2</td></tr>
 <tr><td>نتایج</td><td>طبق قواعد پیش‌ثبت‌شده، همان‌طور که گزارش شد</td><td>همان نتایج، با مرجع‌های هم‌شعاع و استنباط سخت‌گیرانه‌تر</td></tr>
-<tr><td>عنوان</td><td>کربن تهران</td><td><span class="en">Reach, not graphs</span></td></tr></table></div>
+<tr><td>عنوان</td><td>کربن تهران</td><td><span class="en">Reach, not the graph</span></td></tr></table></div>
 <ul><li><b>پیوند با کربن:</b> NO₂ نشانگر احتراق سوخت فسیلی است و کانون‌های NO₂ کانون‌های احتراق شهری‌اند، یعنی جاده و ساختمان. برای همین هدف پایان‌نامه NO₂ ماهواره‌ای بود.</li>
 <li><b>نتایج پایان‌نامه دست نمی‌خورند.</b> مقاله پایان‌نامه را «مطالعهٔ اصلی» <span class="en">(Vafaeian, 2026)</span> معرفی و ارجاع می‌دهد و نتایجش را با مرجع‌های سخت‌گیرانه‌تر دوباره می‌سنجد.</li>
 <li><b>پایهٔ مشترک:</b> سیاههٔ CO₂ تهران، لایه‌های ترافیک و انرژی، شبکهٔ یک‌کیلومتری و کد پروژه پایهٔ هر دو کارند.</li>
