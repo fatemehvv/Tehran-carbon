@@ -1,7 +1,8 @@
 """Online Resource 1 of the Earth Science Informatics version: writes online_resource_1.tex.
 
-Section S1 (literature search) and Table S2 (predictor layers) are written below from docs/paper/lit/README.md and
-configs/config.yaml. Table S1 is built from the committed evaluation tables; nothing is re-run:
+Section S1 (literature search), Table S2 (predictor layers) and Table S3 (model settings) are written below from
+docs/paper/lit/README.md, configs/config.yaml and the model code. Table S1 is built from the committed evaluation tables
+and Table S4 (RQ1 runs) from the committed training logs of docs/paper/results_stageA/logs; nothing is re-run:
 
   registered family (22 tests)           docs/paper/results_stageA/evaluate_paper2/
   exploratory, equal reach (32 tests)    docs/paper/results_review/evaluate_step5/
@@ -158,8 +159,9 @@ def table_s1() -> tuple[str, str, str]:
     prim, sens, seeds, key = [], [], [], []
     for fam, title, folder, hyps in FAMILIES:
         holm = pd.read_csv(folder / "paper_holm.csv", encoding="utf-8-sig")
-        for part, ncol in ((prim, 13), (sens, 10), (seeds, 8)):
-            part.append(f"\\multicolumn{{{ncol}}}{{@{{}}l}}{{\\textbf{{{fam}. {title}}}}}\\\\[2pt]")
+        heads = {}
+        for part, ncol in ((prim, 13), (sens, 10), (seeds, 8)):  # the family title, added only above its first row
+            heads[id(part)] = (len(part), f"\\multicolumn{{{ncol}}}{{@{{}}l}}{{\\textbf{{{fam}. {title}}}}}\\\\[2pt]")
         for h in hyps:
             t = pd.read_csv(folder / f"paper_{h}.csv", encoding="utf-8-sig")
             hid = h.replace("_", "\\_")
@@ -182,7 +184,54 @@ def table_s1() -> tuple[str, str, str]:
                 elif r.part == "seeds":
                     seeds.append(" & ".join([hid, cand, ref, str(y), m, num(r.delta), num(r.delta_min),
                                              num(r.delta_max)]) + " \\\\")
+        for part in (seeds, sens, prim):
+            at, head = heads[id(part)]
+            if len(part) > at:
+                part.insert(at, head)
     return "\n".join(key), "\n".join(prim), "\n".join(sens), "\n".join(seeds)
+
+
+LOG_RE = re.compile(r"\] (\S+) \[([^\]]*)\]: ")
+CV_RE = re.compile(r"(\d{4}) CV: pr_auc=([\d.]+),.*spearman=([\d.]+)")
+INPUTS = {"traffic": "Traffic", "energy": "Energy", "pollution": "Stations", "traffic+energy": "Traffic + energy",
+          "traffic+pollution": "Traffic + stations", "energy+pollution": "Energy + stations",
+          "traffic+energy+pollution": "Traffic + energy + stations"}
+
+
+def log_scores(path: Path) -> dict:
+    """{variant: {year: (PR-AUC, Spearman)}} of the five-seed ensembles, from a training log."""
+    out, cur = {}, None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        m = LOG_RE.search(line)
+        if m:
+            cur = m.group(2)
+            continue
+        m = CV_RE.search(line)
+        if m and cur is not None:
+            out.setdefault(cur, {})[int(m.group(1))] = (float(m.group(2)), float(m.group(3)))
+    return out
+
+
+def table_s4() -> str:
+    """RQ1 runs: gated networks with each subset of input groups (context always included)."""
+    logs = STAGE_A / "logs"
+    cv = log_scores(logs / "train_paper2_rq1_ablation_v1.log")
+    ctx = log_scores(logs / "train_paper2_rq1_context_only_v1.log")
+    single = log_scores(logs / "train_paper2_c1404_sage4_single_v1.log")
+    fused = log_scores(logs / "train_paper2_c1404_sage4_v1.log")
+    rows = []
+    for mods, lab in INPUTS.items():
+        sc = cv[f"modalities={mods}|fusion=gated"]
+        rows.append(f"{lab} & {sc[1402][0]:.3f} / {sc[1403][0]:.3f} & {sc[1402][1]:.3f} / {sc[1403][1]:.3f} \\\\")
+    sc = next(iter(ctx.values()))
+    rows.append(f"None (context only) & {sc[1402][0]:.3f} / {sc[1403][0]:.3f} & {sc[1402][1]:.3f} / {sc[1403][1]:.3f} \\\\")
+    held = []
+    for mods in ("traffic", "energy", "pollution"):
+        sc = single[f"modalities={mods}"][1404]
+        held.append(f"{INPUTS[mods]} & {sc[0]:.3f} & {sc[1]:.3f} \\\\")
+    sc = next(iter(fused.values()))[1404]
+    held.append(f"{INPUTS['traffic+energy+pollution']} & {sc[0]:.3f} & {sc[1]:.3f} \\\\")
+    return "\n".join(rows), "\n".join(held)
 
 
 HEAD = r"""%% Online Resource 1 of the Earth Science Informatics version. Written by make_esm.py; do not edit by hand.
@@ -206,13 +255,14 @@ HEAD = r"""%% Online Resource 1 of the Earth Science Informatics version. Writte
 \newunicodechar{°}{\textdegree}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \raggedbottom
+\newcommand{\tabno}[1]{\renewcommand{\thetable}{#1}}  % tables are numbered by hand (L1, S1a, ...)
 \begin{document}
 \title[Online Resource 1]{Online Resource 1\\[4pt]\normalsize Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
 \author[1]{\fnm{Fatemeh} \sur{Vafaeian}}
 \author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
 \affil[1]{\orgdiv{Department of Intelligent Systems Engineering, School of Industrial Engineering}, \orgname{Iran University of Science and Technology}, \orgaddress{\city{Tehran}, \country{Iran}}}
-\abstract{Supplementary material to the article in \emph{Earth Science Informatics}. Section S1 records the literature search behind the research gap stated in the Introduction. Table S1 lists every model comparison with its intervals, $p$-values, Holm family and verdict. Table S2 describes the years and processing of every predictor layer. References are those of the article.}
-\keywords{Literature search, Model comparisons, Predictor layers}
+\abstract{Supplementary material to the article in \emph{Earth Science Informatics}. Section S1 records the literature search behind the research gap stated in the Introduction. Table S1 lists every model comparison with its intervals, $p$-values, Holm family and verdict. Table S2 describes the years and processing of every predictor layer, Table S3 the settings of every model and Table S4 the runs of RQ1. References are those of the article.}
+\keywords{Literature search, Model comparisons, Predictor layers, Model settings}
 \maketitle
 """
 
@@ -223,6 +273,7 @@ S1 = r"""
 
 The search was run on 8 November 2026 in the field ``Title, abstract or author-specified keywords'' of the ScienceDirect advanced search, which allows at most eight Boolean connectors per field and adds plurals and spelling variants itself. For each query the first results page, ranked by relevance, was exported with abstracts (25 records for Q1, Q3, Q4 and Q5; 100 for Q2). The 200 exported records hold 191 unique DOIs from 2019 to 2026, 98 of them from 2026 and 49 from 2025.
 
+\tabno{L1}
 \begin{table}[h]
 \caption{Queries of the structured search}\label{tab:queries}
 \footnotesize
@@ -255,6 +306,7 @@ For Table 1 of the article, the full texts of fifteen studies that compare a GNN
 
 Setting the neighbourhood of a model from the range of spatial dependence is established practice (Table~\ref{tab:prior}), but none of these sources uses it to give a GNN and its spatial-lag baselines the same reach. Web searches for ``reach-matched'' and ``range-matched'' together with GNN or spatial baselines returned no results.
 
+\tabno{L2}
 \begin{table}[h]
 \caption{Earlier uses of the dependence range to set a neighbourhood}\label{tab:prior}
 \footnotesize
@@ -276,10 +328,13 @@ S1_TABLE = r"""
 \clearpage
 \section*{S2 All model comparisons (Table S1)}
 
-Each comparison is candidate minus reference, computed from out-of-fold predictions for the same cells and months, as in Section 3.5 of the article. Neural candidates are five-seed ensembles; SLX references were run once. $\Delta$: difference of the metric averaged over months. CI: delete-one-block jackknife intervals ($K = 12$ blocks, $t$ with 11 degrees of freedom). Verdict: Eq.~(6) of the article with margin $\delta = 0.02$ (descriptive for PR-AUC); superior$^\dagger$, superior with the whole 95\,\% interval beyond the margin. $p$: one-sided block sign-flip randomisation test over all 4,096 assignments, pooled over cells; $p_{\mathrm{blk}}$: the same test on the cell-weighted mean of per-block differences; $p_{\mathrm{Holm}}$: Holm-adjusted $p$ within the family. Boot.: block-bootstrap interval, the inference used in the original study, reported for comparison. Families F1--F3 use the leakage-free station layer; F4 uses the predictions and pre-processing of the original study.
+Each comparison is candidate minus reference, computed from out-of-fold predictions for the same cells and months, as in Section 3.5 of the article. Neural candidates are five-seed ensembles; SLX references were run once. $\Delta$: difference of the metric averaged over months. CI: delete-one-block jackknife intervals ($K = 12$ blocks, $t$ with 11 degrees of freedom). Verdict: Eq.~(6) of the article with margin $\delta = 0.02$ (descriptive for PR-AUC); superior$^\dagger$, superior with the whole 95\,\% interval beyond the margin. $p$: one-sided block sign-flip randomisation test over all 4,096 assignments, pooled over cells; $p_{\mathrm{blk}}$: the same test on the cell-weighted mean of per-block differences; $p_{\mathrm{Holm}}$: Holm-adjusted $p$ within the family. Boot.: block-bootstrap interval, the inference used in the original study, reported for comparison. Families F1--F3 use the station layer rebuilt in every fold; F4 uses the predictions and pre-processing of the original study.
+
+The verdicts in Tables S1a and S1b are taken from the unadjusted jackknife intervals; Holm's adjustment applies only to the one-sided randomisation tests ($p_{\mathrm{Holm}}$), so equivalence and non-inferiority verdicts are nominal. Tables S1b and S1c are descriptive and carry no tests. The reference of each comparison is the best of its candidate references by the comparison's metric, averaged over the years of the comparison and chosen after the results: by PR-AUC in F1 and F4, by Spearman in F2 and F3. For PR\_c1404\_r30 and PR\_c1404\_r38 this choice is made on the held-out year 1404 itself and favours the SLX reference.
 
 Model labels: GNN $L$L, multi-scale GraphSAGE with $L$ layers; No-graph, the same network fed box means; SLX-OLS, SLX-GBM, SLX-RF, spatial-lag-of-X models with ordinary least squares, gradient boosting or random forests; distances are reach. T, E and S: traffic, energy and station inputs. ``(orig.)'': reference run with the original station pre-processing. F3 models use driver inputs only.
 
+\tabno{S1}
 \begin{table}[h]
 \caption{The comparisons and their families}\label{tab:key}
 \footnotesize
@@ -296,8 +351,9 @@ ID & Family & Comparison \\
 \begin{landscape}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
+\tabno{S1a}
 \begin{longtable}{@{}lllclrllllllll@{}}
-\caption{Table S1a. Primary comparisons}\label{tab:s1a}\\
+\caption{Primary comparisons}\label{tab:s1a}\\
 \toprule
 ID & Candidate & Reference & Year & Metric & $\Delta$ & 95\,\% CI & 90\,\% CI & Verdict & $p$ & $p_{\mathrm{blk}}$ & $p_{\mathrm{Holm}}$ & Boot. 95\,\% CI \\
 \midrule
@@ -311,8 +367,9 @@ ID & Candidate & Reference & Year & Metric & $\Delta$ & 95\,\% CI & 90\,\% CI & 
 %PRIM%
 \end{longtable}
 
+\tabno{S1b}
 \begin{longtable}{@{}lllcllrlll@{}}
-\caption{Table S1b. Other hotspot definitions (top 20\,\% and top 5\,\% of cells) and 5 × 5-cell superpixels}\label{tab:s1b}\\
+\caption{Other hotspot definitions (top 20\,\% and top 5\,\% of cells) and 5 × 5-cell superpixels}\label{tab:s1b}\\
 \toprule
 ID & Candidate & Reference & Year & Label & Metric & $\Delta$ & 95\,\% CI & 90\,\% CI & Verdict \\
 \midrule
@@ -326,8 +383,9 @@ ID & Candidate & Reference & Year & Label & Metric & $\Delta$ & 95\,\% CI & 90\,
 %SENS%
 \end{longtable}
 
+\tabno{S1c}
 \begin{longtable}{@{}lllclrrr@{}}
-\caption{Table S1c. Single training runs: candidate seeds minus reference (mean, smallest and largest of the five differences)}\label{tab:s1c}\\
+\caption{Single training runs. Mean $\Delta$: mean of the five single-seed scores of the candidate minus the mean single-seed score of the reference (for a neural reference) or its single score (SLX references, run once); Min and Max: the lowest and highest single-seed score of the candidate minus the same reference value. Seeds are not paired. Only comparisons whose runs stored every seed appear}\label{tab:s1c}\\
 \toprule
 ID & Candidate & Reference & Year & Metric & Mean $\Delta$ & Min $\Delta$ & Max $\Delta$ \\
 \midrule
@@ -350,13 +408,20 @@ S2_TABLE = r"""
 
 All layers are on the 1/120° grid of the article (72 × 126 cells). The development years are 1402 and 1403. No inventory exists yet for 1404, so the held-out year uses the 1403 inventory and traffic layers, with its own station, weather and night-light data. The traffic and energy layers are estimates, not measurements. Every spatially varying layer also enters the SLX models and the no-graph network as box means (Section 3.1 of the article).
 
-\begin{table}[h]
-\caption{Years and processing of the predictor layers. $\log(1+x)$ marks layers that are log-transformed before use}\label{tab:s2}
-\footnotesize
-\begin{tabular}{@{}L{1.5cm}L{3.1cm}L{1.7cm}L{5.9cm}@{}}
+\tabno{S2}
+{\footnotesize
+\begin{longtable}{@{}L{1.5cm}L{3.1cm}L{1.7cm}L{5.9cm}@{}}
+\caption{Years and processing of the predictor layers. $\log(1+x)$ marks layers that are log-transformed before use}\label{tab:s2}\\
 \toprule
 Group & Layer & Time step & Processing \\
 \midrule
+\endfirsthead
+\toprule
+Group & Layer & Time step & Processing \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
 Traffic & Road-transport CO₂ & Monthly & Bottom-up inventory (IPCC Tier 1 with Monte Carlo uncertainty) of each year, allocated to 1-km cells; monthly values are the annual cell value times the monthly share of road-transport fuel use; $\log(1+x)$ \\
  & Road length by class (motorway and trunk, primary, secondary, tertiary) & Static per year & Sum of link lengths in each cell from the road network of the traffic model (OpenStreetMap road classes) \\
  & Peak-hour vehicle-kilometres & Static per year & Sum over the links in each cell of peak-hour volume times link length, from a traffic assignment model; $\log(1+x)$ \\
@@ -369,9 +434,58 @@ Context & Population, total and non-residential building volume & Static & GHSL 
  & Night lights & Annual & Mean VIIRS monthly radiance (\texttt{avg\_rad}) from March to February of the Gregorian year that overlaps the Solar Hijri year most; negative values set to 0; $\log(1+x)$ \\
  & Industrial land share & Static & Share of each cell covered by OpenStreetMap industrial and power land use, areas in UTM zone 39N \\
  & Temperature and wind speed & Monthly & ERA5-Land daily means over the city averaged to months, the same in every cell; temperature with a constant bias correction. The 1404 values come from a later ERA5-Land export over a different area, mapped onto the earlier one by a linear fit on the overlapping days (correlation 0.999 for temperature and 0.85 for wind) \\
+\end{longtable}}
+\noindent{\scriptsize IPCC, Intergovernmental Panel on Climate Change; GHSL, Global Human Settlement Layer; VIIRS, Visible Infrared Imaging Radiometer Suite; ERA5-Land, land component of the fifth-generation reanalysis of the European Centre for Medium-Range Weather Forecasts\par}
+
+\clearpage
+\section*{S4 Model settings (Table S3)}
+
+All settings were fixed before the runs of the original study and none was tuned. They are those of the configuration file of the analysis code, which is available from the corresponding author on request.
+
+\tabno{S3}
+\begin{table}[h]
+\caption{Settings of every model}\label{tab:s3}
+\footnotesize
+\begin{tabular}{@{}L{3.0cm}L{9.6cm}@{}}
+\toprule
+Item & Setting \\
+\midrule
+Predictor scaling & Every model: each feature (including box means) standardised with its mean and standard deviation over all grid cells and months of the training years; predictors are known everywhere, so no target information enters \\
+Box means & Uniform square filter of half-width $k$ cells, edge values repeated beyond the grid; city-wide monthly variables (heating degree-days, temperature, wind) get no box means \\
+OLS & Ordinary least squares (scikit-learn \texttt{LinearRegression}) \\
+GBM & Histogram gradient boosting (scikit-learn \texttt{HistGradientBoostingRegressor}): 300 iterations, learning rate 0.05, at most 31 leaves, random state 0; one run \\
+RF & Random forest (scikit-learn \texttt{RandomForestRegressor}): 300 trees, at least 5 samples per leaf, 33\,\% of the features per split, random state 0; one run \\
+Encoders (networks) & One per input group (traffic, energy, stations, context): a linear layer with SiLU activation followed by one residual block (linear layer, SiLU, dropout 0.1); hidden size 32 \\
+Fusion & Softmax gate over the encoded groups for every cell and month (Eq.~2 of the article) \\
+GNN & $L$ residual GraphSAGE layers (Eq.~3 of the article) with mean aggregation over three edge sets (neighbours at 1, 3 and 9 cells), SiLU and dropout 0.1, on the full grid of 72 × 126 cells; linear head \\
+Training (networks) & Squared error on the training label cells; AdamW, learning rate $3 \times 10^{-3}$, weight decay $10^{-4}$, 300 epochs without early stopping; one batch per year of 12 months; seeds 0--4, predictions averaged into a five-seed ensemble \\
+RQ1 networks & No-graph networks with box means at half-widths of 3 and 9 cells (reach 7.6 km); the context group always included \\
+Physical operator & $z = a + \sum_s b_s \log(1 + K_\sigma * E_s)$ over the inventory sectors $s$, with $K_\sigma$ a Gaussian of width $\sigma$ and $b_s \ge 0$ (non-negative least squares); $\sigma$ chosen from 0, 1, 2, 3, 4, 6, 8, 10, 12 and 15 km by the Spearman correlation on the training cells \\
+Interpolation baselines & Target of the training cells of the same month and fold only. Inverse-distance weighting with power 2. Gaussian process on the coordinates (scikit-learn), kernel constant $\times$ squared exponential (length scale bounded to 0.5--200 km) plus white noise, fitted once per year on the annual mean map at 600 random cells and then applied with fixed hyper-parameters to every month and fold \\
+Hardware & Networks on one NVIDIA RTX 4080 GPU; SLX models, the physical operator and the interpolation baselines on the CPU \\
 \botrule
 \end{tabular}
-\footnotetext{IPCC, Intergovernmental Panel on Climate Change; GHSL, Global Human Settlement Layer; VIIRS, Visible Infrared Imaging Radiometer Suite; ERA5-Land, land component of the fifth-generation reanalysis of the European Centre for Medium-Range Weather Forecasts}
+\end{table}
+
+\section*{S5 Runs of RQ1 (Table S4)}
+
+The registration of RQ1 fixed the rule for the reference (the single input group with the highest mean PR-AUC over 1402 and 1403), not the group; under this rule the reference was energy. On the held-out year the registered design compares four-layer GNNs, with energy as the pre-specified single source. Every network also receives the context group. The pair energy + stations scored highest in cross-validation but was not part of a registered comparison and was not tested.
+
+\tabno{S4}
+\begin{table}[h]
+\caption{Five-seed ensembles of the RQ1 networks. Cross-validation (1402 / 1403): gated no-graph networks with box means up to 7.6 km. Held-out year 1404: gated four-layer GNNs (30.3 km). The traffic and energy layers are estimates}\label{tab:s4}
+\footnotesize
+\begin{tabular}{@{}L{5.2cm}ll@{}}
+\toprule
+Input groups besides context & PR-AUC & Spearman \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Cross-validation, 1402 / 1403}} \\
+%S4CV%
+\midrule
+\multicolumn{3}{@{}l}{\textit{Held-out year 1404}} \\
+%S4HELD%
+\botrule
+\end{tabular}
 \end{table}
 
 \end{document}
@@ -381,6 +495,7 @@ if __name__ == "__main__":
     key, prim, sens, seeds = table_s1()
     body = (S1_TABLE.replace("%KEY%", key).replace("%PRIM%", prim).replace("%SENS%", sens)
             .replace("%SEEDS%", seeds))
-    tex = HEAD + S1 + body + S2_TABLE
+    s4cv, s4held = table_s4()
+    tex = HEAD + S1 + body + S2_TABLE.replace("%S4CV%", s4cv).replace("%S4HELD%", s4held)
     (HERE / "online_resource_1.tex").write_text(tex, encoding="utf-8")
     print("wrote", HERE / "online_resource_1.tex", f"({prim.count(chr(92) * 2)} primary rows)")
