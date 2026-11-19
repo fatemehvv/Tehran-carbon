@@ -208,8 +208,8 @@ HEAD = r"""%% Online Resource 1 of the Earth Science Informatics version. Writte
 \raggedbottom
 \begin{document}
 \title[Online Resource 1]{Online Resource 1\\[4pt]\normalsize Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
-\author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
 \author[1]{\fnm{Fatemeh} \sur{Vafaeian}}
+\author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
 \affil[1]{\orgdiv{Department of Intelligent Systems Engineering, School of Industrial Engineering}, \orgname{Iran University of Science and Technology}, \orgaddress{\city{Tehran}, \country{Iran}}}
 \abstract{Supplementary material to the article in \emph{Earth Science Informatics}. Section S1 records the literature search behind the research gap stated in the Introduction. Table S1 lists every model comparison with its intervals, $p$-values, Holm family and verdict. Table S2 describes the years and processing of every predictor layer. References are those of the article.}
 \keywords{Literature search, Model comparisons, Predictor layers}
