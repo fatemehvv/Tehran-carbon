@@ -34,14 +34,14 @@ FAMILIES = [  # (key, title, folder, hypotheses in order)
       "PR_c1404_r30", "PR_c1404_r38"]),
     ("F3", "Exploratory comparisons with larger buffers, driver inputs (Holm family of 12 tests)",
      REVIEW / "evaluate_buffer", ["PR_buffer02", "PR_buffer10", "PR_buffer20"]),
-    ("F4", "Predictions of the original study, with its pre-processing (Holm family of 18 tests)",
+    ("F4", "Predictions of the initial design, with its pre-processing (Holm family of 18 tests)",
      STAGE_A / "evaluate_thesis", ["H1", "H2", "P2_reach", "H1c", "H2c", "P2c_reach"]),
 ]
 
 PURPOSE = {
     "PA_H1": "RQ1: gated fusion of traffic, energy and station data against the best single source",
     "PA_H1_drivers": "RQ1: gated fusion of traffic and energy against the better of the two",
-    "PA_H2": "RQ2: GNN against the pre-specified reference of the original study",
+    "PA_H2": "RQ2: GNN against the pre-specified reference of the initial design",
     "PA_H2_reach": "RQ2: GNN against the best SLX model at any reach",
     "PA_H1c": "RQ1, held-out year: fused GNN against the energy-only GNN",
     "PA_H2c": "RQ2, held-out year: GNN against the pre-specified reference",
@@ -58,12 +58,12 @@ PURPOSE = {
     "PR_buffer02": "GNN against SLX at 22.7 km, driver inputs, 2-km buffer",
     "PR_buffer10": "GNN against SLX at 22.7 km, driver inputs, 10-km buffer",
     "PR_buffer20": "GNN against SLX at 22.7 km, driver inputs, 20-km buffer",
-    "H1": "RQ1 of the original study: fusion against the best single source",
-    "H2": "RQ2 of the original study: GNN against the pre-specified SLX reference",
-    "P2_reach": "Original-study GNN against the best SLX model at any reach",
-    "H1c": "Held-out year of the original study: fused against energy-only GNN",
-    "H2c": "Held-out year of the original study: GNN against the pre-specified reference",
-    "P2c_reach": "Held-out year of the original study: GNN against the best SLX at any reach",
+    "H1": "RQ1 of the initial design: fusion against the best single source",
+    "H2": "RQ2 of the initial design: GNN against the pre-specified SLX reference",
+    "P2_reach": "Initial-design GNN against the best SLX model at any reach",
+    "H1c": "Held-out year of the initial design: fused against energy-only GNN",
+    "H2c": "Held-out year of the initial design: GNN against the pre-specified reference",
+    "P2c_reach": "Held-out year of the initial design: GNN against the best SLX at any reach",
 }
 
 ESTIMATOR = {"ols": "OLS", "gbm": "GBM", "rf": "RF"}
@@ -95,7 +95,7 @@ def name(run: str, reg: pd.DataFrame, role: str, hyp: str) -> str:
             est = ESTIMATOR[kv["baseline.name"]]
             lab = f"SLX-{est}, {lags_km(kv.get('baseline.lags', ''))}" if kv.get("baseline.lags") else f"{est}, own cell"
             if exp.startswith("paper_") and not exp.startswith("paper2_"):
-                lab += " (orig.)"
+                lab += " (init.)"
             if "buffer_km" in kv:
                 lab = f"SLX-{est}, 22.7 km"
             return lab
@@ -328,11 +328,11 @@ S1_TABLE = r"""
 \clearpage
 \section*{S2 All model comparisons (Table S1)}
 
-Each comparison is candidate minus reference, computed from out-of-fold predictions for the same cells and months, as in Section 3.5 of the article. Neural candidates are five-seed ensembles; SLX references were run once. $\Delta$: difference of the metric averaged over months. CI: delete-one-block jackknife intervals ($K = 12$ blocks, $t$ with 11 degrees of freedom). Verdict: Eq.~(6) of the article with margin $\delta = 0.02$ (descriptive for PR-AUC); superior$^\dagger$, superior with the whole 95\,\% interval beyond the margin. $p$: one-sided block sign-flip randomisation test over all 4,096 assignments, pooled over cells; $p_{\mathrm{blk}}$: the same test on the cell-weighted mean of per-block differences; $p_{\mathrm{Holm}}$: Holm-adjusted $p$ within the family. Boot.: block-bootstrap interval, the inference used in the original study, reported for comparison. Families F1--F3 use the station layer rebuilt in every fold; F4 uses the predictions and pre-processing of the original study.
+Each comparison is candidate minus reference, computed from out-of-fold predictions for the same cells and months, as in Section 3.5 of the article. Neural candidates are five-seed ensembles; SLX references were run once. $\Delta$: difference of the metric averaged over months. CI: delete-one-block jackknife intervals ($K = 12$ blocks, $t$ with 11 degrees of freedom). Verdict: Eq.~(6) of the article with margin $\delta = 0.02$ (descriptive for PR-AUC); superior$^\dagger$, superior with the whole 95\,\% interval beyond the margin. $p$: one-sided block sign-flip randomisation test over all 4,096 assignments, pooled over cells; $p_{\mathrm{blk}}$: the same test on the cell-weighted mean of per-block differences; $p_{\mathrm{Holm}}$: Holm-adjusted $p$ within the family. Boot.: block-bootstrap interval, the inference of the initial design, reported for comparison. Families F1--F3 use the station layer rebuilt in every fold; F4 uses the predictions and pre-processing of the initial design.
 
 The verdicts in Tables S1a and S1b are taken from the unadjusted jackknife intervals; Holm's adjustment applies only to the one-sided randomisation tests ($p_{\mathrm{Holm}}$), so equivalence and non-inferiority verdicts are nominal. Tables S1b and S1c are descriptive and carry no tests. The reference of each comparison is the best of its candidate references by the comparison's metric, averaged over the years of the comparison and chosen after the results: by PR-AUC in F1 and F4, by Spearman in F2 and F3. For PR\_c1404\_r30 and PR\_c1404\_r38 this choice is made on the held-out year 1404 itself and favours the SLX reference.
 
-Model labels: GNN $L$L, multi-scale GraphSAGE with $L$ layers; No-graph, the same network fed box means; SLX-OLS, SLX-GBM, SLX-RF, spatial-lag-of-X models with ordinary least squares, gradient boosting or random forests; distances are reach. T, E and S: traffic, energy and station inputs. ``(orig.)'': reference run with the original station pre-processing. F3 models use driver inputs only.
+Model labels: GNN $L$L, multi-scale GraphSAGE with $L$ layers; No-graph, the same network fed box means; SLX-OLS, SLX-GBM, SLX-RF, spatial-lag-of-X models with ordinary least squares, gradient boosting or random forests; distances are reach. T, E and S: traffic, energy and station inputs. ``(init.)'': reference run with the initial station pre-processing. F3 models use driver inputs only.
 
 \tabno{S1}
 \begin{table}[h]
@@ -440,7 +440,7 @@ Context & Population, total and non-residential building volume & Static & GHSL 
 \clearpage
 \section*{S4 Model settings (Table S3)}
 
-All settings were fixed before the runs of the original study and none was tuned. They are those of the configuration file of the analysis code, which is available from the corresponding author on request.
+All settings were fixed before the first runs and none was tuned. They are those of the configuration file of the analysis code, which is available from the corresponding author on request.
 
 \tabno{S3}
 \begin{table}[h]

@@ -28,10 +28,10 @@ GNN_T, SLX_T, NOG_T, NAVY_T, ZONE = fd.GNN_T, fd.SLX_T, fd.NOG_T, fd.NAVY_T, fd.
 def build() -> Path:
     c = fd.Canvas("en")
     # labels that follow the article: inputs on the full grid, loss and metrics on the label cells; matching is by
-    # nominal reach while the aggregation differs; "original study" as in the text
+    # nominal reach while the aggregation differs; "initial design" as in the text
     c.t = t = dict(c.t, inputs="Inputs: 72 × 126 grid cells", mapcap=["NO₂ (z) at 2,436 label cells", c.t["mapcap"][1]],
-                   same="Same nominal reach, different aggregation", tb="From the original comparison to the test in this study",
-                   thesis="Original study: GNN against the best SLX", pair="original pair")
+                   same="Same nominal reach, different aggregation", tb="From the initial design to the reach-matched test",
+                   thesis="Initial design: GNN against the best SLX", pair="initial pair")
     # ================================================================ panel a: shared network, two rows
     c.text(14, 40, "a", size=30, weight=700)
     c.text(44, 40, t["ta"], size=S4, weight=700)

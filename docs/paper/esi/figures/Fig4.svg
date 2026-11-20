@@ -441,9 +441,9 @@
 <text x="34.0" y="431.0" font-size="17.5" fill="#0b0b0b" font-weight="400" text-anchor="start">as box means of each input.</text>
 <text x="34.0" y="461.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="start">SLX: the same inputs and box means go to OLS, GBM or RF.</text>
 <text x="14.0" y="532.0" font-size="30" fill="#0b0b0b" font-weight="700" text-anchor="start">b</text>
-<text x="44.0" y="532.0" font-size="23" fill="#0b0b0b" font-weight="700" text-anchor="start">From the original comparison to the test in this study</text>
+<text x="44.0" y="532.0" font-size="23" fill="#0b0b0b" font-weight="700" text-anchor="start">From the initial design to the reach-matched test</text>
 <text x="36.0" y="584.5" font-size="18" fill="#ffffff" font-weight="700" text-anchor="middle">3</text>
-<text x="58.0" y="585.0" font-size="20.5" fill="#0b0b0b" font-weight="700" text-anchor="start">Original study: GNN against the best SLX</text>
+<text x="58.0" y="585.0" font-size="20.5" fill="#0b0b0b" font-weight="700" text-anchor="start">Initial design: GNN against the best SLX</text>
 <text x="256.0" y="635.0" font-size="19" fill="#0b0b0b" font-weight="400" text-anchor="start">GNN, 3 layers: 22.7 km</text>
 <text x="256.0" y="665.0" font-size="19" fill="#0b0b0b" font-weight="400" text-anchor="start">best SLX window: 12.6 km</text>
 <text x="230.0" y="712.0" font-size="19" fill="#0b0b0b" font-weight="700" text-anchor="start">GNN ahead in all three</text>
@@ -478,7 +478,7 @@
 <text x="795.0" y="1289.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="middle">30</text>
 <text x="1010.0" y="1289.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="middle">40</text>
 <text x="580.0" y="1311.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="middle">reach (km): how far from a cell a prediction can look</text>
-<text x="60.0" y="1311.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="start">original pair</text>
+<text x="60.0" y="1311.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="start">initial pair</text>
 <text x="40.0" y="1363.0" font-size="17.5" fill="#0b0b0b" font-weight="400" text-anchor="start">Same evaluation for all: 12 blocks of 22 km, 2-km buffer · held-out year 1404 · five seeds</text>
 <text x="40.0" y="1386.0" font-size="17.5" fill="#52514e" font-weight="400" text-anchor="start">Spearman (primary), PR-AUC · sign-flip test, jackknife, ±0.02 equivalence, Holm</text>
 </svg>
