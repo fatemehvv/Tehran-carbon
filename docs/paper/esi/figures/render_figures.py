@@ -31,7 +31,8 @@ def save(fig, stem):
         if t.get_text():
             if t.get_fontsize() < MIN_PT:
                 t.set_fontsize(MIN_PT)
-            t.set_text(t.get_text().replace("5-seed", "five-seed"))
+            t.set_text(t.get_text().replace("5-seed", "five-seed")
+                       .replace("target correlation\nrange (", "correlogram\nzero crossing\n("))  # as in the text
     return _save(fig, stem)
 
 
