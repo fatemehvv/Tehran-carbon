@@ -49,7 +49,7 @@
 
 \begin{document}
 
-\title[Reach, not the graph]{Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
+\title[Reach, more than the graph]{Reach, more than the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
 
 %% Affiliation and corresponding author left out for now; for submission use instead:
 %% \author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
@@ -423,7 +423,7 @@ Larger buffers, which force the models to extrapolate from the periphery towards
 
 \section{Discussion}\label{sec:discussion}
 
-\subsection{Why reach, and not the graph, delivers skill}\label{sec:why}
+\subsection{Why reach, more than the graph, delivers skill}\label{sec:why}
 
 The monthly NO₂ pattern over Tehran is a smooth field, with a correlation length of 14--24 km depending on how its large-scale gradient is treated and an effective sample size of about five independent cells across the city. Two processes make it so. TROPOMI averages over pixels of 3.5 × 5.5 km, and NO\textsubscript{x} is carried downwind during its daytime lifetime of a few hours; \citet{beirle2024} report a mean lifetime of 2.4 h over 100 cities, of the same order as earlier megacity estimates \citep{beirle2011}, which at boundary-layer wind speeds of a few metres per second implies a transport scale of 10--30 km. At these scales, a cell's value could depend mainly on emissions and urban form within a radius of comparable size, which would explain why models that use information from that neighbourhood predict the cell well. Our experiments, however, identify the reach at which skill levels off, not the physical source area.
 

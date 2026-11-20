@@ -1,6 +1,6 @@
 Dear Editor,
 
-We submit the research article "Reach, not the graph, explains the skill of distance-based graph neural networks in
+We submit the research article "Reach, more than the graph, explains the skill of distance-based graph neural networks in
 mapping Tehran's NO₂ hotspots from TROPOMI" for consideration in *Earth Science Informatics*.
 
 Graph neural networks are increasingly used to map urban emissions and air pollution from satellite and urban data,

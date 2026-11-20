@@ -20,7 +20,7 @@ Please do the following.
 5. His likely first questions. List the five to ten questions he is most likely to ask in our first meeting about this paper, with a short note on whether the manuscript already answers each one and where.
 
 Known and intentional; do not report these as problems:
-- The title was chosen by the authors and stays.
+- The title ("Reach, more than the graph, …") was chosen by the authors and stays.
 - The traffic and energy layers are estimates, not measurements, and the text says so on purpose.
 - Non-public data (estimated traffic and energy layers, station data) are deliberately not shared and their sources are not named; code is available on request.
 - A master's thesis is mentioned as unpublished and is not in the reference list (Springer's rule for unpublished work).
