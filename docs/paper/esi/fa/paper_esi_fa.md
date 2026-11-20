@@ -6,7 +6,7 @@ dir: rtl
 
 <div class="en-title">Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI</div>
 
-<div class="authors">وحید خطیبی (نویسندهٔ مسئول، khatibi@iust.ac.ir) و فاطمه وفاییان<br>گروه مهندسی سیستم‌های هوشمند، دانشکدهٔ مهندسی صنایع، دانشگاه علم و صنعت ایران، تهران</div>
+<div class="authors">وحید خطیبی و فاطمه وفاییان</div>
 
 <div class="note">این نسخهٔ فارسی برای مطالعه و تسلط بر مقاله است. متن مرجع، نسخهٔ انگلیسیِ آماده‌شده برای مجلهٔ <i>Earth Science Informatics</i> است (<code>paper_esi.pdf</code>). عددها عمداً با رقم‌های لاتین و دقیقاً مثل نسخهٔ انگلیسی آمده‌اند تا هنگام ارائه به‌راحتی با آن تطبیق داده شوند. شکل‌ها همان شکل‌های انگلیسی‌اند. اصطلاح‌های کلیدی بار اول با معادل انگلیسی آمده‌اند و در پایان یک واژه‌نامهٔ فارسی‌ـ‌انگلیسی هست.</div>
 

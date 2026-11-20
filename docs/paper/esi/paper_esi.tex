@@ -51,11 +51,13 @@
 
 \title[Reach, not the graph]{Reach, not the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
 
-\author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
+%% Affiliation and corresponding author left out for now; for submission use instead:
+%% \author*[1]{\fnm{Vahid} \sur{Khatibi}}\email{khatibi@iust.ac.ir}
+%% \author[1]{\fnm{Fatemeh} \sur{Vafaeian}}
+%% \affil[1]{\orgdiv{Department of Intelligent Systems Engineering, School of Industrial Engineering}, \orgname{Iran University of Science and Technology}, \orgaddress{\city{Tehran}, \country{Iran}}}
+\author{\fnm{Vahid} \sur{Khatibi}}
 
-\author[1]{\fnm{Fatemeh} \sur{Vafaeian}}
-
-\affil[1]{\orgdiv{Department of Intelligent Systems Engineering, School of Industrial Engineering}, \orgname{Iran University of Science and Technology}, \orgaddress{\city{Tehran}, \country{Iran}}}
+\author{\fnm{Fatemeh} \sur{Vafaeian}}
 
 \abstract{Gains of graph neural networks (GNNs) in mapping urban emissions and air pollution are usually credited to the graph, yet a GNN also draws on a larger neighbourhood than its baselines. We ask which explains the skill for nitrogen dioxide (NO₂) hotspots in Tehran, from monthly TROPOspheric Monitoring Instrument (TROPOMI) columns on a 1-km grid, and whether fusing estimated traffic and energy layers with station data helps. A multi-scale GraphSAGE network on a distance-based graph is compared at matched nominal reach (0--38 km) with spatial lag of X (SLX) models, under spatial cross-validation and on a held-out year, and in cross-validation with the same network fed neighbourhood means rather than a graph. Spearman correlation of the best SLX models climbs from 0.75--0.77 (own cell) to 0.92--0.93 at 12.6 km, then by at most 0.03. The GNN's lead over SLX at equal reach falls from about 0.04 at 7.6 km to −0.004 and +0.009 at 37.8 km, none conclusive, and at 22.7 km the graph-free network is nominally equivalent to the GNN (±0.02). On the held-out year, the GNN and reach-matched SLX nearly tie in Spearman, and the GNN's hotspot leads shrink for single training runs. Fusion brought no clear gain, possibly because the main emission layers become highly correlated at the target's scale. With about five effectively independent cells, the choice of inference changed several verdicts. For this smooth target and distance-based graph, reach accounts for most of the GNN's skill in ranking cells; graph models need reach-matched baselines.}
 
