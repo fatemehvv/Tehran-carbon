@@ -1,8 +1,8 @@
 """Online Resource 1 of the Earth Science Informatics version: writes online_resource_1.tex.
 
-Section S1 (literature search), Table S2 (predictor layers) and Table S3 (model settings) are written below from
-docs/paper/lit/README.md, configs/config.yaml and the model code. Table S1 is built from the committed evaluation tables
-and Table S4 (RQ1 runs) from the committed training logs of docs/paper/results_stageA/logs; nothing is re-run:
+Section S1 (literature search), Table S4 (predictor layers) and Table S5 (model settings) are written below from
+docs/paper/lit/README.md, configs/config.yaml and the model code. Table S3 is built from the committed evaluation tables
+and Table S6 (RQ1 runs) from the committed training logs of docs/paper/results_stageA/logs; nothing is re-run:
 
   registered family (22 tests)           docs/paper/results_stageA/evaluate_paper2/
   exploratory, equal reach (32 tests)    docs/paper/results_review/evaluate_step5/
@@ -255,13 +255,13 @@ HEAD = r"""%% Online Resource 1 of the Earth Science Informatics version. Writte
 \newunicodechar{°}{\textdegree}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \raggedbottom
-\newcommand{\tabno}[1]{\renewcommand{\thetable}{#1}}  % tables are numbered by hand (L1, S1a, ...)
+\newcommand{\tabno}[1]{\renewcommand{\thetable}{#1}}  % tables are numbered by hand (S1, S3a, ...)
 \begin{document}
 \title[Online Resource 1]{Online Resource 1\\[4pt]\normalsize Reach, more than the graph, explains the skill of distance-based graph neural networks in mapping Tehran's NO₂ hotspots from TROPOMI}
 %% affiliation and corresponding author left out for now, as in the article
 \author{\fnm{Vahid} \sur{Khatibi}}
 \author{\fnm{Fatemeh} \sur{Vafaeian}}
-\abstract{Supplementary material to the article in \emph{Earth Science Informatics}. Section S1 records the literature search behind the research gap stated in the Introduction. Table S1 lists every model comparison with its intervals, $p$-values, Holm family and verdict. Table S2 describes the years and processing of every predictor layer, Table S3 the settings of every model and Table S4 the runs of RQ1. References are those of the article.}
+\abstract{Supplementary material to the article in \emph{Earth Science Informatics}. Section S1 records the literature search behind the research gap stated in the Introduction. Table S3 lists every model comparison with its intervals, $p$-values, Holm family and verdict. Table S4 describes the years and processing of every predictor layer, Table S5 the settings of every model and Table S6 the runs of RQ1. References are those of the article.}
 \keywords{Literature search, Model comparisons, Predictor layers, Model settings}
 \maketitle
 """
@@ -273,7 +273,7 @@ S1 = r"""
 
 The search was run on 8 November 2026 in the field ``Title, abstract or author-specified keywords'' of the ScienceDirect advanced search, which allows at most eight Boolean connectors per field and adds plurals and spelling variants itself. For each query the first results page, ranked by relevance, was exported with abstracts (25 records for Q1, Q3, Q4 and Q5; 100 for Q2). The 200 exported records hold 191 unique DOIs from 2019 to 2026, 98 of them from 2026 and 49 from 2025.
 
-\tabno{L1}
+\tabno{S1}
 \begin{table}[h]
 \caption{Queries of the structured search}\label{tab:queries}
 \footnotesize
@@ -300,13 +300,13 @@ On 13 November 2026 ChatGPT with web search was given four questions: (1) a GNN 
 
 \subsection*{S1.3 Reach audit of comparable studies}
 
-For Table 1 of the article, the full texts of fifteen studies that compare a GNN with baselines on spatial data were read: seven from arXiv or open proceedings, and eight from PDFs obtained by the authors because publisher sites block automated reading. For each study we recorded how far the GNN sees and how far each baseline sees. No study makes reach the object of the comparison, varies the reach of both models or sets it by one rule; where neighbourhoods coincide, it is incidental. The three closest cases (Liang et al. 2023; Schmidt and Ong 2026; Bai et al. 2025) are described in the Introduction of the article.
+For Table 1 of the article, the full texts of fifteen studies that compare a GNN with baselines on spatial data were read: seven from arXiv or open proceedings and eight from publisher PDFs. For each study we recorded how far the GNN sees and how far each baseline sees. No study makes reach the object of the comparison, varies the reach of both models or sets it by one rule; where neighbourhoods coincide, it is incidental. The three closest cases (Liang et al. 2023; Schmidt and Ong 2026; Bai et al. 2025) are described in the Introduction of the article.
 
 \subsection*{S1.4 Prior use of the dependence range to set a neighbourhood}
 
 Setting the neighbourhood of a model from the range of spatial dependence is established practice (Table~\ref{tab:prior}), but none of these sources uses it to give a GNN and its spatial-lag baselines the same reach. Web searches for ``reach-matched'' and ``range-matched'' together with GNN or spatial baselines returned no results.
 
-\tabno{L2}
+\tabno{S2}
 \begin{table}[h]
 \caption{Earlier uses of the dependence range to set a neighbourhood}\label{tab:prior}
 \footnotesize
@@ -326,15 +326,15 @@ Freitas et al. (2026) & Receptive field of a GNN for turbulent transport, from t
 
 S1_TABLE = r"""
 \clearpage
-\section*{S2 All model comparisons (Table S1)}
+\section*{S2 All model comparisons (Table S3)}
 
 Each comparison is candidate minus reference, computed from out-of-fold predictions for the same cells and months, as in Section 3.5 of the article. Neural candidates are five-seed ensembles; SLX references were run once. $\Delta$: difference of the metric averaged over months. CI: delete-one-block jackknife intervals ($K = 12$ blocks, $t$ with 11 degrees of freedom). Verdict: Eq.~(6) of the article with margin $\delta = 0.02$ (descriptive for PR-AUC); superior$^\dagger$, superior with the whole 95\,\% interval beyond the margin. $p$: one-sided block sign-flip randomisation test over all 4,096 assignments, pooled over cells; $p_{\mathrm{blk}}$: the same test on the cell-weighted mean of per-block differences; $p_{\mathrm{Holm}}$: Holm-adjusted $p$ within the family. Boot.: block-bootstrap interval, the inference of the initial design, reported for comparison. Families F1--F3 use the station layer rebuilt in every fold; F4 uses the predictions and pre-processing of the initial design.
 
-The verdicts in Tables S1a and S1b are taken from the unadjusted jackknife intervals; Holm's adjustment applies only to the one-sided randomisation tests ($p_{\mathrm{Holm}}$), so equivalence and non-inferiority verdicts are nominal. Tables S1b and S1c are descriptive and carry no tests. The reference of each comparison is the best of its candidate references by the comparison's metric, averaged over the years of the comparison and chosen after the results: by PR-AUC in F1 and F4, by Spearman in F2 and F3. For PR\_c1404\_r30 and PR\_c1404\_r38 this choice is made on the held-out year 1404 itself and favours the SLX reference.
+The verdicts in Tables S3a and S3b are taken from the unadjusted jackknife intervals; Holm's adjustment applies only to the one-sided randomisation tests ($p_{\mathrm{Holm}}$), so equivalence and non-inferiority verdicts are nominal. Tables S3b and S3c are descriptive and carry no tests. The reference of each comparison is the best of its candidate references by the comparison's metric, averaged over the years of the comparison and chosen after the results: by PR-AUC in F1 and F4, by Spearman in F2 and F3. For PR\_c1404\_r30 and PR\_c1404\_r38 this choice is made on the held-out year 1404 itself and favours the SLX reference.
 
 Model labels: GNN $L$L, multi-scale GraphSAGE with $L$ layers; No-graph, the same network fed box means; SLX-OLS, SLX-GBM, SLX-RF, spatial-lag-of-X models with ordinary least squares, gradient boosting or random forests; distances are reach. T, E and S: traffic, energy and station inputs. ``(init.)'': reference run with the initial station pre-processing. F3 models use driver inputs only.
 
-\tabno{S1}
+\tabno{S3}
 \begin{table}[h]
 \caption{The comparisons and their families}\label{tab:key}
 \footnotesize
@@ -351,7 +351,7 @@ ID & Family & Comparison \\
 \begin{landscape}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\tabno{S1a}
+\tabno{S3a}
 \begin{longtable}{@{}lllclrllllllll@{}}
 \caption{Primary comparisons}\label{tab:s1a}\\
 \toprule
@@ -367,7 +367,7 @@ ID & Candidate & Reference & Year & Metric & $\Delta$ & 95\,\% CI & 90\,\% CI & 
 %PRIM%
 \end{longtable}
 
-\tabno{S1b}
+\tabno{S3b}
 \begin{longtable}{@{}lllcllrlll@{}}
 \caption{Other hotspot definitions (top 20\,\% and top 5\,\% of cells) and 5 × 5-cell superpixels}\label{tab:s1b}\\
 \toprule
@@ -383,7 +383,7 @@ ID & Candidate & Reference & Year & Label & Metric & $\Delta$ & 95\,\% CI & 90\,
 %SENS%
 \end{longtable}
 
-\tabno{S1c}
+\tabno{S3c}
 \begin{longtable}{@{}lllclrrr@{}}
 \caption{Single training runs. Mean $\Delta$: mean of the five single-seed scores of the candidate minus the mean single-seed score of the reference (for a neural reference) or its single score (SLX references, run once); Min and Max: the lowest and highest single-seed score of the candidate minus the same reference value. Seeds are not paired. Only comparisons whose runs stored every seed appear}\label{tab:s1c}\\
 \toprule
@@ -404,11 +404,11 @@ ID & Candidate & Reference & Year & Metric & Mean $\Delta$ & Min $\Delta$ & Max 
 
 S2_TABLE = r"""
 \clearpage
-\section*{S3 Predictor layers (Table S2)}
+\section*{S3 Predictor layers (Table S4)}
 
 All layers are on the 1/120° grid of the article (72 × 126 cells). The development years are 1402 and 1403. No inventory exists yet for 1404, so the held-out year uses the 1403 inventory and traffic layers, with its own station, weather and night-light data. The traffic and energy layers are estimates, not measurements. Every spatially varying layer also enters the SLX models and the no-graph network as box means (Section 3.1 of the article).
 
-\tabno{S2}
+\tabno{S4}
 {\footnotesize
 \begin{longtable}{@{}L{1.5cm}L{3.1cm}L{1.7cm}L{5.9cm}@{}}
 \caption{Years and processing of the predictor layers. $\log(1+x)$ marks layers that are log-transformed before use}\label{tab:s2}\\
@@ -438,11 +438,11 @@ Context & Population, total and non-residential building volume & Static & GHSL 
 \noindent{\scriptsize IPCC, Intergovernmental Panel on Climate Change; GHSL, Global Human Settlement Layer; VIIRS, Visible Infrared Imaging Radiometer Suite; ERA5-Land, land component of the fifth-generation reanalysis of the European Centre for Medium-Range Weather Forecasts\par}
 
 \clearpage
-\section*{S4 Model settings (Table S3)}
+\section*{S4 Model settings (Table S5)}
 
 All settings were fixed before the first runs and none was tuned. They are those of the configuration file of the analysis code, which is available from the corresponding author on request.
 
-\tabno{S3}
+\tabno{S5}
 \begin{table}[h]
 \caption{Settings of every model}\label{tab:s3}
 \footnotesize
@@ -467,11 +467,11 @@ Hardware & Networks on one NVIDIA RTX 4080 GPU; SLX models, the physical operato
 \end{tabular}
 \end{table}
 
-\section*{S5 Runs of RQ1 (Table S4)}
+\section*{S5 Runs of RQ1 (Table S6)}
 
 The registration of RQ1 fixed the rule for the reference (the single input group with the highest mean PR-AUC over 1402 and 1403), not the group; under this rule the reference was energy. On the held-out year the registered design compares four-layer GNNs, with energy as the pre-specified single source. Every network also receives the context group. The pair energy + stations scored highest in cross-validation but was not part of a registered comparison and was not tested.
 
-\tabno{S4}
+\tabno{S6}
 \begin{table}[h]
 \caption{Five-seed ensembles of the RQ1 networks. Cross-validation (1402 / 1403): gated no-graph networks with box means up to 7.6 km. Held-out year 1404: gated four-layer GNNs (30.3 km). The traffic and energy layers are estimates}\label{tab:s4}
 \footnotesize
