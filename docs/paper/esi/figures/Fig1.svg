@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="830" viewBox="0 0 1000 830" role="img" aria-labelledby="t d">
   <title id="t">From the literature to the research gap</title>
-  <desc id="d">Funnel of five layers narrowing from satellite NO2 as a tracer of urban combustion, through deep learning and graph neural networks, to the overlooked difference in reach and the gap that no study holds reach equal; below it, the contribution of this study: reach, not the graph.</desc>
+  <desc id="d">Funnel of five layers narrowing from satellite NO2 as a tracer of urban combustion, through deep learning and graph neural networks, to the overlooked difference in reach and the gap that no study holds reach equal; below it, the contribution of this study: reach, more than the graph.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#104281"/>
@@ -51,5 +51,5 @@
   <rect x="215" y="664" width="570" height="146" rx="16" fill="#104281"/>
   <text class="title white" x="500" y="700">This study · Tehran, TROPOMI NO₂</text>
   <text class="desc white" x="500" y="728">GNN and spatial-lag models compared at the same reach</text>
-  <text class="punch" x="500" y="782">Reach, not the graph</text>
+  <text class="punch" x="500" y="782">Reach, more than the graph</text>
 </svg>
